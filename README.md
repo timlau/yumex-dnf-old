@@ -14,7 +14,9 @@ cd src
 Requirements
 ============
 
+```
 yum install python3 python3-gobject
+```
 
 yum-deamon must also be installed.
 
