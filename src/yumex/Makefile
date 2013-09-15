@@ -10,7 +10,7 @@ all:
 	echo "Nothing to do"
 
 clean:
-	rm -f *.pyc *.pyo *~ __pycache__
+	rm -rf *.pyc *.pyo *~ __pycache__
 
 install:
 	mkdir -p $(DESTDIR)/$(PKGDIR)
