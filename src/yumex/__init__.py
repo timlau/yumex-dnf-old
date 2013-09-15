@@ -227,7 +227,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
-            pkgs = self.backend.get_packages_by_name(data+"*",True)
+            pkgs = self.backend.get_packages_by_name("*"+data+"*",True)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
