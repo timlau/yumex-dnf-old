@@ -1,8 +1,8 @@
 %global appname yumex
 
 Name:     %{appname}-nextgen
-Version:  3.99.1
-Release:  1%{?dist}
+Version:  3.99.3
+Release:  0.1.git20130915%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -36,6 +36,9 @@ make
 make DESTDIR=$RPM_BUILD_ROOT install
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop    
 
+%find_lang %name
+
+
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
@@ -48,7 +51,7 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
-%files
+%files -f  %{name}.lang
 %doc README.md
 %{_datadir}/%{name}
 %{_bindir}/%{name}
