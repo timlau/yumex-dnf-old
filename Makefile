@@ -1,4 +1,4 @@
-SUBDIRS = src src/yumex
+SUBDIRS = src src/yumex po
 PYFILES = $(wildcard *.py)
 PKGNAME = yumex
 APPNAME = yumex-nextgen
