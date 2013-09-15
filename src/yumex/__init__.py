@@ -141,6 +141,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         show_information(self, msg)
         sys.exit(1)
  
+    def set_spinner(self, state):
+        widget = self.builder.get_object("progress_spinner")
+        if state:
+            widget.start()
+        else:
+            widget.stop()
+
+    
     def _parse_error(self, value):
         '''
         parse values from a DBus releated exception
@@ -212,9 +220,11 @@ class YumexWindow(Gtk.ApplicationWindow):
             print(data)
             if data in ["installed","available","updates"]:
                 self.current_filter = (widget, data)
+                self.set_spinner(True)
                 pkgs = self.backend.get_packages(data)
                 self.info.set_package(None)
                 self.package_view.populate(pkgs)
+                self.set_spinner(False)
 
 
     def on_search_changed(self, widget, data):
@@ -227,10 +237,12 @@ class YumexWindow(Gtk.ApplicationWindow):
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
+            self.set_spinner(True)
             pkgs = self.backend.get_packages_by_name("*"+data+"*",True)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
+            self.set_spinner(False)
         elif data == "": # revert to the current selected filter
             if self.current_filter:
                 widget, flt = self.current_filter
