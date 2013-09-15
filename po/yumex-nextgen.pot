@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-15 12:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/yumex/widgets.py:296
+msgid "Package"
+msgstr ""
+
+#: ../src/yumex/widgets.py:297
+msgid "Ver."
+msgstr ""
+
+#: ../src/yumex/widgets.py:298
+msgid "Arch."
+msgstr ""
+
+#: ../src/yumex/widgets.py:299 ../src/yumex/widgets.py:542
+msgid "Summary"
+msgstr ""
+
+#: ../src/yumex/widgets.py:300
+msgid "Repo."
+msgstr ""
+
+#: ../src/yumex/widgets.py:301
+msgid "Size."
+msgstr ""
+
+#: ../src/yumex/widgets.py:537
+msgid "Packages"
+msgstr ""
+
+#: ../src/yumex/widgets.py:628
+#, python-format
+msgid "<b>Downgrade to</b> %s "
+msgstr ""
+
+#: ../src/yumex/widgets.py:650
+msgid "History (Date/Time)"
+msgstr ""
+
+#: ../src/yumex/widgets.py:661
+msgid "History Packages"
+msgstr ""
+
+#: ../src/yumex/widgets.py:950
+msgid "Release"
+msgstr ""
+
+#: ../src/yumex/widgets.py:951
+msgid "Type"
+msgstr ""
+
+#: ../src/yumex/widgets.py:952
+msgid "Status"
+msgstr ""
+
+#: ../src/yumex/widgets.py:953
+msgid "Issued"
+msgstr ""
+
+#: ../src/yumex/widgets.py:991
+msgid "Description"
+msgstr ""
+
+#: ../misc/yumex-nextgen.desktop.in.h:1
+msgid "Yum Extender (next-gen)"
+msgstr ""
+
+#: ../misc/yumex-nextgen.desktop.in.h:2
+msgid "Install, update and remove applications"
+msgstr ""
+
+#: ../misc/yumex-nextgen.desktop.in.h:3
+msgid "Software Installer"
+msgstr ""

@@ -1,0 +1,10 @@
+src/main.py
+src/yumex/yum_backend.py
+src/yumex/const.py
+src/yumex/test_backend.py
+src/yumex/__init__.py
+src/yumex/backend.py
+src/yumex/widgets.py
+src/yumex/misc.py
+src/yumex.ui
+misc/yumex-nextgen.desktop.in

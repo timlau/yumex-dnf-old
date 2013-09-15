@@ -6,6 +6,7 @@ VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 SRCDIR=src
 MISCDIR=misc
 PIXDIR=gfx
+PODIR=po
 ALLDIRS=$(SUBDIRS) gfx misc tools
 GITDATE=git$(shell date +%Y%m%d)
 VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
