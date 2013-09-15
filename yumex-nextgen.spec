@@ -34,11 +34,7 @@ make
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
-
-desktop-file-install --vendor fedora --delete-original \
-    --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-    --add-category X-Fedora \
-    $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop    
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
