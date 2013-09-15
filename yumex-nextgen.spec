@@ -53,7 +53,7 @@ fi
 %{_datadir}/%{name}
 %{_bindir}/%{name}
 %{python3_sitelib}/yumex/
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
 
 %changelog

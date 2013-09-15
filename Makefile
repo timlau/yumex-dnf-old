@@ -29,7 +29,11 @@ install:
 	mkdir -p $(DESTDIR)/usr/bin
 	install -m644 $(PIXDIR)/yumex-icon.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/$(APPNAME).svg
 	install -m644 $(PIXDIR)/yumex-icon.png $(DESTDIR)/usr/share/icons/hicolor/48x48/apps/$(APPNAME).png
+	# build & install desktop file with translations
+	@rm -f $(MISCDIR)/$(APPNAME).desktop
+	intltool-merge -d -u $(PODIR) $(MISCDIR)/$(APPNAME).desktop.in $(MISCDIR)/$(APPNAME).desktop
 	install -m644 $(MISCDIR)/$(APPNAME).desktop $(DESTDIR)/usr/share/applications/.
+	
 	for d in $(SUBDIRS); do make DESTDIR=`cd $(DESTDIR); pwd` -C $$d install; [ $$? = 0 ] || exit 1; done
 
 get-builddeps:
