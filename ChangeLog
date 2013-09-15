@@ -1,0 +1,19 @@
+2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile, gfx/yumex-icon.png, gfx/yumex-icon.svg,
+	misc/yumex-nextgen.desktop, src/Makefile, src/yumex/Makefile,
+	tools/git2cl, yumex-nextgen.spec: Added Makefiles, .spec, icon,
+	.desktop
+
+2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* README.md: cleanup readme
+
+2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* README.md: cleanup readme
+
+2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Inital commit of Yum Extender rewrite
+
