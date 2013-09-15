@@ -6,5 +6,5 @@ src/yumex/__init__.py
 src/yumex/backend.py
 src/yumex/widgets.py
 src/yumex/misc.py
-src/yumex.ui
+[type: gettext/glade]src/yumex.ui
 misc/yumex-nextgen.desktop.in

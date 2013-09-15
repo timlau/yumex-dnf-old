@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-15 12:51+0200\n"
+"POT-Creation-Date: 2013-09-15 13:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,78 @@ msgstr ""
 
 #: ../src/yumex/widgets.py:991
 msgid "Description"
+msgstr ""
+
+#: ../src/yumex.ui.h:1
+msgid "Exit the program"
+msgstr ""
+
+#: ../src/yumex.ui.h:2
+msgid "Quit"
+msgstr ""
+
+#: ../src/yumex.ui.h:3
+msgid "Change program preferences"
+msgstr ""
+
+#: ../src/yumex.ui.h:4
+msgid "Preferences"
+msgstr ""
+
+#: ../src/yumex.ui.h:5
+msgid "Select Packages to show"
+msgstr ""
+
+#: ../src/yumex.ui.h:6
+msgid "hidden"
+msgstr ""
+
+#: ../src/yumex.ui.h:7
+msgid "Show Pending Changes"
+msgstr ""
+
+#: ../src/yumex.ui.h:8
+msgid "Queue"
+msgstr ""
+
+#: ../src/yumex.ui.h:9
+msgid "Show history of changes"
+msgstr ""
+
+#: ../src/yumex.ui.h:10
+msgid "History"
+msgstr ""
+
+#: ../src/yumex.ui.h:11
+msgid "Apply Pending Changes"
+msgstr ""
+
+#: ../src/yumex.ui.h:12
+msgid "Apply Changes"
+msgstr ""
+
+#: ../src/yumex.ui.h:13
+msgid "page 1"
+msgstr ""
+
+#: ../src/yumex.ui.h:14
+msgid "page 2"
+msgstr ""
+
+#: ../src/yumex.ui.h:15
+msgid "page 3"
+msgstr ""
+
+#: ../src/yumex.ui.h:16
+msgid "Updates"
+msgstr ""
+
+#: ../src/yumex.ui.h:17
+msgid "Installed"
+msgstr ""
+
+#: ../src/yumex.ui.h:18
+msgid "Available"
 msgstr ""
 
 #: ../misc/yumex-nextgen.desktop.in.h:1
