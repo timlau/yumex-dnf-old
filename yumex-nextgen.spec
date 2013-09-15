@@ -1,14 +1,14 @@
 %global appname yumex
 
 Name:     %{appname}-nextgen
-Version:  3.99.3
-Release:  0.1.git20130915%{?dist}
+Version:  3.99.1
+Release:  1
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
 License:  GPLv2+
-URL:      http://yum-extender.blogspot.com
-Source0:  http://www.yum-extender.org/dnl/yumex/source/%{name}-%{version}.tar.gz
+URL:      http://yumex.dk
+Source0:  https://fedorahosted.org/releases/y/u/yumex/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 BuildRequires: python3-devel
