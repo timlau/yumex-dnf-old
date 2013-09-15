@@ -23,7 +23,6 @@ from .misc import show_information
 from .const import *
 from .yum_backend import YumReadOnlyBackend
 import re
-import sys
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
@@ -41,7 +40,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.builder = Gtk.Builder()
         # get the file (if it is there)
         try:
-            self.builder.add_from_file("yumex.ui")
+            self.builder.add_from_file(DATA_DIR +"/yumex.ui")
         except:
             print ("file not found")
             sys.exit()

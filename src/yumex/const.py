@@ -1,11 +1,22 @@
 from gi.repository import Pango
 import gettext
-
+import os.path
+import sys
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
 _ = gettext.gettext
 P_ = gettext.ngettext
+
+__yumex_version__ = "3.99.1"
+
+# find the data dir for resources
+BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
+if BIN_PATH in ["/usr/bin", "/bin"]:
+    DATA_DIR = '/usr/share/yumex-nextgen'
+else:
+    DATA_DIR = BIN_PATH
+
 
 # Fonts
 XSMALL_FONT = Pango.FontDescription("sans 6")
