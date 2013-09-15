@@ -359,7 +359,9 @@ class PackageView(SelectionView):
             cell.set_property('visible', False)
 
     def populate(self, pkgs):
+        self.set_model(None)
         self.store.clear()
+        self.set_model(self.store)
         for po in sorted(pkgs,key=lambda po: po.name ):
             self.store.append([po, str(po)])
 

@@ -213,6 +213,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             if data in ["installed","available","updates"]:
                 self.current_filter = (widget, data)
                 pkgs = self.backend.get_packages(data)
+                self.info.set_package(None)
                 self.package_view.populate(pkgs)
 
 
@@ -227,6 +228,8 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             pkgs = self.backend.get_packages_by_name(data+"*",True)
+            self.on_packages(None,None) # switch to package view
+            self.info.set_package(None)
             self.package_view.populate(pkgs)
         elif data == "": # revert to the current selected filter
             if self.current_filter:
