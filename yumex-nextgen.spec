@@ -21,7 +21,7 @@ Requires: python3-yumdaemon >= 0.9.2
 Requires: python3-gobject
 
 %description
-Graphical User Interface for Yum.
+Graphical package tool for maintain packages on the system
 
 
 %prep
