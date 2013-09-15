@@ -1,3 +1,22 @@
+# -*- coding: iso-8859-1 -*-
+#    Yum Exteder (yumex) - A graphic package management tool
+#    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
 import time
 from yumdaemon import YumDaemonError
 
@@ -88,15 +107,15 @@ def format_number(number, SI=0, space=' '):
     if type(number) == type(1) or type(number) == type(1):
         # it's an int or a long, which means it didn't get divided,
         # which means it's already short enough
-        format = '%i%s%s'
+        fmt = '%i%s%s'
     elif number < 9.95:
         # must use 9.95 for proper sizing.  For example, 9.99 will be
-        # rounded to 10.0 with the .1f format string (which is too long)
-        format = '%.1f%s%s'
+        # rounded to 10.0 with the .1f fmt string (which is too long)
+        fmt = '%.1f%s%s'
     else:
-        format = '%.0f%s%s'
+        fmt = '%.0f%s%s'
 
-    return(format % (float(number or 0), space, symbols[depth]))
+    return(fmt % (float(number or 0), space, symbols[depth]))
 
 class Package:
     '''

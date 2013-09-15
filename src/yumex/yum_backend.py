@@ -1,4 +1,21 @@
-# -*- coding: utf-8 -*-
+# -*- coding: iso-8859-1 -*-
+#    Yum Exteder (yumex) - A graphic package management tool
+#    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 from yumdaemon import *
 
 from .backend import *
@@ -11,10 +28,10 @@ class YumPackage(Package):
 
     def __init__(self, po_tuple, action, backend):
         Package.__init__(self, backend)
-        (id, summary, size) = po_tuple
-        self.id = id
+        (pkg_id, summary, size) = po_tuple
+        self.pkg_id = pkg_id
         self.action = action
-        (n, e, v, r, a, repo_id) = self.to_pkg_tuple(self.id)
+        (n, e, v, r, a, repo_id) = self.to_pkg_tuple(self.pkg_id)
         self.name = n
         self.epoch = e
         self.ver = v
@@ -29,9 +46,9 @@ class YumPackage(Package):
         # cache
         self._description = None
 
-    def to_pkg_tuple(self, id):
-        ''' find the real package nevre & repoid from an package id'''
-        (n, e, v, r, a, repo_id)  = str(id).split(',')
+    def to_pkg_tuple(self, pkg_id):
+        ''' find the real package nevre & repoid from an package pkg_id'''
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
         return (n, e, v, r, a, repo_id)
 
     def __str__(self):
@@ -54,7 +71,7 @@ class YumPackage(Package):
 
         @param attr:
         '''
-        return self.backend.GetAttribute(self.id, attr)
+        return self.backend.GetAttribute(self.pkg_id, attr)
 
 
 
@@ -75,7 +92,7 @@ class YumPackage(Package):
 
     @property
     def filename(self):
-        ''' Package id (the full package filename) '''
+        ''' Package pkg_id (the full package filename) '''
         if self.action == 'li': # the full path for at localinstall is stored in repoid
             return self.repoid
         else:
@@ -148,14 +165,14 @@ class YumPackage(Package):
         '''
         get package color to show in view
         '''
-        return self.backend.get_downgrades(self.id)
+        return self.backend.get_downgrades(self.pkg_id)
 
     @property
     def updateinfo(self):
         '''
         get update info for package
         '''
-        return self.backend.GetUpdateInfo(self.id)
+        return self.backend.GetUpdateInfo(self.pkg_id)
 
 
 
@@ -164,7 +181,7 @@ class YumPackage(Package):
         '''
         get update info for package
         '''
-        return self.backend.get_dependencies(self.id)
+        return self.backend.get_dependencies(self.pkg_id)
 
 
     @property
@@ -259,13 +276,13 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         show a list of packages
         @param pkgs:
         '''
-        for id in pkgs:
-            (n, e, v, r, a, repo_id) = self.to_pkg_tuple(id)
+        for pkg_id in pkgs:
+            (n, e, v, r, a, repo_id) = self.to_pkg_tuple(pkg_id)
             print( " --> %s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id))
 
-    def to_pkg_tuple(self, id):
-        ''' find the real package nevre & repoid from an package id'''
-        (n, e, v, r, a, repo_id)  = str(id).split(',')
+    def to_pkg_tuple(self, pkg_id):
+        ''' find the real package nevre & repoid from an package pkg_id'''
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
         return (n, e, v, r, a, repo_id)
 
     def _make_pkg_object(self, pkgs, flt):
@@ -306,8 +323,8 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         return Backend.get_packages(self, flt)
 
     @ExceptionHandler        
-    def get_downgrades(self, id):
-        pkgs = self.GetAttribute(id,"downgrades")
+    def get_downgrades(self, pkg_id):
+        pkgs = self.GetAttribute(pkg_id,"downgrades")
         return self._build_package_list(pkgs)
 
     @ExceptionHandler        
@@ -340,21 +357,21 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         for action, pkgs in output:
             print( "  %s" % action)
             for pkg_list in pkgs:
-                id, size, obs_list = pkg_list  # (pkg_id, size, list with id's obsoleted by this pkg)
-                print ("    --> %-50s : %s" % (self._fullname(id),size))
+                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
+                print ("    --> %-50s : %s" % (self._fullname(pkg_id),size))
 
     def format_transaction_result(self, output):
         result = []
         for action, pkgs in output:
             result.append( "  %s" % action)
             for pkg_list in pkgs:
-                id, size, obs_list = pkg_list  # (pkg_id, size, list with id's obsoleted by this pkg)
-                result.append("    --> %-50s : %s" % (self._fullname(id),size))
+                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
+                result.append("    --> %-50s : %s" % (self._fullname(pkg_id),size))
         return "\n".join(result)
 
-    def _fullname(self,id):
+    def _fullname(self,pkg_id):
         ''' Package fullname  '''
-        (n, e, v, r, a, repo_id)  = str(id).split(',')
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
         if e and e != '0':
             return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
         else:

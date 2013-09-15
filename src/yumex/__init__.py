@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-#    Yum Exteder (yumex) - A GUI for yum
+#    Yum Exteder (yumex) - A graphic package management tool
 #    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -22,10 +22,6 @@ from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo
 from .misc import show_information
 from .const import *
 from .yum_backend import YumReadOnlyBackend
-import re
-
-DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
-
 
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
