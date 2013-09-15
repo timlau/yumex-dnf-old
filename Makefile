@@ -63,7 +63,7 @@ test-cleanup:
 	@rm -rf ${PKGNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
 	@git checkout -f
-	@git checkout master
+	@git checkout future
 	@git branch -D release-test
 
 show-vars:
