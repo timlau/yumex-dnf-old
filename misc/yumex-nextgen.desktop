@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Yum Extender (nextgen)
+Name[ja]=Yum Extender
+Name[zh_TW]=Yum 延伸程式
+Name[ru]=Дополнение к Yum
+Comment=GUI front end for Yum
+Comment[ja]=YumのGUIフロントエンド
+Comment[zh_TW]=Yum 的圖形使用者介面前端程式
+Comment[ru]=Графический интерфейс для Yum
+Categories=Application;System;X-Red-Hat-Base;X-Fedora;
+Icon=yumex-nextgen
+Exec=/usr/bin/yumex-nextgen
+Type=Application
+Terminal=false
+Encoding=UTF-8
+X-Desktop-File-Install-Version=0.10
