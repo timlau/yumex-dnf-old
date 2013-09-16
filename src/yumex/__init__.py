@@ -77,6 +77,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.info = PackageInfo(self,self)
         info.add(self.info)
         self.info.show_all()
+        
+        # spinner
+        self.spinner = self.builder.get_object("progress_spinner")
+        self.spinner.set_from_file(PIX_DIR+"/spinner.gif")
+        self.spinner.hide()
 
         # setup actions
         self._create_action("pref", self.on_pref)
@@ -142,11 +147,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         sys.exit(1)
  
     def set_spinner(self, state):
-        widget = self.builder.get_object("progress_spinner")
         if state:
-            widget.start()
+            self.spinner.show()
         else:
-            widget.stop()
+            self.spinner.hide()
 
     
     def _parse_error(self, value):

@@ -35,8 +35,11 @@ __yumex_version__ = "3.99.1"
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
 if BIN_PATH in ["/usr/bin", "/bin"]:
     DATA_DIR = '/usr/share/yumex-nextgen'
+    PIX_DIR = DATA_DIR+"/gfx"
 else:
     DATA_DIR = BIN_PATH
+    PIX_DIR = DATA_DIR+"/../gfx"
+    
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
