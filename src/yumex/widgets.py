@@ -362,7 +362,11 @@ class PackageView(SelectionView):
         self.set_model(None)
         self.store.clear()
         self.set_model(self.store)
+        i=0
         for po in sorted(pkgs,key=lambda po: po.name ):
+            i += 1
+            if i % 500: # Handle Gtk event, so gui dont freeze
+                doGtkEvents()
             self.store.append([po, str(po)])
 
     def on_toggled(self, widget, path):
@@ -888,7 +892,7 @@ class PackageInfo(PackageInfoView):
     '''
     class for handling the Package Information view
     '''
-    
+
     def __init__(self, window, base):
         PackageInfoView.__init__(self, window=window, url_handler=self._url_handler)
         self.window = window
@@ -905,17 +909,17 @@ class PackageInfo(PackageInfoView):
         for flt in PKGINFO_FILTERS:
             widget = self.base.builder.get_object("info_%s" % flt)
             widget.connect('toggled',self.on_filter_changed, flt)
-        
+
     def set_package(self, pkg):
         '''
         Set current active package to show information about in the
         Package Info view.
-        
+
         :param pkg: package to set as active package
         '''
         self.current_package = pkg
         self.update()
-        
+
     def update(self):
         '''
         update the information in the Package info view
@@ -954,18 +958,18 @@ class PackageInfo(PackageInfoView):
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             self.frontend.warning("%s is not an url" % url)
-                
+
     def _show_description(self):
         desc = self.current_package.description
         self.write(desc)
-                    
+
     def _show_updateinfo(self):
         updinfo = self.current_package.updateinfo
         for info in updinfo:
             self._write_update_info(info)
         if len(updinfo) == 0:
             self.write("No Update information is available")
-    
+
     def _write_update_info(self, upd_info):
         head = ""
         head += ("%14s " % _("Release")) + ": %(release)s\n"
@@ -1013,7 +1017,7 @@ class PackageInfo(PackageInfoView):
 
         head += "\n"
         self.write(head)
-    
+
     def _show_changelog(self):
         self.write("Changelog for "+str(self.current_package))
         changelog = self.current_package.changelog
@@ -1024,16 +1028,16 @@ class PackageInfo(PackageInfoView):
                 self.write("* %s %s" % (date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
                 for line in msg.split('\n'):
                     self.write("%s" % line, "changelog")
-                self.write('\n')     
+                self.write('\n')
                 if i == 5: # only show the last 5 entries
-                    break 
-                  
-    
+                    break
+
+
     def _show_filelist(self):
         filelist = self.current_package.filelist
         for fname in sorted(filelist):
             self.write(fname)
-    
+
     def _show_requirements(self):
         self.write("Requirements for "+str(self.current_package))
 
@@ -1041,7 +1045,7 @@ class PackageInfo(PackageInfoView):
         '''
         Radio Button changed handler
         Change the info in the view to match the selection
-        
+
         :param button:
         :param data:
         '''

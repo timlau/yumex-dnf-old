@@ -9,7 +9,7 @@
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkGrid" id="grid_top">
+      <object class="GtkBox" id="top_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -76,6 +76,11 @@
               <object class="GtkMenuToolButton" id="tool_packages">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Show Packages
+Updates = Available Updates
+Installed = Packages installed on the system
+Available = Packages available for installation</property>
                 <property name="tooltip_text" translatable="yes">Show Packages
 Updates = Available Updates
 Installed = Packages installed on the system
@@ -92,6 +97,11 @@ Available = Packages available for installation</property>
             <child>
               <object class="GtkRadioToolButton" id="hidden">
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Show Packages
+Updates = Available Updates
+Installed = Packages installed on the system
+Available = Packages available for installation</property>
                 <property name="tooltip_text" translatable="yes">Show Packages
 Updates = Available Updates
 Installed = Packages installed on the system
@@ -99,6 +109,7 @@ Available = Packages available for installation</property>
                 <property name="label" translatable="yes">hidden</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">package-x-generic</property>
+                <property name="active">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -109,6 +120,8 @@ Available = Packages available for installation</property>
               <object class="GtkRadioToolButton" id="tool_queue">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Show Pending Changes</property>
                 <property name="tooltip_text" translatable="yes">Show Pending Changes</property>
                 <property name="action_name">win.queue</property>
                 <property name="label" translatable="yes">Queue</property>
@@ -125,6 +138,8 @@ Available = Packages available for installation</property>
               <object class="GtkRadioToolButton" id="tool_history">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Show history of changes</property>
                 <property name="tooltip_text" translatable="yes">Show history of changes</property>
                 <property name="action_name">win.history</property>
                 <property name="label" translatable="yes">History</property>
@@ -141,6 +156,8 @@ Available = Packages available for installation</property>
               <object class="GtkToolButton" id="tool_apply">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Apply Pending Changes</property>
                 <property name="tooltip_text" translatable="yes">Apply Pending Changes</property>
                 <property name="action_name">win.apply_changes</property>
                 <property name="label" translatable="yes">Apply Changes</property>
@@ -154,10 +171,9 @@ Available = Packages available for installation</property>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -175,39 +191,36 @@ Available = Packages available for installation</property>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkAlignment" id="progress_box">
+            <property name="width_request">46</property>
+            <property name="height_request">36</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="left_padding">10</property>
             <property name="right_padding">10</property>
             <child>
               <object class="GtkImage" id="progress_spinner">
-                <property name="width_request">36</property>
-                <property name="height_request">36</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon_name">system-run</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">False</property>
+        <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
     </child>
