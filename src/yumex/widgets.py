@@ -24,7 +24,7 @@ from gi.repository import GObject, GLib
 from datetime import date
 from subprocess import call
 
-from .const import _
+from .misc import _, P_
 from .const import *
 from .misc import doGtkEvents, format_block, TimeFunction
 

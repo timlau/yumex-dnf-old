@@ -20,6 +20,12 @@ import time
 
 from gi.repository import Gtk
 from yumdaemon import YumDaemonError
+import gettext
+
+gettext.bindtextdomain('yumex')
+gettext.textdomain('yumex')
+_ = gettext.gettext
+P_ = gettext.ngettext
 
 
 def format_block(block, indent):

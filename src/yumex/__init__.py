@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo, InfoProgressBar
-from .misc import show_information, doGtkEvents
+from .misc import show_information, doGtkEvents, _, P_
 from .const import *
 from .yum_backend import YumReadOnlyBackend
 
@@ -247,11 +247,12 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.on_packages(None,None)
             print(data)
             if data in ["installed","available","updates"]:
-                self.infobar.message("Getting : %s" % data)
+                self.infobar.message(PACKAGE_LOAD_MSG[data])
                 self.current_filter = (widget, data)
                 self.set_spinner(True,True)
                 pkgs = self.backend.get_packages(data)
                 self.info.set_package(None)
+                self.infobar.message(_("Adding packages to view"))
                 self.package_view.populate(pkgs)
                 self.set_spinner(False)
                 self.infobar.hide()

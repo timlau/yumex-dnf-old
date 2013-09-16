@@ -18,15 +18,10 @@
 
 
 from gi.repository import Pango
-import gettext
 import os.path
 import sys
 import re
-
-gettext.bindtextdomain('yumex')
-gettext.textdomain('yumex')
-_ = gettext.gettext
-P_ = gettext.ngettext
+from .misc import _, P_
 
 __yumex_version__ = "3.99.1"
 
@@ -89,3 +84,11 @@ PKGINFO_FILTERS = ['desc','updinfo','changelog','files','deps']
 
 #FIXME: The url should not be hardcoded
 BUGZILLA_URL='https://bugzilla.redhat.com/show_bug.cgi?id='
+
+
+
+PACKAGE_LOAD_MSG = {
+ 'installed'    : _('Getting installed packages'),
+ 'available'    : _('Getting available packages'),
+ 'updates'      : _('Getting available updates'),
+ }
