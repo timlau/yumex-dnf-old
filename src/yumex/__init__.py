@@ -19,7 +19,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
-from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo
+from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo, InfoProgressBar
 from .misc import show_information, doGtkEvents
 from .const import *
 from .yum_backend import YumReadOnlyBackend
@@ -83,6 +83,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.spinner = self.builder.get_object("progress_spinner")
         self.spinner.set_from_file(PIX_DIR+"/spinner.gif")
         self.spinner.hide()
+
+        # infobar
+        self.infobar = InfoProgressBar(self.builder)
+        self.infobar.hide()
 
         # setup actions
         self._create_action("pref", self.on_pref)
@@ -243,13 +247,14 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.on_packages(None,None)
             print(data)
             if data in ["installed","available","updates"]:
+                self.infobar.message("Getting : %s" % data)
                 self.current_filter = (widget, data)
                 self.set_spinner(True,True)
                 pkgs = self.backend.get_packages(data)
                 self.info.set_package(None)
                 self.package_view.populate(pkgs)
                 self.set_spinner(False)
-
+                self.infobar.hide()
 
     def on_search_changed(self, widget, data):
         '''

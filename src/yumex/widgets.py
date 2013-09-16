@@ -128,6 +128,44 @@ class SearchEntry(Gtk.Entry):
         else:
             self.set_icon_from_stock(Gtk.EntryIconPosition.SECONDARY, None)
 
+class InfoProgressBar:
+
+    def __init__(self, ui):
+        self.ui = ui
+        self.infobar = ui.get_object("infobar")
+        self.label = ui.get_object("infobar_label")
+        self.sublabel = ui.get_object("infobar_sublabel")
+        self.progress = ui.get_object("infobar_progress")
+        self.actions = ui.get_object("infobar_actions")
+
+    def hide(self):
+        self.label.hide()
+        self.sublabel.hide()
+        self.progress.hide()
+        self.actions.hide()
+        self.infobar.hide()
+
+    def show_label(self):
+        self.label.show()
+        self.label.set_text("")
+
+    def show_sublabel(self):
+        self.sublabel.show()
+        self.sublabel.set_text("")
+
+    def show_progress(self):
+        self.progress.show()
+        self.progress.set_fraction(0.0)
+
+    def show_buttons(self):
+        self.actions.show()
+
+    def message(self, msg):
+        self.infobar.show()
+        self.show_label()
+        self.label.set_text(msg)
+
+
 
 class SelectionView(Gtk.TreeView):
     '''
