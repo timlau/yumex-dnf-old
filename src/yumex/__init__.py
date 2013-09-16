@@ -17,9 +17,10 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo
-from .misc import show_information
+from .misc import show_information, doGtkEvents
 from .const import *
 from .yum_backend import YumReadOnlyBackend
 
@@ -77,7 +78,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.info = PackageInfo(self,self)
         info.add(self.info)
         self.info.show_all()
-        
+
         # spinner
         self.spinner = self.builder.get_object("progress_spinner")
         self.spinner.set_from_file(PIX_DIR+"/spinner.gif")
@@ -89,14 +90,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._create_action("history", self.on_history)
         self._create_action("queue", self.on_queue)
         self._create_action("apply_changes", self.on_apply_changes)
-#         self._create_action("info_desc", self.on_info)
-#         self._create_action("info_changelog", self.on_info)
-#         self._create_action("info_files", self.on_info)
-#         self._create_action("info_deps", self.on_info)
 
         # show window
         self.show_now()
-        
+
         # setup default selections
         self.builder.get_object("pkg_updates").set_active(True)
         self.builder.get_object("info_desc").set_active(True)
@@ -108,7 +105,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         self.content = self.builder.get_object("content")
         self.queue_view = QueueView()
-        self.package_view = PackageView(self.queue_view)
+        self.package_view = PackageView(self.queue_view, self)
         select = self.package_view.get_selection()
         select.connect("changed", self.on_pkg_view_selection_changed)
         self.history_view = History()
@@ -136,7 +133,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         action = Gio.SimpleAction.new(name, para)
         action.connect("activate", callback)
         self.add_action(action)
-        
+
     def exception_handler(self,e):
         msg = str(e)
         err, msg = self._parse_error(msg)
@@ -145,14 +142,14 @@ class YumexWindow(Gtk.ApplicationWindow):
             msg="Yum  is locked by another process \n\nYum Extender will exit"
         show_information(self, msg)
         sys.exit(1)
- 
+
     def set_spinner(self, state):
         if state:
             self.spinner.show()
         else:
             self.spinner.hide()
 
-    
+
     def _parse_error(self, value):
         '''
         parse values from a DBus releated exception
@@ -164,10 +161,30 @@ class YumexWindow(Gtk.ApplicationWindow):
             msg = res.groups()[1]
             return err, msg
         return "",""
-       
+
+    def busy_cursor(self, insensitive=False):
+        ''' Set busy cursor in mainwin and make it insensitive if selected '''
+        win = self.get_window()
+        if win != None:
+            win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+            if insensitive:
+                for widget in ['top_box', 'content']:
+                    self.builder.get_object(widget).set_sensitive(False)
+        doGtkEvents()
+
+    def normal_cursor(self):
+        ''' Set Normal cursor in mainwin and make it sensitive '''
+        win = self.get_window()
+        if win != None:
+            win.set_cursor(None)
+            for widget in ['top_box', 'content']:
+                self.builder.get_object(widget).set_sensitive(True)
+        doGtkEvents()
+
+
     def on_pkg_view_selection_changed(self, selection):
         '''
-        package selected in the view 
+        package selected in the view
         :param widget: the view widget
         '''
         model, iterator = selection.get_selected()
@@ -225,10 +242,12 @@ class YumexWindow(Gtk.ApplicationWindow):
             if data in ["installed","available","updates"]:
                 self.current_filter = (widget, data)
                 self.set_spinner(True)
+                self.busy_cursor(True)
                 pkgs = self.backend.get_packages(data)
                 self.info.set_package(None)
                 self.package_view.populate(pkgs)
                 self.set_spinner(False)
+                self.normal_cursor()
 
 
     def on_search_changed(self, widget, data):
@@ -320,12 +339,12 @@ class YumexApplication(Gtk.Application):
 
     def on_quit(self, action=None, parameter=None):
         self.quit()
-        
+
     def do_shutdown(self):
         Gtk.Application.do_shutdown(self)
         print("Exit Application")
         if self.win.backend:
             self.win.backend.quit()
-    
+
 
 

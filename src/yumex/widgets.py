@@ -26,7 +26,7 @@ from subprocess import call
 
 from .const import _
 from .const import *
-from .misc import doGtkEvents, format_block
+from .misc import doGtkEvents, format_block, TimeFunction
 
 
 class SearchEntry(Gtk.Entry):
@@ -284,13 +284,14 @@ class SelectionView(Gtk.TreeView):
 
 class PackageView(SelectionView):
 
-    def __init__(self,qview):
+    def __init__(self,qview, base):
         SelectionView.__init__(self)
         self.store = self._setup_model()
         self._click_header_active = False
         self._click_header_state = ""
         self.queue = qview.queue
         self.queueView = qview
+        self.base = base
 
 
     def _setup_model(self):
@@ -358,7 +359,9 @@ class PackageView(SelectionView):
         else:
             cell.set_property('visible', False)
 
+    @TimeFunction
     def populate(self, pkgs):
+        self.freeze_child_notify()
         self.set_model(None)
         self.store.clear()
         self.set_model(self.store)
@@ -368,6 +371,7 @@ class PackageView(SelectionView):
             if i % 500: # Handle Gtk event, so gui dont freeze
                 doGtkEvents()
             self.store.append([po, str(po)])
+        self.thaw_child_notify()
 
     def on_toggled(self, widget, path):
         """ Package selection handler """

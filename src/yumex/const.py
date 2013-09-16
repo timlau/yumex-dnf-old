@@ -39,7 +39,7 @@ if BIN_PATH in ["/usr/bin", "/bin"]:
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR+"/../gfx"
-    
+
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
@@ -48,6 +48,31 @@ DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 XSMALL_FONT = Pango.FontDescription("sans 6")
 SMALL_FONT = Pango.FontDescription("sans 8")
 BIG_FONT = Pango.FontDescription("sans 12")
+
+# Constants
+
+ACTIONS_FILTER = { 'u' : 'updates', 'i' : 'available', \
+                   'r' : 'installed' , 'o' : 'obsoletes', \
+                    'do' : 'downgrade', 'ri' : 'reinstall', 'li' : 'localinstall' }
+
+FILTER_ACTIONS = {'updates' : 'u', 'available': 'i', 'installed' : 'r', \
+                   'obsoletes' : 'o', 'downgrade'  : 'do', 'reinstall' : 'ri', 'localinstall' : 'li'}
+
+
+PACKAGE_COLORS = {
+'i' : 'black',
+'u' : 'red',
+'r' : 'darkgreen',
+'o' : 'blue',
+'ri' : 'red',
+'do' : 'goldenrod',
+'li' : 'black'
+
+}
+
+BACKEND_ACTIONS = {'update' : 'u', 'install': 'i', 'remove' : 'r', \
+                   'obsoletes' : 'o', 'downgrade'  : 'do'}
+
 
 QUEUE_PACKAGE_TYPES = {
 'i' : 'install',
@@ -62,5 +87,5 @@ QUEUE_PACKAGE_TYPES = {
 # Package info filters (widget : info_xxxxxx)
 PKGINFO_FILTERS = ['desc','updinfo','changelog','files','deps']
 
-#FIXME: The url should not be hardcoded                    
+#FIXME: The url should not be hardcoded
 BUGZILLA_URL='https://bugzilla.redhat.com/show_bug.cgi?id='

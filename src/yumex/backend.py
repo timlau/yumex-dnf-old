@@ -17,105 +17,8 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-import time
-from yumdaemon import YumDaemonError
+from .const import *
 
-# Constants
-
-ACTIONS_FILTER = { 'u' : 'updates', 'i' : 'available', \
-                   'r' : 'installed' , 'o' : 'obsoletes', \
-                    'do' : 'downgrade', 'ri' : 'reinstall', 'li' : 'localinstall' }
-
-FILTER_ACTIONS = {'updates' : 'u', 'available': 'i', 'installed' : 'r', \
-                   'obsoletes' : 'o', 'downgrade'  : 'do', 'reinstall' : 'ri', 'localinstall' : 'li'}
-
-
-PACKAGE_COLORS = {
-'i' : 'black',
-'u' : 'red',
-'r' : 'darkgreen',
-'o' : 'blue',
-'ri' : 'red',
-'do' : 'goldenrod',
-'li' : 'black'
-
-}
-
-BACKEND_ACTIONS = {'update' : 'u', 'install': 'i', 'remove' : 'r', \
-                   'obsoletes' : 'o', 'downgrade'  : 'do'}
-
-
-def ExceptionHandler(func):
-    """
-    This decorator catch yum backed exceptions 
-    """
-    def newFunc(*args, **kwargs):
-        try:
-            rc = func(*args, **kwargs)
-            return rc
-        except YumDaemonError as e:
-            base = args[0] # get current class
-            base.exception_handler(e)
-    newFunc.__name__ = func.__name__
-    newFunc.__doc__ = func.__doc__
-    newFunc.__dict__.update(func.__dict__)
-    return newFunc
-
-def TimeFunction(func):
-    """
-    This decorator catch yum exceptions and send fatal signal to frontend
-    """
-    def newFunc(*args, **kwargs):
-        t_start = time.time()
-        rc = func(*args, **kwargs)
-        t_end = time.time()
-        name = func.__name__
-        print("%s took %.2f sec" % (name, t_end - t_start))
-        return rc
-
-    newFunc.__name__ = func.__name__
-    newFunc.__doc__ = func.__doc__
-    newFunc.__dict__.update(func.__dict__)
-    return newFunc
-
-def format_number(number, SI=0, space=' '):
-    """Turn numbers into human-readable metric-like numbers"""
-    symbols = ['',  # (none)
-               'k', # kilo
-               'M', # mega
-               'G', # giga
-               'T', # tera
-               'P', # peta
-               'E', # exa
-               'Z', # zetta
-               'Y'] # yotta
-
-    if SI: step = 1000.0
-    else: step = 1024.0
-
-    thresh = 999
-    depth = 0
-    max_depth = len(symbols) - 1
-
-    # we want numbers between 0 and thresh, but don't exceed the length
-    # of our list.  In that event, the formatting will be screwed up,
-    # but it'll still show the right number.
-    while number > thresh and depth < max_depth:
-        depth  = depth + 1
-        number = number / step
-
-    if type(number) == type(1) or type(number) == type(1):
-        # it's an int or a long, which means it didn't get divided,
-        # which means it's already short enough
-        fmt = '%i%s%s'
-    elif number < 9.95:
-        # must use 9.95 for proper sizing.  For example, 9.99 will be
-        # rounded to 10.0 with the .1f fmt string (which is too long)
-        fmt = '%.1f%s%s'
-    else:
-        fmt = '%.0f%s%s'
-
-    return(fmt % (float(number or 0), space, symbols[depth]))
 
 class Package:
     '''
@@ -183,7 +86,7 @@ class Backend:
     def __init__(self, frontend):
         self.cache = PackageCache()
         self.frontend = frontend
-        
+
 
     def exception_handler(self,e):
         """

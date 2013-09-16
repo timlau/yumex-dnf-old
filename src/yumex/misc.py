@@ -16,9 +16,10 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+import time
 
 from gi.repository import Gtk
-from gi.repository import Gdk
+from yumdaemon import YumDaemonError
 
 
 def format_block(block, indent):
@@ -28,7 +29,7 @@ def format_block(block, indent):
         result = lines[0]+"\n"
         for line in lines[1:]:
             result += spaces + line + '\n'
-        return result        
+        return result
 
 def show_information(window, msg, add_msg = None):
     dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, msg)
@@ -46,25 +47,76 @@ def doGtkEvents():
         Gtk.main_iteration()
 
 
-def busyCursor(base, insensitive=False):
-    ''' Set busy cursor in mainwin and make it insensitive if selected '''
-    win = base.window.get_window()
-    if win != None:
-        win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        if insensitive:
-            #base.window.set_sensitive(False)
-            for widget in ['main_vpaned', 'toolbar', 'search_hb']:
-                base.get_widget(widget).set_sensitive(False)
+def ExceptionHandler(func):
+    """
+    This decorator catch yum backed exceptions
+    """
+    def newFunc(*args, **kwargs):
+        try:
+            rc = func(*args, **kwargs)
+            return rc
+        except YumDaemonError as e:
+            base = args[0] # get current class
+            base.exception_handler(e)
+    newFunc.__name__ = func.__name__
+    newFunc.__doc__ = func.__doc__
+    newFunc.__dict__.update(func.__dict__)
+    return newFunc
 
-    doGtkEvents()
+def TimeFunction(func):
+    """
+    This decorator catch yum exceptions and send fatal signal to frontend
+    """
+    def newFunc(*args, **kwargs):
+        t_start = time.time()
+        rc = func(*args, **kwargs)
+        t_end = time.time()
+        name = func.__name__
+        print("%s took %.2f sec" % (name, t_end - t_start))
+        return rc
 
-def normalCursor(base):
-    ''' Set Normal cursor in mainwin and make it sensitive '''
-    win = base.window.get_window()
-    if win != None:
-        win.set_cursor(None)
-        for widget in ['main_vpaned', 'toolbar', 'search_hb']:
-            base.get_widget(widget).set_sensitive(True)
-        #base.window.set_sensitive(True)
-    doGtkEvents()
+    newFunc.__name__ = func.__name__
+    newFunc.__doc__ = func.__doc__
+    newFunc.__dict__.update(func.__dict__)
+    return newFunc
+
+def format_number(number, SI=0, space=' '):
+    """Turn numbers into human-readable metric-like numbers"""
+    symbols = ['',  # (none)
+               'k', # kilo
+               'M', # mega
+               'G', # giga
+               'T', # tera
+               'P', # peta
+               'E', # exa
+               'Z', # zetta
+               'Y'] # yotta
+
+    if SI: step = 1000.0
+    else: step = 1024.0
+
+    thresh = 999
+    depth = 0
+    max_depth = len(symbols) - 1
+
+    # we want numbers between 0 and thresh, but don't exceed the length
+    # of our list.  In that event, the formatting will be screwed up,
+    # but it'll still show the right number.
+    while number > thresh and depth < max_depth:
+        depth  = depth + 1
+        number = number / step
+
+    if type(number) == type(1) or type(number) == type(1):
+        # it's an int or a long, which means it didn't get divided,
+        # which means it's already short enough
+        fmt = '%i%s%s'
+    elif number < 9.95:
+        # must use 9.95 for proper sizing.  For example, 9.99 will be
+        # rounded to 10.0 with the .1f fmt string (which is too long)
+        fmt = '%.1f%s%s'
+    else:
+        fmt = '%.0f%s%s'
+
+    return(fmt % (float(number or 0), space, symbols[depth]))
+
 

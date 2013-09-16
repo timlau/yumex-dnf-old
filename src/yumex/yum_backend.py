@@ -18,8 +18,9 @@
 
 from yumdaemon import *
 
-from .backend import *
+from .backend import Package, Backend
 from .const import *
+from .misc import format_number, ExceptionHandler, TimeFunction
 
 class YumPackage(Package):
     '''
@@ -245,13 +246,14 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     def __init__(self, frontend):
         Backend.__init__(self, frontend)
         YumDaemonReadOnlyClient.__init__(self)
-        
-    @ExceptionHandler        
+
+    @ExceptionHandler
     def setup(self):
         self.Lock()
+        self.SetWatchdogState(False)
         return True
 
-    @ExceptionHandler        
+    @ExceptionHandler
     def quit(self):
         '''
         quit the application by unlocking yum and stop the mainloop
@@ -259,7 +261,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         self.Unlock()
         self.Exit()
 
-    @ExceptionHandler        
+    @ExceptionHandler
     def reload(self):
         '''
         Reload the yumdaemon service
@@ -312,7 +314,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
-    @ExceptionHandler        
+    @ExceptionHandler
     @TimeFunction
     def get_packages(self,flt):
         if not self.cache.is_populated(flt): # is this type of packages is already cached ?
@@ -322,12 +324,12 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             self.cache.populate(flt, pkgs)
         return Backend.get_packages(self, flt)
 
-    @ExceptionHandler        
+    @ExceptionHandler
     def get_downgrades(self, pkg_id):
         pkgs = self.GetAttribute(pkg_id,"downgrades")
         return self._build_package_list(pkgs)
 
-    @ExceptionHandler        
+    @ExceptionHandler
     def get_packages_by_name(self, prefix, newest_only):
         '''
 
@@ -339,7 +341,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         pkgs = self.GetPackagesByName(prefix, newest_only)
         return self._build_package_list(pkgs)
 
-    @ExceptionHandler        
+    @ExceptionHandler
     def search(self, fields, keys, match_all, newest_only):
         '''
 
