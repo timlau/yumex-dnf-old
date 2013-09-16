@@ -29,6 +29,10 @@ from .const import *
 from .misc import doGtkEvents, format_block, TimeFunction
 
 
+#
+# based on SearchEntry by Sebastian Heinlein <glatzor@ubuntu.com>
+# http://bazaar.launchpad.net/~ubuntuone-control-tower/software-center/trunk/view/head:/softwarecenter/ui/gtk3/widgets/searchentry.py
+#
 class SearchEntry(Gtk.Entry):
 
     __gsignals__ = {'search-changed': (GObject.SignalFlags.RUN_FIRST,
