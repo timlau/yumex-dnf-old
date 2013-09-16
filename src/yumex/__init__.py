@@ -27,7 +27,7 @@ from .yum_backend import YumReadOnlyBackend
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
         Gtk.Window.__init__(self, title="Yum Extender", application=app)
-        self.set_default_size(1024, 600)
+        self.set_default_size(1024, 700)
         self.app = app
         # init vars
         self.last_search = None
@@ -143,11 +143,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         show_information(self, msg)
         sys.exit(1)
 
-    def set_spinner(self, state):
+    def set_spinner(self, state, insensitive=False):
         if state:
             self.spinner.show()
+            self.busy_cursor(insensitive)
         else:
             self.spinner.hide()
+            self.normal_cursor()
+
 
 
     def _parse_error(self, value):
@@ -241,13 +244,11 @@ class YumexWindow(Gtk.ApplicationWindow):
             print(data)
             if data in ["installed","available","updates"]:
                 self.current_filter = (widget, data)
-                self.set_spinner(True)
-                self.busy_cursor(True)
+                self.set_spinner(True,True)
                 pkgs = self.backend.get_packages(data)
                 self.info.set_package(None)
                 self.package_view.populate(pkgs)
                 self.set_spinner(False)
-                self.normal_cursor()
 
 
     def on_search_changed(self, widget, data):

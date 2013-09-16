@@ -705,6 +705,7 @@ class TextViewBase(Gtk.TextView):
         Gtk.TextView.__init__(self)
         self.set_right_margin(10)
         self.set_left_margin(10)
+        self.set_margin_top(5)
         self.set_editable(False)
         self.set_cursor_visible(False)
         self.buffer = self.get_buffer()
@@ -837,6 +838,7 @@ class TextViewBase(Gtk.TextView):
         '''
         self.buffer.set_text('')
 
+
     def goTop(self):
         '''
         Set the cursor to the start of the text view
@@ -849,7 +851,7 @@ class PackageInfoView(TextViewBase):
     TextView handler for showing package information
     '''
 
-    def __init__(self, font_size=8, window=None, url_handler=None):
+    def __init__(self, font_size=9, window=None, url_handler=None):
         '''
         Setup the textview
 
@@ -899,12 +901,14 @@ class PackageInfo(PackageInfoView):
 
     def __init__(self, window, base):
         PackageInfoView.__init__(self, window=window, url_handler=self._url_handler)
+        #self.set_margin_top(10)
         self.window = window
         self.base = base
         self.current_package = None
         self.active_filter = PKGINFO_FILTERS[0]
         self.setup_filters()
         self.update()
+
 
     def setup_filters(self):
         '''
@@ -968,11 +972,13 @@ class PackageInfo(PackageInfoView):
         self.write(desc)
 
     def _show_updateinfo(self):
+        self.base.set_spinner(True)
         updinfo = self.current_package.updateinfo
         for info in updinfo:
             self._write_update_info(info)
         if len(updinfo) == 0:
             self.write("No Update information is available")
+        self.base.set_spinner(False)
 
     def _write_update_info(self, upd_info):
         head = ""
@@ -1023,7 +1029,7 @@ class PackageInfo(PackageInfoView):
         self.write(head)
 
     def _show_changelog(self):
-        self.write("Changelog for "+str(self.current_package))
+        self.base.set_spinner(True)
         changelog = self.current_package.changelog
         if changelog:
             i = 0
@@ -1035,12 +1041,15 @@ class PackageInfo(PackageInfoView):
                 self.write('\n')
                 if i == 5: # only show the last 5 entries
                     break
+        self.base.set_spinner(False)
 
 
     def _show_filelist(self):
+        self.base.set_spinner(True)
         filelist = self.current_package.filelist
         for fname in sorted(filelist):
             self.write(fname)
+        self.base.set_spinner(False)
 
     def _show_requirements(self):
         self.write("Requirements for "+str(self.current_package))
@@ -1055,6 +1064,5 @@ class PackageInfo(PackageInfoView):
         '''
         if button.get_active():
             #self.base.infobar.info("pkginfo: %s selected" % data)
-            print(data)
             self.active_filter = data
             self.update()
