@@ -21,6 +21,8 @@ import time
 from gi.repository import Gtk
 from yumdaemon import YumDaemonError
 import gettext
+import os.path
+import configparser
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -125,4 +127,57 @@ def format_number(number, SI=0, space=' '):
 
     return(fmt % (float(number or 0), space, symbols[depth]))
 
+class Config(object):
+    '''
+    Yum Extender Configuration class
+    '''
+    # Yumex default config values
+    DEFAULT_CONFIG_SETTING = {
+    'history_days' : 180,
+    'color_available' : 'black',      
+    'color_update'    : 'red',      
+    'color_installed' : 'darkgreen',      
+    'color_obsolete'  : 'blue',      
+    'color_downgrade' : 'goldenrod'      
+    }
+    
+    def __init__(self):
+        object.__init__(self)
+        self.conf_dir = os.environ['HOME'] + "/.config/yumex-nextgen"
+        if not os.path.isdir(self.conf_dir):
+            print("creating config directory : %s" % self.conf_dir)
+            os.makedirs(self.conf_dir, 0o700)
+        self.conf_file = self.conf_dir+"/yumex.conf"
+        self._config = configparser.ConfigParser()
+        self._config['yumex'] = Config.DEFAULT_CONFIG_SETTING
+        self.read()
+        
+    def read(self):
+        if not os.path.exists(self.conf_file):
+            print("creating default config file : %s" % self.conf_file)
+            self.write()
+        else:
+            self._config.read_file(open(self.conf_file,"r"))
+            
+    def write(self):
+        fp = open(self.conf_file,"w")
+        self._config.write(fp)
+        fp.close()
+        
+    def get_config(self, option):
+        if self._config.has_option('yumex', option):
+            return self._config['yumex'][option]
+        else:
+            return None
 
+    def set_config(self, option, value):
+        if self._config.has_option('yumex', option):
+            self._config['yumex'][option] = value
+
+    def __getattr__(self, name):
+        result = self.get_config(name)
+        return result
+        
+        
+
+CONFIG = Config()

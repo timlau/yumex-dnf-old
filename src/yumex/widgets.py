@@ -24,8 +24,8 @@ from gi.repository import GObject, GLib
 from datetime import date
 from subprocess import call
 
-from .misc import _, P_
-from .const import *
+from .misc import _, P_, CONFIG  # @UnusedImport
+from .const import *  # @UnusedWildImport
 from .misc import doGtkEvents, format_block, TimeFunction
 
 
@@ -699,42 +699,167 @@ class QueueView(Gtk.TreeView):
                 self.store.append(item, [_("<b>Downgrade to</b> %s ") % str(pkg.downgrade_po), ""])
 
 
-class History(Gtk.Box):
+class HistoryView(Gtk.TreeView):
+    """ History View Class"""
+    def __init__(self,base):
+        '''
+        
+        @param widget:
+        '''
+        Gtk.TreeView.__init__(self)
+        self.modify_font(SMALL_FONT)
+        self.model = self.setup_view()
+        self.base = base
+        self.pkg_view = HistoryPackageView(self.base)
+        self.connect('cursor-changed', self.on_cursor_changed)
+        self.is_populated = False
 
-    def __init__(self):
-        Gtk.Box.__init__(self)
-        self.set_direction(Gtk.Orientation.HORIZONTAL)
-        self._setup_views()
-
-    def _setup_views(self):
-        self.selection = Gtk.TreeView()
-        self.add(self.selection)
-        self.selection_model = self._setup_selection()
-        self.content = Gtk.TreeView()
-        self.pack_start(self.content,True,True,0)
-        self.content_model = self._setup_content()
-
-    def _setup_selection(self):
+    def setup_view(self):
+        """ Create Notebook list for single page  """
         model = Gtk.TreeStore(str, int)
-        self.selection.set_model(model)
+        self.set_model(model)
         cell1 = Gtk.CellRendererText()
         column1 = Gtk.TreeViewColumn(_("History (Date/Time)"), cell1, markup=0)
         column1.set_resizable(False)
         column1.set_fixed_width(200)
-        self.selection.append_column(column1)
+        self.append_column(column1)
         model.set_sort_column_id(0, Gtk.SortType.DESCENDING)
         return model
 
-    def _setup_content(self):
+    def reset(self):
+        self.model.clear()
+        self.is_populated = False
+        self.pkg_view.reset()
+    
+    def populate(self, data):
+        self.pkg_view.reset()
+        self.model.clear()
+        main = {}
+        for tid,dt in data:
+            da,t = dt.split('T')
+            y,m,d = da.split('-')
+            # year 
+            if not y in main:
+                ycat = self.model.append(None, [y, -1])
+                main[y] = (ycat,{})
+            ycat, mdict = main[y]
+            # month
+            if not m in mdict:
+                mcat = self.model.append(ycat, [m, -1])
+                mdict[m] = (mcat,{})
+            mcat, ddict = mdict[m]
+            # day
+            if not d in ddict:
+                dcat = self.model.append(mcat, [d, -1])
+                ddict[d] = dcat
+            dcat = ddict[d]
+            self.model.append(dcat, [t,tid])
+        self.collapse_all()
+        self.is_populated = True
+        
+    def on_cursor_changed(self, widget):
+        '''
+        a new History element is selected in history view
+        '''
+        if widget.get_selection():
+            (model, iterator) = widget.get_selection().get_selected()
+            if model != None and iterator != None:
+                tid = model.get_value(iterator, 1)
+                if tid != -1:
+                    pkgs = self.base.backend.GetHistoryPackages(tid)
+                    self.pkg_view.populate(pkgs)
+
+class HistoryPackageView(Gtk.TreeView):
+    """ History Package View Class"""
+    def __init__(self, base):
+        '''
+        
+        @param widget:
+        '''
+        Gtk.TreeView.__init__(self)
+        self.modify_font(SMALL_FONT)
+        self.model = self.setup_view()
+        self.base = base
+
+    def setup_view(self):
+        """ Create Notebook list for single page  """
         model = Gtk.TreeStore(str)
-        self.content.set_model(model)
+        self.set_model(model)
         cell = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(_("History Packages"), cell, markup=0)
         column.set_resizable(True)
-        #column.set_fixed_width(600)
-        self.content.append_column(column)
+        #column1.set_fixed_width(200)
+        self.append_column(column)
         #model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         return model
+
+    def reset(self):
+        self.model.clear()
+    
+    def populate(self, data):
+        self.model.clear()
+        #print(data)
+        # Order by package name.arch
+        names = {}
+        names_pair = {}
+        for elem in data:
+            pkg_id,state,is_inst = elem
+            (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+            na = "%s.%s" % (n,a)
+            if state in HISTORY_UPDATE_STATES: # part of a pair
+                if na in names_pair:
+                    if state in HISTORY_NEW_STATES: # this is the updating pkg
+                        names_pair[na].insert(0, elem) # add first in list                    
+                    else:
+                        names_pair[na].append(elem)
+                else:
+                    names_pair[na] = [elem]
+            else:
+                names[na] = [elem]
+                
+        # order by primary state 
+        states = {}
+        # pkgs without relatives
+        for na in sorted(list(names)):
+            pkg_list = names[na]
+            pkg_id,state,is_inst = pkg_list[0] # Get first element (the primary (new) one )
+            if state in states:
+                states[state].append(pkg_list)
+            else:
+                states[state] = [pkg_list]
+        # pkgs with releatives
+        for na in sorted(list(names_pair)):
+            pkg_list = names_pair[na]
+            pkg_id,state,is_inst = pkg_list[0] # Get first element (the primary (new) one )
+            if state in states:
+                states[state].append(pkg_list)
+            else:
+                states[state] = [pkg_list]
+        # apply packages to model in right order
+        for state in HISTORY_SORT_ORDER:
+            if state in states:
+                cat = self.model.append(None, ["<b>%s</b>" % HISTORY_STATE_LABLES[state]])
+                for pkg_list in states[state]:
+                    pkg_id,st,is_inst = pkg_list[0]
+                    if is_inst:
+                        name = '<span foreground="%s">%s</span>' % (CONFIG.color_installed, self._fullname(pkg_id))
+                    else:
+                        name = self._fullname(pkg_id)
+                    pkg_cat = self.model.append(cat,[name])
+                    if len(pkg_list) == 2:
+                        pkg_id,st,is_inst = pkg_list[1]
+                        name = self._fullname(pkg_id)
+                        self.model.append(pkg_cat,[name])
+                    
+    def _fullname(self,pkg_id):
+        ''' Package fullname  '''
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        if e and e != '0':
+            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
+        else:
+            return "%s-%s-%s.%s" % (n, v, r, a)
+
+
 
 class TextViewBase(Gtk.TextView):
     '''  Encapsulate a Gtk.TextView with support for adding and using Pango styles'''

@@ -19,9 +19,9 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
-from .widgets import SearchEntry, PackageView, QueueView, History, PackageInfo, InfoProgressBar
-from .misc import show_information, doGtkEvents, _, P_
-from .const import *
+from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView
+from .misc import show_information, doGtkEvents, _, P_, CONFIG
+from .const import * # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend
 
 class YumexWindow(Gtk.ApplicationWindow):
@@ -112,13 +112,18 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.package_view = PackageView(self.queue_view, self)
         select = self.package_view.get_selection()
         select.connect("changed", self.on_pkg_view_selection_changed)
-        self.history_view = History()
         sw = self.ui.get_object("package_sw")
         sw.add(self.package_view)
         sw = self.ui.get_object("queue_sw")
         sw.add(self.queue_view)
+        # History
         sw = self.ui.get_object("history_sw")
-        sw.add(self.history_view)
+        hb = Gtk.Box()
+        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        self.history_view = HistoryView(self)
+        hb.pack_start(self.history_view, False,False,0)
+        hb.pack_start(self.history_view.pkg_view, True,True,0)
+        sw.add(hb)
         self.content.set_show_tabs(False)
         self.content.show_all()
 
@@ -285,6 +290,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
+            if not self.history_view.is_populated:
+                result = self.backend.GetHistoryByDays(0,int(CONFIG.history_days))
+                print(result)
+                self.history_view.populate(result)
             self._show_info(False)
             self.set_content_page(2)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)

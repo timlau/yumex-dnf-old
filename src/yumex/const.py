@@ -21,7 +21,7 @@ from gi.repository import Pango
 import os.path
 import sys
 import re
-from .misc import _, P_
+from .misc import _, P_ # @UnusedImport
 
 __yumex_version__ = "3.99.1"
 
@@ -92,3 +92,21 @@ PACKAGE_LOAD_MSG = {
  'available'    : _('Getting available packages'),
  'updates'      : _('Getting available updates'),
  }
+
+HISTORY_NEW_STATES = ['Update', 'Downgrade', 'Obsoleting']
+HISTORY_OLD_STATES = ['Updated', 'Downgraded', 'Obsoleted']
+
+HISTORY_UPDATE_STATES = ['Update', 'Downgrade', 'Updated', 'Downgraded']
+
+HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update', 'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Dep-Install' ]
+
+HISTORY_STATE_LABLES = {
+     'Update' : _('Updated packages'),
+     'Downgrade' : _('Downgraded packages'),
+     'Obsoleting' : _('Obsoleting packages'),
+     'Obsoleted' : _('Obsoleted packages'),
+     'Erase' : _('Erased packages'),
+     'Install' : _('Installed packages'),
+     'True-Install' : _('Installed packages'),
+     'Dep-Install' : _('Installed for dependencies'),
+     'Reinstall' : _('Reinstalled packages')}
