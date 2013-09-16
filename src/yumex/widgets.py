@@ -957,7 +957,7 @@ class PackageInfo(PackageInfoView):
         Setup the package info radio buttons toggle handlers
         '''
         for flt in PKGINFO_FILTERS:
-            widget = self.base.builder.get_object("info_%s" % flt)
+            widget = self.base.ui.get_object("info_%s" % flt)
             widget.connect('toggled',self.on_filter_changed, flt)
 
     def set_package(self, pkg):

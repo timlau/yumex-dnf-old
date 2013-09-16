@@ -34,10 +34,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.current_filter = None
 
         # setup the GtkBuilder from file
-        self.builder = Gtk.Builder()
+        self.ui = Gtk.Builder()
         # get the file (if it is there)
         try:
-            self.builder.add_from_file(DATA_DIR +"/yumex.ui")
+            self.ui.add_from_file(DATA_DIR +"/yumex.ui")
         except:
             print ("file not found")
             sys.exit()
@@ -52,19 +52,19 @@ class YumexWindow(Gtk.ApplicationWindow):
         grid = Gtk.Grid()
         self.add(grid)
         grid.show()
-        grid.attach(self.builder.get_object("main"), 0, 0, 1, 1)
+        grid.attach(self.ui.get_object("main"), 0, 0, 1, 1)
 
         # build the package filter widget
-        button = self.builder.get_object("tool_packages")
-        button.set_menu(self.builder.get_object("pkg_filter_menu"))
+        button = self.ui.get_object("tool_packages")
+        button.set_menu(self.ui.get_object("pkg_filter_menu"))
 
         # Connect menu radio buttons to handler
         for widget_name in ['updates','installed','available']:
-            rb = self.builder.get_object("pkg_"+widget_name)
+            rb = self.ui.get_object("pkg_"+widget_name)
             rb.connect('toggled', self.on_pkg_filter, widget_name)
 
         # Setup search entry
-        search_widget = self.builder.get_object("seach_entry")
+        search_widget = self.ui.get_object("seach_entry")
         search_entry = SearchEntry()
         search_entry.connect("search-changed", self.on_search_changed)
         search_widget.add(search_entry)
@@ -74,18 +74,18 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.build_content()
 
         # setup info view
-        info = self.builder.get_object("info_sw")
+        info = self.ui.get_object("info_sw")
         self.info = PackageInfo(self,self)
         info.add(self.info)
         self.info.show_all()
 
         # spinner
-        self.spinner = self.builder.get_object("progress_spinner")
+        self.spinner = self.ui.get_object("progress_spinner")
         self.spinner.set_from_file(PIX_DIR+"/spinner.gif")
         self.spinner.hide()
 
         # infobar
-        self.infobar = InfoProgressBar(self.builder)
+        self.infobar = InfoProgressBar(self.ui)
         self.infobar.hide()
 
         # setup actions
@@ -99,25 +99,25 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.show_now()
 
         # setup default selections
-        self.builder.get_object("pkg_updates").set_active(True)
-        self.builder.get_object("info_desc").set_active(True)
+        self.ui.get_object("pkg_updates").set_active(True)
+        self.ui.get_object("info_desc").set_active(True)
 
 
     def build_content(self):
         '''
         Create a tab-less notebook to handle the package, history and queue views
         '''
-        self.content = self.builder.get_object("content")
+        self.content = self.ui.get_object("content")
         self.queue_view = QueueView()
         self.package_view = PackageView(self.queue_view, self)
         select = self.package_view.get_selection()
         select.connect("changed", self.on_pkg_view_selection_changed)
         self.history_view = History()
-        sw = self.builder.get_object("package_sw")
+        sw = self.ui.get_object("package_sw")
         sw.add(self.package_view)
-        sw = self.builder.get_object("queue_sw")
+        sw = self.ui.get_object("queue_sw")
         sw.add(self.queue_view)
-        sw = self.builder.get_object("history_sw")
+        sw = self.ui.get_object("history_sw")
         sw.add(self.history_view)
         self.content.set_show_tabs(False)
         self.content.show_all()
@@ -176,7 +176,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
             if insensitive:
                 for widget in ['top_box', 'content']:
-                    self.builder.get_object(widget).set_sensitive(False)
+                    self.ui.get_object(widget).set_sensitive(False)
         doGtkEvents()
 
     def normal_cursor(self):
@@ -185,7 +185,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         if win != None:
             win.set_cursor(None)
             for widget in ['top_box', 'content']:
-                self.builder.get_object(widget).set_sensitive(True)
+                self.ui.get_object(widget).set_sensitive(True)
         doGtkEvents()
 
 
@@ -209,7 +209,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         self._show_info(True)
 
-        widget = self.builder.get_object("hidden")
+        widget = self.ui.get_object("hidden")
         widget.set_active(True)
         self._set_pkg_relief()
         self.set_content_page(0)
@@ -219,7 +219,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         Set the button relief on the package button, so it is visible
         that it is selected or not
         '''
-        widget = self.builder.get_object("tool_packages")
+        widget = self.ui.get_object("tool_packages")
         button = widget.get_children()[0].get_children()[0]
         button.set_relief(relief)
 
@@ -227,10 +227,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Show/Hide the package info box
         '''
-        box = self.builder.get_object("info_box")
+        box = self.ui.get_object("info_box")
         box.set_visible(state)
         if state:
-            desc = self.builder.get_object("info_desc")
+            desc = self.ui.get_object("info_desc")
             desc.set_active(True)
 
 #
@@ -283,7 +283,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         History button callback handler
         '''
-        widget = self.builder.get_object("tool_history")
+        widget = self.ui.get_object("tool_history")
         if widget.get_active():
             self._show_info(False)
             self.set_content_page(2)
@@ -293,7 +293,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Queue button callback handler
         '''
-        widget = self.builder.get_object("tool_queue")
+        widget = self.ui.get_object("tool_queue")
         if widget.get_active():
             self._show_info(False)
             self.set_content_page(1)
@@ -303,7 +303,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Package info radiobuttons callback handler
         '''
-        widget = self.builder.get_object(action.get_name())
+        widget = self.ui.get_object(action.get_name())
         if widget.get_active():
             print("You clicked \"info\".",action.get_name())
             self.info.clear()
