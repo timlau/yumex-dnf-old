@@ -703,7 +703,7 @@ class HistoryView(Gtk.TreeView):
     """ History View Class"""
     def __init__(self,base):
         '''
-        
+
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
@@ -730,7 +730,7 @@ class HistoryView(Gtk.TreeView):
         self.model.clear()
         self.is_populated = False
         self.pkg_view.reset()
-    
+
     def populate(self, data):
         self.pkg_view.reset()
         self.model.clear()
@@ -738,7 +738,7 @@ class HistoryView(Gtk.TreeView):
         for tid,dt in data:
             da,t = dt.split('T')
             y,m,d = da.split('-')
-            # year 
+            # year
             if not y in main:
                 ycat = self.model.append(None, [y, -1])
                 main[y] = (ycat,{})
@@ -756,7 +756,7 @@ class HistoryView(Gtk.TreeView):
             self.model.append(dcat, [t,tid])
         self.collapse_all()
         self.is_populated = True
-        
+
     def on_cursor_changed(self, widget):
         '''
         a new History element is selected in history view
@@ -766,14 +766,14 @@ class HistoryView(Gtk.TreeView):
             if model != None and iterator != None:
                 tid = model.get_value(iterator, 1)
                 if tid != -1:
-                    pkgs = self.base.backend.GetHistoryPackages(tid)
+                    pkgs = self.base.get_root_backend().GetHistoryPackages(tid)
                     self.pkg_view.populate(pkgs)
 
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
     def __init__(self, base):
         '''
-        
+
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
@@ -795,7 +795,7 @@ class HistoryPackageView(Gtk.TreeView):
 
     def reset(self):
         self.model.clear()
-    
+
     def populate(self, data):
         self.model.clear()
         #print(data)
@@ -809,15 +809,15 @@ class HistoryPackageView(Gtk.TreeView):
             if state in HISTORY_UPDATE_STATES: # part of a pair
                 if na in names_pair:
                     if state in HISTORY_NEW_STATES: # this is the updating pkg
-                        names_pair[na].insert(0, elem) # add first in list                    
+                        names_pair[na].insert(0, elem) # add first in list
                     else:
                         names_pair[na].append(elem)
                 else:
                     names_pair[na] = [elem]
             else:
                 names[na] = [elem]
-                
-        # order by primary state 
+
+        # order by primary state
         states = {}
         # pkgs without relatives
         for na in sorted(list(names)):
@@ -850,7 +850,7 @@ class HistoryPackageView(Gtk.TreeView):
                         pkg_id,st,is_inst = pkg_list[1]
                         name = self._fullname(pkg_id)
                         self.model.append(pkg_cat,[name])
-                    
+
     def _fullname(self,pkg_id):
         ''' Package fullname  '''
         (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')

@@ -20,9 +20,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView
-from .misc import show_information, doGtkEvents, _, P_, CONFIG
+from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import * # @UnusedWildImport
-from .yum_backend import YumReadOnlyBackend
+from .yum_backend import YumReadOnlyBackend, YumRootBackend
 
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
@@ -32,6 +32,8 @@ class YumexWindow(Gtk.ApplicationWindow):
         # init vars
         self.last_search = None
         self.current_filter = None
+        self._root_backend = None
+        self._root_locked = False
 
         # setup the GtkBuilder from file
         self.ui = Gtk.Builder()
@@ -46,7 +48,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         #self.backend = TestBackend()
         self.backend = YumReadOnlyBackend(self)
         self.backend.setup()
-
 
         # setup the main gui
         grid = Gtk.Grid()
@@ -102,6 +103,38 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
 
+    @ExceptionHandler
+    def get_root_backend(self):
+        """
+        Get the current root backend
+        if it is not setup yet, the create it
+        if it is not locked, then lock it
+        """
+        if self._root_backend == None:
+            self._root_backend = YumRootBackend(self)
+            self._root_backend.setup()
+            self._root_locked = True
+            print("Start the yum root daemon")
+        elif self._root_locked == False:
+            self._root_backend.Lock()
+            self._root_locked = True
+            print("Lock the yum root daemon")
+        return self._root_backend
+
+    @ExceptionHandler
+    def release_root_backend(self, quit=False):
+        """
+        Release the current root backend, if it is setup and locked
+        """
+        if self._root_backend == None:
+            return
+        if self._root_locked == True:
+            print("Unlock the yum root daemon")
+            self._root_backend.Unlock()
+            self._root_locked = False
+        if quit:
+            print("Exit the yum root daemon")
+            self._root_backend.Exit()
 
     def build_content(self):
         '''
@@ -291,12 +324,13 @@ class YumexWindow(Gtk.ApplicationWindow):
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
-                result = self.backend.GetHistoryByDays(0,int(CONFIG.history_days))
-                print(result)
+                result = self.get_root_backend().GetHistoryByDays(0,int(CONFIG.history_days))
                 self.history_view.populate(result)
             self._show_info(False)
             self.set_content_page(2)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
+        else:
+            self.release_root_backend()
 
     def on_queue(self, action, parameter):
         '''
@@ -361,6 +395,7 @@ class YumexApplication(Gtk.Application):
         print("Exit Application")
         if self.win.backend:
             self.win.backend.quit()
+        self.win.release_root_backend(quit=True)
 
 
 

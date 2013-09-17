@@ -378,3 +378,96 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
         else:
             return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
+
+
+class YumRootBackend(Backend, YumDaemonClient):
+    """
+    Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
+    """
+
+    def __init__(self, frontend):
+        Backend.__init__(self, frontend)
+        YumDaemonClient.__init__(self)
+
+    @ExceptionHandler
+    def setup(self):
+        self.Lock()
+        self.SetWatchdogState(False)
+        return True
+
+    @ExceptionHandler
+    def quit(self):
+        '''
+        quit the application by unlocking yum and stop the mainloop
+        '''
+        self.Unlock()
+        self.Exit()
+
+    @ExceptionHandler
+    def reload(self):
+        '''
+        Reload the yumdaemon service
+        '''
+        self.Unlock() # Release the lock
+        #time.sleep(5)
+        self.Lock() # Load & Lock the daemon
+        self.SetWatchdogState(False)
+        self.cache.reset() # Reset the cache
+
+
+    def to_pkg_tuple(self, pkg_id):
+        ''' find the real package nevre & repoid from an package pkg_id'''
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        return (n, e, v, r, a, repo_id)
+
+    def _make_pkg_object(self, pkgs, flt):
+        '''
+        Make list of po_dict to Package objects
+        :param pkgs:
+        :param flt:
+        '''
+        po_list = []
+        action = FILTER_ACTIONS[flt]
+        for pkg_values in pkgs:
+            po_list.append(YumPackage(pkg_values, action, self))
+        return self.cache.find_packages(po_list)
+
+    def _build_package_list(self,pkg_ids):
+        '''
+        Build a list of package object, take existing ones from the cache.
+        :param pkg_ids:
+        :type pkg_ids:
+        '''
+        po_list = []
+        for pkg_id in pkg_ids:
+            summary = self.GetAttribute(pkg_id, "summary")
+            size = self.GetAttribute(pkg_id, "size")
+            pkg_values = (pkg_id,summary,size)
+            action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
+            po_list.append(YumPackage(pkg_values, action, self))
+        return self.cache.find_packages(po_list)
+
+
+    def show_transaction_result(self, output):
+        for action, pkgs in output:
+            print( "  %s" % action)
+            for pkg_list in pkgs:
+                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
+                print ("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+
+    def format_transaction_result(self, output):
+        result = []
+        for action, pkgs in output:
+            result.append( "  %s" % action)
+            for pkg_list in pkgs:
+                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
+                result.append("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+        return "\n".join(result)
+
+    def _fullname(self,pkg_id):
+        ''' Package fullname  '''
+        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        if e and e != '0':
+            return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
+        else:
+            return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
