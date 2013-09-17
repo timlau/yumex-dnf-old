@@ -203,40 +203,38 @@ class YumBackend(YumDaemonClient):
         self.base = base
 
     def on_UpdateProgress(self,name,frac,fread,ftime):
-        YumDaemonClient.on_UpdateProgress(self,name,frac,fread,ftime)
-        #self.base.infobar.set_progress(frac)
-        #self.base.infobar.set_subheader(name)
+        #YumDaemonClient.on_UpdateProgress(self,name,frac,fread,ftime)
+        self.base.infobar.set_progress(frac)
+        self.base.infobar.set_info_sub(name)
 
     def on_TransactionEvent(self,event, data):
-        #if event == 'start-run':
-            #self.base.infobar.show_progress(True)
-        #elif event == 'download':
-            #self.base.infobar.info(_("Downloading Packages"))
-        #elif event == 'pkg-to-download':
-            #self._dnl_packages = data
-        #elif event == 'signature-check':
-            #self.base.infobar.show_progress(False)
-            #self.base.infobar.info(_("Checking Packages Signatures"))
-        #elif event == 'run-test-transaction':
-            #self.base.infobar.info(_("Testing Package Transactions"))
-        #elif event == 'run-transaction':
-            #self.base.infobar.show_progress(True)
-            #self.base.infobar.info(_("Applying Package Transactions"))
-        ##elif event == '':
-        #elif event == 'fail':
-            #self.base.infobar.show_progress(False)
-        #elif event == 'end-run':
-            #self.base.infobar.show_progress(False)
-        #else:
-            #print("TransactionEvent : %s" % event)
-        YumDaemonClient.on_TransactionEvent(self,event, data)
+        if event == 'start-run':
+            self.base.infobar.show_progress(True)
+        elif event == 'download':
+            self.base.infobar.info(_("Downloading Packages"))
+        elif event == 'pkg-to-download':
+            self._dnl_packages = data
+        elif event == 'signature-check':
+            self.base.infobar.show_progress(False)
+            self.base.infobar.info(_("Checking Packages Signatures"))
+        elif event == 'run-test-transaction':
+            self.base.infobar.info(_("Testing Package Transactions"))
+        elif event == 'run-transaction':
+            self.base.infobar.show_progress(True)
+            self.base.infobar.info(_("Applying Package Transactions"))
+        #elif event == '':
+        elif event == 'fail':
+            self.base.infobar.show_progress(False)
+        elif event == 'end-run':
+            self.base.infobar.show_progress(False)
+        else:
+            print("TransactionEvent : %s" % event)
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
-        #num = " ( %i/%i ) : " % (ts_current, ts_total)
-        #self.base.infobar.set_subheader(num + (RPM_ACTIONS[action] % str(package)))
-        #frac = te_total / te_current
-        #self.base.infobar.set_progress(frac)
-        YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
+        num = " ( %i/%i ) : " % (ts_current, ts_total)
+        self.base.infobar.set_info_sub(num + (RPM_ACTIONS[action] % str(package)))
+        frac = te_total / te_current
+        self.base.infobar.set_progress(frac)
 
 class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     """
@@ -246,6 +244,11 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     def __init__(self, frontend):
         Backend.__init__(self, frontend)
         YumDaemonReadOnlyClient.__init__(self)
+
+    def on_UpdateProgress(self,name,frac,fread,ftime):
+        YumDaemonClient.on_UpdateProgress(self,name,frac,fread,ftime)
+        self.base.infobar.set_progress(frac)
+        self.base.infobar.set_info_sub(name)
 
     @ExceptionHandler
     def setup(self):
