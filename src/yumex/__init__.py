@@ -19,7 +19,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
-from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView
+from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import * # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -66,9 +66,9 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         # Setup search entry
         search_widget = self.ui.get_object("seach_entry")
-        search_entry = SearchEntry()
-        search_entry.connect("search-changed", self.on_search_changed)
-        search_widget.add(search_entry)
+        self.search_entry = SearchEntry()
+        self.search_entry.connect("search-changed", self.on_search_changed)
+        search_widget.add(self.search_entry)
         search_widget.show_all()
 
         # setup the package/queue/history views
@@ -88,6 +88,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         # infobar
         self.infobar = InfoProgressBar(self.ui)
         self.infobar.hide()
+        
+        # transaction result dialog
+        self.transaction_result = TransactionResult(self)
 
         # setup actions
         self._create_action("pref", self.on_pref)
@@ -178,6 +181,7 @@ class YumexWindow(Gtk.ApplicationWindow):
 
     def exception_handler(self,e):
         msg = str(e)
+        print("EXCEPTION : ", msg)
         err, msg = self._parse_error(msg)
         print(err,msg)
         if err == "YumLockedError":
@@ -358,12 +362,78 @@ class YumexWindow(Gtk.ApplicationWindow):
         Apply Changes button callback handler
         '''
         print("You clicked \"Apply Changes\".",action.get_name())
+        self.process_actions()
 
     def on_pref(self, action, parameter):
         '''
         Preferences button callback handler
         '''
         print("You clicked \"Pref\".")
+        
+    def process_actions(self):
+        '''
+        Process the current action in the queue
+        - setup the yum transaction
+        - resolve dependencies
+        - ask user for confirmation on result of depsolve
+        - run the transaction
+        '''
+        self.set_spinner(True)
+        #pkgs = self.get_root_backend().GetPackages('updates')
+        self.get_root_backend().ClearTransaction()
+        for action in QUEUE_PACKAGE_TYPES:
+            pkgs = self.queue_view.queue.get(action)
+            for pkg in pkgs:
+                if action == 'do':
+                    txmbr = self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    #print(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                else:
+                    txmbr = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    #print(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    #print(txmbr)
+                
+        ta = self.get_root_backend().GetTransaction()                 
+        #print(ta)
+        self.infobar.info('Resolving Dependencies')
+        rc, result = self.get_root_backend().BuildTransaction()
+        #self.get_root_backend().show_transaction_result(result)
+        self.infobar.info('Dependencies Resolved')
+        self.set_spinner(False)
+        if rc == 2:
+            self.transaction_result.populate(result, "")
+            ok = self.transaction_result.run()
+            if ok: # Ok pressed
+                self.infobar.info('Running Transaction')
+                self.set_spinner(True)
+                self.get_root_backend().RunTransaction()
+                self.set_spinner(False)
+                self.reset()
+        elif rc == 0:
+            print('nothing to do')
+        else:
+            print ('Error in DepSolve:')
+            print(result)
+        self.infobar.hide()
+        self.release_root_backend()
+        
+    def reset(self):
+        self.set_spinner(True)
+        self.infobar.hide()
+        self.release_root_backend()
+        # clear the package queue
+        self.queue_view.queue.clear()
+        self.queue_view.refresh()
+        self.backend.reload()
+        # clear search entry
+        self.search_entry.clear_with_no_signal()
+        self.last_search = None
+        self.set_spinner(False)
+        if self.current_filter:
+            widget, flt = self.current_filter
+            self.on_pkg_filter(widget,flt)
+
+    
+        
 
 class YumexApplication(Gtk.Application):
     def __init__(self):

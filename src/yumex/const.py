@@ -110,3 +110,23 @@ HISTORY_STATE_LABLES = {
      'True-Install' : _('Installed packages'),
      'Dep-Install' : _('Installed for dependencies'),
      'Reinstall' : _('Reinstalled packages')}
+
+
+TRANSACTION_RESULT_TYPES = {
+'install'       : _('Installing'), 
+'update'        : _('Updating'), 
+'remove'        : _('Removing'), 
+'install-deps'  : _('Installing for dependencies'), 
+'update-deps'   : _('Updating for dependencies'),
+'remove-deps'   : _('Removing for dependencies'),
+'skipped'       : _('Skipped (dependency problems)'),
+'obsoletes'     : _('Replacing')
+}
+
+RPM_ACTIONS = {
+'update' : _("Updating : %s"),
+'install' : _("Installing : %s"),
+'cleanup' : _("Cleanup : %s"),
+'erase' : _("Removing : %s"),
+'obsolete' : _("Obsoleting :"),
+}

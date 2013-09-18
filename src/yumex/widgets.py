@@ -24,9 +24,8 @@ from gi.repository import GObject, GLib
 from datetime import date
 from subprocess import call
 
-from .misc import _, P_, CONFIG  # @UnusedImport
+from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction  # @UnusedImport
 from .const import *  # @UnusedWildImport
-from .misc import doGtkEvents, format_block, TimeFunction
 
 
 #
@@ -1253,3 +1252,77 @@ class PackageInfo(PackageInfoView):
             #self.base.infobar.info("pkginfo: %s selected" % data)
             self.active_filter = data
             self.update()
+            
+            
+class TransactionResult:
+    
+    def __init__(self, base):
+        self.base = base
+        self.dialog = self.base.ui.get_object("transaction-results")
+        self.view = self.base.ui.get_object("result_view")
+        self.store = self.setup_view(self.view)
+        
+    def run(self):
+        self.dialog.show_all()
+        rc = self.dialog.run()
+        print(rc)
+        self.dialog.hide()
+        return rc == 1
+
+    def clear(self):
+        self.store.clear()
+            
+    
+    def setup_view(self, view):
+        '''
+        Setup the TreeView
+        @param view: the TreeView widget
+        '''
+        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
+                              GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_STRING)
+        view.set_model(model)
+        self.create_text_column(_("Name"), view, 0, size=250)
+        self.create_text_column(_("Arch"), view, 1)
+        self.create_text_column(_("Ver"), view, 2)
+        self.create_text_column(_("Repository"), view, 3)
+        self.create_text_column(_("Size"), view, 4)
+        return model
+
+    def create_text_column(self, hdr, view, colno, size=None):
+        '''
+        Create at TreeViewColumn 
+        @param hdr: column header text
+        @param view: the TreeView widget
+        @param colno: the TreeStore column containing data for the column
+        @param min_width: the min column view (optional)
+        '''
+        cell = Gtk.CellRendererText()    # Size Column
+        column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
+        column.set_resizable(True)
+        if size:
+            column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
+            column.set_fixed_width(size)
+        view.append_column(column)
+
+
+    def populate(self, pkglist, dnl_size):
+        '''
+        Populate the TreeView with data
+        @param pkglist: list containing view data 
+        '''
+        model = self.store
+        self.store.clear()
+        total_size = 0
+        for sub, lvl1 in pkglist:
+            label = "<b>%s</b>" % TRANSACTION_RESULT_TYPES[sub]
+            level1 = model.append(None, [label, "", "", "", ""])
+            for id, size, replaces in lvl1:
+                (n, e, v, r, a, repo_id)  = str(id).split(',')
+                level2 = model.append(level1, [n, a, "%s.%s" % (v,r), repo_id, format_number(size)])
+                if sub in ['install','update','install-deps','update-deps','obsoletes']: # packages there need to be downloaded
+                    total_size += size
+                for r in replaces:
+                    level3 = model.append(level2, [ r, "", "", "", ""])
+        self.base.ui.get_object("result_size").set_text(format_number(total_size))
+        self.view.expand_all()
+            
