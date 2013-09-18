@@ -164,7 +164,7 @@ class InfoProgressBar:
     def message(self, msg):
         self.infobar.show()
         self.show_label()
-        self.label.set_text(msg)
+        self.label.set_markup("<b>%s</b>" % msg)
 
     def message_sub(self, msg):
         self.infobar.show()
