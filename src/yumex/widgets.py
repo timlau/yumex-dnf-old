@@ -159,10 +159,6 @@ class InfoProgressBar:
         self.sublabel.show()
         self.sublabel.set_text("")
 
-    def show_progress(self):
-        self.progress.show()
-        self.progress.set_fraction(0.0)
-
     def show_buttons(self):
         self.actions.show()
 
