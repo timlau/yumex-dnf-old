@@ -34,6 +34,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.current_filter = None
         self._root_backend = None
         self._root_locked = False
+        self.search_type = ""
 
         # setup the GtkBuilder from file
         self.ui = Gtk.Builder()
@@ -63,6 +64,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         for widget_name in ['updates','installed','available']:
             rb = self.ui.get_object("pkg_"+widget_name)
             rb.connect('toggled', self.on_pkg_filter, widget_name)
+
+        # build the search_conf widget
+        button = self.ui.get_object("search_conf")
+        button.set_menu(self.ui.get_object("search_menu"))
+        # Connect menu radio buttons to handler
+        for widget_name in ['keyword','prefix','summary',"desc"]:
+            rb = self.ui.get_object("search_"+widget_name)
+            rb.connect('toggled', self.on_search_config, widget_name)
+
 
         # Setup search entry
         search_widget = self.ui.get_object("seach_entry")
@@ -98,6 +108,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._create_action("history", self.on_history)
         self._create_action("queue", self.on_queue)
         self._create_action("apply_changes", self.on_apply_changes)
+        self._create_action("search_config", self.on_search_config)
 
         # show window
         self.show_now()
@@ -105,6 +116,8 @@ class YumexWindow(Gtk.ApplicationWindow):
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
+        self.ui.get_object("search_keyword").set_active(True)
+        
 
     @ExceptionHandler
     def get_root_backend(self):
@@ -279,6 +292,15 @@ class YumexWindow(Gtk.ApplicationWindow):
 #
 # Callback handlers
 #
+    def on_search_config(self, widget, data):
+        '''
+        callback for search config
+        :param widget:
+        :param data:
+        '''
+        self.search_type = data
+        self.last_search = None
+        self.search_entry.clear_with_no_signal()
 
     def on_pkg_filter(self, widget, data):
         '''
@@ -305,13 +327,28 @@ class YumexWindow(Gtk.ApplicationWindow):
         Search callback handler
         '''
         print("Search for : [%s]" % data)
+        if self.search_type == "keyword":
+            flt = "*%s*" 
+            self._search_name(data, flt)
+        elif self.search_type == "prefix":
+            flt = "%s*"
+            self._search_name(data, flt)
+        elif self.search_type == "summary":
+            fields = ['name','summary']
+            self._search_keys(fields, data)    
+        elif self.search_type == "desc":    
+            fields = ['name','summary', 'description']
+            self._search_keys(fields, data)    
+            
+            
+    def _search_name(self, data,  search_flt):    
         if len(data) >= 3 and data != self.last_search: # only search for word larger than 3 chars
             self.last_search = data
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_spinner(True)
-            pkgs = self.backend.get_packages_by_name("*"+data+"*",True)
+            pkgs = self.backend.get_packages_by_name(search_flt % data, True)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
@@ -321,6 +358,25 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 self.on_pkg_filter(widget,flt)
 
+    def _search_keys(self, fields, data):
+        if data != self.last_search:
+            self.last_search = data
+            if self.current_filter:
+                widget, flt = self.current_filter
+                widget.set_active(False)
+            self.set_spinner(True)
+            pkgs = self.backend.search(fields,data.split(' '), True,True)
+            self.on_packages(None,None) # switch to package view
+            self.info.set_package(None)
+            self.package_view.populate(pkgs)
+            self.set_spinner(False)
+        elif data == "": # revert to the current selected filter
+            if self.current_filter:
+                widget, flt = self.current_filter
+                self.on_pkg_filter(widget,flt)
+            
+        
+        
 
     def on_history(self, action, parameter):
         '''

@@ -180,6 +180,17 @@ Available = Packages available for installation</property>
               </packing>
             </child>
             <child>
+              <object class="GtkMenuToolButton" id="search_conf">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="action_name">win.search_config_button</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolItem" id="toolbutton2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -671,6 +682,53 @@ Available = Packages available for installation</property>
         <property name="label" translatable="yes">Available</property>
         <property name="draw_as_radio">True</property>
         <property name="group">pkg_updates</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="search_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_keyword">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">keyword in package name</property>
+        <property name="label" translatable="yes">name contains &lt;keyword&gt;</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_prefix">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
+        <property name="label" translatable="yes">name starts with &lt;keyword&gt;</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">search_keyword</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_summary">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">keywords in name and summary</property>
+        <property name="label" translatable="yes">name, summary contains &lt;keywords&gt;</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">search_keyword</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_desc">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">keywords in name, summary &amp; description</property>
+        <property name="label" translatable="yes">name, summary, desc contains &lt;keywords&gt;</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">search_keyword</property>
       </object>
     </child>
   </object>
