@@ -195,6 +195,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.busy_cursor(insensitive)
         else:
             self.spinner.hide()
+            self.infobar.hide()
             self.normal_cursor()
 
 
