@@ -1259,6 +1259,7 @@ class TransactionResult:
     def __init__(self, base):
         self.base = base
         self.dialog = self.base.ui.get_object("transaction-results")
+        self.dialog.set_transient_for(base)
         self.view = self.base.ui.get_object("result_view")
         self.store = self.setup_view(self.view)
         
