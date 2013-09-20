@@ -33,7 +33,6 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -46,7 +45,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="tool_pref">
+              <object class="GtkMenuToolButton" id="tool_pref">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
@@ -60,7 +59,6 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -113,7 +111,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -131,7 +128,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -149,7 +145,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -166,7 +161,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -212,7 +206,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -238,7 +231,6 @@ Available = Packages available for installation</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
           </object>

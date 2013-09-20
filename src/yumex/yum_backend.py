@@ -20,7 +20,7 @@ from yumdaemon import *
 
 from .backend import Package, Backend
 from .const import *
-from .misc import format_number, ExceptionHandler, TimeFunction,  _, P_
+from .misc import format_number, ExceptionHandler, TimeFunction,  _, P_  # @UnusedImport @Reimport
 
 class YumPackage(Package):
     '''

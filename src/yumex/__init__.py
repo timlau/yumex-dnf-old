@@ -366,7 +366,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_spinner(True)
-            pkgs = self.backend.search(fields,data.split(' '), True,True)
+            pkgs = self.backend.search(fields,data.split(' '), True, False)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
