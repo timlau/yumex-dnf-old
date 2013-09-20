@@ -483,9 +483,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.search_entry.clear_with_no_signal()
         self.last_search = None
         self.set_spinner(False)
-        if self.current_filter:
-            widget, flt = self.current_filter
-            self.on_pkg_filter(widget,flt)
+        widget = self.ui.get_object("pkg_updates")
+        widget.set_active(True)
+        self.on_pkg_filter(widget,"updates")
 
 
 
