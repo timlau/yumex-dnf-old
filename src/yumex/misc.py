@@ -138,7 +138,10 @@ class Config(object):
     'color_update'    : 'red',      
     'color_installed' : 'darkgreen',      
     'color_obsolete'  : 'blue',      
-    'color_downgrade' : 'goldenrod'      
+    'color_downgrade' : 'goldenrod',
+    "skip_broken"     : 0,
+    "clean_unused"    : 0,
+    "newest_only"     : 1  
     }
     
     def __init__(self):

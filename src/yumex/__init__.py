@@ -61,17 +61,26 @@ class YumexWindow(Gtk.ApplicationWindow):
         button.set_menu(self.ui.get_object("pkg_filter_menu"))
 
         # Connect menu radio buttons to handler
-        for widget_name in ['updates','installed','available']:
-            rb = self.ui.get_object("pkg_"+widget_name)
-            rb.connect('toggled', self.on_pkg_filter, widget_name)
+        for name in ['updates','installed','available']:
+            rb = self.ui.get_object("pkg_"+name)
+            rb.connect('toggled', self.on_pkg_filter, name)
+
+        # build the option widget
+        button = self.ui.get_object("tool_pref")
+        button.set_menu(self.ui.get_object("options_menu"))
+        # Connect menu radio buttons to handler
+        for name in ['newest_only','skip_broken','clean_unused']:
+            rb = self.ui.get_object("option_"+name)
+            rb.set_active(getattr(CONFIG,name) == "1")
+            rb.connect('toggled', self.on_options, name)
 
         # build the search_conf widget
         button = self.ui.get_object("search_conf")
         button.set_menu(self.ui.get_object("search_menu"))
         # Connect menu radio buttons to handler
-        for widget_name in ['keyword','prefix','summary',"desc"]:
-            rb = self.ui.get_object("search_"+widget_name)
-            rb.connect('toggled', self.on_search_config, widget_name)
+        for name in ['keyword','prefix','summary',"desc"]:
+            rb = self.ui.get_object("search_"+name)
+            rb.connect('toggled', self.on_search_config, name)
 
 
         # Setup search entry
@@ -298,8 +307,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         :param data:
         '''
         self.search_type = data
-        self.last_search = None
-        self.search_entry.clear_with_no_signal()
+        if self.last_search:
+            key = self.last_search
+            self.last_search = None
+            self.search_entry.clear_with_no_signal()
+            self.search_entry.set_text(key)
 
     def on_pkg_filter(self, widget, data):
         '''
@@ -349,7 +361,8 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_spinner(True)
-            pkgs = self.backend.get_packages_by_name(search_flt % data, True)
+            newest_only = CONFIG.newest_only == "1"
+            pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
@@ -366,7 +379,8 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_spinner(True)
-            pkgs = self.backend.search(fields,data.split(' '), True, False)
+            newest_only = CONFIG.newest_only == "1"
+            pkgs = self.backend.search(fields,data.split(' '), True, newest_only)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
@@ -419,6 +433,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         Apply Changes button callback handler
         '''
         self.process_actions()
+        
+    def on_options(self, widget, parameter):
+        state = widget.get_active()
+        if state:
+            setattr(CONFIG,parameter,"1")
+        else:
+            setattr(CONFIG,parameter,"0")
+            
+        print("Option : ",parameter, getattr(CONFIG, parameter))
 
     def on_pref(self, action, parameter):
         '''
