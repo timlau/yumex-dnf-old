@@ -202,9 +202,16 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         YumDaemonReadOnlyClient.__init__(self)
 
     def on_UpdateProgress(self,name,frac,fread,ftime):
-        #YumDaemonClient.on_UpdateProgress(self,name,frac,fread,ftime)
+        #print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " %(name,frac,fread,ftime))
+        parts =  name.split('/')
+        meta_type = parts[-1]
+        repo = parts[0]
+        if meta_type in REPO_META:
+            name = REPO_META[meta_type] % repo
+            self.frontend.infobar.info(name)
+        else:
+            self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
-        self.frontend.infobar.info_sub(name)
 
     @ExceptionHandler
     def setup(self):
@@ -349,8 +356,10 @@ class YumRootBackend(Backend, YumDaemonClient):
         YumDaemonClient.__init__(self)
 
     def on_UpdateProgress(self,name,frac,fread,ftime):
-        #YumDaemonClient.on_UpdateProgress(self,name,frac,fread,ftime)
+        print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " %(name,frac,fread,ftime))
         self.frontend.infobar.set_progress(frac)
+        if name == '<locally rebuilding deltarpms>':
+            name = _("Building packages from delta packages")
         self.frontend.infobar.info_sub(name)
 
     def on_TransactionEvent(self,event, data):
@@ -378,11 +387,11 @@ class YumRootBackend(Backend, YumDaemonClient):
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
         #YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
-        num = " ( %i/%i ) : " % (ts_current, ts_total)
-        self.frontend.infobar.info_sub(num + (RPM_ACTIONS[action] % str(package)))
-        if te_current != 0:
-            frac = te_total / te_current
-            self.frontend.infobar.set_progress(frac)
+        num = " ( %i/%i )" % (ts_current, ts_total)
+        self.frontend.infobar.info_sub(RPM_ACTIONS[action] % str(package))
+        if ts_current > 0 and ts_current <= ts_total:
+            frac = float(ts_current)/float(ts_total)
+            self.frontend.infobar.set_progress(frac, label=num)
 
     @ExceptionHandler
     def setup(self):

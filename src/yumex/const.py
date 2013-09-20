@@ -113,10 +113,10 @@ HISTORY_STATE_LABLES = {
 
 
 TRANSACTION_RESULT_TYPES = {
-'install'       : _('Installing'), 
-'update'        : _('Updating'), 
-'remove'        : _('Removing'), 
-'install-deps'  : _('Installing for dependencies'), 
+'install'       : _('Installing'),
+'update'        : _('Updating'),
+'remove'        : _('Removing'),
+'install-deps'  : _('Installing for dependencies'),
 'update-deps'   : _('Updating for dependencies'),
 'remove-deps'   : _('Removing for dependencies'),
 'skipped'       : _('Skipped (dependency problems)'),
@@ -129,4 +129,20 @@ RPM_ACTIONS = {
 'cleanup' : _("Cleanup : %s"),
 'erase' : _("Removing : %s"),
 'obsolete' : _("Obsoleting :"),
+}
+
+
+REPO_META = {
+    'repomd'        : _("Downloading repository information for the %s repository"),
+    'primary'       : _("Downloading Package information for the %s repository"),
+    'primary_db'    : _("Downloading Package information for the %s repository"),
+    'filelists'     : _("Downloading Filelist information for the %s repository"),
+    'filelists_db'     : _("Downloading Filelist information for the %s repository"),
+    'other'         : _("Downloading Changelog information for the %s repository"),
+    'other_db'         : _("Downloading Changelog information for the %s repository"),
+    'group'         : _("Downloading Group information for the %s repository"),
+    'metalink'      : _("Downloading metalink information for the %s repository"),
+    'presto'        : _("Downloading Delta update information for the %s repository"),
+    'prestodelta'   : _("Downloading Delta update information for the %s repository"),
+    'updateinfo'    : _("Downloading Update information for the %s repository")
 }

@@ -149,6 +149,8 @@ class InfoProgressBar:
         self.progress.hide()
         self.actions.hide()
         self.infobar.hide()
+        self.progress.set_text("")
+        self.progress.set_show_text (False)
 
     def show_label(self):
         self.label.show()
@@ -177,8 +179,11 @@ class InfoProgressBar:
     def info_sub(self, msg):
         self.message_sub(msg)
 
-    def set_progress(self, frac):
-        if frac >= 0.0 and frac < 1.0:
+    def set_progress(self, frac, label = None):
+        if label:
+            self.progress.set_text(label)
+            self.progress.set_show_text (True)
+        if frac >= 0.0 and frac <=1.0:
             self.infobar.show()
             self.progress.show()
             self.progress.set_fraction(frac)
