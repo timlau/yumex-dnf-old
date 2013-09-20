@@ -450,23 +450,23 @@ class YumexWindow(Gtk.ApplicationWindow):
                     self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
 
         self.get_root_backend().GetTransaction()
-        self.infobar.info('Resolving Dependencies')
+        self.infobar.info(_('Resolving Dependencies'))
         rc, result = self.get_root_backend().BuildTransaction()
-        self.infobar.info('Dependencies Resolved')
+        self.infobar.info(_('Dependencies Resolved'))
         self.set_spinner(False)
         if rc == 2:
             self.transaction_result.populate(result, "")
             ok = self.transaction_result.run()
             if ok: # Ok pressed
-                self.infobar.info('Running Transaction')
+                self.infobar.info(_('Running Transaction'))
                 self.set_spinner(True)
                 self.get_root_backend().RunTransaction()
                 self.set_spinner(False)
                 self.reset()
         elif rc == 0:
-            print('nothing to do')
+            show_information(self,_("No actions to process"))
         else:
-            print ('Error in DepSolve:')
+            show_information(self, _("Errors in dependency resolution"), result)
             print(result)
         self.infobar.hide()
         self.release_root_backend()
