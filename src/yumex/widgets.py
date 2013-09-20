@@ -238,7 +238,7 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None):
+    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip = None):
         '''
         Create an selection column, there get data via property function and a key attr
         @param attr: key attr for property funtion
@@ -256,15 +256,16 @@ class SelectionView(Gtk.TreeView):
         column1.set_clickable(True)
         if click_handler:
             column1.connect('clicked', click_handler)
+        label = Gtk.Label("")
+        label.show()
+        column1.set_widget(label)
         if popup_handler:
-            label = Gtk.Label("")
-            label.show()
-            column1.set_widget(label)
             widget = column1.get_widget()
             while not isinstance(widget, Gtk.Button):
                 widget = widget.get_parent()
-            print(widget)
             widget.connect('button-release-event', popup_handler)
+            if tooltip:
+                widget.set_tooltip_text(tooltip)
 
 
 
@@ -371,8 +372,10 @@ class PackageView(SelectionView):
         '''
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
-        self.create_selection_colunm('selected', click_handler=self.on_section_header_clicked, popup_handler=self.on_section_header_button)
-
+        self.create_selection_colunm('selected',
+                                      click_handler=self.on_section_header_clicked,
+                                      popup_handler=self.on_section_header_button,
+                                      tooltip = _("Click to select/deselect all (updates only)"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()    # new
         cell2.set_property('stock-id', Gtk.STOCK_ADD)
