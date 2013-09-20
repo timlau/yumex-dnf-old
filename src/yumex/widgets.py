@@ -238,7 +238,7 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_selection_colunm(self, attr, click_handler=None):
+    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None):
         '''
         Create an selection column, there get data via property function and a key attr
         @param attr: key attr for property funtion
@@ -256,6 +256,16 @@ class SelectionView(Gtk.TreeView):
         column1.set_clickable(True)
         if click_handler:
             column1.connect('clicked', click_handler)
+        if popup_handler:
+            label = Gtk.Label("")
+            label.show()
+            column1.set_widget(label)
+            widget = column1.get_widget()
+            while not isinstance(widget, Gtk.Button):
+                widget = widget.get_parent()
+            print(widget)
+            widget.connect('button-release-event', popup_handler)
+
 
 
     def create_selection_column_num(self, num, data_func=None):
@@ -361,7 +371,7 @@ class PackageView(SelectionView):
         '''
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
-        self.create_selection_colunm('selected', click_handler=self.on_section_header_clicked)
+        self.create_selection_colunm('selected', click_handler=self.on_section_header_clicked, popup_handler=self.on_section_header_button)
 
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()    # new
@@ -386,6 +396,11 @@ class PackageView(SelectionView):
         self.set_reorderable(False)
         return store
 
+    def on_section_header_button(self, button, event):
+        if event.button == 3: # Right click
+            print("Right Click on selection column header")
+
+
     def on_section_header_clicked(self,*args):
         if self._click_header_active:
             if self._click_header_state == "":
@@ -394,6 +409,37 @@ class PackageView(SelectionView):
             elif self._click_header_state == "selected":
                 self.deselectAll()
                 self._click_header_state = ""
+
+    def set_header_click(self, state):
+        self._click_header_active = state
+        self._click_header_state = ""
+
+    def selectAll(self):
+        '''
+        Select all packages in the view
+        '''
+        for el in self.store:
+            obj = el[0]
+            if not obj.queued == obj.action:
+                obj.queued = obj.action
+                self.queue.add(obj)
+                obj.set_select(not obj.selected)
+        self.queueView.refresh()
+        self.queue_draw()
+
+    def deselectAll(self):
+        '''
+        Deselect all packages in the view
+        '''
+        for el in self.store:
+            obj = el[0]
+            if obj.queued == obj.action:
+                obj.queued = None
+                self.queue.remove(obj)
+                obj.set_select(not obj.selected)
+        self.queueView.refresh()
+        self.queue_draw()
+
 
     def new_pixbuf(self, column, cell, model, iterator, data):
         """
@@ -1185,7 +1231,6 @@ class PackageInfo(PackageInfoView):
             bzs = [ r for r in upd_info['references'] if r and r['type'] == 'bugzilla']
             if len(bzs):
                 header = "Bugzilla"
-                buglist = ""
                 for bz in bzs:
                     if 'title' in bz and bz['title']:
                         bug_msg = ' - %s' % bz['title']
@@ -1252,17 +1297,17 @@ class PackageInfo(PackageInfoView):
             #self.base.infobar.info("pkginfo: %s selected" % data)
             self.active_filter = data
             self.update()
-            
-            
+
+
 class TransactionResult:
-    
+
     def __init__(self, base):
         self.base = base
         self.dialog = self.base.ui.get_object("transaction-results")
         self.dialog.set_transient_for(base)
         self.view = self.base.ui.get_object("result_view")
         self.store = self.setup_view(self.view)
-        
+
     def run(self):
         self.dialog.show_all()
         rc = self.dialog.run()
@@ -1272,8 +1317,8 @@ class TransactionResult:
 
     def clear(self):
         self.store.clear()
-            
-    
+
+
     def setup_view(self, view):
         '''
         Setup the TreeView
@@ -1291,7 +1336,7 @@ class TransactionResult:
 
     def create_text_column(self, hdr, view, colno, size=None):
         '''
-        Create at TreeViewColumn 
+        Create at TreeViewColumn
         @param hdr: column header text
         @param view: the TreeView widget
         @param colno: the TreeStore column containing data for the column
@@ -1309,7 +1354,7 @@ class TransactionResult:
     def populate(self, pkglist, dnl_size):
         '''
         Populate the TreeView with data
-        @param pkglist: list containing view data 
+        @param pkglist: list containing view data
         '''
         model = self.store
         self.store.clear()
@@ -1323,7 +1368,6 @@ class TransactionResult:
                 if sub in ['install','update','install-deps','update-deps','obsoletes']: # packages there need to be downloaded
                     total_size += size
                 for r in replaces:
-                    level3 = model.append(level2, [ r, "", "", "", ""])
+                    model.append(level2, [ r, "", "", "", ""])
         self.base.ui.get_object("result_size").set_text(format_number(total_size))
         self.view.expand_all()
-            

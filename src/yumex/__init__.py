@@ -98,7 +98,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # infobar
         self.infobar = InfoProgressBar(self.ui)
         self.infobar.hide()
-        
+
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
 
@@ -117,7 +117,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
-        
+
 
     @ExceptionHandler
     def get_root_backend(self):
@@ -321,6 +321,10 @@ class YumexWindow(Gtk.ApplicationWindow):
                 self.package_view.populate(pkgs)
                 self.set_spinner(False)
                 self.infobar.hide()
+                if data == 'updates':
+                    self.package_view.set_header_click(True)
+                else:
+                    self.package_view.set_header_click(False)
 
     def on_search_changed(self, widget, data):
         '''
@@ -328,20 +332,20 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         print("Search for : [%s]" % data)
         if self.search_type == "keyword":
-            flt = "*%s*" 
+            flt = "*%s*"
             self._search_name(data, flt)
         elif self.search_type == "prefix":
             flt = "%s*"
             self._search_name(data, flt)
         elif self.search_type == "summary":
             fields = ['name','summary']
-            self._search_keys(fields, data)    
-        elif self.search_type == "desc":    
+            self._search_keys(fields, data)
+        elif self.search_type == "desc":
             fields = ['name','summary', 'description']
-            self._search_keys(fields, data)    
-            
-            
-    def _search_name(self, data,  search_flt):    
+            self._search_keys(fields, data)
+
+
+    def _search_name(self, data,  search_flt):
         if len(data) >= 3 and data != self.last_search: # only search for word larger than 3 chars
             self.last_search = data
             if self.current_filter:
@@ -374,9 +378,9 @@ class YumexWindow(Gtk.ApplicationWindow):
             if self.current_filter:
                 widget, flt = self.current_filter
                 self.on_pkg_filter(widget,flt)
-            
-        
-        
+
+
+
 
     def on_history(self, action, parameter):
         '''
@@ -426,7 +430,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         Preferences button callback handler
         '''
         print("You clicked \"Pref\".")
-        
+
     def process_actions(self):
         '''
         Process the current action in the queue
@@ -436,24 +440,18 @@ class YumexWindow(Gtk.ApplicationWindow):
         - run the transaction
         '''
         self.set_spinner(True)
-        #pkgs = self.get_root_backend().GetPackages('updates')
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    txmbr = self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
-                    #print(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
                 else:
-                    txmbr = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
-                    #print(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
-                    #print(txmbr)
-                
-        ta = self.get_root_backend().GetTransaction()                 
-        #print(ta)
+                    self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+
+        self.get_root_backend().GetTransaction()
         self.infobar.info('Resolving Dependencies')
         rc, result = self.get_root_backend().BuildTransaction()
-        #self.get_root_backend().show_transaction_result(result)
         self.infobar.info('Dependencies Resolved')
         self.set_spinner(False)
         if rc == 2:
@@ -472,7 +470,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             print(result)
         self.infobar.hide()
         self.release_root_backend()
-        
+
     def reset(self):
         self.set_spinner(True)
         self.infobar.hide()
@@ -489,8 +487,8 @@ class YumexWindow(Gtk.ApplicationWindow):
             widget, flt = self.current_filter
             self.on_pkg_filter(widget,flt)
 
-    
-        
+
+
 
 class YumexApplication(Gtk.Application):
     def __init__(self):
