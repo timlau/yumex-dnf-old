@@ -42,7 +42,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         try:
             self.ui.add_from_file(DATA_DIR +"/yumex.ui")
         except:
-            print ("file not found")
+            show_information(self, "GtkBuilder ui file not found : "+DATA_DIR +"/yumex.ui")
             sys.exit()
 
         # setup the package manager backend
@@ -253,7 +253,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         model, iterator = selection.get_selected()
         if model != None and iterator != None:
             pkg = model.get_value(iterator, 0)
-            print("package selected", pkg)
             if pkg:
                 self.info.set_package(pkg)
 
@@ -310,7 +309,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         if widget.get_active():
             self.on_packages(None,None)
-            print(data)
             if data in ["installed","available","updates"]:
                 self.infobar.message(PACKAGE_LOAD_MSG[data])
                 self.current_filter = (widget, data)
@@ -330,7 +328,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Search callback handler
         '''
-        print("Search for : [%s]" % data)
         if self.search_type == "keyword":
             flt = "*%s*"
             self._search_name(data, flt)
@@ -413,7 +410,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         widget = self.ui.get_object(action.get_name())
         if widget.get_active():
-            print("You clicked \"info\".",action.get_name())
             self.info.clear()
             self.info.write(action.get_name())
 
@@ -422,14 +418,13 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Apply Changes button callback handler
         '''
-        print("You clicked \"Apply Changes\".",action.get_name())
         self.process_actions()
 
     def on_pref(self, action, parameter):
         '''
         Preferences button callback handler
         '''
-        print("You clicked \"Pref\".")
+        show_information(self, "not implemented yet")
 
     def process_actions(self):
         '''
@@ -467,7 +462,6 @@ class YumexWindow(Gtk.ApplicationWindow):
             show_information(self,_("No actions to process"))
         else:
             show_information(self, _("Errors in dependency resolution"), result)
-            print(result)
         self.infobar.hide()
         self.release_root_backend()
 
@@ -517,7 +511,6 @@ class YumexApplication(Gtk.Application):
 
     def do_shutdown(self):
         Gtk.Application.do_shutdown(self)
-        print("Exit Application")
         if self.win.backend:
             self.win.backend.quit()
         self.win.release_root_backend(quit=True)

@@ -529,7 +529,6 @@ class PackageView(SelectionView):
             # the releated package
         else:
             pkgs = obj.downgrades # get the installed po
-            print("downgrades",pkgs)
             if pkgs:
                 # downgrade the po
                 pkg = pkgs[0]
@@ -871,7 +870,6 @@ class HistoryPackageView(Gtk.TreeView):
 
     def populate(self, data):
         self.model.clear()
-        #print(data)
         # Order by package name.arch
         names = {}
         names_pair = {}
@@ -967,7 +965,6 @@ class TextViewBase(Gtk.TextView):
         """ Catch when the user clicks the URL """
         if event.type == Gdk.EventType.BUTTON_RELEASE:
             url = self.url_list[tag.get_property("name")]
-            #print("button press : ", url)
             if self.url_handler:
                 self.url_handler(url)
 
@@ -1319,7 +1316,6 @@ class TransactionResult:
     def run(self):
         self.dialog.show_all()
         rc = self.dialog.run()
-        print(rc)
         self.dialog.hide()
         return rc == 1
 
