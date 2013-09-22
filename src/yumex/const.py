@@ -38,6 +38,11 @@ else:
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
+ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
+ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
+ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
+ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
+ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
 
 # Fonts
 XSMALL_FONT = Pango.FontDescription("sans 6")

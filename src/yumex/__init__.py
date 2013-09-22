@@ -17,9 +17,10 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gdk, GdkPixbuf
 from gi.repository import Gio
-from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult
+from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
+                     StatusIcon
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import * # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -29,6 +30,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         Gtk.Window.__init__(self, title="Yum Extender", application=app)
         self.set_default_size(1024, 700)
         self.app = app
+        icon = Gtk.IconTheme.get_default().load_icon('yumex', 128, 0)
+        self.set_icon(icon)
+        
         # init vars
         self.last_search = None
         self.current_filter = None
@@ -121,12 +125,25 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         # show window
         self.show_now()
+        
+        # Status Icon
+        self.status_icon = StatusIcon()
+        icon=self.status_icon.get_status_icon()
+        icon.connect("activate", self.on_status_icon_clicked)
+        self.status_icon.quit_menu.connect("activate", self.app.on_quit)
+        self.status_icon.search_updates_menu.connect("activate",   self.check_for_updates)
+        #self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
 
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
 
+    def on_status_icon_clicked(self, event):
+        if self.get_property('visible'):
+            self.hide()
+        else:
+            self.show()
 
     @ExceptionHandler
     def get_root_backend(self):
@@ -211,13 +228,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         show_information(self, msg)
         sys.exit(1)
 
-    def set_spinner(self, state, insensitive=False):
+    def set_working(self, state, insensitive=False):
         if state:
             self.spinner.show()
+            self.status_icon.set_is_working(True)
             self.busy_cursor(insensitive)
         else:
             self.spinner.hide()
             self.infobar.hide()
+            self.status_icon.set_is_working(False)
             self.normal_cursor()
 
 
@@ -234,6 +253,14 @@ class YumexWindow(Gtk.ApplicationWindow):
             return err, msg
         return "",""
 
+    def check_for_updates(self, widget=None):
+        self.backend.reload() # Reload backend
+        widget = self.ui.get_object("pkg_updates")
+        if widget.get_active():
+            self.on_pkg_filter(widget, "updates")
+        else:
+            self.ui.get_object("pkg_updates").set_active(True)
+        
     def busy_cursor(self, insensitive=False):
         ''' Set busy cursor in mainwin and make it insensitive if selected '''
         win = self.get_window()
@@ -324,12 +351,14 @@ class YumexWindow(Gtk.ApplicationWindow):
             if data in ["installed","available","updates"]:
                 self.infobar.message(PACKAGE_LOAD_MSG[data])
                 self.current_filter = (widget, data)
-                self.set_spinner(True,True)
+                self.set_working(True,True)
                 pkgs = self.backend.get_packages(data)
+                if data == 'update':
+                    self.status_icon.set_update_count(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.message(_("Adding packages to view"))
                 self.package_view.populate(pkgs)
-                self.set_spinner(False)
+                self.set_working(False)
                 self.infobar.hide()
                 if data == 'updates':
                     self.package_view.set_header_click(True)
@@ -360,13 +389,13 @@ class YumexWindow(Gtk.ApplicationWindow):
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
-            self.set_spinner(True)
+            self.set_working(True)
             newest_only = CONFIG.newest_only == "1"
             pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
-            self.set_spinner(False)
+            self.set_working(False)
         elif data == "": # revert to the current selected filter
             if self.current_filter:
                 widget, flt = self.current_filter
@@ -378,13 +407,13 @@ class YumexWindow(Gtk.ApplicationWindow):
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
-            self.set_spinner(True)
+            self.set_working(True)
             newest_only = CONFIG.newest_only == "1"
             pkgs = self.backend.search(fields,data.split(' '), True, newest_only)
             self.on_packages(None,None) # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
-            self.set_spinner(False)
+            self.set_working(False)
         elif data == "": # revert to the current selected filter
             if self.current_filter:
                 widget, flt = self.current_filter
@@ -457,7 +486,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         - ask user for confirmation on result of depsolve
         - run the transaction
         '''
-        self.set_spinner(True)
+        self.set_working(True)
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
@@ -471,15 +500,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.infobar.info(_('Resolving Dependencies'))
         rc, result = self.get_root_backend().BuildTransaction()
         self.infobar.info(_('Dependencies Resolved'))
-        self.set_spinner(False)
+        self.set_working(False)
         if rc == 2:
             self.transaction_result.populate(result, "")
             ok = self.transaction_result.run()
             if ok: # Ok pressed
                 self.infobar.info(_('Running Transaction'))
-                self.set_spinner(True)
+                self.set_working(True)
                 self.get_root_backend().RunTransaction()
-                self.set_spinner(False)
+                self.set_working(False)
                 self.reset()
         elif rc == 0:
             show_information(self,_("No actions to process"))
@@ -489,7 +518,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.release_root_backend()
 
     def reset(self):
-        self.set_spinner(True)
+        self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
         # clear the package queue
@@ -499,7 +528,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # clear search entry
         self.search_entry.clear_with_no_signal()
         self.last_search = None
-        self.set_spinner(False)
+        self.set_working(False)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)
         self.on_pkg_filter(widget,"updates")
