@@ -32,6 +32,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.app = app
         icon = Gtk.IconTheme.get_default().load_icon('yumex', 128, 0)
         self.set_icon(icon)
+        self.connect('delete_event', self.on_delete_event)
         
         # init vars
         self.last_search = None
@@ -138,6 +139,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
+        
+    def on_delete_event(self, *args):
+        self.hide()
+        return True
+        
 
     def on_status_icon_clicked(self, event):
         if self.get_property('visible'):
