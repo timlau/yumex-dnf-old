@@ -23,11 +23,14 @@ from yumdaemon import YumDaemonError
 import gettext
 import os.path
 import configparser
+import logging
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
 _ = gettext.gettext
 P_ = gettext.ngettext
+
+logger = logging.getLogger('yumex.misc')        
 
 
 def format_block(block, indent):
@@ -80,7 +83,7 @@ def TimeFunction(func):
         rc = func(*args, **kwargs)
         t_end = time.time()
         name = func.__name__
-        print("%s took %.2f sec" % (name, t_end - t_start))
+        logger.debug("%s took %.2f sec" % (name, t_end - t_start))
         return rc
 
     newFunc.__name__ = func.__name__

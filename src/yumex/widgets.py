@@ -25,6 +25,7 @@ from datetime import date
 from subprocess import call
 import cairo
 import random
+import logging
 
 from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction  # @UnusedImport
 from .const import *  # @UnusedWildImport
@@ -364,6 +365,7 @@ class SelectionView(Gtk.TreeView):
 class PackageView(SelectionView):
 
     def __init__(self, qview, base):
+        self.logger = logging.getLogger('yumex.PackageView')
         SelectionView.__init__(self)
         self.store = self._setup_model()
         self._click_header_active = False

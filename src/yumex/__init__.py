@@ -30,6 +30,7 @@ import logging
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
         Gtk.Window.__init__(self, title="Yum Extender", application=app)
+        self.logger = logging.getLogger('yumex.Window')        
         self.set_default_size(1024, 700)
         self.app = app
         icon = Gtk.IconTheme.get_default().load_icon('yumex', 128, 0)
@@ -549,6 +550,7 @@ class YumexApplication(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
+        self.logger = logging.getLogger('yumex.Application')
 
     def do_activate(self):
         self.win = YumexWindow(self)
@@ -581,10 +583,11 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('--hidden', action='store_true')
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
-        print(self.args)
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
-        
+        else:
+            self.doTextLoggerSetup()
+        self.logger.debug("cmdline : %s " % repr(self.args))
         self.do_activate()
         return 0
 
@@ -594,7 +597,7 @@ class YumexApplication(Gtk.Application):
             self.win.backend.quit()
         self.win.release_root_backend(quit=True)
 
-    def doTextLoggerSetup(self, logroot='yumdaemon-session', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
+    def doTextLoggerSetup(self, logroot='yumex', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
         ''' Setup Python logging  '''
         logger = logging.getLogger(logroot)
         logger.setLevel(loglvl)
