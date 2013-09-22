@@ -232,12 +232,12 @@ class YumexWindow(Gtk.ApplicationWindow):
         if state:
             self.spinner.show()
             self.status_icon.set_is_working(True)
-            self.busy_cursor(insensitive)
+            self._set_busy_cursor(insensitive)
         else:
             self.spinner.hide()
             self.infobar.hide()
             self.status_icon.set_is_working(False)
-            self.normal_cursor()
+            self._set_normal_cursor()
 
 
 
@@ -261,7 +261,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         else:
             self.ui.get_object("pkg_updates").set_active(True)
         
-    def busy_cursor(self, insensitive=False):
+    def _set_busy_cursor(self, insensitive=False):
         ''' Set busy cursor in mainwin and make it insensitive if selected '''
         win = self.get_window()
         if win != None:
@@ -271,7 +271,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                     self.ui.get_object(widget).set_sensitive(False)
         doGtkEvents()
 
-    def normal_cursor(self):
+    def _set_normal_cursor(self):
         ''' Set Normal cursor in mainwin and make it sensitive '''
         win = self.get_window()
         if win != None:
