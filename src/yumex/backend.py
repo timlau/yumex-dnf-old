@@ -25,17 +25,17 @@ class Package:
     Base class for a package, must be implemented in a sub class
     '''
 
-    def __init__(self,backend):
+    def __init__(self, backend):
         self.backend = backend
         self.name = None
-        #self.version = None
+        # self.version = None
         self.arch = None
         self.repository = None
         self.summary = None
-        #self.description = None
+        # self.description = None
         self.size = None
         self.action = None
-        #self.color = 'black'
+        # self.color = 'black'
         self.queued = False
         self.recent = False
         self.selected = False
@@ -60,12 +60,12 @@ class Package:
         get attribute for the package
         :param attr:
         '''
-        if hasattr(self,attr):
-            return getattr(self,attr)
+        if hasattr(self, attr):
+            return getattr(self, attr)
         else:
             return self.do_get_atributes(attr)
 
-    def do_get_atributes(self,attr):
+    def do_get_atributes(self, attr):
         '''
         get non local attributes for the package
         must be implemented in a sub class
@@ -88,7 +88,7 @@ class Backend:
         self.frontend = frontend
 
 
-    def exception_handler(self,e):
+    def exception_handler(self, e):
         """
         send exceptions to the frontend
         """
@@ -180,7 +180,7 @@ class PackageCache:
 
 
     def _add(self, po):
-        if str(po) in self._index: # package is in cache
+        if str(po) in self._index:  # package is in cache
             return self._index[str(po)]
         else:
             target = getattr(self, ACTIONS_FILTER[po.action])
@@ -188,7 +188,7 @@ class PackageCache:
             target.add(po)
             return po
 
-    #@TimeFunction
+    # @TimeFunction
     def find_packages(self, packages):
         pkgs = []
         i = 0

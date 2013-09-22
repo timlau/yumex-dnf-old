@@ -46,7 +46,7 @@ class SearchEntry(Gtk.Entry):
         """
         Gtk.Entry.__init__(self)
         self.set_width_chars(width)
-        self._timeout = timeout # timeout for sending changed signal
+        self._timeout = timeout  # timeout for sending changed signal
 
 
         self._handler_changed = self.connect_after("changed",
@@ -181,11 +181,11 @@ class InfoProgressBar:
     def info_sub(self, msg):
         self.message_sub(msg)
 
-    def set_progress(self, frac, label = None):
+    def set_progress(self, frac, label=None):
         if label:
             self.progress.set_text(label)
             self.progress.set_show_text (True)
-        if frac >= 0.0 and frac <=1.0:
+        if frac >= 0.0 and frac <= 1.0:
             self.infobar.show()
             self.progress.show()
             self.progress.set_fraction(frac)
@@ -230,7 +230,7 @@ class SelectionView(Gtk.TreeView):
         Create a TreeViewColumn with text and set
         the sorting properties and add it to the view
         """
-        cell = Gtk.CellRendererText()    # Size Column
+        cell = Gtk.CellRendererText()  # Size Column
         column = Gtk.TreeViewColumn(hdr, cell)
         column.set_resizable(True)
         column.set_cell_data_func(cell, self.get_data_text, prop)
@@ -238,20 +238,20 @@ class SelectionView(Gtk.TreeView):
         column.set_fixed_width(size)
         if sortcol:
             column.set_sort_column_id(sortcol)
-            #column.set_sort_indicator(True)
-            #column.set_sort_order(Gtk.Gtk.SortType.ASCENDING)
+            # column.set_sort_indicator(True)
+            # column.set_sort_order(Gtk.Gtk.SortType.ASCENDING)
         else:
             column.set_sort_column_id(-1)
         self.append_column(column)
         return column
 
-    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip = None):
+    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip=None):
         '''
         Create an selection column, there get data via property function and a key attr
         @param attr: key attr for property funtion
         '''
         # Setup a selection column using a object attribute
-        cell1 = Gtk.CellRendererToggle()    # Selection
+        cell1 = Gtk.CellRendererToggle()  # Selection
         cell1.set_property('activatable', True)
         column1 = Gtk.TreeViewColumn("", cell1)
         column1.set_cell_data_func(cell1, self.get_data_bool, attr)
@@ -285,7 +285,7 @@ class SelectionView(Gtk.TreeView):
 
         column = Gtk.TreeViewColumn(None, None)
         # Selection checkbox
-        selection = Gtk.CellRendererToggle()    # Selection
+        selection = Gtk.CellRendererToggle()  # Selection
         selection.set_property('activatable', True)
         column.pack_start(selection, False)
         if data_func:
@@ -307,7 +307,7 @@ class SelectionView(Gtk.TreeView):
 
         column = Gtk.TreeViewColumn(hdr, None)
         # Selection checkbox
-        selection = Gtk.CellRendererToggle()    # Selection
+        selection = Gtk.CellRendererToggle()  # Selection
         selection.set_property('activatable', True)
         selection.connect("toggled", self.on_toggled)
         column.pack_start(selection, False)
@@ -363,7 +363,7 @@ class SelectionView(Gtk.TreeView):
 
 class PackageView(SelectionView):
 
-    def __init__(self,qview, base):
+    def __init__(self, qview, base):
         SelectionView.__init__(self)
         self.store = self._setup_model()
         self._click_header_active = False
@@ -382,9 +382,9 @@ class PackageView(SelectionView):
         self.create_selection_colunm('selected',
                                       click_handler=self.on_section_header_clicked,
                                       popup_handler=self.on_section_header_button,
-                                      tooltip = _("Click to select/deselect all (updates only)"))
+                                      tooltip=_("Click to select/deselect all (updates only)"))
         # Setup resent column
-        cell2 = Gtk.CellRendererPixbuf()    # new
+        cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('stock-id', Gtk.STOCK_ADD)
         column2 = Gtk.TreeViewColumn("", cell2)
         column2.set_cell_data_func(cell2, self.new_pixbuf)
@@ -402,16 +402,16 @@ class PackageView(SelectionView):
         self.create_text_column(_("Size."), 'sizeM' , size=90)
         self.set_search_column(1)
         self.set_enable_search(True)
-        #store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
+        # store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
         self.set_reorderable(False)
         return store
 
     def on_section_header_button(self, button, event):
-        if event.button == 3: # Right click
+        if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
 
-    def on_section_header_clicked(self,*args):
+    def on_section_header_clicked(self, *args):
         if self._click_header_active:
             if self._click_header_state == "":
                 self.selectAll()
@@ -482,10 +482,10 @@ class PackageView(SelectionView):
         self.set_model(None)
         self.store.clear()
         self.set_model(self.store)
-        i=0
-        for po in sorted(pkgs,key=lambda po: po.name ):
+        i = 0
+        for po in sorted(pkgs, key=lambda po: po.name):
             i += 1
-            if i % 500: # Handle Gtk event, so gui dont freeze
+            if i % 500:  # Handle Gtk event, so gui dont freeze
                 doGtkEvents()
             self.store.append([po, str(po)])
         self.thaw_child_notify()
@@ -516,9 +516,9 @@ class PackageView(SelectionView):
 
 
     def _toggle_downgrade(self, obj):
-        if obj.queued == 'do': # all-ready queued
+        if obj.queued == 'do':  # all-ready queued
             related_po = obj.downgrade_po
-            if obj.is_installed(): # is obj the installed pkg ?
+            if obj.is_installed():  # is obj the installed pkg ?
                 self.queue.remove(obj)
                 obj.action = "r"
             else:
@@ -530,11 +530,11 @@ class PackageView(SelectionView):
             related_po.selected = False
             # the releated package
         else:
-            pkgs = obj.downgrades # get the installed po
+            pkgs = obj.downgrades  # get the installed po
             if pkgs:
                 # downgrade the po
                 pkg = pkgs[0]
-                if pkg.action == 'do' or self.queue.has_pkg_with_name_arch(pkg): # Installed pkg is all-ready downgraded by another package
+                if pkg.action == 'do' or self.queue.has_pkg_with_name_arch(pkg):  # Installed pkg is all-ready downgraded by another package
                     return
                 pkg.action = 'do'
                 pkg.queued = 'do'
@@ -706,7 +706,7 @@ class QueueView(Gtk.TreeView):
             if pkg.queued == "do" and pkg.is_installed():
                 pkg.downgrade_po.queued = None
                 pkg.downgrade_po.set_select(not pkg.selected)
-                pkg.action = "r" # reset action type of installed package
+                pkg.action = "r"  # reset action type of installed package
             pkg.queued = None
             pkg.set_select(not pkg.selected)
         self.refresh()
@@ -775,7 +775,7 @@ class QueueView(Gtk.TreeView):
 
 class HistoryView(Gtk.TreeView):
     """ History View Class"""
-    def __init__(self,base):
+    def __init__(self, base):
         '''
 
         @param widget:
@@ -809,25 +809,25 @@ class HistoryView(Gtk.TreeView):
         self.pkg_view.reset()
         self.model.clear()
         main = {}
-        for tid,dt in data:
-            da,t = dt.split('T')
-            y,m,d = da.split('-')
+        for tid, dt in data:
+            da, t = dt.split('T')
+            y, m, d = da.split('-')
             # year
             if not y in main:
                 ycat = self.model.append(None, [y, -1])
-                main[y] = (ycat,{})
+                main[y] = (ycat, {})
             ycat, mdict = main[y]
             # month
             if not m in mdict:
                 mcat = self.model.append(ycat, [m, -1])
-                mdict[m] = (mcat,{})
+                mdict[m] = (mcat, {})
             mcat, ddict = mdict[m]
             # day
             if not d in ddict:
                 dcat = self.model.append(mcat, [d, -1])
                 ddict[d] = dcat
             dcat = ddict[d]
-            self.model.append(dcat, [t,tid])
+            self.model.append(dcat, [t, tid])
         self.collapse_all()
         self.is_populated = True
 
@@ -862,9 +862,9 @@ class HistoryPackageView(Gtk.TreeView):
         cell = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(_("History Packages"), cell, markup=0)
         column.set_resizable(True)
-        #column1.set_fixed_width(200)
+        # column1.set_fixed_width(200)
         self.append_column(column)
-        #model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        # model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         return model
 
     def reset(self):
@@ -876,13 +876,13 @@ class HistoryPackageView(Gtk.TreeView):
         names = {}
         names_pair = {}
         for elem in data:
-            pkg_id,state,is_inst = elem
-            (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
-            na = "%s.%s" % (n,a)
-            if state in HISTORY_UPDATE_STATES: # part of a pair
+            pkg_id, state, is_inst = elem
+            (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
+            na = "%s.%s" % (n, a)
+            if state in HISTORY_UPDATE_STATES:  # part of a pair
                 if na in names_pair:
-                    if state in HISTORY_NEW_STATES: # this is the updating pkg
-                        names_pair[na].insert(0, elem) # add first in list
+                    if state in HISTORY_NEW_STATES:  # this is the updating pkg
+                        names_pair[na].insert(0, elem)  # add first in list
                     else:
                         names_pair[na].append(elem)
                 else:
@@ -895,7 +895,7 @@ class HistoryPackageView(Gtk.TreeView):
         # pkgs without relatives
         for na in sorted(list(names)):
             pkg_list = names[na]
-            pkg_id,state,is_inst = pkg_list[0] # Get first element (the primary (new) one )
+            pkg_id, state, is_inst = pkg_list[0]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -903,7 +903,7 @@ class HistoryPackageView(Gtk.TreeView):
         # pkgs with releatives
         for na in sorted(list(names_pair)):
             pkg_list = names_pair[na]
-            pkg_id,state,is_inst = pkg_list[0] # Get first element (the primary (new) one )
+            pkg_id, state, is_inst = pkg_list[0]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -913,20 +913,20 @@ class HistoryPackageView(Gtk.TreeView):
             if state in states:
                 cat = self.model.append(None, ["<b>%s</b>" % HISTORY_STATE_LABLES[state]])
                 for pkg_list in states[state]:
-                    pkg_id,st,is_inst = pkg_list[0]
+                    pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
                         name = '<span foreground="%s">%s</span>' % (CONFIG.color_installed, self._fullname(pkg_id))
                     else:
                         name = self._fullname(pkg_id)
-                    pkg_cat = self.model.append(cat,[name])
+                    pkg_cat = self.model.append(cat, [name])
                     if len(pkg_list) == 2:
-                        pkg_id,st,is_inst = pkg_list[1]
+                        pkg_id, st, is_inst = pkg_list[1]
                         name = self._fullname(pkg_id)
-                        self.model.append(pkg_cat,[name])
+                        self.model.append(pkg_cat, [name])
 
-    def _fullname(self,pkg_id):
+    def _fullname(self, pkg_id):
         ''' Package fullname  '''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         if e and e != '0':
             return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
         else:
@@ -952,7 +952,7 @@ class TextViewBase(Gtk.TextView):
         self.endMark = self.buffer.create_mark("End", self.buffer.get_end_iter(), False)
         self.startMark = self.buffer.create_mark("Start", self.buffer.get_start_iter(), False)
         self._styles = {}
-        self.default_style = None # the default style (text tag)
+        self.default_style = None  # the default style (text tag)
         self.window = window
         if window:
             self.connect("motion_notify_event", self.on_mouse_motion)
@@ -980,7 +980,7 @@ class TextViewBase(Gtk.TextView):
         '''
         window = widget.get_window(Gtk.TextWindowType.WIDGET)
         # Get x,y pos for widget
-        w,x,y,mask = window.get_pointer()
+        w, x, y, mask = window.get_pointer()
         # convert coords to TextBuffer coords
         x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
         # Get the tags on current pointer location
@@ -1068,7 +1068,7 @@ class TextViewBase(Gtk.TextView):
             self.buffer.insert_with_tags(end, txt, style)
         else:
             self.buffer.insert(end, txt)
-        self.scroll_to_iter(self.buffer.get_end_iter(), 0.0, True, 0.0,0.0)
+        self.scroll_to_iter(self.buffer.get_end_iter(), 0.0, True, 0.0, 0.0)
         doGtkEvents()
 
     def clear(self):
@@ -1140,7 +1140,7 @@ class PackageInfo(PackageInfoView):
 
     def __init__(self, window, base):
         PackageInfoView.__init__(self, window=window, url_handler=self._url_handler)
-        #self.set_margin_top(10)
+        # self.set_margin_top(10)
         self.window = window
         self.base = base
         self.current_package = None
@@ -1155,7 +1155,7 @@ class PackageInfo(PackageInfoView):
         '''
         for flt in PKGINFO_FILTERS:
             widget = self.base.ui.get_object("info_%s" % flt)
-            widget.connect('toggled',self.on_filter_changed, flt)
+            widget.connect('toggled', self.on_filter_changed, flt)
 
     def set_package(self, pkg):
         '''
@@ -1190,7 +1190,7 @@ class PackageInfo(PackageInfoView):
                 print("Package info not found : ", self.active_filter)
         self.goTop()
 
-    def _is_url(self,url):
+    def _is_url(self, url):
         urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
         if urls:
             return True
@@ -1199,9 +1199,9 @@ class PackageInfo(PackageInfoView):
 
     def _url_handler(self, url):
         print('Url activated : ' + url)
-        if self._is_url(url): # just to be sure and prevent shell injection
-            rc = call("xdg-open %s"%url, shell=True)
-            if rc != 0: # failover to gtk.show_uri, if xdg-open fails or is not installed
+        if self._is_url(url):  # just to be sure and prevent shell injection
+            rc = call("xdg-open %s" % url, shell=True)
+            if rc != 0:  # failover to gtk.show_uri, if xdg-open fails or is not installed
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             self.frontend.warning("%s is not an url" % url)
@@ -1261,7 +1261,7 @@ class PackageInfo(PackageInfoView):
 
         if upd_info['description'] is not None:
             desc = upd_info['description']
-            head += "\n%14s : %s\n" % (_("Description"), format_block(desc,17))
+            head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
 
         head += "\n"
         self.write(head)
@@ -1277,7 +1277,7 @@ class PackageInfo(PackageInfoView):
                 for line in msg.split('\n'):
                     self.write("%s" % line, "changelog")
                 self.write('\n')
-                if i == 5: # only show the last 5 entries
+                if i == 5:  # only show the last 5 entries
                     break
         self.base.set_working(False)
 
@@ -1290,7 +1290,7 @@ class PackageInfo(PackageInfoView):
         self.base.set_working(False)
 
     def _show_requirements(self):
-        self.write("Requirements for "+str(self.current_package))
+        self.write("Requirements for " + str(self.current_package))
 
     def on_filter_changed(self, button, data):
         '''
@@ -1301,7 +1301,7 @@ class PackageInfo(PackageInfoView):
         :param data:
         '''
         if button.get_active():
-            #self.base.infobar.info("pkginfo: %s selected" % data)
+            # self.base.infobar.info("pkginfo: %s selected" % data)
             self.active_filter = data
             self.update()
 
@@ -1348,7 +1348,7 @@ class TransactionResult:
         @param colno: the TreeStore column containing data for the column
         @param min_width: the min column view (optional)
         '''
-        cell = Gtk.CellRendererText()    # Size Column
+        cell = Gtk.CellRendererText()  # Size Column
         column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
         column.set_resizable(True)
         if size:
@@ -1369,9 +1369,9 @@ class TransactionResult:
             label = "<b>%s</b>" % TRANSACTION_RESULT_TYPES[sub]
             level1 = model.append(None, [label, "", "", "", ""])
             for id, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id)  = str(id).split(',')
-                level2 = model.append(level1, [n, a, "%s.%s" % (v,r), repo_id, format_number(size)])
-                if sub in ['install','update','install-deps','update-deps','obsoletes']: # packages there need to be downloaded
+                (n, e, v, r, a, repo_id) = str(id).split(',')
+                level2 = model.append(level1, [n, a, "%s.%s" % (v, r), repo_id, format_number(size)])
+                if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:  # packages there need to be downloaded
                     total_size += size
                 for r in replaces:
                     model.append(level2, [ r, "", "", "", ""])
@@ -1392,10 +1392,10 @@ class StatusIcon:
 
     def __init__(self):
         self.image_checking = ICON_TRAY_WORKING
-        self.image_no_update= ICON_TRAY_NO_UPDATES
-        self.image_updates  = ICON_TRAY_UPDATES
-        self.image_error    = ICON_TRAY_ERROR
-        self.image_info    = ICON_TRAY_INFO
+        self.image_no_update = ICON_TRAY_NO_UPDATES
+        self.image_updates = ICON_TRAY_UPDATES
+        self.image_error = ICON_TRAY_ERROR
+        self.image_info = ICON_TRAY_INFO
 
         self.statusicon = Gtk.StatusIcon()
         self.init_popup_menu()
@@ -1422,12 +1422,12 @@ class StatusIcon:
         self.search_updates_menu.set_sensitive(sensitive)
         
     def on_popup(self, icon, button, time):
-        #self.popup_menu.popup(None, None, Gtk.StatusIcon.position_menu, button,time, self.statusicon)
+        # self.popup_menu.popup(None, None, Gtk.StatusIcon.position_menu, button,time, self.statusicon)
         def pos(menu, icon):
             return (Gtk.StatusIcon.position_menu(menu, icon))
 
         self.popup_menu.popup(None, None, pos, self.statusicon, button, time)         
-        #self.popup_menu.popup(None, None, None, Gtk.StatusIcon.position_menu, button, time)
+        # self.popup_menu.popup(None, None, None, Gtk.StatusIcon.position_menu, button, time)
 
     def get_status_icon(self):
         return self.statusicon
@@ -1470,7 +1470,7 @@ class StatusIcon:
         ctx.set_source_surface(img, 0, 0)  
         ctx.paint()
 
-        font_size = size*relative_font_size
+        font_size = size * relative_font_size
         ctx.set_source_rgb(0.1, 0.1, 0.1)
         # resize font size until text fits ...
         while font_size > 1.0:
@@ -1480,14 +1480,14 @@ class StatusIcon:
             [bearing_x, bearing_y, font_x, font_y, ax, ay] = ctx.text_extents(text) 
             if font_x < size: break
             font_size = font_size * 0.9
-        ctx.move_to(int(size-font_x)/2-bearing_x , int(size-font_y)/2-bearing_y)
+        ctx.move_to(int(size - font_x) / 2 - bearing_x , int(size - font_y) / 2 - bearing_y)
         ctx.show_text(text)
         ctx.stroke()
 
         # this is ugly but the easiest way to get a pixbuf from a cairo image
         # surface...
-        r = int(random.random()*999999)
-        file_name = "/tmp/notifier_tmp_"+str(r)+".png"
+        r = int(random.random() * 999999)
+        file_name = "/tmp/notifier_tmp_" + str(r) + ".png"
         surface.write_to_png(file_name)
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_name)
         os.remove(file_name)
@@ -1507,9 +1507,9 @@ class StatusIcon:
         set working: show a busy tray icon if is_working is True
         '''
         if is_working:
-            self.is_working = self.is_working+1
+            self.is_working = self.is_working + 1
         else:
-            self.is_working = self.is_working-1
+            self.is_working = self.is_working - 1
         self.update_tray_icon()
     
     def need_user_input(self, need_input=True):

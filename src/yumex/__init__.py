@@ -22,7 +22,7 @@ from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
                      StatusIcon
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
-from .const import * # @UnusedWildImport
+from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
 
 class YumexWindow(Gtk.ApplicationWindow):
@@ -44,13 +44,13 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.ui = Gtk.Builder()
         # get the file (if it is there)
         try:
-            self.ui.add_from_file(DATA_DIR +"/yumex.ui")
+            self.ui.add_from_file(DATA_DIR + "/yumex.ui")
         except:
-            show_information(self, "GtkBuilder ui file not found : "+DATA_DIR +"/yumex.ui")
+            show_information(self, "GtkBuilder ui file not found : " + DATA_DIR + "/yumex.ui")
             sys.exit()
 
         # setup the package manager backend
-        #self.backend = TestBackend()
+        # self.backend = TestBackend()
         self.backend = YumReadOnlyBackend(self)
         self.backend.setup()
 
@@ -65,25 +65,25 @@ class YumexWindow(Gtk.ApplicationWindow):
         button.set_menu(self.ui.get_object("pkg_filter_menu"))
 
         # Connect menu radio buttons to handler
-        for name in ['updates','installed','available']:
-            rb = self.ui.get_object("pkg_"+name)
+        for name in ['updates', 'installed', 'available']:
+            rb = self.ui.get_object("pkg_" + name)
             rb.connect('toggled', self.on_pkg_filter, name)
 
         # build the option widget
         button = self.ui.get_object("tool_pref")
         button.set_menu(self.ui.get_object("options_menu"))
         # Connect menu radio buttons to handler
-        for name in ['newest_only','skip_broken','clean_unused']:
-            rb = self.ui.get_object("option_"+name)
-            rb.set_active(getattr(CONFIG,name) == "1")
+        for name in ['newest_only', 'skip_broken', 'clean_unused']:
+            rb = self.ui.get_object("option_" + name)
+            rb.set_active(getattr(CONFIG, name) == "1")
             rb.connect('toggled', self.on_options, name)
 
         # build the search_conf widget
         button = self.ui.get_object("search_conf")
         button.set_menu(self.ui.get_object("search_menu"))
         # Connect menu radio buttons to handler
-        for name in ['keyword','prefix','summary',"desc"]:
-            rb = self.ui.get_object("search_"+name)
+        for name in ['keyword', 'prefix', 'summary', "desc"]:
+            rb = self.ui.get_object("search_" + name)
             rb.connect('toggled', self.on_search_config, name)
 
 
@@ -99,13 +99,13 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         # setup info view
         info = self.ui.get_object("info_sw")
-        self.info = PackageInfo(self,self)
+        self.info = PackageInfo(self, self)
         info.add(self.info)
         self.info.show_all()
 
         # spinner
         self.spinner = self.ui.get_object("progress_spinner")
-        self.spinner.set_from_file(PIX_DIR+"/spinner.gif")
+        self.spinner.set_from_file(PIX_DIR + "/spinner.gif")
         self.spinner.hide()
 
         # infobar
@@ -128,11 +128,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         
         # Status Icon
         self.status_icon = StatusIcon()
-        icon=self.status_icon.get_status_icon()
+        icon = self.status_icon.get_status_icon()
         icon.connect("activate", self.on_status_icon_clicked)
         self.status_icon.quit_menu.connect("activate", self.app.on_quit)
-        self.status_icon.search_updates_menu.connect("activate",   self.check_for_updates)
-        #self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
+        self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
+        # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
 
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
@@ -196,8 +196,8 @@ class YumexWindow(Gtk.ApplicationWindow):
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.history_view = HistoryView(self)
-        hb.pack_start(self.history_view, False,False,0)
-        hb.pack_start(self.history_view.pkg_view, True,True,0)
+        hb.pack_start(self.history_view, False, False, 0)
+        hb.pack_start(self.history_view.pkg_view, True, True, 0)
         sw.add(hb)
         self.content.set_show_tabs(False)
         self.content.show_all()
@@ -209,7 +209,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         self.content.set_current_page(page)
 
-    def _create_action(self, name, callback, para = None):
+    def _create_action(self, name, callback, para=None):
         '''
         Created a Gio.SimpleAction on a given name and connect it to a given callback
         handler
@@ -218,13 +218,13 @@ class YumexWindow(Gtk.ApplicationWindow):
         action.connect("activate", callback)
         self.add_action(action)
 
-    def exception_handler(self,e):
+    def exception_handler(self, e):
         msg = str(e)
         print("EXCEPTION : ", msg)
         err, msg = self._parse_error(msg)
-        print(err,msg)
+        print(err, msg)
         if err == "YumLockedError":
-            msg="Yum  is locked by another process \n\nYum Extender will exit"
+            msg = "Yum  is locked by another process \n\nYum Extender will exit"
         show_information(self, msg)
         sys.exit(1)
 
@@ -251,10 +251,10 @@ class YumexWindow(Gtk.ApplicationWindow):
             err = err.split('.')[-1]
             msg = res.groups()[1]
             return err, msg
-        return "",""
+        return "", ""
 
     def check_for_updates(self, widget=None):
-        self.backend.reload() # Reload backend
+        self.backend.reload()  # Reload backend
         widget = self.ui.get_object("pkg_updates")
         if widget.get_active():
             self.on_pkg_filter(widget, "updates")
@@ -305,7 +305,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._set_pkg_relief()
         self.set_content_page(0)
 
-    def _set_pkg_relief(self, relief = Gtk.ReliefStyle.HALF):
+    def _set_pkg_relief(self, relief=Gtk.ReliefStyle.HALF):
         '''
         Set the button relief on the package button, so it is visible
         that it is selected or not
@@ -347,11 +347,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         :param data:
         '''
         if widget.get_active():
-            self.on_packages(None,None)
-            if data in ["installed","available","updates"]:
+            self.on_packages(None, None)
+            if data in ["installed", "available", "updates"]:
                 self.infobar.message(PACKAGE_LOAD_MSG[data])
                 self.current_filter = (widget, data)
-                self.set_working(True,True)
+                self.set_working(True, True)
                 pkgs = self.backend.get_packages(data)
                 if data == 'update':
                     self.status_icon.set_update_count(len(pkgs))
@@ -376,15 +376,15 @@ class YumexWindow(Gtk.ApplicationWindow):
             flt = "%s*"
             self._search_name(data, flt)
         elif self.search_type == "summary":
-            fields = ['name','summary']
+            fields = ['name', 'summary']
             self._search_keys(fields, data)
         elif self.search_type == "desc":
-            fields = ['name','summary', 'description']
+            fields = ['name', 'summary', 'description']
             self._search_keys(fields, data)
 
 
-    def _search_name(self, data,  search_flt):
-        if len(data) >= 3 and data != self.last_search: # only search for word larger than 3 chars
+    def _search_name(self, data, search_flt):
+        if len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
             self.last_search = data
             if self.current_filter:
                 widget, flt = self.current_filter
@@ -392,14 +392,14 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.set_working(True)
             newest_only = CONFIG.newest_only == "1"
             pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
-            self.on_packages(None,None) # switch to package view
+            self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
             self.set_working(False)
-        elif data == "": # revert to the current selected filter
+        elif data == "":  # revert to the current selected filter
             if self.current_filter:
                 widget, flt = self.current_filter
-                self.on_pkg_filter(widget,flt)
+                self.on_pkg_filter(widget, flt)
 
     def _search_keys(self, fields, data):
         if data != self.last_search:
@@ -409,15 +409,15 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget.set_active(False)
             self.set_working(True)
             newest_only = CONFIG.newest_only == "1"
-            pkgs = self.backend.search(fields,data.split(' '), True, newest_only)
-            self.on_packages(None,None) # switch to package view
+            pkgs = self.backend.search(fields, data.split(' '), True, newest_only)
+            self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
             self.set_working(False)
-        elif data == "": # revert to the current selected filter
+        elif data == "":  # revert to the current selected filter
             if self.current_filter:
                 widget, flt = self.current_filter
-                self.on_pkg_filter(widget,flt)
+                self.on_pkg_filter(widget, flt)
 
 
 
@@ -429,7 +429,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
-                result = self.get_root_backend().GetHistoryByDays(0,int(CONFIG.history_days))
+                result = self.get_root_backend().GetHistoryByDays(0, int(CONFIG.history_days))
                 self.history_view.populate(result)
             self._show_info(False)
             self.set_content_page(2)
@@ -466,11 +466,11 @@ class YumexWindow(Gtk.ApplicationWindow):
     def on_options(self, widget, parameter):
         state = widget.get_active()
         if state:
-            setattr(CONFIG,parameter,"1")
+            setattr(CONFIG, parameter, "1")
         else:
-            setattr(CONFIG,parameter,"0")
+            setattr(CONFIG, parameter, "0")
             
-        print("Option : ",parameter, getattr(CONFIG, parameter))
+        print("Option : ", parameter, getattr(CONFIG, parameter))
 
     def on_pref(self, action, parameter):
         '''
@@ -504,14 +504,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         if rc == 2:
             self.transaction_result.populate(result, "")
             ok = self.transaction_result.run()
-            if ok: # Ok pressed
+            if ok:  # Ok pressed
                 self.infobar.info(_('Running Transaction'))
                 self.set_working(True)
                 self.get_root_backend().RunTransaction()
                 self.set_working(False)
                 self.reset()
         elif rc == 0:
-            show_information(self,_("No actions to process"))
+            show_information(self, _("No actions to process"))
         else:
             show_information(self, _("Errors in dependency resolution"), result)
         self.infobar.hide()
@@ -531,7 +531,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.set_working(False)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)
-        self.on_pkg_filter(widget,"updates")
+        self.on_pkg_filter(widget, "updates")
 
 
 
@@ -553,7 +553,7 @@ class YumexApplication(Gtk.Application):
         # Setup actions
         self._create_action("quit", self.on_quit)
 
-    def _create_action(self, name, callback, para = None):
+    def _create_action(self, name, callback, para=None):
         action = Gio.SimpleAction.new(name, para)
         action.connect("activate", callback)
         self.add_action(action)

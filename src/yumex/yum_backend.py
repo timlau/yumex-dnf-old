@@ -20,7 +20,7 @@ from yumdaemon import *
 
 from .backend import Package, Backend
 from .const import *
-from .misc import format_number, ExceptionHandler, TimeFunction,  _, P_  # @UnusedImport @Reimport
+from .misc import format_number, ExceptionHandler, TimeFunction, _, P_  # @UnusedImport @Reimport
 
 class YumPackage(Package):
     '''
@@ -49,7 +49,7 @@ class YumPackage(Package):
 
     def to_pkg_tuple(self, pkg_id):
         ''' find the real package nevre & repoid from an package pkg_id'''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         return (n, e, v, r, a, repo_id)
 
     def __str__(self):
@@ -94,7 +94,7 @@ class YumPackage(Package):
     @property
     def filename(self):
         ''' Package pkg_id (the full package filename) '''
-        if self.action == 'li': # the full path for at localinstall is stored in repoid
+        if self.action == 'li':  # the full path for at localinstall is stored in repoid
             return self.repoid
         else:
             return "%s-%s.%s.%s.rpm" % (self.name, self.version, self.release, self.arch)
@@ -201,9 +201,9 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         Backend.__init__(self, frontend)
         YumDaemonReadOnlyClient.__init__(self)
 
-    def on_UpdateProgress(self,name,frac,fread,ftime):
-        #print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " %(name,frac,fread,ftime))
-        parts =  name.split('/')
+    def on_UpdateProgress(self, name, frac, fread, ftime):
+        # print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " %(name,frac,fread,ftime))
+        parts = name.split('/')
         meta_type = parts[-1]
         repo = parts[0]
         if meta_type in REPO_META:
@@ -232,11 +232,11 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         '''
         Reload the yumdaemon service
         '''
-        self.Unlock() # Release the lock
-        #time.sleep(5)
-        self.Lock() # Load & Lock the daemon
+        self.Unlock()  # Release the lock
+        # time.sleep(5)
+        self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        self.cache.reset() # Reset the cache
+        self.cache.reset()  # Reset the cache
 
 
     def show_package_list(self, pkgs):
@@ -246,11 +246,11 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         '''
         for pkg_id in pkgs:
             (n, e, v, r, a, repo_id) = self.to_pkg_tuple(pkg_id)
-            print( " --> %s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id))
+            print(" --> %s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id))
 
     def to_pkg_tuple(self, pkg_id):
         ''' find the real package nevre & repoid from an package pkg_id'''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         return (n, e, v, r, a, repo_id)
 
     def _make_pkg_object(self, pkgs, flt):
@@ -265,7 +265,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
-    def _build_package_list(self,pkg_ids):
+    def _build_package_list(self, pkg_ids):
         '''
         Build a list of package object, take existing ones from the cache.
         :param pkg_ids:
@@ -275,24 +275,24 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         for pkg_id in pkg_ids:
             summary = self.GetAttribute(pkg_id, "summary")
             size = self.GetAttribute(pkg_id, "size")
-            pkg_values = (pkg_id,summary,size)
+            pkg_values = (pkg_id, summary, size)
             action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
     @ExceptionHandler
     @TimeFunction
-    def get_packages(self,flt):
-        if not self.cache.is_populated(flt): # is this type of packages is already cached ?
-            fields = ['summary','size'] # fields to get
+    def get_packages(self, flt):
+        if not self.cache.is_populated(flt):  # is this type of packages is already cached ?
+            fields = ['summary', 'size']  # fields to get
             po_list = self.GetPackageWithAttributes(flt, fields)
-            pkgs = self._make_pkg_object(po_list,flt)
+            pkgs = self._make_pkg_object(po_list, flt)
             self.cache.populate(flt, pkgs)
         return Backend.get_packages(self, flt)
 
     @ExceptionHandler
     def get_downgrades(self, pkg_id):
-        pkgs = self.GetAttribute(pkg_id,"downgrades")
+        pkgs = self.GetAttribute(pkg_id, "downgrades")
         return self._build_package_list(pkgs)
 
     @ExceptionHandler
@@ -323,23 +323,23 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
 
     def show_transaction_result(self, output):
         for action, pkgs in output:
-            print( "  %s" % action)
+            print("  %s" % action)
             for pkg_list in pkgs:
                 pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                print ("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+                print ("    --> %-50s : %s" % (self._fullname(pkg_id), size))
 
     def format_transaction_result(self, output):
         result = []
         for action, pkgs in output:
-            result.append( "  %s" % action)
+            result.append("  %s" % action)
             for pkg_list in pkgs:
                 pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                result.append("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+                result.append("    --> %-50s : %s" % (self._fullname(pkg_id), size))
         return "\n".join(result)
 
-    def _fullname(self,pkg_id):
+    def _fullname(self, pkg_id):
         ''' Package fullname  '''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         if e and e != '0':
             return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
         else:
@@ -355,14 +355,14 @@ class YumRootBackend(Backend, YumDaemonClient):
         Backend.__init__(self, frontend)
         YumDaemonClient.__init__(self)
 
-    def on_UpdateProgress(self,name,frac,fread,ftime):
-        print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " %(name,frac,fread,ftime))
+    def on_UpdateProgress(self, name, frac, fread, ftime):
+        print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
         self.frontend.infobar.set_progress(frac)
         if name == '<locally rebuilding deltarpms>':
             name = _("Building packages from delta packages")
         self.frontend.infobar.info_sub(name)
 
-    def on_TransactionEvent(self,event, data):
+    def on_TransactionEvent(self, event, data):
         if event == 'start-run':
             self.frontend.infobar.show_progress(True)
         elif event == 'download':
@@ -377,7 +377,7 @@ class YumRootBackend(Backend, YumDaemonClient):
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
             self.frontend.infobar.info(_("Applying Package Transactions"))
-        #elif event == '':
+        # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)
         elif event == 'end-run':
@@ -386,11 +386,11 @@ class YumRootBackend(Backend, YumDaemonClient):
             print("TransactionEvent : %s" % event)
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
-        #YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
+        # YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
         num = " ( %i/%i )" % (ts_current, ts_total)
         self.frontend.infobar.info_sub(RPM_ACTIONS[action] % str(package))
         if ts_current > 0 and ts_current <= ts_total:
-            frac = float(ts_current)/float(ts_total)
+            frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
 
     @ExceptionHandler
@@ -412,26 +412,26 @@ class YumRootBackend(Backend, YumDaemonClient):
         '''
         Reload the yumdaemon service
         '''
-        self.Unlock() # Release the lock
-        #time.sleep(5)
-        self.Lock() # Load & Lock the daemon
+        self.Unlock()  # Release the lock
+        # time.sleep(5)
+        self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        self.cache.reset() # Reset the cache
+        self.cache.reset()  # Reset the cache
 
 
     @ExceptionHandler
     @TimeFunction
-    def get_packages(self,flt):
-        if not self.cache.is_populated(flt): # is this type of packages is already cached ?
-            fields = ['summary','size'] # fields to get
+    def get_packages(self, flt):
+        if not self.cache.is_populated(flt):  # is this type of packages is already cached ?
+            fields = ['summary', 'size']  # fields to get
             po_list = self.GetPackageWithAttributes(flt, fields)
-            pkgs = self._make_pkg_object(po_list,flt)
+            pkgs = self._make_pkg_object(po_list, flt)
             self.cache.populate(flt, pkgs)
         return Backend.get_packages(self, flt)
 
     def to_pkg_tuple(self, pkg_id):
         ''' find the real package nevre & repoid from an package pkg_id'''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         return (n, e, v, r, a, repo_id)
 
     def _make_pkg_object(self, pkgs, flt):
@@ -446,7 +446,7 @@ class YumRootBackend(Backend, YumDaemonClient):
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
-    def _build_package_list(self,pkg_ids):
+    def _build_package_list(self, pkg_ids):
         '''
         Build a list of package object, take existing ones from the cache.
         :param pkg_ids:
@@ -456,7 +456,7 @@ class YumRootBackend(Backend, YumDaemonClient):
         for pkg_id in pkg_ids:
             summary = self.GetAttribute(pkg_id, "summary")
             size = self.GetAttribute(pkg_id, "size")
-            pkg_values = (pkg_id,summary,size)
+            pkg_values = (pkg_id, summary, size)
             action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
@@ -464,23 +464,23 @@ class YumRootBackend(Backend, YumDaemonClient):
 
     def show_transaction_result(self, output):
         for action, pkgs in output:
-            print( "  %s" % action)
+            print("  %s" % action)
             for pkg_list in pkgs:
                 pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                print ("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+                print ("    --> %-50s : %s" % (self._fullname(pkg_id), size))
 
     def format_transaction_result(self, output):
         result = []
         for action, pkgs in output:
-            result.append( "  %s" % action)
+            result.append("  %s" % action)
             for pkg_list in pkgs:
                 pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                result.append("    --> %-50s : %s" % (self._fullname(pkg_id),size))
+                result.append("    --> %-50s : %s" % (self._fullname(pkg_id), size))
         return "\n".join(result)
 
-    def _fullname(self,pkg_id):
+    def _fullname(self, pkg_id):
         ''' Package fullname  '''
-        (n, e, v, r, a, repo_id)  = str(pkg_id).split(',')
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         if e and e != '0':
             return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
         else:

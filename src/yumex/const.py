@@ -21,7 +21,7 @@ from gi.repository import Pango
 import os.path
 import sys
 import re
-from .misc import _, P_ # @UnusedImport
+from .misc import _, P_  # @UnusedImport
 
 __yumex_version__ = "3.99.1"
 
@@ -30,10 +30,10 @@ __yumex_version__ = "3.99.1"
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
 if BIN_PATH in ["/usr/bin", "/bin"]:
     DATA_DIR = '/usr/share/yumex-nextgen'
-    PIX_DIR = DATA_DIR+"/gfx"
+    PIX_DIR = DATA_DIR + "/gfx"
 else:
     DATA_DIR = BIN_PATH
-    PIX_DIR = DATA_DIR+"/../gfx"
+    PIX_DIR = DATA_DIR + "/../gfx"
 
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
@@ -85,10 +85,10 @@ QUEUE_PACKAGE_TYPES = {
 }
 
 # Package info filters (widget : info_xxxxxx)
-PKGINFO_FILTERS = ['desc','updinfo','changelog','files','deps']
+PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
 
-#FIXME: The url should not be hardcoded
-BUGZILLA_URL='https://bugzilla.redhat.com/show_bug.cgi?id='
+# FIXME: The url should not be hardcoded
+BUGZILLA_URL = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 
 
 
