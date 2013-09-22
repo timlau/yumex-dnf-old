@@ -24,6 +24,7 @@ from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgr
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
+import argparse
 
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
@@ -123,9 +124,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._create_action("queue", self.on_queue)
         self._create_action("apply_changes", self.on_apply_changes)
         self._create_action("search_config", self.on_search_config)
-
-        # show window
-        self.show_now()
         
         # Status Icon
         self.status_icon = StatusIcon()
@@ -135,10 +133,12 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
         # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
 
+
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
+        
         
     def on_delete_event(self, *args):
         self.hide()
@@ -544,14 +544,18 @@ class YumexWindow(Gtk.ApplicationWindow):
 
 class YumexApplication(Gtk.Application):
     def __init__(self):
-        Gtk.Application.__init__(self)
+        Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        self.args = None
 
     def do_activate(self):
         self.win = YumexWindow(self)
         # show the window - with show() not show_all() because that would show also
         # the leave_fullscreen button
-        self.win.show()
         self.win.connect('delete_event', self.on_quit)
+        if self.args.hidden:
+            self.win.hide()
+        else:
+            self.win.show()
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -566,6 +570,17 @@ class YumexApplication(Gtk.Application):
 
     def on_quit(self, action=None, parameter=None):
         self.quit()
+
+    def do_command_line(self, args):
+        Gtk.Application.do_command_line(self, args)
+        parser = argparse.ArgumentParser(prog='yumex')
+        parser.add_argument('-d', '--debug', action='store_true')
+        parser.add_argument('--hidden', action='store_true')
+        parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
+        self.args = parser.parse_args(args.get_arguments()[1:])
+        print(self.args)
+        self.do_activate()
+        return 0
 
     def do_shutdown(self):
         Gtk.Application.do_shutdown(self)
