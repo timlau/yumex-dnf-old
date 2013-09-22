@@ -25,6 +25,7 @@ from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
 import argparse
+import logging
 
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
@@ -133,7 +134,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
         # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
 
-
+        if not self.app.args.hidden:
+            self.show_now()
+            
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
@@ -579,6 +582,9 @@ class YumexApplication(Gtk.Application):
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
         print(self.args)
+        if self.args.debug:
+            self.doTextLoggerSetup(loglvl=logging.DEBUG)
+        
         self.do_activate()
         return 0
 
@@ -588,5 +594,14 @@ class YumexApplication(Gtk.Application):
             self.win.backend.quit()
         self.win.release_root_backend(quit=True)
 
+    def doTextLoggerSetup(self, logroot='yumdaemon-session', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
+        ''' Setup Python logging  '''
+        logger = logging.getLogger(logroot)
+        logger.setLevel(loglvl)
+        formatter = logging.Formatter(logfmt, "%H:%M:%S")
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        handler.propagate = False
+        logger.addHandler(handler)
 
 
