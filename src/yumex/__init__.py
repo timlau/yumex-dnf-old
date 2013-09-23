@@ -245,7 +245,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         Called if exception occours in methods with the @ExceptionHandler decorator
         '''
         msg = str(e)
-        self.logger.error("EXCEPTION : ", msg)
+        self.logger.error("EXCEPTION : %s " % msg)
         err, msg = self._parse_error(msg)
         self.logger.debug("err:  %s - msg: %s" % (err, msg))
         if err == "YumLockedError":
