@@ -156,6 +156,13 @@ class YumPackage(Package):
         '''
         return self.get_attribute('filelist')
 
+    @property
+    def pkgtags(self):
+        '''
+        get package filelist
+        '''
+        return self.get_attribute('pkgtags')
+
 
     @property
     def color(self):

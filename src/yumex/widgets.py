@@ -1209,6 +1209,9 @@ class PackageInfo(PackageInfoView):
             self.frontend.warning("%s is not an url" % url)
 
     def _show_description(self):
+        tags = self.current_package.pkgtags
+        if tags:
+            self.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
         desc = self.current_package.description
         self.write(desc)
 
@@ -1412,7 +1415,7 @@ class StatusIcon:
 
         search_updates = Gtk.MenuItem(_("Search for Updates"))
         self.search_updates_menu = search_updates
-        
+
         menu.append(search_updates)
         menu.append(quit)
         menu.show_all()
@@ -1422,13 +1425,13 @@ class StatusIcon:
     def set_popup_menu_sensitivity(self, sensitive):
         self.quit_menu.set_sensitive(sensitive)
         self.search_updates_menu.set_sensitive(sensitive)
-        
+
     def on_popup(self, icon, button, time):
         # self.popup_menu.popup(None, None, Gtk.StatusIcon.position_menu, button,time, self.statusicon)
         def pos(menu, icon):
             return (Gtk.StatusIcon.position_menu(menu, icon))
 
-        self.popup_menu.popup(None, None, pos, self.statusicon, button, time)         
+        self.popup_menu.popup(None, None, pos, self.statusicon, button, time)
         # self.popup_menu.popup(None, None, None, Gtk.StatusIcon.position_menu, button, time)
 
     def get_status_icon(self):
@@ -1465,11 +1468,11 @@ class StatusIcon:
 
     # png_file must be a squared image
     def get_pixbuf_with_text(self, png_file, text, relative_font_size):
-        img = cairo.ImageSurface.create_from_png(png_file)  
+        img = cairo.ImageSurface.create_from_png(png_file)
         size = img.get_height()
         surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, size, size)
         ctx = cairo.Context (surface)
-        ctx.set_source_surface(img, 0, 0)  
+        ctx.set_source_surface(img, 0, 0)
         ctx.paint()
 
         font_size = size * relative_font_size
@@ -1479,7 +1482,7 @@ class StatusIcon:
             ctx.set_font_size(int(font_size))
             ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL,
                     cairo.FONT_WEIGHT_BOLD)
-            [bearing_x, bearing_y, font_x, font_y, ax, ay] = ctx.text_extents(text) 
+            [bearing_x, bearing_y, font_x, font_y, ax, ay] = ctx.text_extents(text)
             if font_x < size: break
             font_size = font_size * 0.9
         ctx.move_to(int(size - font_x) / 2 - bearing_x , int(size - font_y) / 2 - bearing_y)
@@ -1513,10 +1516,10 @@ class StatusIcon:
         else:
             self.is_working = self.is_working - 1
         self.update_tray_icon()
-    
+
     def need_user_input(self, need_input=True):
         """ call this when a user interacton/input is needed """
-        
+
         self.need_input = need_input
         self.update_tray_icon()
 
