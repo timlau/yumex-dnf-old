@@ -28,6 +28,9 @@ import argparse
 import logging
 
 class YumexWindow(Gtk.ApplicationWindow):
+    '''
+    Main application window class
+    '''
     def __init__(self, app):
         Gtk.Window.__init__(self, title="Yum Extender", application=app)
         self.logger = logging.getLogger('yumex.Window')
@@ -145,11 +148,19 @@ class YumexWindow(Gtk.ApplicationWindow):
 
 
     def on_delete_event(self, *args):
+        '''
+        windows delete event handler
+        just hide, dont exit application
+        '''
         self.hide()
         return True
 
 
     def on_status_icon_clicked(self, event):
+        '''
+        left click on status icon handler
+        hide/show the window, based on current state
+        '''
         if self.get_property('visible'):
             self.hide()
         else:
@@ -190,7 +201,8 @@ class YumexWindow(Gtk.ApplicationWindow):
 
     def build_content(self):
         '''
-        Create a tab-less notebook to handle the package, history and queue views
+        setup the main content notebook
+        setup the package, history and queue views pages
         '''
         self.content = self.ui.get_object("content")
         self.queue_view = QueueView()
@@ -215,20 +227,23 @@ class YumexWindow(Gtk.ApplicationWindow):
     def set_content_page(self, page):
         '''
         Set the visible content notebook page
-        :param page: active page (0 = packages, 1 = queue, 2 = history)
+        :param page: active page (PAGE_PACKAGES, PAGE_QUEUE, PAGE_HISTORY)
         '''
         self.content.set_current_page(page)
 
     def _create_action(self, name, callback, para=None):
         '''
-        Created a Gio.SimpleAction on a given name and connect it to a given callback
-        handler
+        create and action and connect it to a callback handler
+        handles win.<name> actions defined in GtkBuilder ui file.
         '''
         action = Gio.SimpleAction.new(name, para)
         action.connect("activate", callback)
         self.add_action(action)
 
     def exception_handler(self, e):
+        '''
+        Called if exception occours in methods with the @ExceptionHandler decorator
+        '''
         msg = str(e)
         self.logger.error("EXCEPTION : ", msg)
         err, msg = self._parse_error(msg)
@@ -239,6 +254,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         sys.exit(1)
 
     def set_working(self, state, insensitive=False):
+        '''
+        Set the working state
+        - show/hide the progress spinner
+        - show busy/normal mousepointer
+        - make gui insensitive/sensitive
+        - set/unset the woring state in the status icon
+        based on the state.
+        '''
         if state:
             self.spinner.show()
             self.status_icon.set_is_working(True)
@@ -264,6 +287,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         return "", ""
 
     def check_for_updates(self, widget=None):
+        '''
+        check for updates handller for the status icon menu
+        '''
         self.backend.reload()  # Reload backend
         widget = self.ui.get_object("pkg_updates")
         if widget.get_active():
@@ -313,7 +339,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         widget = self.ui.get_object("hidden")
         widget.set_active(True)
         self._set_pkg_relief()
-        self.set_content_page(0)
+        self.set_content_page(PAGE_PACKAGES)
 
     def _set_pkg_relief(self, relief=Gtk.ReliefStyle.HALF):
         '''
@@ -394,6 +420,9 @@ class YumexWindow(Gtk.ApplicationWindow):
 
 
     def _search_name(self, data, search_flt):
+        '''
+        search package name for keyword with wildcards
+        '''
         if len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
             self.last_search = data
             if self.current_filter:
@@ -412,6 +441,9 @@ class YumexWindow(Gtk.ApplicationWindow):
                 self.on_pkg_filter(widget, flt)
 
     def _search_keys(self, fields, data):
+        '''
+        search given package attributes for keywords
+        '''
         if data != self.last_search:
             self.last_search = data
             if self.current_filter:
@@ -442,7 +474,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 result = self.get_root_backend().GetHistoryByDays(0, int(CONFIG.history_days))
                 self.history_view.populate(result)
             self._show_info(False)
-            self.set_content_page(2)
+            self.set_content_page(PAGE_HISTORY)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
         else:
             self.release_root_backend()
@@ -454,7 +486,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         widget = self.ui.get_object("tool_queue")
         if widget.get_active():
             self._show_info(False)
-            self.set_content_page(1)
+            self.set_content_page(PAGE_QUEUE)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
 
     def on_info(self, action, parameter):
@@ -474,6 +506,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.process_actions()
 
     def on_options(self, widget, parameter):
+        '''
+        callback handler for options menu
+        set the CONFIG parameter values based on the menu checkbox states
+        '''
         state = widget.get_active()
         if state:
             setattr(CONFIG, parameter, "1")
@@ -528,6 +564,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.release_root_backend()
 
     def reset(self):
+        '''
+        Reset the gui to inital state, used after at transaction is completted.
+        '''
         self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
@@ -547,12 +586,18 @@ class YumexWindow(Gtk.ApplicationWindow):
 
 
 class YumexApplication(Gtk.Application):
+    '''
+    Main application class
+    '''
     def __init__(self):
         Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.logger = logging.getLogger('yumex.Application')
 
     def do_activate(self):
+        '''
+        Gtk.Application activate handler
+        '''
         self.win = YumexWindow(self)
         # show the window - with show() not show_all() because that would show also
         # the leave_fullscreen button
@@ -563,20 +608,34 @@ class YumexApplication(Gtk.Application):
             self.win.show()
 
     def do_startup(self):
+        '''
+        Gtk.Application startup handler
+        '''
         Gtk.Application.do_startup(self)
-
         # Setup actions
         self._create_action("quit", self.on_quit)
 
     def _create_action(self, name, callback, para=None):
+        '''
+        create and action and connect it to a callback handler
+        handles app.<name> actions defined in GtkBuilder ui file.
+        '''
         action = Gio.SimpleAction.new(name, para)
         action.connect("activate", callback)
         self.add_action(action)
 
     def on_quit(self, action=None, parameter=None):
-        self.quit()
+        '''
+        quit handler
+        '''
+        self.quit() # quit the application
 
     def do_command_line(self, args):
+        '''
+        Gtk.Application command line handler
+        called if Gio.ApplicationFlags.HANDLES_COMMAND_LINE is set.
+        must call the self.do_activate() to get the application up and running.
+        '''
         Gtk.Application.do_command_line(self, args)
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
@@ -585,6 +644,7 @@ class YumexApplication(Gtk.Application):
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
+            # setup log handler for yumdaemon API
             self.doTextLoggerSetup(logroot='yumdaemon', logfmt = "%(asctime)s: [%(name)s] - %(message)s",loglvl=logging.DEBUG)
         else:
             self.doTextLoggerSetup()
@@ -593,10 +653,15 @@ class YumexApplication(Gtk.Application):
         return 0
 
     def do_shutdown(self):
+        '''
+        Gtk.Application shutdown handler
+        Do clean up before the application is closed.
+        '''
         Gtk.Application.do_shutdown(self)
-        if self.win.backend:
-            self.win.backend.quit()
-        self.win.release_root_backend(quit=True)
+        if hasattr(self,"win"): # if windows object exist, unlock and exit backends
+            if self.win.backend:
+                self.win.backend.quit()
+            self.win.release_root_backend(quit=True)
 
     def doTextLoggerSetup(self, logroot='yumex', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
         ''' Setup Python logging  '''
