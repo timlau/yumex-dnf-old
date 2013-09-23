@@ -21,7 +21,7 @@ import logging
 from yumdaemon import *
 from .backend import Package, Backend
 from .const import *
-from .misc import format_number, ExceptionHandler, TimeFunction, _, P_  # @UnusedImport @Reimport
+from .misc import format_number, ExceptionHandler, TimeFunction, _, P_  # @UnusedImport @Reimport lint:ok
 
 logger = logging.getLogger('yumex.yum_backend')
 
@@ -391,7 +391,12 @@ class YumRootBackend(Backend, YumDaemonClient):
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
         # YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
         num = " ( %i/%i )" % (ts_current, ts_total)
-        self.frontend.infobar.info_sub(RPM_ACTIONS[action] % str(package))
+        if ',' in package: # this is a pkg_id
+            name = self._fullname(package)
+        else: # this is just a pkg name (cleanup)
+            name = package
+        #logger.debug("on_RPMProgress : [%s]" % package )
+        self.frontend.infobar.info_sub(RPM_ACTIONS[action] % name)
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
