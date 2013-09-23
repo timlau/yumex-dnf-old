@@ -16,11 +16,14 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-from yumdaemon import *
+import logging
 
+from yumdaemon import *
 from .backend import Package, Backend
 from .const import *
 from .misc import format_number, ExceptionHandler, TimeFunction, _, P_  # @UnusedImport @Reimport
+
+logger = logging.getLogger('yumex.yum_backend')
 
 class YumPackage(Package):
     '''
@@ -356,7 +359,7 @@ class YumRootBackend(Backend, YumDaemonClient):
         YumDaemonClient.__init__(self)
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
-        print("name : [%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
+        logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
         self.frontend.infobar.set_progress(frac)
         if name == '<locally rebuilding deltarpms>':
             name = _("Building packages from delta packages")
@@ -383,7 +386,7 @@ class YumRootBackend(Backend, YumDaemonClient):
         elif event == 'end-run':
             self.frontend.infobar.show_progress(False)
         else:
-            print("TransactionEvent : %s" % event)
+            logger.debug("TransactionEvent : %s" % event)
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
         # YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)

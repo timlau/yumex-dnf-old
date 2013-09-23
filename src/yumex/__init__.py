@@ -30,13 +30,13 @@ import logging
 class YumexWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
         Gtk.Window.__init__(self, title="Yum Extender", application=app)
-        self.logger = logging.getLogger('yumex.Window')        
+        self.logger = logging.getLogger('yumex.Window')
         self.set_default_size(1024, 700)
         self.app = app
         icon = Gtk.IconTheme.get_default().load_icon('yumex', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
-        
+
         # init vars
         self.last_search = None
         self.current_filter = None
@@ -126,7 +126,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._create_action("queue", self.on_queue)
         self._create_action("apply_changes", self.on_apply_changes)
         self._create_action("search_config", self.on_search_config)
-        
+
         # Status Icon
         self.status_icon = StatusIcon()
         icon = self.status_icon.get_status_icon()
@@ -137,17 +137,17 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         if not self.app.args.hidden:
             self.show_now()
-            
+
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
         self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
-        
-        
+
+
     def on_delete_event(self, *args):
         self.hide()
         return True
-        
+
 
     def on_status_icon_clicked(self, event):
         if self.get_property('visible'):
@@ -166,11 +166,11 @@ class YumexWindow(Gtk.ApplicationWindow):
             self._root_backend = YumRootBackend(self)
             self._root_backend.setup()
             self._root_locked = True
-            print("Start the yum root daemon")
+            self.logger.debug("Start the yum root daemon")
         elif self._root_locked == False:
             self._root_backend.Lock()
             self._root_locked = True
-            print("Lock the yum root daemon")
+            self.logger.debug("Lock the yum root daemon")
         return self._root_backend
 
     @ExceptionHandler
@@ -181,11 +181,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         if self._root_backend == None:
             return
         if self._root_locked == True:
-            print("Unlock the yum root daemon")
+            self.logger.debug("Unlock the yum root daemon")
             self._root_backend.Unlock()
             self._root_locked = False
         if quit:
-            print("Exit the yum root daemon")
+            self.logger.debug("Exit the yum root daemon")
             self._root_backend.Exit()
 
     def build_content(self):
@@ -230,9 +230,9 @@ class YumexWindow(Gtk.ApplicationWindow):
 
     def exception_handler(self, e):
         msg = str(e)
-        print("EXCEPTION : ", msg)
+        self.logger.error("EXCEPTION : ", msg)
         err, msg = self._parse_error(msg)
-        print(err, msg)
+        self.logger.debug("err:  %s - msg: %s" % (err, msg))
         if err == "YumLockedError":
             msg = "Yum  is locked by another process \n\nYum Extender will exit"
         show_information(self, msg)
@@ -270,7 +270,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.on_pkg_filter(widget, "updates")
         else:
             self.ui.get_object("pkg_updates").set_active(True)
-        
+
     def _set_busy_cursor(self, insensitive=False):
         ''' Set busy cursor in mainwin and make it insensitive if selected '''
         win = self.get_window()
@@ -472,15 +472,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         Apply Changes button callback handler
         '''
         self.process_actions()
-        
+
     def on_options(self, widget, parameter):
         state = widget.get_active()
         if state:
             setattr(CONFIG, parameter, "1")
         else:
             setattr(CONFIG, parameter, "0")
-            
-        print("Option : ", parameter, getattr(CONFIG, parameter))
+
+        self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG, parameter)))
 
     def on_pref(self, action, parameter):
         '''
@@ -585,6 +585,7 @@ class YumexApplication(Gtk.Application):
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
+            self.doTextLoggerSetup(logroot='yumdaemon', logfmt = "%(asctime)s: [%(name)s] - %(message)s",loglvl=logging.DEBUG)
         else:
             self.doTextLoggerSetup()
         self.logger.debug("cmdline : %s " % repr(self.args))
