@@ -8,7 +8,7 @@ How to run
 ==========
 ```
 cd src
-./main,py
+./main.py
 ```
 
 Requirements
@@ -18,11 +18,10 @@ Requirements
 yum install python3 python3-gobject
 ```
 
-yum-deamon must also be installed.
+[yum-deamon][https://github.com/timlau/yum-daemon] must also be installed.
 
 ```
 git clone https://github.com/timlau/yum-daemon.git
 cd yum-daemon
-make test-release
-yum install ~/rpmbuild/RPMS/noarch/*yumdaemon*.rpm
+make test-inst
 ```

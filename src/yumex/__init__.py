@@ -451,7 +451,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget.set_active(False)
             self.set_working(True)
             newest_only = CONFIG.newest_only == "1"
-            pkgs = self.backend.search(fields, data.split(' '), True, newest_only)
+            pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)

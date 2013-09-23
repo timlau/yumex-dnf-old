@@ -155,5 +155,6 @@ REPO_META = {
     'metalink'      : _("Downloading metalink information for the %s repository"),
     'presto'        : _("Downloading Delta update information for the %s repository"),
     'prestodelta'   : _("Downloading Delta update information for the %s repository"),
+    'pkgtags'       : _("Downloading pkgtags information for the %s repository"),
     'updateinfo'    : _("Downloading Update information for the %s repository")
 }

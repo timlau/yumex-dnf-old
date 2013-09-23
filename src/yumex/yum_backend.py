@@ -318,7 +318,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         return self._build_package_list(pkgs)
 
     @ExceptionHandler
-    def search(self, fields, keys, match_all, newest_only):
+    def search(self, fields, keys, match_all, newest_only, tags):
         '''
 
         :param fields:
@@ -328,7 +328,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         :param match_all:
         :type match_all:
         '''
-        pkgs = self.Search(fields, keys, match_all, newest_only)
+        pkgs = self.Search(fields, keys, match_all, newest_only, tags)
         return self._build_package_list(pkgs)
 
     def show_transaction_result(self, output):
