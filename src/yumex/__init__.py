@@ -389,7 +389,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 self.current_filter = (widget, data)
                 self.set_working(True, True)
                 pkgs = self.backend.get_packages(data)
-                if data == 'update':
+                if data == 'updates':
                     self.status_icon.set_update_count(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.message(_("Adding packages to view"))
