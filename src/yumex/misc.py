@@ -146,24 +146,18 @@ class YumexConf(BaseConfig):
     newest_only= BoolOption(True)
     clean_unused = BoolOption(False)
 
+class SessionConf(BaseConfig):
+    """ Yum Extender current session Setting"""
+    skip_broken = BoolOption(False)
+    newest_only= BoolOption(True)
+    clean_unused = BoolOption(False)
+
 
 class Config(object):
     '''
     Yum Extender Configuration class
     '''
-    # Yumex default config values
-    DEFAULT_CONFIG_SETTING = {
-    'history_days' : 180,
-    'color_available' : 'black',      
-    'color_update'    : 'red',      
-    'color_installed' : 'darkgreen',      
-    'color_obsolete'  : 'blue',      
-    'color_downgrade' : 'goldenrod',
-    "skip_broken"     : 0,
-    "clean_unused"    : 0,
-    "newest_only"     : 1,  
-    "autostart"       : 0
-    }
+    WRITE_ALWAYS = ['autostart']
     
     def __init__(self):
         object.__init__(self)
@@ -174,21 +168,26 @@ class Config(object):
         self.conf_file = self.conf_dir+"/yumex.conf"
         self.parser = configparser.ConfigParser()
         self.conf = YumexConf()
+        self.session = SessionConf()
         self.read()
         
     def read(self):
         if not os.path.exists(self.conf_file):
-            print("creating default config file : %s" % self.conf_file)
-            self.write()
-        else:
-            self.parser.read_file(open(self.conf_file,"r"))
-            if not self.parser.has_section('yumex'):
-                self.parser.add_section('yumex')
-            self.conf.populate(self.parser, 'yumex')
+            logger.info("creating default config file : %s" % self.conf_file)
+            fh = open(self.conf_file,"w")
+            print('[yumex]\n', file=fh)
+            fh.close()
+        self.parser.read_file(open(self.conf_file,"r"))
+        print(self.parser.items())
+        if not self.parser.has_section('yumex'):
+            self.parser.add_section('yumex')
+        self.conf.populate(self.parser, 'yumex')
+        self.session.populate(self.parser, 'yumex')
+        print(self.conf)
             
     def write(self):
         fp = open(self.conf_file,"w")
-        self.conf.write(fp)
+        self.conf.write(fp,"yumex", Config.WRITE_ALWAYS)
         fp.close()
        
 

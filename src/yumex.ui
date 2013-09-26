@@ -808,7 +808,7 @@ Available = Packages available for installation</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_00">
+                  <object class="GtkSwitch" id="pref_newest_only">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                   </object>
@@ -820,7 +820,7 @@ Available = Packages available for installation</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_01">
+                  <object class="GtkSwitch" id="pref_skip_broken">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                   </object>
@@ -832,7 +832,7 @@ Available = Packages available for installation</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_02">
+                  <object class="GtkSwitch" id="pref_clean_unused">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                   </object>
@@ -917,11 +917,11 @@ Available = Packages available for installation</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_settings">
+                  <object class="GtkLabel" id="label_show_newest">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 0</property>
+                    <property name="label" translatable="yes">Default: Show newest only</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -935,7 +935,7 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 1</property>
+                    <property name="label" translatable="yes">Default: Skip Broken</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -949,7 +949,7 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 2</property>
+                    <property name="label" translatable="yes">Default: Erase Used Requirments</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

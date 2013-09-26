@@ -31,9 +31,11 @@ BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
 if BIN_PATH in ["/usr/bin", "/bin"]:
     DATA_DIR = '/usr/share/yumex-nextgen'
     PIX_DIR = DATA_DIR + "/gfx"
+    MISC_DIR = DATA_DIR
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
+    MISC_DIR = DATA_DIR + "/../misc"
 
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')

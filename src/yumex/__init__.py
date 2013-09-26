@@ -82,7 +82,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # Connect menu radio buttons to handler
         for name in ['newest_only', 'skip_broken', 'clean_unused']:
             rb = self.ui.get_object("option_" + name)
-            rb.set_active(getattr(CONFIG.conf, name) == "1")
+            rb.set_active(getattr(CONFIG.session, name))
             rb.connect('toggled', self.on_options, name)
 
         # build the search_conf widget
@@ -433,7 +433,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_working(True)
-            newest_only = CONFIG.conf.newest_only
+            newest_only = CONFIG.session.newest_only
             pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
@@ -454,7 +454,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_working(True)
-            newest_only = CONFIG.conf.newest_only
+            newest_only = CONFIG.session.newest_only
             pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
@@ -515,8 +515,8 @@ class YumexWindow(Gtk.ApplicationWindow):
         set the CONFIG parameter values based on the menu checkbox states
         '''
         state = widget.get_active()
-        setattr(CONFIG.conf, parameter,state )
-        self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG.conf, parameter)))
+        setattr(CONFIG.session, parameter,state )
+        self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG.session, parameter)))
 
     def on_pref(self, action, parameter):
         '''

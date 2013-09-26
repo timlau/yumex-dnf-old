@@ -29,7 +29,10 @@ import logging
 
 from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction  # @UnusedImport
 from .const import *  # @UnusedWildImport
+import shutil
 
+
+logger = logging.getLogger('yumex.widget')        
 
 #
 # based on SearchEntry by Sebastian Heinlein <glatzor@ubuntu.com>
@@ -1317,7 +1320,7 @@ class Preferences:
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self._settings = ['autostart']
+        self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only']
 
     def run(self):
         self.get_settings()
@@ -1330,14 +1333,29 @@ class Preferences:
 
     def get_settings(self):
         for option in self._settings:
+            logger.debug("%s : %s " % (option,getattr(CONFIG.conf,option) ))
             widget = self.base.ui.get_object('pref_'+option)
             widget.set_active(getattr(CONFIG.conf,option))
 
     def set_settings(self):
+        changed = False
         for option in self._settings:
             widget = self.base.ui.get_object('pref_'+option)
-            setattr(CONFIG.conf, option, widget.get_active())
-        CONFIG.write()
+            state = widget.get_active()
+            if state != getattr(CONFIG.conf, option): # changed ??
+                setattr(CONFIG.conf, option, state)
+                changed = True
+                self.handle_setting(option, state)
+        if changed:
+            CONFIG.write()
+
+    def handle_setting(self, option, state):
+        if option == 'autostart':
+            if state: # create an autostart .desktop for current user
+                shutil.copy(MISC_DIR+"/yumex-nextgen-autostart.desktop", os.environ['HOME'] +"/.config/autostart/yumex-nextgen.desktop")
+            else: # remove the autostart file
+                os.unlink(os.environ['HOME'] +"/.config/autostart/yumex-nextgen.desktop")
+        
 
 class TransactionResult:
 
