@@ -106,6 +106,13 @@ test-builds:
 	@scp ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 	@scp ~/rpmbuild/SRPMS/${PKGNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 
+test-inst:
+	@$(MAKE) test-release
+	sudo yum install ~/rpmbuild/RPMS/noarch/yumex*.rpm
+
+test-reinst:
+	@$(MAKE) test-release
+	sudo yum reinstall ~/rpmbuild/RPMS/noarch/yumex*.rpm
 		
 FORCE:
     
