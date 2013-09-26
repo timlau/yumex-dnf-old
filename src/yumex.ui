@@ -916,7 +916,6 @@ Available = Packages available for installation</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
-                <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="labe_adv_1l">
                     <property name="visible">True</property>
@@ -1062,36 +1061,6 @@ Available = Packages available for installation</property>
                     <property name="height">1</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -1111,9 +1080,12 @@ Available = Packages available for installation</property>
             </child>
             <child>
               <object class="GtkScrolledWindow" id="repo_sw">
+                <property name="height_request">400</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
+                <property name="min_content_height">400</property>
                 <child>
                   <placeholder/>
                 </child>

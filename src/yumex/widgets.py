@@ -1656,7 +1656,7 @@ class RepoView(SelectionView):
         for state, ident, name, gpg in data:
             self.store.append([state, ident, name, gpg])
 
-    def new_pixbuf(self, column, cell, model, iterator):
+    def new_pixbuf(self, column, cell, model, iterator,data):
         '''
 
         @param column:
