@@ -338,7 +338,7 @@ class SelectionView(Gtk.TreeView):
         obj = model.get_value(iterator, 0)
         if obj:
             cell.set_property('text', getattr(obj, prop))
-            cell.set_property('foreground', obj.color)
+            cell.set_property('foreground-rgba', obj.color)
 
     def get_data_bool(self, column, cell, model, iterator, prop):
         '''
@@ -1332,10 +1332,17 @@ class Preferences:
         return rc == 1
 
     def get_settings(self):
+        # set settings states
         for option in self._settings:
             logger.debug("%s : %s " % (option,getattr(CONFIG.conf,option) ))
             widget = self.base.ui.get_object('pref_'+option)
             widget.set_active(getattr(CONFIG.conf,option))
+        # set current colors 
+        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
+            rgba = Gdk.RGBA()
+            rgba.parse(getattr(CONFIG.conf,name))
+            widget = self.base.ui.get_object(name)
+            widget.set_rgba(rgba)
 
     def set_settings(self):
         changed = False
@@ -1346,6 +1353,13 @@ class Preferences:
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
+        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
+            widget = self.base.ui.get_object(name)
+            rgba = widget.get_rgba()
+            color =  rgba.to_string()
+            if color != getattr(CONFIG.conf, name): # changed ??
+                setattr(CONFIG.conf, name, color)
+                changed = True
         if changed:
             CONFIG.write()
 

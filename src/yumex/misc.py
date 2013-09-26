@@ -135,11 +135,11 @@ class YumexConf(BaseConfig):
     """ Yum Extender Config Setting"""
     debug = BoolOption(False)
     autostart = BoolOption(False)
-    color_install = Option('darkgreen')
-    color_update = Option('red')
-    color_normal = Option('black')
-    color_obsolete = Option('blue')
-    color_downgrade = Option('goldenrod')
+    color_install = Option('rgb(78,154,6)')
+    color_update = Option('rgb(204,0,0)')
+    color_normal = Option('rgb(0,0,0)')
+    color_obsolete = Option('rgb(52,101,164)')
+    color_downgrade = Option('rgb(193,125,17)')
     history_days = IntOption(180)
     bugzilla_url = Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
     skip_broken = BoolOption(False)
@@ -178,12 +178,10 @@ class Config(object):
             print('[yumex]\n', file=fh)
             fh.close()
         self.parser.read_file(open(self.conf_file,"r"))
-        print(self.parser.items())
         if not self.parser.has_section('yumex'):
             self.parser.add_section('yumex')
         self.conf.populate(self.parser, 'yumex')
         self.session.populate(self.parser, 'yumex')
-        print(self.conf)
             
     def write(self):
         fp = open(self.conf_file,"w")

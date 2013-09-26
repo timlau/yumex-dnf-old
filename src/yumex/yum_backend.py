@@ -21,7 +21,8 @@ import logging  # @UnusedImport
 from yumdaemon import *
 from .backend import Package, Backend
 from .const import *
-from .misc import format_number, ExceptionHandler, TimeFunction, _, P_  # @UnusedImport @Reimport lint:ok
+from .misc import format_number, ExceptionHandler, TimeFunction, _, P_ , CONFIG # @UnusedImport @Reimport lint:ok
+from gi.repository import Gdk
 
 logger = logging.getLogger('yumex.yum_backend')
 
@@ -169,7 +170,18 @@ class YumPackage(Package):
         '''
         get package color to show in view
         '''
-        return PACKAGE_COLORS[self.action]
+        color = CONFIG.conf.color_normal
+        if self.action == 'u':
+            color = CONFIG.conf.color_update
+        elif self.action == 'o':
+            color = CONFIG.conf.color_obsolete
+        elif self.action == 'do':
+            color = CONFIG.conf.color_downgrade
+        elif self.action == 'r':
+            color = CONFIG.conf.color_install
+        rgba = Gdk.RGBA()
+        rgba.parse(color)
+        return rgba
 
     @property
     def downgrades(self):
