@@ -771,11 +771,10 @@ Available = Packages available for installation</property>
               <object class="GtkGrid" id="grid_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="margin_right">10</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
                 <property name="row_homogeneous">True</property>
@@ -783,6 +782,7 @@ Available = Packages available for installation</property>
                   <object class="GtkLabel" id="label_autostart">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Start Yum Extender at user logon</property>
@@ -799,6 +799,7 @@ Available = Packages available for installation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -811,6 +812,7 @@ Available = Packages available for installation</property>
                   <object class="GtkSwitch" id="pref_newest_only">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -823,6 +825,7 @@ Available = Packages available for installation</property>
                   <object class="GtkSwitch" id="pref_skip_broken">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -835,6 +838,7 @@ Available = Packages available for installation</property>
                   <object class="GtkSwitch" id="pref_clean_unused">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -844,81 +848,9 @@ Available = Packages available for installation</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_03">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_04">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_05">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_06">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_07">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_08">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">9</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label_show_newest">
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Default: Show newest only</property>
@@ -933,6 +865,7 @@ Available = Packages available for installation</property>
                 <child>
                   <object class="GtkLabel" id="label_settings1">
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Default: Skip Broken</property>
@@ -947,6 +880,7 @@ Available = Packages available for installation</property>
                 <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Default: Erase Used Requirments</property>
@@ -954,90 +888,6 @@ Available = Packages available for installation</property>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings3">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 3</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings4">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 4</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings5">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 5</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings6">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 6</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings7">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 7</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_settings8">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Setting 8</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
                     <property name="width">2</property>
                     <property name="height">1</property>
                   </packing>
@@ -1391,7 +1241,7 @@ Available = Packages available for installation</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
