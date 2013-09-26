@@ -1321,6 +1321,12 @@ class Preferences:
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
         self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only']
+        self.repos = self.base.backend.get_repositories()
+        self.repo_view = RepoView()
+        widget = self.base.ui.get_object('repo_sw')
+        widget.add(self.repo_view)
+        self.repo_view.populate(self.repos)
+        
 
     def run(self):
         self.get_settings()
@@ -1583,3 +1589,140 @@ class StatusIcon:
         self.need_input = need_input
         self.update_tray_icon()
 
+class RepoView(SelectionView):
+    """
+    This class controls the repo TreeView
+    """
+    def __init__(self):
+        '''
+
+        @param widget:
+        '''
+        SelectionView.__init__(self)
+        self.headers = [_('Repository'), _('Filename')]
+        self.store = self.setup_view()
+
+    def on_toggled(self, widget, path):
+        """ Repo select/unselect handler """
+        iterator = self.store.get_iter(path)
+        state = self.store.get_value(iterator, 0)
+        self.store.set_value(iterator, 0, not state)
+
+    def on_section_header_clicked(self, widget):
+        """  Selection column header clicked"""
+        if self.state == 'normal': # deselect all
+            self._last_selected = self.get_selected()
+            self.deselect_all()
+            self.state = 'deselected'
+        elif self.state == 'deselected': # select all
+            self.state = 'selected'
+            self.select_all()
+        elif self.state == 'selected': # select previous selected
+            self.state = 'normal'
+            self.select_by_keys(self._last_selected)
+            self._last_selected = []
+
+
+
+    def setup_view(self):
+        """ Create models and columns for the Repo TextView  """
+        store = Gtk.ListStore('gboolean', str, str, 'gboolean')
+        self.set_model(store)
+        # Setup Selection Column
+        col = self.create_selection_column_num(0)
+        col.set_clickable(True)
+        col.connect('clicked', self.on_section_header_clicked)
+
+        # Setup resent column
+        cell2 = Gtk.CellRendererPixbuf()    # gpgcheck
+        cell2.set_property('stock-id', Gtk.STOCK_DIALOG_AUTHENTICATION)
+        column2 = Gtk.TreeViewColumn("", cell2)
+        column2.set_cell_data_func(cell2, self.new_pixbuf)
+        column2.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
+        column2.set_fixed_width(20)
+        column2.set_sort_column_id(-1)
+        self.append_column(column2)
+
+        # Setup reponame & repofile column's
+        self.create_text_column_num(_('Repository'), 1)
+        self.create_text_column_num(_('Name'), 2)
+        self.set_search_column(1)
+        self.set_reorderable(False)
+        return store
+
+    def populate(self, data):
+        """ Populate a repo liststore with data """
+        self.store.clear()
+        for state, ident, name, gpg in data:
+            self.store.append([state, ident, name, gpg])
+
+    def new_pixbuf(self, column, cell, model, iterator):
+        '''
+
+        @param column:
+        @param cell:
+        @param model:
+        @param iterator:
+        '''
+        gpg = model.get_value(iterator, 3)
+        if gpg:
+            cell.set_property('visible', True)
+        else:
+            cell.set_property('visible', False)
+
+    def get_selected(self):
+        '''
+
+        '''
+        selected = []
+        for elem in self.store:
+            state = elem[0]
+            name = elem[1]
+            if state:
+                selected.append(name)
+        return selected
+
+    def get_notselected(self):
+        '''
+
+        '''
+        notselected = []
+        for elem in self.store:
+            state = elem[0]
+            name = elem[1]
+            if not state:
+                notselected.append(name)
+        return notselected
+
+    def deselect_all(self):
+        '''
+
+        '''
+        iterator = self.store.get_iter_first()
+        while iterator != None:
+            self.store.set_value(iterator, 0, False)
+            iterator = self.store.iter_next(iterator)
+
+    def select_all(self):
+        '''
+
+        '''
+        iterator = self.store.get_iter_first()
+        while iterator != None:
+            self.store.set_value(iterator, 0, True)
+            iterator = self.store.iter_next(iterator)
+
+
+    def select_by_keys(self, keys):
+        '''
+
+        @param keys:
+        '''
+        iterator = self.store.get_iter_first()
+        while iterator != None:
+            repoid = self.store.get_value(iterator, 1)
+            if repoid in keys:
+                self.store.set_value(iterator, 0, True)
+            else:
+                self.store.set_value(iterator, 0, False)
+            iterator = self.store.iter_next(iterator)

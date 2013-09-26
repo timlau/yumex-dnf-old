@@ -317,6 +317,18 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         pkgs = self.GetAttribute(pkg_id, "downgrades")
         return self._build_package_list(pkgs)
 
+
+    @ExceptionHandler
+    def get_repositories(self):
+        repo_list = []
+        repos = self.GetRepositories('*')
+        for repo_id in repos:
+            if repo_id.endswith('-source') or repo_id.endswith('-debuginfo'):
+                continue
+            repo = self.GetRepo(repo_id)
+            repo_list.append([repo['enabled'], repo_id, repo['name'], False])
+        return repo_list
+
     @ExceptionHandler
     def get_packages_by_name(self, prefix, newest_only):
         '''
