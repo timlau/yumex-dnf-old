@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     StatusIcon
+                     StatusIcon, Preferences
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -82,7 +82,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # Connect menu radio buttons to handler
         for name in ['newest_only', 'skip_broken', 'clean_unused']:
             rb = self.ui.get_object("option_" + name)
-            rb.set_active(getattr(CONFIG, name) == "1")
+            rb.set_active(getattr(CONFIG.conf, name) == "1")
             rb.connect('toggled', self.on_options, name)
 
         # build the search_conf widget
@@ -121,6 +121,10 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
+        
+        # preferences dialog
+        
+        self.preferences = Preferences(self)
 
         # setup actions
         self._create_action("pref", self.on_pref)
@@ -429,7 +433,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_working(True)
-            newest_only = CONFIG.newest_only == "1"
+            newest_only = CONFIG.conf.newest_only
             pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
@@ -450,7 +454,7 @@ class YumexWindow(Gtk.ApplicationWindow):
                 widget, flt = self.current_filter
                 widget.set_active(False)
             self.set_working(True)
-            newest_only = CONFIG.newest_only == "1"
+            newest_only = CONFIG.conf.newest_only
             pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
@@ -471,7 +475,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
-                result = self.get_root_backend().GetHistoryByDays(0, int(CONFIG.history_days))
+                result = self.get_root_backend().GetHistoryByDays(0, int(CONFIG.conf.history_days))
                 self.history_view.populate(result)
             self._show_info(False)
             self.set_content_page(PAGE_HISTORY)
@@ -511,18 +515,15 @@ class YumexWindow(Gtk.ApplicationWindow):
         set the CONFIG parameter values based on the menu checkbox states
         '''
         state = widget.get_active()
-        if state:
-            setattr(CONFIG, parameter, "1")
-        else:
-            setattr(CONFIG, parameter, "0")
-
-        self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG, parameter)))
+        setattr(CONFIG.conf, parameter,state )
+        self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG.conf, parameter)))
 
     def on_pref(self, action, parameter):
         '''
         Preferences button callback handler
         '''
-        show_information(self, "not implemented yet")
+        
+        rc = self.preferences.run()
 
     def process_actions(self):
         '''

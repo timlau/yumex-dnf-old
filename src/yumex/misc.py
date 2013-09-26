@@ -24,6 +24,7 @@ import gettext
 import os.path
 import configparser
 import logging
+from .config import *
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -130,6 +131,22 @@ def format_number(number, SI=0, space=' '):
 
     return(fmt % (float(number or 0), space, symbols[depth]))
 
+class YumexConf(BaseConfig):
+    """ Yum Extender Config Setting"""
+    debug = BoolOption(False)
+    autostart = BoolOption(False)
+    color_install = Option('darkgreen')
+    color_update = Option('red')
+    color_normal = Option('black')
+    color_obsolete = Option('blue')
+    color_downgrade = Option('goldenrod')
+    history_days = IntOption(180)
+    bugzilla_url = Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
+    skip_broken = BoolOption(False)
+    newest_only= BoolOption(True)
+    clean_unused = BoolOption(False)
+
+
 class Config(object):
     '''
     Yum Extender Configuration class
@@ -144,7 +161,8 @@ class Config(object):
     'color_downgrade' : 'goldenrod',
     "skip_broken"     : 0,
     "clean_unused"    : 0,
-    "newest_only"     : 1  
+    "newest_only"     : 1,  
+    "autostart"       : 0
     }
     
     def __init__(self):
@@ -154,8 +172,8 @@ class Config(object):
             print("creating config directory : %s" % self.conf_dir)
             os.makedirs(self.conf_dir, 0o700)
         self.conf_file = self.conf_dir+"/yumex.conf"
-        self._config = configparser.ConfigParser()
-        self._config['yumex'] = Config.DEFAULT_CONFIG_SETTING
+        self.parser = configparser.ConfigParser()
+        self.conf = YumexConf()
         self.read()
         
     def read(self):
@@ -163,27 +181,15 @@ class Config(object):
             print("creating default config file : %s" % self.conf_file)
             self.write()
         else:
-            self._config.read_file(open(self.conf_file,"r"))
+            self.parser.read_file(open(self.conf_file,"r"))
+            if not self.parser.has_section('yumex'):
+                self.parser.add_section('yumex')
+            self.conf.populate(self.parser, 'yumex')
             
     def write(self):
         fp = open(self.conf_file,"w")
-        self._config.write(fp)
+        self.conf.write(fp)
         fp.close()
-        
-    def get_config(self, option):
-        if self._config.has_option('yumex', option):
-            return self._config['yumex'][option]
-        else:
-            return None
-
-    def set_config(self, option, value):
-        if self._config.has_option('yumex', option):
-            self._config['yumex'][option] = value
-
-    def __getattr__(self, name):
-        result = self.get_config(name)
-        return result
-        
-        
+       
 
 CONFIG = Config()

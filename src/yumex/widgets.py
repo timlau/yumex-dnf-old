@@ -917,7 +917,7 @@ class HistoryPackageView(Gtk.TreeView):
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
-                        name = '<span foreground="%s">%s</span>' % (CONFIG.color_installed, self._fullname(pkg_id))
+                        name = '<span foreground="%s">%s</span>' % (CONFIG.conf.color_install, self._fullname(pkg_id))
                     else:
                         name = self._fullname(pkg_id)
                     pkg_cat = self.model.append(cat, [name])
@@ -1310,6 +1310,34 @@ class PackageInfo(PackageInfoView):
             self.active_filter = data
             self.update()
 
+
+class Preferences:
+
+    def __init__(self, base):
+        self.base = base
+        self.dialog = self.base.ui.get_object("preferences")
+        self.dialog.set_transient_for(base)
+        self._settings = ['autostart']
+
+    def run(self):
+        self.get_settings()
+        self.dialog.show_all()
+        rc = self.dialog.run()
+        self.dialog.hide()
+        if rc == 1:
+            self.set_settings()
+        return rc == 1
+
+    def get_settings(self):
+        for option in self._settings:
+            widget = self.base.ui.get_object('pref_'+option)
+            widget.set_active(getattr(CONFIG.conf,option))
+
+    def set_settings(self):
+        for option in self._settings:
+            widget = self.base.ui.get_object('pref_'+option)
+            setattr(CONFIG.conf, option, widget.get_active())
+        CONFIG.write()
 
 class TransactionResult:
 
