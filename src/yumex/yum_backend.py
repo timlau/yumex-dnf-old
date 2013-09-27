@@ -239,6 +239,8 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     def setup(self):
         self.Lock()
         self.SetWatchdogState(False)
+        if CONFIG.session.enabled_repos != []:
+            self.SetEnabledRepos(CONFIG.session.enabled_repos)
         return True
 
     @ExceptionHandler
@@ -258,6 +260,8 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
+        if CONFIG.session.enabled_repos != []:
+            self.SetEnabledRepos(CONFIG.session.enabled_repos)
         self.cache.reset()  # Reset the cache
 
 
@@ -319,15 +323,15 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
 
 
     @ExceptionHandler
-    def get_repositories(self):
+    def get_repositories(self,flt="*"):
         repo_list = []
-        repos = self.GetRepositories('*')
+        repos = self.GetRepositories(flt)
         for repo_id in repos:
             if repo_id.endswith('-source') or repo_id.endswith('-debuginfo'):
                 continue
             repo = self.GetRepo(repo_id)
             repo_list.append([repo['enabled'], repo_id, repo['name'], False])
-        return repo_list
+        return sorted(repo_list, key=lambda elem: elem[1])
 
     @ExceptionHandler
     def get_packages_by_name(self, prefix, newest_only):
@@ -436,6 +440,8 @@ class YumRootBackend(Backend, YumDaemonClient):
     def setup(self):
         self.Lock()
         self.SetWatchdogState(False)
+        if CONFIG.session.enabled_repos != []:
+            self.SetEnabledRepos(CONFIG.session.enabled_repos)
         return True
 
     @ExceptionHandler
@@ -455,6 +461,8 @@ class YumRootBackend(Backend, YumDaemonClient):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
+        if CONFIG.session.enabled_repos != []:
+            self.SetEnabledRepos(CONFIG.session.enabled_repos)
         self.cache.reset()  # Reset the cache
 
 

@@ -60,6 +60,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # self.backend = TestBackend()
         self.backend = YumReadOnlyBackend(self)
         self.backend.setup()
+        CONFIG.session.enabled_repos = self.backend.get_repositories("enabled") # get the default enabled repos
 
         # setup the main gui
         grid = Gtk.Grid()
@@ -250,11 +251,22 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         msg = str(e)
         self.logger.error("EXCEPTION : %s " % msg)
-        err, msg = self._parse_error(msg)
-        self.logger.debug("err:  %s - msg: %s" % (err, msg))
+        err, errmsg = self._parse_error(msg)
+        self.logger.debug("err:  %s - msg: %s" % (err, errmsg))
         if err == "YumLockedError":
-            msg = "Yum  is locked by another process \n\nYum Extender will exit"
-        show_information(self, msg)
+            errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
+        if errmsg == "":
+            errmsg = msg
+        show_information(self, errmsg)
+        # try to exit the backends, ignore errors
+        try:
+            self.backend.Exit()
+        except:
+            pass
+        try:
+            self.release_root_backend(quit=True)
+        except:
+            pass
         sys.exit(1)
 
     def set_working(self, state, insensitive=False):
@@ -523,8 +535,11 @@ class YumexWindow(Gtk.ApplicationWindow):
         Preferences button callback handler
         '''
         
-        rc = self.preferences.run()
+        need_reset = self.preferences.run()
+        if need_reset:
+            self.reset()
 
+    @ExceptionHandler
     def process_actions(self):
         '''
         Process the current action in the queue
@@ -534,6 +549,9 @@ class YumexWindow(Gtk.ApplicationWindow):
         - run the transaction
         '''
         self.set_working(True, True)
+        self.release_root_backend()
+        enabled_repos = self.get_root_backend().GetRepositories('enabled')
+        self.logger.debug("System: enabled repos : %s " % enabled_repos)
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
@@ -564,6 +582,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.infobar.hide()
         self.release_root_backend()
 
+    @ExceptionHandler
     def reset(self):
         '''
         Reset the gui to inital state, used after at transaction is completted.

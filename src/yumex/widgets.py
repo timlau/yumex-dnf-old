@@ -1321,21 +1321,20 @@ class Preferences:
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
         self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only']
-        self.repos = self.base.backend.get_repositories()
         self.repo_view = RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
-        self.repo_view.populate(self.repos)
-        
+        self.repos = []
 
     def run(self):
         self.get_settings()
         self.dialog.show_all()
         rc = self.dialog.run()
         self.dialog.hide()
+        need_reset = False
         if rc == 1:
-            self.set_settings()
-        return rc == 1
+            need_reset = self.set_settings()
+        return need_reset
 
     def get_settings(self):
         # set settings states
@@ -1349,9 +1348,14 @@ class Preferences:
             rgba.parse(getattr(CONFIG.conf,name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
+        # get the repositories 
+        self.repos = self.base.backend.get_repositories()
+        self.repo_view.populate(self.repos)
 
     def set_settings(self):
         changed = False
+        need_reset = False
+        # handle options
         for option in self._settings:
             widget = self.base.ui.get_object('pref_'+option)
             state = widget.get_active()
@@ -1359,6 +1363,7 @@ class Preferences:
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
+        # handle colors
         for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
@@ -1366,8 +1371,15 @@ class Preferences:
             if color != getattr(CONFIG.conf, name): # changed ??
                 setattr(CONFIG.conf, name, color)
                 changed = True
+        # handle repos
+        repo_before = CONFIG.session.enabled_repos
+        repo_now = self.repo_view.get_selected()
+        if repo_now != repo_before:                     # repo selection changed 
+            CONFIG.session.enabled_repos = repo_now     # set the new selection
+            need_reset = True                           # we need to reset the gui
         if changed:
             CONFIG.write()
+        return need_reset
 
     def handle_setting(self, option, state):
         if option == 'autostart':

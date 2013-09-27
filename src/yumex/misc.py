@@ -148,9 +148,10 @@ class YumexConf(BaseConfig):
 
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
-    skip_broken = BoolOption(False)
-    newest_only= BoolOption(True)
-    clean_unused = BoolOption(False)
+    skip_broken = BoolOption(False)     # skip broken for current session
+    newest_only= BoolOption(True)       # show newest package version only for current session
+    clean_unused = BoolOption(False)    # Clean orphan dependencies for this session
+    enabled_repos = ListOption([])      # enabled repositories for this session
 
 
 class Config(object):
