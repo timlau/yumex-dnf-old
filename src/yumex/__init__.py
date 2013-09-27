@@ -533,7 +533,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         - ask user for confirmation on result of depsolve
         - run the transaction
         '''
-        self.set_working(True)
+        self.set_working(True, True)
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
@@ -553,7 +553,7 @@ class YumexWindow(Gtk.ApplicationWindow):
             ok = self.transaction_result.run()
             if ok:  # Ok pressed
                 self.infobar.info(_('Running Transaction'))
-                self.set_working(True)
+                self.set_working(True, True)
                 self.get_root_backend().RunTransaction()
                 self.set_working(False)
                 self.reset()
