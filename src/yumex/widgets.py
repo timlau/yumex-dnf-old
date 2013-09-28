@@ -138,6 +138,9 @@ class InfoProgressBar:
     def __init__(self, ui):
         self.ui = ui
         self.infobar = ui.get_object("infobar")
+        new_bg = Gdk.RGBA()
+        new_bg.parse("rgb(243,243,243)")
+        self.infobar.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
