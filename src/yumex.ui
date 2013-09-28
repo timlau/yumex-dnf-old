@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkRadioAction" id="radioaction1">
-    <property name="draw_as_radio">True</property>
-  </object>
   <object class="GtkBox" id="main">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -30,7 +27,6 @@
                 <property name="label" translatable="yes">Quit</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-quit</property>
-                <accelerator key="q" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -146,7 +142,6 @@ Available = Packages available for installation</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">accessories-dictionary</property>
                 <property name="group">hidden</property>
-                <accelerator key="q" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
               </object>
               <packing>
                 <property name="expand">False</property>

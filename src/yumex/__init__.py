@@ -32,7 +32,9 @@ class YumexWindow(Gtk.ApplicationWindow):
     Main application window class
     '''
     def __init__(self, app):
-        Gtk.Window.__init__(self, title="Yum Extender", application=app)
+        Gtk.ApplicationWindow.__init__(self, title="Yum Extender", application=app)
+        self.key_bindings = Gtk.AccelGroup()
+        self.add_accel_group(self.key_bindings)
         self.logger = logging.getLogger('yumex.Window')
         self.set_default_size(1024, 700)
         self.app = app
@@ -63,11 +65,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled") # get the default enabled repos
 
         # setup the main gui
-        grid = Gtk.Grid()
-        self.add(grid)
-        grid.show()
-        grid.attach(self.ui.get_object("main"), 0, 0, 1, 1)
-
+        main = self.ui.get_object("main")
+        self.add(main)
+        main.show()
+        
         # build the package filter widget
         button = self.ui.get_object("tool_packages")
         button.set_menu(self.ui.get_object("pkg_filter_menu"))
@@ -142,6 +143,10 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.status_icon.quit_menu.connect("activate", self.app.on_quit)
         self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
         # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
+        
+        # Key bindings
+        widget = self.ui.get_object('tool_quit')
+        self._add_key_binding(widget, '<ctrl>q')
 
         if not self.app.args.hidden:
             self.show_now()
@@ -248,6 +253,16 @@ class YumexWindow(Gtk.ApplicationWindow):
         action = Gio.SimpleAction.new(name, para)
         action.connect("activate", callback)
         self.add_action(action)
+
+    def _add_key_binding(self, widget, accel, event='clicked'):
+        '''
+        Added key bindings to widget
+        @param widget: widget
+        @param accel: key binding to map (ex. <ctrl>1 )
+        @param event: key event (default = clicked)
+        '''
+        keyval, mask = Gtk.accelerator_parse(accel)
+        widget.add_accelerator(event, self.key_bindings, keyval, mask, 0)
 
     def exception_handler(self, e):
         '''
