@@ -239,7 +239,8 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     def setup(self):
         self.Lock()
         self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos != []:
+        if CONFIG.session.enabled_repos:
+            logger.debug("nonroot : Setting repos : %s" % CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
         return True
 
@@ -260,7 +261,8 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos != []:
+        if CONFIG.session.enabled_repos:
+            logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
         self.cache.reset()  # Reset the cache
 
@@ -321,7 +323,11 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         pkgs = self.GetAttribute(pkg_id, "downgrades")
         return self._build_package_list(pkgs)
 
-
+    @ExceptionHandler
+    def get_repo_ids(self, flt):
+        repos = self.GetRepositories(flt)
+        return
+    
     @ExceptionHandler
     def get_repositories(self,flt="*"):
         repo_list = []
@@ -440,7 +446,8 @@ class YumRootBackend(Backend, YumDaemonClient):
     def setup(self):
         self.Lock()
         self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos != []:
+        if CONFIG.session.enabled_repos:
+            logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
         return True
 
@@ -461,7 +468,8 @@ class YumRootBackend(Backend, YumDaemonClient):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos != []:
+        if CONFIG.session.enabled_repos:
+            logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
         self.cache.reset()  # Reset the cache
 

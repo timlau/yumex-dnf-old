@@ -60,7 +60,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         # self.backend = TestBackend()
         self.backend = YumReadOnlyBackend(self)
         self.backend.setup()
-        CONFIG.session.enabled_repos = self.backend.get_repositories("enabled") # get the default enabled repos
+        CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled") # get the default enabled repos
 
         # setup the main gui
         grid = Gtk.Grid()
@@ -185,6 +185,10 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.logger.debug("Start the yum root daemon")
         elif self._root_locked == False:
             self._root_backend.Lock()
+            if CONFIG.session.enabled_repos:
+                self.logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
+                self._root_backend.SetEnabledRepos(CONFIG.session.enabled_repos)
+
             self._root_locked = True
             self.logger.debug("Lock the yum root daemon")
         return self._root_backend
@@ -549,17 +553,18 @@ class YumexWindow(Gtk.ApplicationWindow):
         - run the transaction
         '''
         self.set_working(True, True)
-        self.release_root_backend()
-        enabled_repos = self.get_root_backend().GetRepositories('enabled')
-        self.logger.debug("System: enabled repos : %s " % enabled_repos)
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug('adding : %s %s' % (action, pkg.downgrade_po.pkg_id))
+                    txmbrs = self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug("%s: %s" % (action, txmbrs))
                 else:
-                    self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug('adding : %s %s' % (action, pkg.pkg_id))
+                    txmbrs = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug("%s: %s" % (action, txmbrs))
 
         self.get_root_backend().GetTransaction()
         self.infobar.info(_('Resolving Dependencies'))
