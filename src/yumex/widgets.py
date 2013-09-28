@@ -280,7 +280,7 @@ class SelectionView(Gtk.TreeView):
 
 
 
-    def create_selection_column_num(self, num, data_func=None):
+    def create_selection_column_num(self, num, data_func=None, tooltip=None):
         '''
         Create an selection column, there get data an TreeStore Column
         @param num: TreeStore column to get data from
@@ -300,6 +300,15 @@ class SelectionView(Gtk.TreeView):
         column.set_sort_column_id(-1)
         self.append_column(column)
         selection.connect("toggled", self.on_toggled)
+        if tooltip:
+            label = Gtk.Label("")
+            label.show()
+            column.set_widget(label)
+            widget = column.get_widget()
+            while not isinstance(widget, Gtk.Button):
+                widget = widget.get_parent()
+            widget.set_tooltip_text(tooltip)
+
         return column
 
     def create_selection_text_column(self, hdr, select_func, text_attr, size=200):
@@ -1613,6 +1622,8 @@ class RepoView(SelectionView):
         SelectionView.__init__(self)
         self.headers = [_('Repository'), _('Filename')]
         self.store = self.setup_view()
+        self.state = 'normal'
+        self._last_selected = []
 
     def on_toggled(self, widget, path):
         """ Repo select/unselect handler """
@@ -1641,7 +1652,7 @@ class RepoView(SelectionView):
         store = Gtk.ListStore('gboolean', str, str, 'gboolean')
         self.set_model(store)
         # Setup Selection Column
-        col = self.create_selection_column_num(0)
+        col = self.create_selection_column_num(0, tooltip = _("Click here to switch between\n none/all/default selected"))
         col.set_clickable(True)
         col.connect('clicked', self.on_section_header_clicked)
 
