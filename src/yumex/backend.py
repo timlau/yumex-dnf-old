@@ -18,7 +18,9 @@
 
 
 from .const import *
+import logging
 
+logger = logging.getLogger('yumex.backend')
 
 class Package:
     '''
@@ -83,10 +85,19 @@ class Backend:
     must be implemented in a sub class
     '''
 
-    def __init__(self, frontend):
-        self.cache = PackageCache()
+    def __init__(self, frontend, filters= False):
+        if filters:
+            self.cache = PackageCacheWithFilters()
+        else:
+            self.cache = PackageCache()
+        self.has_filters = filters
         self.frontend = frontend
 
+    def get_filter(self, name):
+        if self.has_filters:
+            return self.cache.filters.get(name)
+        else:
+            return None
 
     def exception_handler(self, e):
         """
@@ -137,7 +148,63 @@ class Backend:
         '''
         raise NotImplementedError()
 
+class BaseFilter:
+    
+    def __init__(self, name, active = False):
+        self.name = name
+        self.active = active
+    
+    def run(self,pkgs):
+        if not self.active:
+            return pkgs
+        
+    def change(self):
+        pass
+    
+    def set_active(self, state):
+        self.active = state
+        
+class ArchFilter(BaseFilter):
+    
+    def __init__(self, name, active = False):
+        BaseFilter.__init__(self, name, active)
+        self.archs = ['noarch','i686','x86_64']
+            
+    def run(self, pkgs):
+        BaseFilter.run(self, pkgs)
+        filtered = [po for po in pkgs if po.arch in self.archs]
+        return filtered
+        
+    def change(self, archs):
+        self.archs = archs
 
+class Filters:
+    
+    def __init__(self):
+        self._filters = {}
+        
+    def add(self, filter_cls):
+        if not filter_cls.name in self._filters:
+            self._filters[filter_cls.name] = filter_cls
+            
+    def delete(self, name):
+        if name in self._filters:
+            del self._filters[name]
+            
+    def run(self, pkgs):
+        flt_pkgs = pkgs
+        for name in self._filters:
+            logger.debug('pre: %s : pkgs : %s' % (name,len(flt_pkgs)))
+            flt_pkgs = self._filters[name].run(flt_pkgs)
+            logger.debug('post: %s  pkgs : %s' % (name,len(flt_pkgs)))
+        return flt_pkgs
+            
+    def get(self, name):
+        if name in self._filters:
+            return self._filters[name]
+        else:
+            return None
+        
 class PackageCache:
     '''
     Package cache to contain packages from backend, so we dont have get them more
@@ -152,6 +219,7 @@ class PackageCache:
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
+        
 
     def reset(self):
         '''
@@ -167,7 +235,8 @@ class PackageCache:
         get a list of packages from the cache
         @param pkg_filter: the type of packages to get
         '''
-        return list(getattr(self, str(pkg_filter)))
+        pkgs = list(getattr(self, str(pkg_filter)))
+        return pkgs
 
     def is_populated(self, pkg_filter):
         return str(pkg_filter) in self._populated
@@ -192,9 +261,43 @@ class PackageCache:
     def find_packages(self, packages):
         pkgs = []
         i = 0
-        for po in packages:
-            i += 1
-            pkgs.append(self._add(po))
+        if packages:
+            for po in packages:
+                i += 1
+                pkgs.append(self._add(po))
+            return pkgs
+        else:
+            return []
+
+                   
+
+class PackageCacheWithFilters(PackageCache):
+    '''
+    Package cache to contain packages from backend, so we dont have get them more
+    than once.
+    '''
+
+    def __init__(self):
+        '''
+        setup the cache
+        '''
+        PackageCache.__init__(self)
+        self.filters = Filters()
+        arch_flt = ArchFilter('arch')
+        self.filters.add(arch_flt)
+
+    def _get_packages(self, pkg_filter):
+        '''
+        get a list of packages from the cache
+        @param pkg_filter: the type of packages to get
+        '''
+        pkgs = PackageCache._get_packages(self, str(pkg_filter))
+        pkgs = self.filters.run(pkgs)
         return pkgs
 
+    # @TimeFunction
+    def find_packages(self, packages):
+        pkgs = PackageCache.find_packages(self, packages)
+        pkgs = self.filters.run(pkgs)
+        return pkgs
 

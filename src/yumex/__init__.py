@@ -48,6 +48,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._root_backend = None
         self._root_locked = False
         self.search_type = ""
+        self.active_archs = ['i686','noarch','x86_64']
 
         # setup the GtkBuilder from file
         self.ui = Gtk.Builder()
@@ -150,6 +151,11 @@ class YumexWindow(Gtk.ApplicationWindow):
 
         if not self.app.args.hidden:
             self.show_now()
+            
+        # get the arch filter
+        self.arch_filter = self.backend.get_filter('arch')
+        self.arch_filter.set_active(True)
+        self.arch_filter.change(self.active_archs)
 
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
@@ -598,7 +604,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         elif rc == 0:
             show_information(self, _("No actions to process"))
         else:
-            show_information(self, _("Errors in dependency resolution"), result)
+            show_information(self, _("Errors in dependency resolution"), result[0])
         self.infobar.hide()
         self.release_root_backend()
 

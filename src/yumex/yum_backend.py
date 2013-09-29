@@ -220,7 +220,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     """
 
     def __init__(self, frontend):
-        Backend.__init__(self, frontend)
+        Backend.__init__(self, frontend, filters = True)
         YumDaemonReadOnlyClient.__init__(self)
 
     def on_UpdateProgress(self, name, frac, fread, ftime):

@@ -232,7 +232,7 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_text_column(self, hdr, prop, size, sortcol=None):
+    def create_text_column(self, hdr, prop, size, sortcol=None, click_handler=None, tooltip=None):
         """
         Create a TreeViewColumn with text and set
         the sorting properties and add it to the view
@@ -250,6 +250,19 @@ class SelectionView(Gtk.TreeView):
         else:
             column.set_sort_column_id(-1)
         self.append_column(column)
+        if click_handler:
+            column.set_clickable(True)
+            #column.connect('clicked', click_handler)
+            label = Gtk.Label(hdr)
+            label.show()
+            column.set_widget(label)
+            widget = column.get_button()
+            while not isinstance(widget, Gtk.Button) :
+                widget = widget.get_parent()
+            widget.connect('button-release-event', click_handler)
+            if tooltip:
+                widget.set_tooltip_text(tooltip)
+            
         return column
 
     def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip=None):
@@ -388,7 +401,17 @@ class PackageView(SelectionView):
         self.queue = qview.queue
         self.queueView = qview
         self.base = base
-
+        self.arch_menu = self._setup_archmenu()
+        
+    def _setup_archmenu(self):
+        arch_menu = self.base.ui.get_object('arch_menu')
+        for menu in arch_menu.get_children():
+            if menu.get_label() in self.base.active_archs:
+                menu.set_active(True)
+            else:
+                menu.set_active(False)
+            menu.connect('toggled', self.on_archmenu_clicked)
+        return arch_menu
 
     def _setup_model(self):
         '''
@@ -413,7 +436,7 @@ class PackageView(SelectionView):
 
         self.create_text_column(_("Package"), 'name' , size=200)
         self.create_text_column(_("Ver."), 'fullver', size=120)
-        self.create_text_column(_("Arch."), 'arch' , size=60)
+        self.create_text_column(_("Arch."), 'arch' , size=60, click_handler=self.on_arch_clicked, tooltip=_('click to filter archs'))
         self.create_text_column(_("Summary"), 'summary', size=400)
         self.create_text_column(_("Repo."), 'repository' , size=90)
         self.create_text_column(_("Size."), 'sizeM' , size=90)
@@ -422,6 +445,26 @@ class PackageView(SelectionView):
         # store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
         self.set_reorderable(False)
         return store
+
+    def on_arch_clicked(self, button, event=None):
+        #print('clicked : event : %s' % event.type)
+        if event:
+            self.arch_menu.popup(None, None, None, None, event.button, event.time)
+            return True
+
+
+    def on_archmenu_clicked(self, widget):
+        state = widget.get_active()
+        label = widget.get_label()
+        if state:
+            self.base.active_archs.append(label)
+        else:
+            self.base.active_archs.remove(label)
+        if self.base.current_filter:
+            widget, flt = self.base.current_filter
+            self.base.on_pkg_filter(widget, flt)
+        
+        
 
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
