@@ -231,6 +231,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         if meta_type in REPO_META:
             name = REPO_META[meta_type] % repo
             self.frontend.infobar.info(name)
+            self.frontend.infobar.hide_sublabel()
         else:
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
@@ -410,17 +411,21 @@ class YumRootBackend(Backend, YumDaemonClient):
         if event == 'start-run':
             self.frontend.infobar.show_progress(True)
         elif event == 'download':
-            self.frontend.infobar.info(_("Downloading Packages"))
+            self.frontend.infobar.info(_("Downloading packages"))
         elif event == 'pkg-to-download':
             self._dnl_packages = data
         elif event == 'signature-check':
-            self.frontend.infobar.show_progress(False)
-            self.frontend.infobar.info(_("Checking Packages Signatures"))
+            #self.frontend.infobar.show_progress(False) 
+            self.frontend.infobar.set_progress(0.0)
+            self.frontend.infobar.info(_("Checking packages signatures"))
+            self.frontend.infobar.set_progress(1.0)
+            self.frontend.infobar.info_sub("")
         elif event == 'run-test-transaction':
-            self.frontend.infobar.info(_("Testing Package Transactions"))
+            #self.frontend.infobar.info(_("Testing Package Transactions")) # User don't care
+            pass
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_("Applying Package Transactions"))
+            self.frontend.infobar.info(_("Applying Changes to the system"))
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)

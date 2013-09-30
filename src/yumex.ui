@@ -296,121 +296,97 @@ Available = Packages available for installation</property>
       </packing>
     </child>
     <child>
-      <object class="GtkInfoBar" id="infobar">
+      <object class="GtkFrame" id="infobar">
         <property name="visible">True</property>
-        <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
-        <property name="message_type">other</property>
-        <child internal-child="content_area">
-          <object class="GtkBox" id="infobar-content_area1">
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
+        <property name="label_xalign">0</property>
+        <child>
+          <object class="GtkAlignment" id="info_align">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">8</property>
-            <property name="spacing">16</property>
+            <property name="margin_left">10</property>
+            <property name="margin_right">10</property>
             <child>
-              <object class="GtkBox" id="infobar_box">
+              <object class="GtkGrid" id="info_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="hexpand">True</property>
                 <child>
                   <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_right">10</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">2.2351741291171123e-10</property>
-                    <property name="xpad">5</property>
                     <property name="ypad">5</property>
                     <property name="label" translatable="yes">label</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 11"/>
+                      <attribute name="weight" value="ultrabold"/>
+                    </attributes>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkProgressBar" id="infobar_progress">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="infobar_sublabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">20</property>
+                    <property name="margin_right">10</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="xpad">10</property>
                     <property name="ypad">5</property>
                     <property name="label" translatable="yes">label</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
+                      <attribute name="stretch" value="condensed"/>
+                    </attributes>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
-        <action-widgets>
-          <action-widget response="0">button1</action-widget>
-        </action-widgets>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="infobar_actions">
+        <child type="label">
+          <object class="GtkLabel" id="frame_label">
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button1">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="action_name">win.infobar_ok</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="use_markup">True</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
         </child>
-        <action-widgets>
-          <action-widget response="0">button1</action-widget>
-        </action-widgets>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">False</property>
+        <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>

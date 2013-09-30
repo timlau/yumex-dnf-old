@@ -114,41 +114,11 @@ class Backend:
         return pkgs
 
 
-    def get_history_dates(self):
-        '''
-        Get a list for dates for the system change history
-        '''
-        raise NotImplementedError()
-
-
-    def get_history(self, date):
-        '''
-        Get the system changes for a given date
-        :param date:
-        '''
-        raise NotImplementedError()
-
-    def get_categories(self):
-        '''
-        Get categorties for available packages
-        '''
-        raise NotImplementedError()
-
-    def get_sub_categories(self, category):
-        '''
-        Get sub categorties for a give category
-        :param category:
-        '''
-        raise NotImplementedError()
-
-    def get_packages_by_category(self, category):
-        '''
-        Get a list of Package objects for a given category
-        :param category:
-        '''
-        raise NotImplementedError()
 
 class BaseFilter:
+    '''
+    Base filter, used at base for filters there can filter a list of packages based on a different conditions
+    '''
     
     def __init__(self, name, active = False):
         self.name = name
@@ -165,6 +135,9 @@ class BaseFilter:
         self.active = state
         
 class ArchFilter(BaseFilter):
+    '''
+    Arch Filter to filter a list of packages by arch
+    '''
     
     def __init__(self, name, active = False):
         BaseFilter.__init__(self, name, active)
@@ -179,6 +152,9 @@ class ArchFilter(BaseFilter):
         self.archs = archs
 
 class Filters:
+    '''
+    Container to contain a number of filters based on the BaseFilter class
+    '''
     
     def __init__(self):
         self._filters = {}
@@ -275,6 +251,7 @@ class PackageCacheWithFilters(PackageCache):
     '''
     Package cache to contain packages from backend, so we dont have get them more
     than once.
+    This version has filtering, so we can filter packages by fx. arch
     '''
 
     def __init__(self):

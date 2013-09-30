@@ -588,15 +588,15 @@ class YumexWindow(Gtk.ApplicationWindow):
                     self.logger.debug("%s: %s" % (action, txmbrs))
 
         self.get_root_backend().GetTransaction()
-        self.infobar.info(_('Resolving Dependencies'))
+        self.infobar.info(_('Searching for dependencies'))
         rc, result = self.get_root_backend().BuildTransaction()
-        self.infobar.info(_('Dependencies Resolved'))
+        self.infobar.info(_('Dependencies resolved'))
         self.set_working(False)
         if rc == 2:
             self.transaction_result.populate(result, "")
             ok = self.transaction_result.run()
             if ok:  # Ok pressed
-                self.infobar.info(_('Running Transaction'))
+                self.infobar.info(_('Applying changes to the system'))
                 self.set_working(True, True)
                 self.get_root_backend().RunTransaction()
                 self.set_working(False)
@@ -604,7 +604,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         elif rc == 0:
             show_information(self, _("No actions to process"))
         else:
-            show_information(self, _("Errors in dependency resolution"), result[0])
+            show_information(self, _("Error(s) in search for dependencies"), result[0])
         self.infobar.hide()
         self.release_root_backend()
 

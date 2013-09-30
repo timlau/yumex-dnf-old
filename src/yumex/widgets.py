@@ -39,6 +39,11 @@ logger = logging.getLogger('yumex.widget')
 # http://bazaar.launchpad.net/~ubuntuone-control-tower/software-center/trunk/view/head:/softwarecenter/ui/gtk3/widgets/searchentry.py
 #
 class SearchEntry(Gtk.Entry):
+    '''
+    Search entry widget
+    It emit at a search-change signal when something is typed, after a timeout where nothing is typed
+    auto show/hide clear button based on if entry contains some text.
+    '''
 
     __gsignals__ = {'search-changed': (GObject.SignalFlags.RUN_FIRST,
                                       None,
@@ -139,12 +144,11 @@ class InfoProgressBar:
         self.ui = ui
         self.infobar = ui.get_object("infobar")
         new_bg = Gdk.RGBA()
-        new_bg.parse("rgb(243,243,243)")
+        new_bg.parse("rgb(255,255,255)")
         self.infobar.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
-        self.actions = ui.get_object("infobar_actions")
 
     def show_progress(self, state):
         if state:
@@ -156,10 +160,12 @@ class InfoProgressBar:
         self.label.hide()
         self.sublabel.hide()
         self.progress.hide()
-        self.actions.hide()
         self.infobar.hide()
         self.progress.set_text("")
         self.progress.set_show_text (False)
+
+    def hide_sublabel(self):
+        self.sublabel.hide()
 
     def show_label(self):
         self.label.show()
@@ -175,7 +181,7 @@ class InfoProgressBar:
     def message(self, msg):
         self.infobar.show()
         self.show_label()
-        self.label.set_markup("<b>%s</b>" % msg)
+        self.label.set_text(msg)
 
     def message_sub(self, msg):
         self.infobar.show()
