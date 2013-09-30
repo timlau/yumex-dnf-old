@@ -201,6 +201,8 @@ class InfoProgressBar:
             self.infobar.show()
             self.progress.show()
             self.progress.set_fraction(frac)
+            if not self.label.get_property('visible'): # make sure that the main label is shown, else the progres looks bad
+                self.info("")
 
 
 
@@ -1277,6 +1279,7 @@ class PackageInfo(PackageInfoView):
             self.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
         desc = self.current_package.description
         self.write(desc)
+        self.base.set_working(False)
 
     def _show_updateinfo(self):
         self.base.set_working(True)
