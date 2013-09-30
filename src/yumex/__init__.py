@@ -574,6 +574,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         - run the transaction
         '''
         self.set_working(True, True)
+        self.infobar.info(_('Preparing system for applying changes'))
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)

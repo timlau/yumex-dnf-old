@@ -99,10 +99,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Show Packages
-Updates = Available Updates
-Installed = Packages installed on the system
-Available = Packages available for installation</property>
                 <property name="tooltip_text" translatable="yes">Show Packages
 Updates = Available Updates
 Installed = Packages installed on the system
@@ -205,6 +201,7 @@ Available = Packages available for installation</property>
               <object class="GtkMenuToolButton" id="search_conf">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Search Options</property>
                 <property name="action_name">win.search_config_button</property>
                 <property name="use_underline">True</property>
               </object>
@@ -326,7 +323,6 @@ Available = Packages available for installation</property>
                     <property name="ypad">5</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 11"/>
                       <attribute name="weight" value="ultrabold"/>
                     </attributes>
                   </object>

@@ -147,16 +147,17 @@ RPM_ACTIONS = {
 
 REPO_META = {
     'repomd'        : _("Downloading repository information for the %s repository"),
-    'primary'       : _("Downloading Package information for the %s repository"),
-    'primary_db'    : _("Downloading Package information for the %s repository"),
-    'filelists'     : _("Downloading Filelist information for the %s repository"),
-    'filelists_db'     : _("Downloading Filelist information for the %s repository"),
-    'other'         : _("Downloading Changelog information for the %s repository"),
-    'other_db'         : _("Downloading Changelog information for the %s repository"),
-    'group'         : _("Downloading Group information for the %s repository"),
+    'primary'       : _("Downloading package information for the %s repository"),
+    'primary_db'    : _("Downloading package information for the %s repository"),
+    'filelists'     : _("Downloading filelist information for the %s repository"),
+    'filelists_db'  : _("Downloading filelist information for the %s repository"),
+    'other'         : _("Downloading changelog information for the %s repository"),
+    'other_db'      : _("Downloading changelog information for the %s repository"),
+    'group'         : _("Downloading group information for the %s repository"),
+    'group_gz'      : _("Downloading group information for the %s repository"),
     'metalink'      : _("Downloading metalink information for the %s repository"),
-    'presto'        : _("Downloading Delta update information for the %s repository"),
-    'prestodelta'   : _("Downloading Delta update information for the %s repository"),
+    'presto'        : _("Downloading delta update information for the %s repository"),
+    'prestodelta'   : _("Downloading delta update information for the %s repository"),
     'pkgtags'       : _("Downloading pkgtags information for the %s repository"),
-    'updateinfo'    : _("Downloading Update information for the %s repository")
+    'updateinfo'    : _("Downloading update information for the %s repository")
 }
