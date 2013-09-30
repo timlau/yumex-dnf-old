@@ -2,7 +2,7 @@
 _Name=Yum Extender (next-gen)
 _Comment=Install, update and remove applications
 Categories=System;Settings;X-Red-Hat-Base;X-Fedora;
-Icon=yumex
+Icon=yumex-nextgen
 Exec=/usr/bin/yumex-nextgen
 Type=Application
 Terminal=false

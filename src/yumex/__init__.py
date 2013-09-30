@@ -38,7 +38,7 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.logger = logging.getLogger('yumex.Window')
         self.set_default_size(1024, 700)
         self.app = app
-        icon = Gtk.IconTheme.get_default().load_icon('yumex', 128, 0)
+        icon = Gtk.IconTheme.get_default().load_icon('yumex-nextgen', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
 
