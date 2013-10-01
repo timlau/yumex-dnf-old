@@ -1,8 +1,8 @@
 %global appname yumex
 
 Name:     %{appname}-nextgen
-Version:  3.99.1
-Release:  1
+Version:  3.99.2
+Release:  0.1.git20131001%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -15,10 +15,11 @@ BuildRequires: python3-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: intltool
-
+BuildRequires: python2-devel
 
 Requires: python3-yumdaemon >= 0.9.2
 Requires: python3-gobject
+Requires: python-yumdaemon >= 0.9.2
 
 %description
 Graphical package tool for maintain packages on the system
@@ -58,6 +59,7 @@ fi
 %{python3_sitelib}/yumex/
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
+%{_datadir}/dbus-1/services/*
 
 %changelog
 * Sun Sep 15 2013 Tim Lauridsen <timlau@fedoraproject.org> 3.99.1-1

@@ -13,6 +13,9 @@ VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
 BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX}/\2/'`; echo $$(($$VN + 1))}
 NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
 NEW_REL=0.1.${GITDATE}
+ORG_NAME = dk.yumex.StatusIcon
+
+
 all: subdirs
 	
 subdirs:
@@ -28,6 +31,8 @@ install:
 	mkdir -p $(DESTDIR)/usr/share/icons/hicolor/scalable/apps
 	mkdir -p $(DESTDIR)/usr/share/icons/hicolor/48x48/apps	
 	mkdir -p $(DESTDIR)/usr/bin
+	mkdir -p $(DESTDIR)/usr/share/dbus-1/services
+	install -m644 dbus/$(ORG_NAME).service $(DESTDIR)/usr/share/dbus-1/services/.				
 	install -m644 $(PIXDIR)/yumex-icon.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/$(APPNAME).svg
 	install -m644 $(PIXDIR)/yumex-icon.png $(DESTDIR)/usr/share/icons/hicolor/48x48/apps/$(APPNAME).png
 	install -m644 $(PIXDIR)/tray*.png $(DESTDIR)/usr/share/$(APPNAME)/gfx/.
