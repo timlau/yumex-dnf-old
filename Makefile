@@ -36,7 +36,7 @@ install:
 	install -m644 $(PIXDIR)/yumex-icon.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/$(APPNAME).svg
 	install -m644 $(PIXDIR)/yumex-icon.png $(DESTDIR)/usr/share/icons/hicolor/48x48/apps/$(APPNAME).png
 	install -m644 $(PIXDIR)/tray*.png $(DESTDIR)/usr/share/$(APPNAME)/gfx/.
-	install -m644 $(PIXDIR)/spinner.gif $(DESTDIR)/usr/share/$(APPNAME)/gfx/.
+	install -m644 $(PIXDIR)/spinner*.gif $(DESTDIR)/usr/share/$(APPNAME)/gfx/.
 	# build & install desktop file with translations
 	@rm -f $(MISCDIR)/$(APPNAME).desktop
 	intltool-merge -d -u $(PODIR) $(MISCDIR)/$(APPNAME).desktop.in $(MISCDIR)/$(APPNAME).desktop
