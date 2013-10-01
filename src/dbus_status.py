@@ -251,7 +251,7 @@ class YumexStatusDaemon(dbus.service.Object):
         icon = self.status_icon.get_status_icon()
         icon.connect("activate", self.on_status_icon_clicked)
         self.status_icon.quit_menu.connect("activate", self.on_quit)
-        self.status_icon.search_updates_menu.connect("activate", self.get_updates)
+        self.status_icon.search_updates_menu.connect("activate", self.on_check_updates)
 
 #===============================================================================
 # DBus Methods
@@ -296,15 +296,6 @@ class YumexStatusDaemon(dbus.service.Object):
     
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
-                                          in_signature='',
-                                          out_signature='s',
-                                          sender_keyword='sender')
- 
-    def Test(self,sender=None):
-        return "Hello World"
- 
-    @Logger
-    @dbus.service.method(DAEMON_INTERFACE,
                                           in_signature='b',
                                           out_signature='',
                                           sender_keyword='sender')
@@ -341,7 +332,7 @@ class YumexStatusDaemon(dbus.service.Object):
                                           sender_keyword='sender')
  
     def SetYumexIsRunning(self, state, sender=None):
-        if self.yumex_running == not state:
+        if not self.yumex_running == state:
             self.yumex_running = state
             return True
         else: # Yumex is already running  
@@ -353,11 +344,23 @@ class YumexStatusDaemon(dbus.service.Object):
 # DBus signals
 #===============================================================================
     @dbus.service.signal(DAEMON_INTERFACE)
-    def TestSignal(self):
+    def QuitSignal(self):
         '''
         '''
         pass
 
+    @dbus.service.signal(DAEMON_INTERFACE)
+    def IconClickSignal(self):
+        '''
+        '''
+        pass
+    
+    @dbus.service.signal(DAEMON_INTERFACE)
+    def CheckUpdateSignal(self):
+        '''
+        '''
+        pass
+    
 #===============================================================================
 # yum helpers
 #===============================================================================
@@ -388,6 +391,7 @@ class YumexStatusDaemon(dbus.service.Object):
         hide/show the window, based on current state
         '''
         logger.debug('status-icon clicked')
+        self.IconClickSignal()
 
 
     def on_quit(self, *args):
@@ -396,8 +400,18 @@ class YumexStatusDaemon(dbus.service.Object):
         hide/show the window, based on current state
         '''
         logger.debug('quit clicked')
-        self.mainloop.quit()
+        if self.yumex_running:
+            self.QuitSignal()
+        else:
+            self.mainloop.quit()
         
+
+    def on_check_updates(self, * args):
+        logger.debug('check updates clicked')
+        if self.yumex_running:
+            self.CheckUpdateSignal()
+        else:
+            self.get_updates()
         
 
 def doTextLoggerSetup(logroot=LOG_ROOT, logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):

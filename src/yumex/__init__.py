@@ -24,6 +24,7 @@ from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgr
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
+from .status import StatusIcon
 import argparse
 import logging
 
@@ -194,7 +195,7 @@ class YumexWindow(BaseWindow):
     '''
     Main application window class
     '''
-    def __init__(self, app):
+    def __init__(self, app, status):
         BaseWindow.__init__(self, app)
         self.set_default_size(1024, 700)
 
@@ -205,6 +206,7 @@ class YumexWindow(BaseWindow):
         self._root_locked = False
         self.search_type = ""
         self.active_archs = ['i686','noarch','x86_64']
+        self.status = status
 
         # setup the package manager backend
         # self.backend = TestBackend()
@@ -283,13 +285,6 @@ class YumexWindow(BaseWindow):
         self._create_action("apply_changes", self.on_apply_changes)
         self._create_action("search_config", self.on_search_config)
 
-        # Status Icon
-        self.status_icon = StatusIcon()
-        icon = self.status_icon.get_status_icon()
-        icon.connect("activate", self.on_status_icon_clicked)
-        self.status_icon.quit_menu.connect("activate", self.app.on_quit)
-        self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
-        # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
         
         if not self.app.args.hidden:
             self.show_now()
@@ -314,7 +309,7 @@ class YumexWindow(BaseWindow):
         return True
 
 
-    def on_status_icon_clicked(self, event):
+    def on_status_icon_clicked(self):
         '''
         left click on status icon handler
         hide/show the window, based on current state
@@ -414,12 +409,12 @@ class YumexWindow(BaseWindow):
         '''
         if state:
             self.spinner.show()
-            self.status_icon.set_is_working(True)
+            self.status.SetWorking(True)
             self._set_busy_cursor(insensitive)
         else:
             self.spinner.hide()
             self.infobar.hide()
-            self.status_icon.set_is_working(False)
+            self.status.SetWorking(False)
             self._set_normal_cursor()
 
 
@@ -527,7 +522,7 @@ class YumexWindow(BaseWindow):
                 self.set_working(True, True)
                 pkgs = self.backend.get_packages(data)
                 if data == 'updates':
-                    self.status_icon.set_update_count(len(pkgs))
+                    self.status.SetUpdateCount(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.info(_("Adding packages to view"))
                 self.package_view.populate(pkgs)
@@ -735,12 +730,14 @@ class YumexApplication(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
+        self.status = None
         self.logger = logging.getLogger('yumex.Application')
 
     def do_activate(self):
         '''
         Gtk.Application activate handler
         '''
+        self.logger.debug("do_activate")
         if self.args.install:
             self.install = YumexInstallWindow(self)
             self.install.show()
@@ -750,7 +747,7 @@ class YumexApplication(Gtk.Application):
             self.install.show()
             self.install.process_actions("remove",self.args.remove, self.args.yes)        
         else:
-            self.win = YumexWindow(self)
+            self.win = YumexWindow(self, self.status)
             # show the window - with show() not show_all() because that would show also
             # the leave_fullscreen button
             self.win.connect('delete_event', self.on_quit)
@@ -763,6 +760,7 @@ class YumexApplication(Gtk.Application):
         '''
         Gtk.Application startup handler
         '''
+        self.logger.debug("do_startup")
         Gtk.Application.do_startup(self)
         # Setup actions
         self._create_action("quit", self.on_quit)
@@ -803,7 +801,14 @@ class YumexApplication(Gtk.Application):
         else:
             self.doTextLoggerSetup()
         self.logger.debug("cmdline : %s " % repr(self.args))
-        self.do_activate()
+        # Start the StatusIcon dbus client
+        self.status = StatusIcon(self)
+        if self.status.SetYumexIsRunning(True): # Check if yumex is running already
+            self.status.Start() # Show the icon
+            self.do_activate()
+        else:
+            show_information(None, "Yum Extender is already running")
+            sys.exit(1)
         return 0
 
     def do_shutdown(self):
@@ -812,6 +817,9 @@ class YumexApplication(Gtk.Application):
         Do clean up before the application is closed.
         '''
         Gtk.Application.do_shutdown(self)
+        if self.status:
+            self.status.SetYumexIsRunning(False)
+            self.status.Exit()
         if hasattr(self,"win"): # if windows object exist, unlock and exit backends
             if self.win.backend:
                 self.win.backend.quit()
