@@ -27,21 +27,176 @@ from .yum_backend import YumReadOnlyBackend, YumRootBackend
 import argparse
 import logging
 
-class YumexWindow(Gtk.ApplicationWindow):
-    '''
-    Main application window class
-    '''
+class BaseWindow(Gtk.ApplicationWindow):
+    """ Common Yumex Base window """
+
     def __init__(self, app):
         Gtk.ApplicationWindow.__init__(self, title="Yum Extender", application=app)
-        self.key_bindings = Gtk.AccelGroup()
-        self.add_accel_group(self.key_bindings)
         self.logger = logging.getLogger('yumex.Window')
-        self.set_default_size(1024, 700)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
         icon = Gtk.IconTheme.get_default().load_icon('yumex-nextgen', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
+        
+        self._root_backend = None
+        self._root_locked = False
+        
+        # setup GtkBuilder
+        self.ui = Gtk.Builder()
+        try:
+            self.ui.add_from_file(DATA_DIR + "/yumex.ui")
+        except:
+            show_information(self, "GtkBuilder ui file not found : " + DATA_DIR + "/yumex.ui")
+            sys.exit()
+            
+        # transaction result dialog
+        self.transaction_result = TransactionResult(self)
+            
+    @ExceptionHandler
+    def get_root_backend(self):
+        """
+        Get the current root backend
+        if it is not setup yet, the create it
+        if it is not locked, then lock it
+        """
+        if self._root_backend == None:
+            self._root_backend = YumRootBackend(self)
+            self._root_backend.setup()
+            self._root_locked = True
+            self.logger.debug("Start the yum root daemon")
+        elif self._root_locked == False:
+            self._root_backend.Lock()
+            if CONFIG.session.enabled_repos:
+                self.logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
+                self._root_backend.SetEnabledRepos(CONFIG.session.enabled_repos)
+
+            self._root_locked = True
+            self.logger.debug("Lock the yum root daemon")
+        return self._root_backend
+
+    @ExceptionHandler
+    def release_root_backend(self, quit=False):
+        """
+        Release the current root backend, if it is setup and locked
+        """
+        if self._root_backend == None:
+            return
+        if self._root_locked == True:
+            self.logger.debug("Unlock the yum root daemon")
+            self._root_backend.Unlock()
+            self._root_locked = False
+        if quit:
+            self.logger.debug("Exit the yum root daemon")
+            self._root_backend.Exit()
+
+    def exception_handler(self, e):
+        '''
+        Called if exception occours in methods with the @ExceptionHandler decorator
+        '''
+        close = True
+        msg = str(e)
+        self.logger.error("EXCEPTION : %s " % msg)
+        err, errmsg = self._parse_error(msg)
+        self.logger.debug("err:  %s - msg: %s" % (err, errmsg))
+        if err == "YumLockedError":
+            errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
+            close = False
+        if errmsg == "":
+            errmsg = msg
+        show_information(self, errmsg)
+        # try to exit the backends, ignore errors
+        if close:
+            try:
+                self.release_root_backend(quit=True)            
+            except:
+                pass
+        sys.exit(1)
+        
+    def _parse_error(self, value):
+        '''
+        parse values from a DBus releated exception
+        '''
+        res = DBUS_ERR_RE.match(str(value))
+        if res:
+            err = res.groups()[0]
+            err = err.split('.')[-1]
+            msg = res.groups()[1]
+            return err, msg
+        return "", ""
+            
+    
+class YumexInstallWindow(BaseWindow):
+    '''
+    Simple ui windows class for doing actions from the command line.
+    '''
+    def __init__(self, app):
+        BaseWindow.__init__(self, app)
+        self.set_default_size(600, 80)
+        grid = Gtk.Grid()
+        ib = self.ui.get_object("infobar")
+        ib.reparent(grid)
+        grid.attach(ib, 0, 0, 1, 1)
+        self.add(grid)
+        grid.show()
+        self.infobar = InfoProgressBar(self.ui)
+        self.infobar.show_all()
+        info_spinner = self.ui.get_object("info_spinner")
+        info_spinner.set_from_file(PIX_DIR + "/spinner-small.gif")
+        
+    def on_delete_event(self, *args):
+        '''
+        windows delete event handler
+        just hide, dont exit application
+        '''
+        self.app.quit()
+        return True
+
+    @ExceptionHandler
+    def process_actions(self,action, package, always_yes):
+        if action == 'install':
+            self.infobar.info(_("Installing package"))
+            self.infobar.info_sub(package)
+            txmbrs = self.get_root_backend().Install(package)
+            self.logger.debug("txmbrs: %s" % str(txmbrs))
+        elif action == "remove":
+            self.infobar.info(_("Removing package"))
+            self.infobar.info_sub(package)
+            txmbrs = self.get_root_backend().Remove(package)
+            self.logger.debug("txmbrs: %s" % str(txmbrs))
+        self.infobar.info(_('Searching for dependencies'))
+        rc, result = self.get_root_backend().BuildTransaction()
+        self.infobar.info(_('Dependencies resolved'))
+        if rc == 2:
+            self.transaction_result.populate(result, "")
+            if not always_yes:
+                ok = self.transaction_result.run()
+            else:
+                ok = True
+            if ok:  # Ok pressed
+                self.infobar.info(_('Applying changes to the system'))
+                self.get_root_backend().RunTransaction()
+                self.release_root_backend()
+                self.hide()
+                if not always_yes:
+                    show_information(self,_("Changes was successfully applied to the system"))
+        elif rc == 0:
+            if action == 'install':
+                show_information(self, _("the %s package can't be installed") % package)
+            elif action == 'remove':
+                show_information(self, _("the %s package can't be removed") % package)
+        else:
+            show_information(self, _("Error(s) in search for dependencies"), result[0])
+        self.release_root_backend(quit=True)
+        self.app.quit()
+
+class YumexWindow(BaseWindow):
+    '''
+    Main application window class
+    '''
+    def __init__(self, app):
+        BaseWindow.__init__(self, app)
+        self.set_default_size(1024, 700)
 
         # init vars
         self.last_search = None
@@ -50,15 +205,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         self._root_locked = False
         self.search_type = ""
         self.active_archs = ['i686','noarch','x86_64']
-
-        # setup the GtkBuilder from file
-        self.ui = Gtk.Builder()
-        # get the file (if it is there)
-        try:
-            self.ui.add_from_file(DATA_DIR + "/yumex.ui")
-        except:
-            show_information(self, "GtkBuilder ui file not found : " + DATA_DIR + "/yumex.ui")
-            sys.exit()
 
         # setup the package manager backend
         # self.backend = TestBackend()
@@ -117,15 +263,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         # spinner
         self.spinner = self.ui.get_object("progress_spinner")
         self.spinner.set_from_file(PIX_DIR + "/spinner.gif")
+        self.info_spinner = self.ui.get_object("info_spinner")
+        self.info_spinner.set_from_file(PIX_DIR + "/spinner-small.gif")
         self.spinner.hide()
 
         # infobar
         self.infobar = InfoProgressBar(self.ui)
         self.infobar.hide()
-
-        # transaction result dialog
-        self.transaction_result = TransactionResult(self)
-        
+       
         # preferences dialog
         
         self.preferences = Preferences(self)
@@ -146,10 +291,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         self.status_icon.search_updates_menu.connect("activate", self.check_for_updates)
         # self.status_icon.search_updates_menu.connect("activate",   self.app.on_quit)
         
-        # Key bindings
-        widget = self.ui.get_object('tool_quit')
-        self._add_key_binding(widget, '<ctrl>q')
-
         if not self.app.args.hidden:
             self.show_now()
             
@@ -183,42 +324,6 @@ class YumexWindow(Gtk.ApplicationWindow):
         else:
             self.show()
 
-    @ExceptionHandler
-    def get_root_backend(self):
-        """
-        Get the current root backend
-        if it is not setup yet, the create it
-        if it is not locked, then lock it
-        """
-        if self._root_backend == None:
-            self._root_backend = YumRootBackend(self)
-            self._root_backend.setup()
-            self._root_locked = True
-            self.logger.debug("Start the yum root daemon")
-        elif self._root_locked == False:
-            self._root_backend.Lock()
-            if CONFIG.session.enabled_repos:
-                self.logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
-                self._root_backend.SetEnabledRepos(CONFIG.session.enabled_repos)
-
-            self._root_locked = True
-            self.logger.debug("Lock the yum root daemon")
-        return self._root_backend
-
-    @ExceptionHandler
-    def release_root_backend(self, quit=False):
-        """
-        Release the current root backend, if it is setup and locked
-        """
-        if self._root_backend == None:
-            return
-        if self._root_locked == True:
-            self.logger.debug("Unlock the yum root daemon")
-            self._root_backend.Unlock()
-            self._root_locked = False
-        if quit:
-            self.logger.debug("Exit the yum root daemon")
-            self._root_backend.Exit()
 
     def build_content(self):
         '''
@@ -275,24 +380,27 @@ class YumexWindow(Gtk.ApplicationWindow):
         '''
         Called if exception occours in methods with the @ExceptionHandler decorator
         '''
+        close = True
         msg = str(e)
         self.logger.error("EXCEPTION : %s " % msg)
         err, errmsg = self._parse_error(msg)
         self.logger.debug("err:  %s - msg: %s" % (err, errmsg))
         if err == "YumLockedError":
             errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
+            close = False
         if errmsg == "":
             errmsg = msg
         show_information(self, errmsg)
         # try to exit the backends, ignore errors
-        try:
-            self.backend.Exit()
-        except:
-            pass
-        try:
-            self.release_root_backend(quit=True)
-        except:
-            pass
+        if close:
+            try:
+                self.backend.Exit()
+            except:
+                pass
+            try:
+                self.release_root_backend(quit=True)
+            except:
+                pass
         sys.exit(1)
 
     def set_working(self, state, insensitive=False):
@@ -314,19 +422,6 @@ class YumexWindow(Gtk.ApplicationWindow):
             self.status_icon.set_is_working(False)
             self._set_normal_cursor()
 
-
-
-    def _parse_error(self, value):
-        '''
-        parse values from a DBus releated exception
-        '''
-        res = DBUS_ERR_RE.match(str(value))
-        if res:
-            err = res.groups()[0]
-            err = err.split('.')[-1]
-            msg = res.groups()[1]
-            return err, msg
-        return "", ""
 
     def check_for_updates(self, widget=None):
         '''
@@ -427,14 +522,14 @@ class YumexWindow(Gtk.ApplicationWindow):
         if widget.get_active():
             self.on_packages(None, None)
             if data in ["installed", "available", "updates"]:
-                self.infobar.message(PACKAGE_LOAD_MSG[data])
+                self.infobar.info(PACKAGE_LOAD_MSG[data])
                 self.current_filter = (widget, data)
                 self.set_working(True, True)
                 pkgs = self.backend.get_packages(data)
                 if data == 'updates':
                     self.status_icon.set_update_count(len(pkgs))
                 self.info.set_package(None)
-                self.infobar.message(_("Adding packages to view"))
+                self.infobar.info(_("Adding packages to view"))
                 self.package_view.populate(pkgs)
                 self.set_working(False)
                 self.infobar.hide()
@@ -646,14 +741,23 @@ class YumexApplication(Gtk.Application):
         '''
         Gtk.Application activate handler
         '''
-        self.win = YumexWindow(self)
-        # show the window - with show() not show_all() because that would show also
-        # the leave_fullscreen button
-        self.win.connect('delete_event', self.on_quit)
-        if self.args.hidden:
-            self.win.hide()
+        if self.args.install:
+            self.install = YumexInstallWindow(self)
+            self.install.show()
+            self.install.process_actions("install",self.args.install, self.args.yes)
+        elif self.args.remove:
+            self.install = YumexInstallWindow(self)
+            self.install.show()
+            self.install.process_actions("remove",self.args.remove, self.args.yes)        
         else:
-            self.win.show()
+            self.win = YumexWindow(self)
+            # show the window - with show() not show_all() because that would show also
+            # the leave_fullscreen button
+            self.win.connect('delete_event', self.on_quit)
+            if self.args.hidden:
+                self.win.hide()
+            else:
+                self.win.show()
 
     def do_startup(self):
         '''
@@ -687,8 +791,10 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_command_line(self, args)
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
+        parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
         parser.add_argument('--hidden', action='store_true')
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
+        parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)

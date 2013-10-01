@@ -238,9 +238,6 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
                 self.frontend.infobar.info_sub(name)
                 logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
             self.frontend.infobar.set_progress(frac)    
-        elif name == '<locally rebuilding deltarpms>':
-            name = _("Building packages from delta packages")
-            self.frontend.infobar.info_sub(name)
         else: # normal file download
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
@@ -411,7 +408,10 @@ class YumRootBackend(Backend, YumDaemonClient):
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
         logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
-        if not '.' in name: # Repo metadata
+        if name == '<locally rebuilding deltarpms>':
+            name = _("Building packages from delta packages")
+            self.frontend.infobar.info_sub(name)
+        elif not '.' in name: # Repo metadata
             parts = name.split('/')
             meta_type = parts[-1]
             repo = parts[0]
@@ -424,9 +424,6 @@ class YumRootBackend(Backend, YumDaemonClient):
                 self.frontend.infobar.info_sub(name)
                 logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
             self.frontend.infobar.set_progress(frac)    
-        elif name == '<locally rebuilding deltarpms>':
-            name = _("Building packages from delta packages")
-            self.frontend.infobar.info_sub(name)
         else: # normal file download
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
@@ -449,7 +446,7 @@ class YumRootBackend(Backend, YumDaemonClient):
             pass
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_("Applying Changes to the system"))
+            self.frontend.infobar.info(_("Applying changes to the system"))
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)

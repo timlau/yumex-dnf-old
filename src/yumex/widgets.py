@@ -175,24 +175,20 @@ class InfoProgressBar:
         self.sublabel.show()
         self.sublabel.set_text("")
 
-    def show_buttons(self):
-        self.actions.show()
+    def show_all(self):
+        self.show_label()
+        self.show_sublabel()
+        self.progress.show()
 
-    def message(self, msg):
+    def info(self, msg):
         self.infobar.show()
         self.show_label()
         self.label.set_text(msg)
 
-    def message_sub(self, msg):
+    def info_sub(self, msg):
         self.infobar.show()
         self.show_sublabel()
         self.sublabel.set_text(msg)
-
-    def info(self, msg):
-        self.message(msg)
-
-    def info_sub(self, msg):
-        self.message_sub(msg)
 
     def set_progress(self, frac, label=None):
         if label:
@@ -1803,3 +1799,5 @@ class RepoView(SelectionView):
             else:
                 self.store.set_value(iterator, 0, False)
             iterator = self.store.iter_next(iterator)
+
+
