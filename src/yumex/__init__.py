@@ -286,8 +286,7 @@ class YumexWindow(BaseWindow):
         self._create_action("search_config", self.on_search_config)
 
         
-        if not self.app.args.hidden:
-            self.show_now()
+        self.show_now()
             
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -731,6 +730,7 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
+        self.keep_icon_running = True # flag to control if StatusIcon is closed on application exit
         self.logger = logging.getLogger('yumex.Application')
 
     def do_activate(self):
@@ -748,13 +748,8 @@ class YumexApplication(Gtk.Application):
             self.install.process_actions("remove",self.args.remove, self.args.yes)        
         else:
             self.win = YumexWindow(self, self.status)
-            # show the window - with show() not show_all() because that would show also
-            # the leave_fullscreen button
             self.win.connect('delete_event', self.on_quit)
-            if self.args.hidden:
-                self.win.hide()
-            else:
-                self.win.show()
+            self.win.show()
 
     def do_startup(self):
         '''
@@ -778,6 +773,8 @@ class YumexApplication(Gtk.Application):
         '''
         quit handler
         '''
+        if action == None: # If we quit from the StatusIcon, then quit the status icon also
+            self.keep_icon_running = False 
         self.quit() # quit the application
 
     def do_command_line(self, args):
@@ -790,7 +787,7 @@ class YumexApplication(Gtk.Application):
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
-        parser.add_argument('--hidden', action='store_true')
+        parser.add_argument('--icononly', action='store_true')
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
@@ -803,8 +800,10 @@ class YumexApplication(Gtk.Application):
         self.logger.debug("cmdline : %s " % repr(self.args))
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)
+        self.status.Start() # Show the icon
+        if self.args.icononly: # Only start the icon and exit
+            sys.exit(0)
         if self.status.SetYumexIsRunning(True): # Check if yumex is running already
-            self.status.Start() # Show the icon
             self.do_activate()
         else:
             show_information(None, "Yum Extender is already running")
@@ -819,7 +818,8 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_shutdown(self)
         if self.status:
             self.status.SetYumexIsRunning(False)
-            self.status.Exit()
+            if not self.keep_icon_running:
+                self.status.Exit()
         if hasattr(self,"win"): # if windows object exist, unlock and exit backends
             if self.win.backend:
                 self.win.backend.quit()

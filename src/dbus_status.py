@@ -31,6 +31,7 @@ from gi.repository import Gtk, GObject, GdkPixbuf
 import cairo
 import random
 from yumdaemon import *
+from subprocess import Popen
 
 
 version = 100 # must be integer
@@ -50,10 +51,12 @@ if BIN_PATH in ["/usr/share/yumex-nextgen"]:
     DATA_DIR = '/usr/share/yumex-nextgen'
     PIX_DIR = DATA_DIR + "/gfx"
     MISC_DIR = DATA_DIR
+    YUMEX_BIN = "/usr/bin/yumex-nextgen"
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
+    YUMEX_BIN = "./main.py"
 
 ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
 ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
@@ -111,21 +114,21 @@ class StatusIcon:
         menu = Gtk.Menu()
         self.popup_menu = menu
 
-        quit = Gtk.MenuItem(_("Quit"))
-        self.quit_menu = quit
+        self.quit_menu = Gtk.MenuItem(_("Quit"))
+        self.search_updates_menu = Gtk.MenuItem(_("Search for Updates"))
+        self.run_yumex = Gtk.MenuItem(_("Start Yum Extender"))
 
-        search_updates = Gtk.MenuItem(_("Search for Updates"))
-        self.search_updates_menu = search_updates
-
-        menu.append(search_updates)
-        menu.append(quit)
+        menu.append(self.search_updates_menu)
+        menu.append(self.run_yumex)
+        menu.append(self.quit_menu)
         menu.show_all()
         self.statusicon.connect("popup-menu", self.on_popup)
-
 
     def set_popup_menu_sensitivity(self, sensitive):
         self.quit_menu.set_sensitive(sensitive)
         self.search_updates_menu.set_sensitive(sensitive)
+        self.run_yumex.set_sensitive(sensitive)
+
 
     def on_popup(self, icon, button, time):
         # self.popup_menu.popup(None, None, Gtk.StatusIcon.position_menu, button,time, self.statusicon)
@@ -252,6 +255,7 @@ class YumexStatusDaemon(dbus.service.Object):
         icon.connect("activate", self.on_status_icon_clicked)
         self.status_icon.quit_menu.connect("activate", self.on_quit)
         self.status_icon.search_updates_menu.connect("activate", self.on_check_updates)
+        self.status_icon.run_yumex.connect("activate", self.on_run_yumex)
 
 #===============================================================================
 # DBus Methods
@@ -290,6 +294,10 @@ class YumexStatusDaemon(dbus.service.Object):
         if not self.started:
             self.setup_statusicon()
             self.started = True
+            if self.yumex_running:
+                self.status_icon.run_yumex.hide()
+            else:
+                self.status_icon.run_yumex.show()
             return True
         else:
             return False
@@ -334,6 +342,11 @@ class YumexStatusDaemon(dbus.service.Object):
     def SetYumexIsRunning(self, state, sender=None):
         if not self.yumex_running == state:
             self.yumex_running = state
+            if self.started:
+                if self.yumex_running:
+                    self.status_icon.run_yumex.hide()
+                else:
+                    self.status_icon.run_yumex.show()
             return True
         else: # Yumex is already running  
             return False
@@ -412,7 +425,12 @@ class YumexStatusDaemon(dbus.service.Object):
             self.CheckUpdateSignal()
         else:
             self.get_updates()
-        
+
+    def on_run_yumex(self, *args):
+        logger.debug('run yumex')
+        if not self.yumex_running:
+            logger.debug('Starting: %s' % YUMEX_BIN)
+            pid = Popen([YUMEX_BIN]).pid
 
 def doTextLoggerSetup(logroot=LOG_ROOT, logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
     ''' Setup Python logging  '''

@@ -798,7 +798,7 @@ Available = Packages available for installation</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.019999999552965164</property>
-                    <property name="label" translatable="yes">Start Yum Extender at user logon</property>
+                    <property name="label" translatable="yes">Start Yum Extender status icon at user logon</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
