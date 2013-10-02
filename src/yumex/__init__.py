@@ -730,7 +730,6 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
-        self.keep_icon_running = True # flag to control if StatusIcon is closed on application exit
         self.logger = logging.getLogger('yumex.Application')
 
     def do_activate(self):
@@ -818,7 +817,7 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_shutdown(self)
         if self.status:
             self.status.SetYumexIsRunning(False)
-            if not self.keep_icon_running:
+            if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
                 self.status.Exit()
         if hasattr(self,"win"): # if windows object exist, unlock and exit backends
             if self.win.backend:
