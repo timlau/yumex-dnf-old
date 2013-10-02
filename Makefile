@@ -46,7 +46,7 @@ install:
 	for d in $(SUBDIRS); do make DESTDIR=`cd $(DESTDIR); pwd` -C $$d install; [ $$? = 0 ] || exit 1; done
 
 get-builddeps:
-	yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject
+	@sudo yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject
 
 archive:
 	@rm -rf ${PKGNAME}-${VERSION}.tar.gz
@@ -113,11 +113,11 @@ test-builds:
 
 test-inst:
 	@$(MAKE) test-release
-	sudo yum install ~/rpmbuild/RPMS/noarch/yumex*.rpm
+	sudo yum install ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm
 
 test-reinst:
 	@$(MAKE) test-release
-	sudo yum reinstall ~/rpmbuild/RPMS/noarch/yumex*.rpm
+	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm
 		
 FORCE:
     
