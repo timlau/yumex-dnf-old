@@ -21,7 +21,6 @@
 import dbus
 import dbus.service
 import dbus.glib
-#import gobject
 import logging
 import argparse
 import os.path
@@ -32,6 +31,10 @@ import cairo
 import random
 from yumdaemon import *
 from subprocess import Popen
+from xdg import BaseDirectory
+import time
+from ConfigParser import SafeConfigParser 
+import os.path
 
 
 version = 100 # must be integer
@@ -63,6 +66,58 @@ ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
 ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
 ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
 ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
+
+CONF_DIR = BaseDirectory.save_config_path('yumex-nextgen')
+CONF_FILE = os.path.join(CONF_DIR,'yumex.conf')
+TIMESTAMP_FILE = os.path.join(CONF_DIR,'update_timestamp.conf')
+TIMER_STARTUP_DELAY = 30
+UPDATE_INTERVAL = 5
+
+# Setup configs
+CONF_DEFAULTS = {'update_interval': '60', 'update_startup_delay': '30','autocheck_updates' : '0'} # every 60 minutes, start delay = 30 seconds
+CONFIG = SafeConfigParser(CONF_DEFAULTS)
+if not CONFIG.has_section('yumex'):
+    CONFIG.add_section('yumex')
+if os.path.exists(CONF_FILE):
+    CONFIG.read(CONF_FILE)
+
+TIMER_STARTUP_DELAY = CONFIG.getint('yumex','update_startup_delay')
+UPDATE_INTERVAL = CONFIG.getint('yumex','update_interval')
+AUTOCHECK_UPDATE = CONFIG.getboolean('yumex','autocheck_updates')
+
+
+class UpdateTimestamp:
+    '''
+    a persistent timestamp. eg for storing the last update check
+    '''
+
+    def __init__(self, file_name=TIMESTAMP_FILE):
+        self.time_file = file_name
+        self.last_time = -1
+
+    def get_last_time_diff(self):
+        """
+        returns time difference to last check in seconds >=0 or -1 on error
+        """
+        try:
+            t = int(time.time())
+            if self.last_time == -1:
+                f = open(self.time_file, 'r')
+                t_old = int(f.read())
+                f.close()
+                self.last_time = t_old
+            if self.last_time > t: return -1
+            return t - self.last_time
+        except:
+            pass
+        return -1
+
+    def store_current_time(self):
+        t = int(time.time())
+        f = open(self.time_file, 'w')
+        f.write(str(t))
+        f.close()
+        self.last_time = t
 
 
 def Logger(func):
@@ -216,9 +271,9 @@ class StatusIcon:
         set working: show a busy tray icon if is_working is True
         '''
         if is_working:
-            self.is_working = self.is_working + 1
+            self.is_working = 1
         else:
-            self.is_working = self.is_working - 1
+            self.is_working = 0
         self.update_tray_icon()
 
     def need_user_input(self, need_input=True):
@@ -226,6 +281,8 @@ class StatusIcon:
 
         self.need_input = need_input
         self.update_tray_icon()
+
+
 
 
 #------------------------------------------------------------------------------ DBus Exception
@@ -245,6 +302,11 @@ class YumexStatusDaemon(dbus.service.Object):
         self.started = False
         self.status_icon = None
         self.yumex_running = False
+        # update checking
+        self.update_timer_id = -1
+        self.update_timestamp = UpdateTimestamp()
+        self.next_update = 0
+        self.last_timestamp = 0
 
         # yum daemon client setup
         self.backend = YumReadOnlyBackend()
@@ -294,6 +356,7 @@ class YumexStatusDaemon(dbus.service.Object):
         if not self.started:
             self.setup_statusicon()
             self.started = True
+            self.startup_init_update_timer()
             if self.yumex_running:
                 self.status_icon.run_yumex.hide()
             else:
@@ -392,6 +455,8 @@ class YumexStatusDaemon(dbus.service.Object):
             rc = -1
         self.status_icon.set_is_working(False)
         self.status_icon.set_update_count(rc)
+        self.update_timestamp.store_current_time()
+        self.start_update_timer() # restart update timer if necessary            
         return rc
         
 #===============================================================================
@@ -431,6 +496,58 @@ class YumexStatusDaemon(dbus.service.Object):
         if not self.yumex_running:
             logger.debug('Starting: %s' % YUMEX_BIN)
             pid = Popen([YUMEX_BIN]).pid
+
+
+    def startup_init_update_timer(self):
+        """ start the update timer with a delayed startup
+        """
+        if AUTOCHECK_UPDATE:
+            logger.debug("Starting delayed update timer")
+            GObject.timeout_add_seconds(TIMER_STARTUP_DELAY, self.start_update_timer)
+
+    def start_update_timer(self):
+        """
+        start or restart the update timer: check when the last update was done
+        """
+        if AUTOCHECK_UPDATE:
+            if self.update_timer_id != -1:
+                GObject.source_remove(self.update_timer_id)
+    
+            time_diff = self.update_timestamp.get_last_time_diff() # in seconds
+            delay = UPDATE_INTERVAL - int(time_diff/60)
+            if time_diff == -1 or delay < 0:
+                delay = 0
+    
+            logger.debug("Starting update timer with a delay of {0} min (time_diff={1})".format(delay, time_diff))
+            self.next_update = delay
+            self.last_timestamp = int(time.time())
+            self.update_timer_id = GObject.timeout_add_seconds(1, self.update_timeout)
+        return False
+
+    def update_timeout(self):
+        if AUTOCHECK_UPDATE:
+            self.next_update = self.next_update - 1
+            self.update_timer_id = -1
+            if self.next_update < 0:
+                if self.yumex_running:
+                    # do not check for updates now: retry in a minute
+                    logger.debug("Yumex is running, try again in 1 minut")
+                    self.update_timer_id = GObject.timeout_add_seconds(60, self.update_timeout)
+                else:
+                    # check for updates: this will automatically restart the timer
+                    self.get_updates()
+            else:
+                cur_timestamp = int(time.time())
+                if cur_timestamp - self.last_timestamp > 60*2:
+                    # this can happen on hibernation/suspend or when the system time
+                    # changes
+                    logger.debug("Time changed: restarting update timer")
+                    self.start_update_timer()
+                else:
+                    self.update_timer_id = GObject.timeout_add_seconds(60, self.update_timeout)
+                self.last_timestamp = cur_timestamp
+        return False
+
 
 def doTextLoggerSetup(logroot=LOG_ROOT, logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
     ''' Setup Python logging  '''

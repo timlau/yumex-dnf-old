@@ -1379,7 +1379,7 @@ class Preferences:
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only']
+        self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only','autocheck_updates']
         self.repo_view = RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
@@ -1401,15 +1401,37 @@ class Preferences:
             logger.debug("%s : %s " % (option,getattr(CONFIG.conf,option) ))
             widget = self.base.ui.get_object('pref_'+option)
             widget.set_active(getattr(CONFIG.conf,option))
+        # autocheck update on/off handler
+        widget = self.base.ui.get_object('pref_autocheck_updates')
+        widget.connect('notify::active', self.on_autocheck_updates)
         # set current colors 
         for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
             rgba = Gdk.RGBA()
             rgba.parse(getattr(CONFIG.conf,name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
+        # Set update checker values
+        for name in ['update_startup_delay', 'update_interval']:
+            widget = self.base.ui.get_object('pref_'+name)
+            widget.set_value(getattr(CONFIG.conf,name))
+        self.on_autocheck_updates()
         # get the repositories 
         self.repos = self.base.backend.get_repositories()
         self.repo_view.populate(self.repos)
+
+    def on_autocheck_updates(self, *args):
+        widget = self.base.ui.get_object('pref_autocheck_updates')
+        state = widget.get_active()
+        if state:
+            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(True)
+            self.base.ui.get_object('pref_update_interval').set_sensitive(True)
+            self.base.ui.get_object('label_update_delay').set_sensitive(True)
+            self.base.ui.get_object('label_update_interval').set_sensitive(True)
+        else:
+            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(False)
+            self.base.ui.get_object('pref_update_interval').set_sensitive(False)
+            self.base.ui.get_object('label_update_delay').set_sensitive(False)
+            self.base.ui.get_object('label_update_interval').set_sensitive(False)
 
     def set_settings(self):
         changed = False
@@ -1429,6 +1451,13 @@ class Preferences:
             color =  rgba.to_string()
             if color != getattr(CONFIG.conf, name): # changed ??
                 setattr(CONFIG.conf, name, color)
+                changed = True
+        # handle update checker values
+        for name in ['update_startup_delay', 'update_interval']:
+            widget = self.base.ui.get_object('pref_'+name)
+            value = widget.get_value_as_int()
+            if value != getattr(CONFIG.conf, name): # changed ??
+                setattr(CONFIG.conf, name, value)
                 changed = True
         # handle repos
         repo_before = CONFIG.session.enabled_repos

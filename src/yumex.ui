@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkAdjustment" id="ad_update_startup_delay">
+    <property name="lower">10</property>
+    <property name="upper">900</property>
+    <property name="value">30</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_update_interval">
+    <property name="lower">5</property>
+    <property name="upper">10080</property>
+    <property name="value">60</property>
+    <property name="step_increment">5</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkMenu" id="arch_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -797,7 +811,8 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Start Yum Extender status icon at user logon</property>
                   </object>
                   <packing>
@@ -829,7 +844,7 @@ Available = Packages available for installation</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">4</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -842,7 +857,7 @@ Available = Packages available for installation</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">5</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -855,7 +870,7 @@ Available = Packages available for installation</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">6</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -865,12 +880,13 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Default: Show newest only</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">4</property>
                     <property name="width">2</property>
                     <property name="height">1</property>
                   </packing>
@@ -880,12 +896,13 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Default: Skip Broken</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">5</property>
                     <property name="width">2</property>
                     <property name="height">1</property>
                   </packing>
@@ -895,12 +912,108 @@ Available = Packages available for installation</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Default: Erase Used Requirments</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_update_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="max_length">5</property>
+                    <property name="invisible_char">●</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">adj_update_interval</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_update_startup_delay">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="max_length">5</property>
+                    <property name="invisible_char">●</property>
+                    <property name="width_chars">6</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">ad_update_startup_delay</property>
+                    <property name="climb_rate">5</property>
+                    <property name="numeric">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">25</property>
+                    <property name="label" translatable="yes">Update check interval (minutes)</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_delay">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">25</property>
+                    <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_autocheck_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_auto_check">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">10</property>
+                    <property name="label" translatable="yes">Scheduled check for new updates</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                     <property name="width">2</property>
                     <property name="height">1</property>
                   </packing>

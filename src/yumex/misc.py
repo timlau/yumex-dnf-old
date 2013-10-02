@@ -145,7 +145,10 @@ class YumexConf(BaseConfig):
     skip_broken = BoolOption(False)
     newest_only= BoolOption(True)
     clean_unused = BoolOption(False)
-
+    update_interval = IntOption(60)
+    update_startup_delay = IntOption(30)
+    autocheck_updates = BoolOption(False)
+    
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
     skip_broken = BoolOption(False)     # skip broken for current session
@@ -158,7 +161,7 @@ class Config(object):
     '''
     Yum Extender Configuration class
     '''
-    WRITE_ALWAYS = ['autostart']
+    WRITE_ALWAYS = ['autostart','update_interval','update_startup_delay','autocheck_updates']
     
     def __init__(self):
         object.__init__(self)
