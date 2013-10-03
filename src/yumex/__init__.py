@@ -113,6 +113,8 @@ class BaseWindow(Gtk.ApplicationWindow):
                 self.release_root_backend(quit=True)            
             except:
                 pass
+        self.status.SetWorking(False) # reset working state
+        self.status.SetYumexIsRunning(False)
         sys.exit(1)
         
     def _parse_error(self, value):
@@ -158,12 +160,12 @@ class YumexInstallWindow(BaseWindow):
     def process_actions(self,action, package, always_yes):
         self.status.SetWorking(True)
         if action == 'install':
-            self.infobar.info(_("Installing package"))
+            self.infobar.info(_("Installing package : %s") % package)
             self.infobar.info_sub(package)
             txmbrs = self.get_root_backend().Install(package)
             self.logger.debug("txmbrs: %s" % str(txmbrs))
         elif action == "remove":
-            self.infobar.info(_("Removing package"))
+            self.infobar.info(_("Removing package : %s") % package)
             self.infobar.info_sub(package)
             txmbrs = self.get_root_backend().Remove(package)
             self.logger.debug("txmbrs: %s" % str(txmbrs))
