@@ -1833,3 +1833,207 @@ class RepoView(SelectionView):
             iterator = self.store.iter_next(iterator)
 
 
+class GroupView(Gtk.TreeView):
+    '''
+    '''
+
+    def __init__(self, qview, base):
+        '''
+
+        @param treeview:
+        @param qview:
+        @param base:
+        '''
+        Gtk.TreeView.__init__(self)
+        self.base = base
+        self.model = self.setup_view()
+        self.queue = qview.queue
+        self.queueView = qview
+        self.currentCategory = None
+        self._groups = None
+
+
+    def setup_view(self):
+        """ Setup Group View  """
+        model = Gtk.TreeStore(GObject.TYPE_BOOLEAN, # 0 Installed
+                              GObject.TYPE_STRING, # 1 Group Name
+                              GObject.TYPE_STRING, # 2 Group Id
+                              GObject.TYPE_BOOLEAN, # 3 In queue
+                              GObject.TYPE_BOOLEAN, # 4 isCategory
+                              GObject.TYPE_STRING)  # 5 Description
+
+
+        self.set_model(model)
+        column = Gtk.TreeViewColumn(None, None)
+        # Selection checkbox
+        selection = Gtk.CellRendererToggle()    # Selection
+        selection.set_property('activatable', True)
+        column.pack_start(selection, False)
+        column.set_cell_data_func(selection, self.setCheckbox)
+        selection.connect("toggled", self.on_toggled)
+        self.append_column(column)
+        column = Gtk.TreeViewColumn(None, None)
+#         # Queue Status (install/remove group)
+#         state = Gtk.CellRendererPixbuf()    # Queue Status
+#         state.set_property('stock-size', 1)
+#         column.pack_start(state, False)
+#         column.set_cell_data_func(state, self.queue_pixbuf)
+# 
+#         # category/group icons
+#         icon = Gtk.CellRendererPixbuf()
+#         icon.set_property('stock-size', 1)
+#         column.pack_start(icon, False)
+#         column.set_cell_data_func(icon, self.grp_pixbuf)
+
+        category = Gtk.CellRendererText()
+        column.pack_start(category, False)
+        column.add_attribute(category, 'markup', 1)
+
+        self.append_column(column)
+        self.set_headers_visible(False)
+        return model
+
+    def setCheckbox(self, column, cell, model, iterator):
+        '''
+
+        @param column:
+        @param cell:
+        @param model:
+        @param iterator:
+        '''
+        isCategory = model.get_value(iterator, 4)
+        state = model.get_value(iterator, 0)
+        if isCategory:
+            cell.set_property('visible', False)
+        else:
+            cell.set_property('visible', True)
+            cell.set_property('active', state)
+
+    def on_toggled(self, widget, path):
+        """ Group selection handler """
+        iterator = self.model.get_iter(path)
+        grpid = self.model.get_value(iterator, 2)
+        inst = self.model.get_value(iterator, 0)
+        action = self.queue.hasGroup(grpid)
+        if action: # Group is in the queue, remove it from the queue
+            self.queue.removeGroup(grpid, action)
+            self._updatePackages(grpid, False, None)
+            self.model.set_value(iterator, 3, False)
+        else:
+            if inst: # Group is installed add it to queue for removal
+                self.queue.addGroup(grpid, 'r') # Add for remove
+                self._updatePackages(grpid, True, 'r')
+            else: # Group is not installed, add it to queue for installation
+                self.queue.addGroup(grpid, 'i') # Add for install
+                self._updatePackages(grpid, True, 'i')
+            self.model.set_value(iterator, 3, True)
+        self.model.set_value(iterator, 0, not inst)
+
+
+    def _updatePackages(self, grpid, add, action):
+        '''
+
+        @param grpid:
+        @param add:
+        @param action:
+        '''
+#         pkgs = self.base.backend.get_group_packages(grpid, 'default')
+#         # Add group packages to queue
+#         if add:
+#             for po in pkgs:
+#                 if not po.queued:
+#                     if action == 'i' and not po.is_installed() : # Install
+#                         po.queued = po.action
+#                         self.queue.add(po)
+#                         po.set_select(True)
+#                     elif action == 'r' and po.is_installed() : # Remove
+#                         po.queued = po.action
+#                         self.queue.add(po)
+#                         po.set_select(False)
+#         # Remove group packages from queue
+#         else:
+#             for po in pkgs:
+#                 if po.queued:
+#                     po.queued = None
+#                     self.queue.remove(po)
+#                     po.set_select(not po.selected)
+#         self.queueView.refresh()
+
+    def reset_queued(self):
+        '''
+        Reset the selection of all queued groups
+        used to undo the selection
+        '''
+        for row in self.model: # Loop trough the categories
+            children = row.iterchildren() # get the children
+            if children: # is there any children
+                for elem in children: # loop trough the groups
+                    if elem[3] == True: # if in queue
+                        elem[3] = False
+                        elem[0] = not elem[0] # invert the section
+
+    def populate(self, data):
+        '''
+
+        @param data:
+        '''
+        self.model.clear()
+        self._groups = data
+        for cat, catgrps in data:
+            #print( cat, catgrps)
+            # cat: [category_id, category_name, category_desc]
+            (catid, name, desc) = cat
+            node = self.model.append(None, [None, name, catid, False, True, desc])
+            for grp in catgrps:
+                # [group_id, group_name, group_desc, group_is_installed]               
+                (grpid, grp_name, grp_desc, inst) = grp
+                self.model.append(node, [inst, grp_name, grpid, False, False, grp_desc])
+
+
+    def queue_pixbuf(self, column, cell, model, iterator):
+        """
+        Cell Data function for recent Column, shows pixmap
+        if recent Value is True.
+        """
+        grpid = model.get_value(iterator, 2)
+        queued = model.get_value(iterator, 3)
+        action = self.queue.hasGroup(grpid)
+        if action:
+            if action == 'i':
+                icon = 'network-server'
+            else:
+                icon = 'edit-delete'
+            cell.set_property('visible', True)
+            cell.set_property('icon-name', icon)
+        cell.set_property('visible', queued)
+
+    def grp_pixbuf(self, column, cell, model, iterator):
+        """
+        Cell Data function for recent Column, shows pixmap
+        if recent Value is True.
+        """
+        grpid = model.get_value(iterator, 2)
+        pix = None
+        fn = "/usr/share/pixmaps/comps/%s.png" % grpid
+        if os.access(fn, os.R_OK):
+            pix = self._get_pix(fn)
+        if pix:
+            cell.set_property('visible', True)
+            cell.set_property('pixbuf', pix)
+        else:
+            cell.set_property('visible', False)
+
+
+    def _get_pix(self, fn):
+        '''
+
+        @param fn:
+        '''
+        imgsize = 24
+        pix = GdkPixbuf.new_from_file(fn)
+        if pix.get_height() != imgsize or pix.get_width() != imgsize:
+            pix = pix.scale_simple(imgsize, imgsize,
+                                   GdkPixbuf.INTERP_BILINEAR)
+        return pix
+
+

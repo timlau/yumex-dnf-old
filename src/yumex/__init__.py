@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     StatusIcon, Preferences
+                     StatusIcon, Preferences, GroupView
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -285,6 +285,7 @@ class YumexWindow(BaseWindow):
         self._create_action("pref", self.on_pref)
         self._create_action("packages", self.on_packages)
         self._create_action("history", self.on_history)
+        self._create_action("groups", self.on_groups)
         self._create_action("queue", self.on_queue)
         self._create_action("apply_changes", self.on_apply_changes)
         self._create_action("search_config", self.on_search_config)
@@ -345,8 +346,17 @@ class YumexWindow(BaseWindow):
         hb.pack_start(self.history_view, False, False, 0)
         hb.pack_start(self.history_view.pkg_view, True, True, 0)
         sw.add(hb)
+        #Groups
+        sw = self.ui.get_object("groups_sw")
+        hb = Gtk.Box()
+        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        self.groups = GroupView(self.queue_view, self)
+        #hb.pack_start(self.groups, True, True, 0)
+        #sw.add(hb)
+        sw.add(self.groups)
         self.content.set_show_tabs(False)
         self.content.show_all()
+        
 
     def set_content_page(self, page):
         '''
@@ -598,6 +608,18 @@ class YumexWindow(BaseWindow):
 
 
 
+    def on_groups(self, action, parameter):
+        '''
+        History button callback handler
+        '''
+        widget = self.ui.get_object("tool_groups")
+        if widget.get_active():
+            self._show_info(False)
+            self.set_content_page(PAGE_GROUPS)
+            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
+            grps = self.backend.get_groups()
+            #self.groups.populate(grps)
+
 
     def on_history(self, action, parameter):
         '''
@@ -606,7 +628,6 @@ class YumexWindow(BaseWindow):
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
-                result = self.get_root_backend().GetHistoryByDays(0, int(CONFIG.conf.history_days))
                 self.history_view.populate(result)
             self._show_info(False)
             self.set_content_page(PAGE_HISTORY)

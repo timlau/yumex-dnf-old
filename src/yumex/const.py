@@ -57,7 +57,7 @@ BIG_FONT = Pango.FontDescription("sans 12")
 PAGE_PACKAGES = 0
 PAGE_QUEUE = 1
 PAGE_HISTORY = 2
-
+PAGE_GROUPS = 3
 
 ACTIONS_FILTER = { 'u' : 'updates', 'i' : 'available', \
                    'r' : 'installed' , 'o' : 'obsoletes', \

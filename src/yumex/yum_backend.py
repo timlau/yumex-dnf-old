@@ -372,6 +372,21 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         pkgs = self.Search(fields, keys, match_all, newest_only, tags)
         return self._build_package_list(pkgs)
 
+    @ExceptionHandler
+    def get_groups(self):
+        '''
+        
+        '''
+
+        result = self.GetGroups()
+        for cat, grps in result:
+            # cat: [category_id, category_name, category_desc]
+            print(" --> %s" % cat)
+            for grp in grps:
+                # [group_id, group_name, group_desc, group_is_installed]
+                print(grp)
+
+
     def show_transaction_result(self, output):
         for action, pkgs in output:
             print("  %s" % action)
