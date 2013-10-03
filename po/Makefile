@@ -15,7 +15,7 @@ FMTCATALOGS = $(patsubst %.po,%.mo,$(CATALOGS))
 PYFILES  = $(wildcard ../src/*.py) $(wildcard ../src/yumex*/*.py) 
 GLADEFILES = $(wildcard ../src/*.ui)
 OTHERFILES =  $(wildcard ../misc/*.desktop.in)
-POTFILES  = $(PYFILES) $(GLADEFILES) $(OTHERFILES)
+POTFILES  = $(PYFILES) $(OTHERFILES)
 
 all: $(NLSPACKAGE).pot $(FMTCATALOGS)
 
@@ -23,6 +23,10 @@ POTFILES.in:
 	for file in $(POTFILES); do \
 		echo "$${file#../}" ; \
 	done > $@
+	for file in $(GLADEFILES); do \
+		echo "[type: gettext/glade]$${file#../}" ; \
+	done >> $@
+
 
 $(NLSPACKAGE).pot: $(POTFILES) POTFILES.in
 	intltool-update --gettext-package=$(NLSPACKAGE) --pot
