@@ -1,0 +1,12 @@
+[Desktop Entry]
+_Name=Yumex Package Installer
+_Comment=Install local packages on system
+Categories=System;
+Exec=/usr/bin/yumex-nextgen --install %F
+Terminal=false
+Type=Application
+Icon=yumex
+StartupNotify=true
+NoDisplay=true
+MimeType=application/x-rpm;application/x-redhat-package-manager;
+

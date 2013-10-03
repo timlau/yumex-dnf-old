@@ -40,6 +40,11 @@ install:
 	@rm -f $(MISCDIR)/$(APPNAME).desktop
 	intltool-merge -d -u $(PODIR) $(MISCDIR)/$(APPNAME).desktop.in $(MISCDIR)/$(APPNAME).desktop
 	install -m644 $(MISCDIR)/$(APPNAME).desktop $(DESTDIR)/usr/share/applications/.
+	# build & install desktop file for local package install with translations
+	@rm -f $(MISCDIR)/$(APPNAME)-local.desktop
+	intltool-merge -d -u $(PODIR) $(MISCDIR)/$(APPNAME)-local.desktop.in $(MISCDIR)/$(APPNAME)-local.desktop
+	install -m644 $(MISCDIR)/$(APPNAME)-local.desktop $(DESTDIR)/usr/share/applications/.
+	
 	install -m644 $(MISCDIR)/$(APPNAME)-autostart.desktop $(DESTDIR)/usr/share/$(APPNAME)/.
 	
 	for d in $(SUBDIRS); do make DESTDIR=`cd $(DESTDIR); pwd` -C $$d install; [ $$? = 0 ] || exit 1; done
