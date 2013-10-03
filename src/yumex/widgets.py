@@ -197,8 +197,11 @@ class InfoProgressBar:
             self.infobar.show()
             self.progress.show()
             self.progress.set_fraction(frac)
-            if not self.label.get_property('visible'): # make sure that the main label is shown, else the progres looks bad
-                self.info("")
+            # make sure that the main label is shown, else the progres looks bad
+            # this is normally happen when changlog or filelist info is needed for at package
+            # and it will trigger the yum daemon to download the need metadata. 
+            if not self.label.get_property('visible'):
+                self.info(_("Getting Package metadata"))
 
 
 
