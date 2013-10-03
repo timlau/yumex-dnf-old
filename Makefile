@@ -113,11 +113,11 @@ test-builds:
 
 test-inst:
 	@$(MAKE) test-release
-	sudo yum install ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm
+	sudo yum install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm
 
 test-reinst:
 	@$(MAKE) test-release
-	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm
+	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm
 		
 FORCE:
     
