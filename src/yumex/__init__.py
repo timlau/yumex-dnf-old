@@ -31,11 +31,12 @@ import logging
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
 
-    def __init__(self, app):
+    def __init__(self, app, status):
         Gtk.ApplicationWindow.__init__(self, title="Yum Extender", application=app)
         self.logger = logging.getLogger('yumex.Window')
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
+        self.status = status
         icon = Gtk.IconTheme.get_default().load_icon('yumex-nextgen', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
@@ -131,8 +132,8 @@ class YumexInstallWindow(BaseWindow):
     '''
     Simple ui windows class for doing actions from the command line.
     '''
-    def __init__(self, app):
-        BaseWindow.__init__(self, app)
+    def __init__(self, app, status):
+        BaseWindow.__init__(self, app, status)
         self.set_default_size(600, 80)
         grid = Gtk.Grid()
         ib = self.ui.get_object("infobar")
@@ -155,6 +156,7 @@ class YumexInstallWindow(BaseWindow):
 
     @ExceptionHandler
     def process_actions(self,action, package, always_yes):
+        self.status.SetWorking(True)
         if action == 'install':
             self.infobar.info(_("Installing package"))
             self.infobar.info_sub(package)
@@ -189,6 +191,7 @@ class YumexInstallWindow(BaseWindow):
         else:
             show_information(self, _("Error(s) in search for dependencies"), result[0])
         self.release_root_backend(quit=True)
+        self.status.SetWorking(False)
         self.app.quit()
 
 class YumexWindow(BaseWindow):
@@ -196,7 +199,7 @@ class YumexWindow(BaseWindow):
     Main application window class
     '''
     def __init__(self, app, status):
-        BaseWindow.__init__(self, app)
+        BaseWindow.__init__(self, app, status)
         self.set_default_size(1024, 700)
 
         # init vars
@@ -206,7 +209,6 @@ class YumexWindow(BaseWindow):
         self._root_locked = False
         self.search_type = ""
         self.active_archs = ['i686','noarch','x86_64']
-        self.status = status
 
         # setup the package manager backend
         # self.backend = TestBackend()
@@ -434,8 +436,8 @@ class YumexWindow(BaseWindow):
         if win != None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
             if insensitive:
-                for widget in ['top_box', 'content']:
-                    self.ui.get_object(widget).set_sensitive(False)
+                for widget in ["tool_quit","tool_pref","tool_history","tool_packages","tool_queue","tool_apply","search_conf","seach_entry",'content']:
+                        self.ui.get_object(widget).set_sensitive(False)
         doGtkEvents()
 
     def _set_normal_cursor(self):
@@ -443,7 +445,7 @@ class YumexWindow(BaseWindow):
         win = self.get_window()
         if win != None:
             win.set_cursor(None)
-            for widget in ['top_box', 'content']:
+            for widget in ["tool_quit","tool_pref","tool_history","tool_packages","tool_queue","tool_apply","search_conf","seach_entry",'content']:
                 self.ui.get_object(widget).set_sensitive(True)
         doGtkEvents()
 
@@ -738,11 +740,11 @@ class YumexApplication(Gtk.Application):
         '''
         self.logger.debug("do_activate")
         if self.args.install:
-            self.install = YumexInstallWindow(self)
+            self.install = YumexInstallWindow(self, self.status)
             self.install.show()
             self.install.process_actions("install",self.args.install, self.args.yes)
         elif self.args.remove:
-            self.install = YumexInstallWindow(self)
+            self.install = YumexInstallWindow(self, self.status)
             self.install.show()
             self.install.process_actions("remove",self.args.remove, self.args.yes)        
         else:
