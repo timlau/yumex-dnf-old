@@ -1,6 +1,5 @@
 SUBDIRS = src src/yumex po
 PYFILES = $(wildcard *.py)
-PKGNAME = yumex
 APPNAME = yumex-nextgen
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 SRCDIR=src
@@ -49,31 +48,31 @@ get-builddeps:
 	@sudo yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject
 
 archive:
-	@rm -rf ${PKGNAME}-${VERSION}.tar.gz
-	@git archive --format=tar --prefix=$(PKGNAME)-$(VERSION)/ HEAD | gzip -9v >${PKGNAME}-$(VERSION).tar.gz
-	@cp ${PKGNAME}-$(VERSION).tar.gz $(shell rpm -E '%_sourcedir')
-	@rm -rf ${PKGNAME}-${VERSION}.tar.gz
-	@echo "The archive is in ${PKGNAME}-$(VERSION).tar.gz"
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
+	@cp ${APPNAME}-$(VERSION).tar.gz $(shell rpm -E '%_sourcedir')
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
+	@echo "The archive is in ${APPNAME}-$(VERSION).tar.gz"
 	
 # needs perl-TimeDate for git2cl
 changelog:
 	@git log --pretty --numstat --summary | tools/git2cl > ChangeLog
 	
 upload: FORCE
-	@scp ~/rpmbuild/SOURCES/${PKGNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
+	@scp ~/rpmbuild/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
     
 release:
 	@git commit -a -m "bumped version to $(VERSION)"
 	@$(MAKE) changelog
 	@git commit -a -m "updated ChangeLog"
 	@git push
-	@git tag -f -m "Added ${PKGNAME}-${VERSION} release tag" ${PKGNAME}-${VERSION}
+	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
 	@$(MAKE) archive
 	@$(MAKE) upload
 
 test-cleanup:	
-	@rm -rf ${PKGNAME}-${VERSION}.test.tar.gz
+	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
 	@git checkout -f
 	@git checkout future
@@ -88,7 +87,7 @@ test-release:
 	@git checkout -b release-test
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat ${APPNAME}.spec | sed  -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
-	@git commit -a -m "bumped ${PKGNAME} version ${NEW_VER}-${NEW_REL}"
+	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
 	# Make Changelog
 	@git log --pretty --numstat --summary | ./tools/git2cl > ChangeLog
 	@git commit -a -m "updated ChangeLog"
@@ -107,9 +106,9 @@ rpm:
 test-builds:
 	@$(MAKE) test-release
 	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
-	@scp ${PKGNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${PKGNAME}-${NEW_VER}-${GITDATE}.tar.gz
-	@scp ~/rpmbuild/RPMS/noarch/${PKGNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
-	@scp ~/rpmbuild/SRPMS/${PKGNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
+	@scp ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 
 test-inst:
 	@$(MAKE) test-release
