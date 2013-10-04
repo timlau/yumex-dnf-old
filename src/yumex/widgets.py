@@ -395,29 +395,65 @@ class SelectionView(Gtk.TreeView):
         '''
         pass
 
-
-class PackageView(SelectionView):
-
-    def __init__(self, qview, base):
-        self.logger = logging.getLogger('yumex.PackageView')
-        SelectionView.__init__(self)
-        self.store = self._setup_model()
-        self._click_header_active = False
-        self._click_header_state = ""
-        self.queue = qview.queue
-        self.queueView = qview
-        self.base = base
+class ArchMenu(GObject.GObject):
+    '''
+    Class to handle a menu to select what arch to show in package view
+    '''
+    __gsignals__ = {'arch-changed': (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_STRING,))}
+    
+    def __init__(self, arch_menu_widget, archs):
+        GObject.GObject.__init__(self)
+        self.current_archs = archs
+        self.arch_menu_widget= arch_menu_widget
         self.arch_menu = self._setup_archmenu()
         
+        
     def _setup_archmenu(self):
-        arch_menu = self.base.ui.get_object('arch_menu')
+        arch_menu = self.arch_menu_widget
         for menu in arch_menu.get_children():
-            if menu.get_label() in self.base.active_archs:
+            if menu.get_label() in self.current_archs:
                 menu.set_active(True)
             else:
                 menu.set_active(False)
             menu.connect('toggled', self.on_archmenu_clicked)
         return arch_menu
+ 
+    def on_arch_clicked(self, button, event=None):
+        #print('clicked : event : %s' % event.type)
+        if event:
+            self.arch_menu.popup(None, None, None, None, event.button, event.time)
+            return True
+
+
+    def on_archmenu_clicked(self, widget):
+        state = widget.get_active()
+        label = widget.get_label()
+        if state:
+            self.current_archs.append(label)
+        else:
+            self.current_archs.remove(label)
+        archs = ",".join(self.current_archs)     
+        self.emit("arch-changed", archs)     
+   
+
+class PackageView(SelectionView):
+    __gsignals__ = { 'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_PYOBJECT,))
+                    }
+
+    def __init__(self, qview, arch_menu):
+        self.logger = logging.getLogger('yumex.PackageView')
+        SelectionView.__init__(self)
+        self._click_header_active = False
+        self._click_header_state = ""
+        self.queue = qview.queue
+        self.queueView = qview
+        self.arch_menu = arch_menu
+        self.store = self._setup_model()
+        self.connect('cursor-changed', self.on_cursor_changed)
 
     def _setup_model(self):
         '''
@@ -442,7 +478,7 @@ class PackageView(SelectionView):
 
         self.create_text_column(_("Package"), 'name' , size=200)
         self.create_text_column(_("Ver."), 'fullver', size=120)
-        self.create_text_column(_("Arch."), 'arch' , size=60, click_handler=self.on_arch_clicked, tooltip=_('click to filter archs'))
+        self.create_text_column(_("Arch."), 'arch' , size=60, click_handler=self.arch_menu.on_arch_clicked, tooltip=_('click to filter archs'))
         self.create_text_column(_("Summary"), 'summary', size=400)
         self.create_text_column(_("Repo."), 'repository' , size=90)
         self.create_text_column(_("Size."), 'sizeM' , size=90)
@@ -452,26 +488,7 @@ class PackageView(SelectionView):
         self.set_reorderable(False)
         return store
 
-    def on_arch_clicked(self, button, event=None):
-        #print('clicked : event : %s' % event.type)
-        if event:
-            self.arch_menu.popup(None, None, None, None, event.button, event.time)
-            return True
-
-
-    def on_archmenu_clicked(self, widget):
-        state = widget.get_active()
-        label = widget.get_label()
-        if state:
-            self.base.active_archs.append(label)
-        else:
-            self.base.active_archs.remove(label)
-        if self.base.current_filter:
-            widget, flt = self.base.current_filter
-            self.base.on_pkg_filter(widget, flt)
-        
-        
-
+ 
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
@@ -486,6 +503,16 @@ class PackageView(SelectionView):
                 self.deselectAll()
                 self._click_header_state = ""
 
+    def on_cursor_changed(self, widget):
+        '''
+        a new group is selected in group view
+        '''
+        if widget.get_selection():
+            (model, iterator) = widget.get_selection().get_selected()
+            if model != None and iterator != None:
+                pkg = model.get_value(iterator, 0)
+                self.emit('pkg-changed', pkg) # send the group-changed signal
+                    
     def set_header_click(self, state):
         self._click_header_active = state
         self._click_header_state = ""
@@ -1156,7 +1183,7 @@ class PackageInfoView(TextViewBase):
     TextView handler for showing package information
     '''
 
-    def __init__(self, font_size=9, window=None, url_handler=None):
+    def __init__(self, window=None, url_handler=None,  font_size=9):
         '''
         Setup the textview
 
@@ -1199,29 +1226,72 @@ class PackageInfoView(TextViewBase):
         self.add_style(tag, style)
 
 
-class PackageInfo(PackageInfoView):
+class PackageInfoWidget(Gtk.Box):
+    __gsignals__ = { 'info-changed': (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_STRING,))
+                    }
+    
+    def __init__(self, window, url_handler):
+        Gtk.Box.__init__(self)
+        vbox = Gtk.Box()
+        vbox.set_orientation(Gtk.Orientation.VERTICAL)
+        # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
+        rb = self._get_radio_button('gtk-about', "desc")
+        vbox.add(rb)
+        vbox.add(self._get_radio_button('gtk-info', "updinfo", rb))
+        vbox.add(self._get_radio_button('gtk-edit', "changelog", rb))
+        vbox.add(self._get_radio_button('gtk-harddisk', "files", rb))
+        vbox.add(self._get_radio_button('gtk-convert', "deps", rb))
+        vbox.set_margin_right(5)
+        self.pack_start(vbox, False, False, 0)
+        sw = Gtk.ScrolledWindow()
+        self.view = PackageInfoView( window, url_handler)
+        sw.add(self.view)
+        self.pack_start(sw, True, True, 0)
+        
+        
+    def _get_radio_button(self,icon_name,name, group=None):
+        if group:
+            wid = Gtk.RadioButton.new_from_widget(group)
+        else:
+            wid = Gtk.RadioButton()
+        image = Gtk.Image()
+        image.set_from_stock(icon_name,Gtk.IconSize.MENU)
+        wid.set_image(image)
+        wid.connect('toggled', self._on_filter_changed, name)
+        wid.set_property("draw-indicator", False) # we only want an image, not the black dot indicator
+        return wid
+
+    def _on_filter_changed(self, button, data):
+        '''
+        Radio Button changed handler
+        Change the info in the view to match the selection
+Gtk.Image()
+        :param button:
+        :param data:
+        '''
+        if button.get_active():
+            logger.debug("pkginfo: %s selected" % data)
+            self.emit("info-changed",data)
+
+class PackageInfo(PackageInfoWidget):
     '''
     class for handling the Package Information view
     '''
 
     def __init__(self, window, base):
-        PackageInfoView.__init__(self, window=window, url_handler=self._url_handler)
-        # self.set_margin_top(10)
+        PackageInfoWidget.__init__(self, window, url_handler=self._url_handler)
         self.window = window
         self.base = base
         self.current_package = None
         self.active_filter = PKGINFO_FILTERS[0]
-        self.setup_filters()
+        self.connect('info-changed',self.on_filter_changed)
         self.update()
 
-
-    def setup_filters(self):
-        '''
-        Setup the package info radio buttons toggle handlers
-        '''
-        for flt in PKGINFO_FILTERS:
-            widget = self.base.ui.get_object("info_%s" % flt)
-            widget.connect('toggled', self.on_filter_changed, flt)
+    def on_filter_changed(self, widget, data):
+        self.active_filter = data
+        self.update()
 
     def set_package(self, pkg):
         '''
@@ -1237,7 +1307,8 @@ class PackageInfo(PackageInfoView):
         '''
         update the information in the Package info view
         '''
-        self.clear()
+        self.view.clear()
+        self.view.write("\n")
         if self.current_package:
             if self.active_filter == 'desc':
                 self._show_description()
@@ -1254,7 +1325,7 @@ class PackageInfo(PackageInfoView):
                 self._show_requirements()
             else:
                 print("Package info not found : ", self.active_filter)
-        self.goTop()
+        self.view.goTop()
 
     def _is_url(self, url):
         urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
@@ -1275,9 +1346,9 @@ class PackageInfo(PackageInfoView):
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
-            self.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
+            self.view.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
         desc = self.current_package.description
-        self.write(desc)
+        self.view.write(desc)
         self.base.set_working(False)
 
     def _show_updateinfo(self):
@@ -1286,7 +1357,7 @@ class PackageInfo(PackageInfoView):
         for info in updinfo:
             self._write_update_info(info)
         if len(updinfo) == 0:
-            self.write("No Update information is available")
+            self.view.write("No Update information is available")
         self.base.set_working(False)
 
     def _write_update_info(self, upd_info):
@@ -1300,7 +1371,7 @@ class PackageInfo(PackageInfoView):
         if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
             head += "    Updated : %s" % upd_info['updated']
 
-        self.write(head)
+        self.view.write(head)
         head = ""
 
         # Add our bugzilla references
@@ -1313,9 +1384,9 @@ class PackageInfo(PackageInfoView):
                         bug_msg = ' - %s' % bz['title']
                     else:
                         bug_msg = ''
-                    self.write("%14s : " % header, newline=False)
-                    self.add_url(bz['id'], BUGZILLA_URL + bz['id'])
-                    self.write(bug_msg)
+                    self.view.write("%14s : " % header, newline=False)
+                    self.view.add_url(bz['id'], BUGZILLA_URL + bz['id'])
+                    self.view.write(bug_msg)
                     header = " "
 
         # Add our CVE references
@@ -1334,7 +1405,7 @@ class PackageInfo(PackageInfoView):
             head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
 
         head += "\n"
-        self.write(head)
+        self.view.write(head)
 
     def _show_changelog(self):
         self.base.set_working(True)
@@ -1343,10 +1414,10 @@ class PackageInfo(PackageInfoView):
             i = 0
             for (c_date, c_ver, msg) in changelog:
                 i += 1
-                self.write("* %s %s" % (date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
+                self.view.write("* %s %s" % (date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
                 for line in msg.split('\n'):
-                    self.write("%s" % line, "changelog")
-                self.write('\n')
+                    self.view.write("%s" % line, "changelog")
+                self.view.write('\n')
                 if i == 5:  # only show the last 5 entries
                     break
         self.base.set_working(False)
@@ -1356,24 +1427,12 @@ class PackageInfo(PackageInfoView):
         self.base.set_working(True)
         filelist = self.current_package.filelist
         for fname in sorted(filelist):
-            self.write(fname)
+            self.view.write(fname)
         self.base.set_working(False)
 
     def _show_requirements(self):
-        self.write("Requirements for " + str(self.current_package))
+        self.view.write("Requirements for " + str(self.current_package))
 
-    def on_filter_changed(self, button, data):
-        '''
-        Radio Button changed handler
-        Change the info in the view to match the selection
-
-        :param button:
-        :param data:
-        '''
-        if button.get_active():
-            # self.base.infobar.info("pkginfo: %s selected" % data)
-            self.active_filter = data
-            self.update()
 
 
 class Preferences:
@@ -1836,6 +1895,9 @@ class RepoView(SelectionView):
 class GroupView(Gtk.TreeView):
     '''
     '''
+    __gsignals__ = {'group-changed': (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_STRING,))}
 
     def __init__(self, qview, base):
         '''
@@ -1851,6 +1913,7 @@ class GroupView(Gtk.TreeView):
         self.queueView = qview
         self.currentCategory = None
         self._groups = None
+        self.connect('cursor-changed', self.on_cursor_changed)
 
 
     def setup_view(self):
@@ -1873,17 +1936,17 @@ class GroupView(Gtk.TreeView):
         selection.connect("toggled", self.on_toggled)
         self.append_column(column)
         column = Gtk.TreeViewColumn(None, None)
-#         # Queue Status (install/remove group)
-#         state = Gtk.CellRendererPixbuf()    # Queue Status
-#         state.set_property('stock-size', 1)
-#         column.pack_start(state, False)
-#         column.set_cell_data_func(state, self.queue_pixbuf)
-# 
-#         # category/group icons
-#         icon = Gtk.CellRendererPixbuf()
-#         icon.set_property('stock-size', 1)
-#         column.pack_start(icon, False)
-#         column.set_cell_data_func(icon, self.grp_pixbuf)
+        # Queue Status (install/remove group)
+        state = Gtk.CellRendererPixbuf()    # Queue Status
+        state.set_property('stock-size', 1)
+        column.pack_start(state, False)
+        column.set_cell_data_func(state, self.queue_pixbuf)
+ 
+        # category/group icons
+        icon = Gtk.CellRendererPixbuf()
+        icon.set_property('stock-size', 1)
+        column.pack_start(icon, False)
+        column.set_cell_data_func(icon, self.grp_pixbuf)
 
         category = Gtk.CellRendererText()
         column.pack_start(category, False)
@@ -1893,7 +1956,7 @@ class GroupView(Gtk.TreeView):
         self.set_headers_visible(False)
         return model
 
-    def setCheckbox(self, column, cell, model, iterator):
+    def setCheckbox(self, column, cell, model, iterator, data=None):
         '''
 
         @param column:
@@ -1929,6 +1992,17 @@ class GroupView(Gtk.TreeView):
             self.model.set_value(iterator, 3, True)
         self.model.set_value(iterator, 0, not inst)
 
+    def on_cursor_changed(self, widget):
+        '''
+        a new group is selected in group view
+        '''
+        if widget.get_selection():
+            (model, iterator) = widget.get_selection().get_selected()
+            if model != None and iterator != None:
+                grp_id = model.get_value(iterator, 2)
+                isCategory = model.get_value(iterator, 4)
+                if not isCategory:
+                    self.emit('group-changed', grp_id) # send the group-changed signal
 
     def _updatePackages(self, grpid, add, action):
         '''
@@ -1937,27 +2011,27 @@ class GroupView(Gtk.TreeView):
         @param add:
         @param action:
         '''
-#         pkgs = self.base.backend.get_group_packages(grpid, 'default')
-#         # Add group packages to queue
-#         if add:
-#             for po in pkgs:
-#                 if not po.queued:
-#                     if action == 'i' and not po.is_installed() : # Install
-#                         po.queued = po.action
-#                         self.queue.add(po)
-#                         po.set_select(True)
-#                     elif action == 'r' and po.is_installed() : # Remove
-#                         po.queued = po.action
-#                         self.queue.add(po)
-#                         po.set_select(False)
-#         # Remove group packages from queue
-#         else:
-#             for po in pkgs:
-#                 if po.queued:
-#                     po.queued = None
-#                     self.queue.remove(po)
-#                     po.set_select(not po.selected)
-#         self.queueView.refresh()
+        pkgs = self.base.backend.get_group_packages(grpid, 'default')
+        # Add group packages to queue
+        if add:
+            for po in pkgs:
+                if not po.queued:
+                    if action == 'i' and not po.is_installed() : # Install
+                        po.queued = po.action
+                        self.queue.add(po)
+                        po.set_select(True)
+                    elif action == 'r' and po.is_installed() : # Remove
+                        po.queued = po.action
+                        self.queue.add(po)
+                        po.set_select(False)
+        # Remove group packages from queue
+        else:
+            for po in pkgs:
+                if po.queued:
+                    po.queued = None
+                    self.queue.remove(po)
+                    po.set_select(not po.selected)
+        self.queueView.refresh()
 
     def reset_queued(self):
         '''
@@ -1977,8 +2051,11 @@ class GroupView(Gtk.TreeView):
 
         @param data:
         '''
+        self.freeze_child_notify()
+        self.set_model(None)
         self.model.clear()
         self._groups = data
+        self.set_model(self.model)
         for cat, catgrps in data:
             #print( cat, catgrps)
             # cat: [category_id, category_name, category_desc]
@@ -1988,9 +2065,10 @@ class GroupView(Gtk.TreeView):
                 # [group_id, group_name, group_desc, group_is_installed]               
                 (grpid, grp_name, grp_desc, inst) = grp
                 self.model.append(node, [inst, grp_name, grpid, False, False, grp_desc])
+        self.thaw_child_notify()
 
 
-    def queue_pixbuf(self, column, cell, model, iterator):
+    def queue_pixbuf(self, column, cell, model, iterator, data=None):
         """
         Cell Data function for recent Column, shows pixmap
         if recent Value is True.
@@ -2007,7 +2085,7 @@ class GroupView(Gtk.TreeView):
             cell.set_property('icon-name', icon)
         cell.set_property('visible', queued)
 
-    def grp_pixbuf(self, column, cell, model, iterator):
+    def grp_pixbuf(self, column, cell, model, iterator, data=None):
         """
         Cell Data function for recent Column, shows pixmap
         if recent Value is True.
@@ -2017,6 +2095,13 @@ class GroupView(Gtk.TreeView):
         fn = "/usr/share/pixmaps/comps/%s.png" % grpid
         if os.access(fn, os.R_OK):
             pix = self._get_pix(fn)
+        else: # Try to get the parent icon
+            parent = model.iter_parent(iterator)
+            if parent:
+                cat_id =model[parent][2] # get the parent cat_id
+                fn = "/usr/share/pixmaps/comps/%s.png" % cat_id
+                if os.access(fn, os.R_OK):
+                    pix = self._get_pix(fn)
         if pix:
             cell.set_property('visible', True)
             cell.set_property('pixbuf', pix)
@@ -2026,11 +2111,11 @@ class GroupView(Gtk.TreeView):
 
     def _get_pix(self, fn):
         '''
-
+        Get a pix buffer from a file, resize it to 24 px, if needed
         @param fn:
         '''
         imgsize = 24
-        pix = GdkPixbuf.new_from_file(fn)
+        pix = GdkPixbuf.Pixbuf.new_from_file(fn)
         if pix.get_height() != imgsize or pix.get_width() != imgsize:
             pix = pix.scale_simple(imgsize, imgsize,
                                    GdkPixbuf.INTERP_BILINEAR)

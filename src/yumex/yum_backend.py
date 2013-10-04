@@ -115,7 +115,7 @@ class YumPackage(Package):
         return self.is_installed()
 
     def is_installed(self):
-        return self.repoid[0] == '@' or self.repoid == 'installed'
+        return self.repository[0] == '@' or self.repository == 'installed'
 
     @property
     def URL(self):
@@ -377,15 +377,17 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
         '''
         
         '''
-
         result = self.GetGroups()
-        for cat, grps in result:
-            # cat: [category_id, category_name, category_desc]
-            print(" --> %s" % cat)
-            for grp in grps:
-                # [group_id, group_name, group_desc, group_is_installed]
-                print(grp)
+        return result
 
+    def get_group_packages(self, grp_id, grp_flt):
+        '''
+        Get a list of packages from a grp_id and a group filter
+        :param grp_id:
+        :param grp_flt:
+        '''
+        pkgs = self.GetGroupPackages(grp_id, grp_flt)
+        return self._build_package_list(pkgs)
 
     def show_transaction_result(self, output):
         for action, pkgs in output:

@@ -31,3 +31,9 @@ status-start:
 status-checkupdates:
 	@/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.CheckUpdates
 	
+error-cleanup:
+	@/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit
+	@/usr/bin/dbus-send --session --print-reply --dest="org.baseurl.YumSession" / org.baseurl.YumSession.Exit
+	@sudo /usr/bin/dbus-send --system --print-reply --dest="org.baseurl.YumSystem" / org.baseurl.YumSystem.Exit
+
+	

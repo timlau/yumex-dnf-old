@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     StatusIcon, Preferences, GroupView
+                     StatusIcon, Preferences, GroupView, ArchMenu
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -211,6 +211,8 @@ class YumexWindow(BaseWindow):
         self._root_locked = False
         self.search_type = ""
         self.active_archs = ['i686','noarch','x86_64']
+        self._grps = None   # Group and Category cache
+        self.active_page = None # Active content page  
 
         # setup the package manager backend
         # self.backend = TestBackend()
@@ -258,13 +260,8 @@ class YumexWindow(BaseWindow):
         search_widget.show_all()
 
         # setup the package/queue/history views
-        self.build_content()
+        self.setup_main_content()
 
-        # setup info view
-        info = self.ui.get_object("info_sw")
-        self.info = PackageInfo(self, self)
-        info.add(self.info)
-        self.info.show_all()
 
         # spinner
         self.spinner = self.ui.get_object("progress_spinner")
@@ -300,7 +297,6 @@ class YumexWindow(BaseWindow):
 
         # setup default selections
         self.ui.get_object("pkg_updates").set_active(True)
-        self.ui.get_object("info_desc").set_active(True)
         self.ui.get_object("search_keyword").set_active(True)
 
 
@@ -324,21 +320,30 @@ class YumexWindow(BaseWindow):
             self.show()
 
 
-    def build_content(self):
+    def setup_main_content(self):
         '''
         setup the main content notebook
         setup the package, history and queue views pages
         '''
         self.content = self.ui.get_object("content")
+        # Package Page
         self.queue_view = QueueView()
-        self.package_view = PackageView(self.queue_view, self)
-        select = self.package_view.get_selection()
-        select.connect("changed", self.on_pkg_view_selection_changed)
+        arch_menu_widget = self.ui.get_object('arch_menu')
+        self.arch_menu = ArchMenu(arch_menu_widget,self.active_archs)
+        self.arch_menu.connect("arch-changed", self.on_arch_changed)
+        self.package_view = PackageView(self.queue_view, self.arch_menu)
+        self.package_view.connect("pkg_changed", self.on_pkg_view_selection_changed)
         sw = self.ui.get_object("package_sw")
         sw.add(self.package_view)
+        # setup info view
+        info = self.ui.get_object("info_box")
+        self.info = PackageInfo(self, self)
+        info.pack_start(self.info,True,True,0)
+        self.info.show_all()
+        # Queue Page
         sw = self.ui.get_object("queue_sw")
         sw.add(self.queue_view)
-        # History
+        # History Page
         sw = self.ui.get_object("history_sw")
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
@@ -351,9 +356,19 @@ class YumexWindow(BaseWindow):
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.groups = GroupView(self.queue_view, self)
+        self.groups.connect('group-changed', self.on_group_changed)
         #hb.pack_start(self.groups, True, True, 0)
         #sw.add(hb)
         sw.add(self.groups)
+        sw = self.ui.get_object("group_pkg_sw")
+        self.group_package_view = PackageView(self.queue_view, self.arch_menu)
+        #self.group_package_view.connect("arch-changed", self.on_arch_changed)
+        self.group_package_view.connect("pkg_changed", self.on_group_pkg_view_selection_changed)
+        sw.add(self.group_package_view)
+        info = self.ui.get_object("group_pkg_info_sw")
+        self.group_info = PackageInfo(self, self)
+        info.add(self.group_info)
+        self.info.show_all()
         self.content.set_show_tabs(False)
         self.content.show_all()
         
@@ -363,6 +378,7 @@ class YumexWindow(BaseWindow):
         Set the visible content notebook page
         :param page: active page (PAGE_PACKAGES, PAGE_QUEUE, PAGE_HISTORY)
         '''
+        self.active_page = page
         self.content.set_current_page(page)
 
     def _create_action(self, name, callback, para=None):
@@ -462,16 +478,19 @@ class YumexWindow(BaseWindow):
         doGtkEvents()
 
 
-    def on_pkg_view_selection_changed(self, selection):
+    def on_pkg_view_selection_changed(self, widget, pkg):
         '''
         package selected in the view
         :param widget: the view widget
         '''
-        model, iterator = selection.get_selected()
-        if model != None and iterator != None:
-            pkg = model.get_value(iterator, 0)
-            if pkg:
-                self.info.set_package(pkg)
+        self.info.set_package(pkg)
+
+    def on_group_pkg_view_selection_changed(self, widget, pkg):
+        '''
+        package selected in the view
+        :param widget: the view widget
+        '''
+        self.group_info.set_package(pkg)
 
     def on_packages(self, action, data):
         '''
@@ -479,8 +498,6 @@ class YumexWindow(BaseWindow):
         :param widget:
         :param data:
         '''
-        self._show_info(True)
-
         widget = self.ui.get_object("hidden")
         widget.set_active(True)
         self._set_pkg_relief()
@@ -494,16 +511,6 @@ class YumexWindow(BaseWindow):
         widget = self.ui.get_object("tool_packages")
         button = widget.get_children()[0].get_children()[0]
         button.set_relief(relief)
-
-    def _show_info(self, state):
-        '''
-        Show/Hide the package info box
-        '''
-        box = self.ui.get_object("info_box")
-        box.set_visible(state)
-        if state:
-            desc = self.ui.get_object("info_desc")
-            desc.set_active(True)
 
 #
 # Callback handlers
@@ -545,6 +552,14 @@ class YumexWindow(BaseWindow):
                     self.package_view.set_header_click(True)
                 else:
                     self.package_view.set_header_click(False)
+                    
+    def on_arch_changed(self, widget, data):
+        self.active_archs = data.split(",")
+        self.logger.debug("arch-changed : %s" % self.active_archs)
+        if self.active_page == PAGE_PACKAGES and self.current_filter:
+            widget, flt = self.current_filter
+            self.on_pkg_filter(widget, flt)
+        
 
     def on_search_changed(self, widget, data):
         '''
@@ -614,12 +629,17 @@ class YumexWindow(BaseWindow):
         '''
         widget = self.ui.get_object("tool_groups")
         if widget.get_active():
-            self._show_info(False)
             self.set_content_page(PAGE_GROUPS)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
-            grps = self.backend.get_groups()
-            #self.groups.populate(grps)
+            if not self._grps:
+                self.logger.debug("getting group and categories")
+                self._grps = self.backend.get_groups()
+                self.groups.populate(self._grps)
 
+    def on_group_changed(self, widget, grp_id):
+        self.logger.debug('on_group_changed : %s ' % grp_id)
+        pkgs = self.backend.get_group_packages(grp_id, 'all')
+        self.group_package_view.populate(pkgs)
 
     def on_history(self, action, parameter):
         '''
@@ -628,8 +648,8 @@ class YumexWindow(BaseWindow):
         widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
+                result = self.get_root_backend().GetHistoryByDays(0, CONFIG.conf.history_days)
                 self.history_view.populate(result)
-            self._show_info(False)
             self.set_content_page(PAGE_HISTORY)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
         else:
@@ -641,7 +661,6 @@ class YumexWindow(BaseWindow):
         '''
         widget = self.ui.get_object("tool_queue")
         if widget.get_active():
-            self._show_info(False)
             self.set_content_page(PAGE_QUEUE)
             self._set_pkg_relief(Gtk.ReliefStyle.NONE)
 
@@ -739,6 +758,7 @@ class YumexWindow(BaseWindow):
         # clear search entry
         self.search_entry.clear_with_no_signal()
         self.last_search = None
+        self._grps = None   # Group and Category cache
         self.set_working(False)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)
