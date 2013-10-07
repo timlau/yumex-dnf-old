@@ -2142,7 +2142,7 @@ class GroupView(Gtk.TreeView):
                 if po.queued:
                     po.queued = None
                     self.queue.remove(po)
-                    po.set_select(not po.selected)
+                    po.set_select(False)
         self.queueView.refresh()
 
     def reset_queued(self):
