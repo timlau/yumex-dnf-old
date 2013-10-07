@@ -523,6 +523,10 @@ class YumexWindow(BaseWindow):
         :param data:
         '''
         self.search_type = data
+        if self.search_type in ['keyword','prefix']:
+            self.search_entry.set_auto_search(True)
+        else:
+            self.search_entry.set_auto_search(False)
         if self.last_search:
             key = self.last_search
             self.last_search = None
@@ -557,7 +561,11 @@ class YumexWindow(BaseWindow):
     def on_arch_changed(self, widget, data):
         self.active_archs = data.split(",")
         self.logger.debug("arch-changed : %s" % self.active_archs)
-        if self.active_page == PAGE_PACKAGES and self.current_filter:
+        if self.last_search:
+            data = self.last_search
+            self.last_search = None
+            self.on_search_changed(self.search_entry, data)
+        elif self.active_page == PAGE_PACKAGES and self.current_filter:
             widget, flt = self.current_filter
             self.on_pkg_filter(widget, flt)
         
@@ -597,6 +605,7 @@ class YumexWindow(BaseWindow):
             self.package_view.populate(pkgs)
             self.set_working(False)
         elif data == "":  # revert to the current selected filter
+            self.last_search = None
             if self.current_filter:
                 widget, flt = self.current_filter
                 self.on_pkg_filter(widget, flt)
@@ -618,6 +627,7 @@ class YumexWindow(BaseWindow):
             self.package_view.populate(pkgs)
             self.set_working(False)
         elif data == "":  # revert to the current selected filter
+            self.last_search = None
             if self.current_filter:
                 widget, flt = self.current_filter
                 self.on_pkg_filter(widget, flt)

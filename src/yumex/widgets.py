@@ -51,23 +51,40 @@ class SearchEntry(Gtk.Entry):
 
     def __init__(self, width=50, timeout=600):
         """
-        Creates an enhanced IconEntry that triggers a timeout when typing
+        Creates an enhanced IconEntry that can emit the content of the entry
+        when the users have not changed the content for a given timeout period.
+        This can be turned on/of using set_auto_search(state).
         """
         Gtk.Entry.__init__(self)
         self.set_width_chars(width)
         self._timeout = timeout  # timeout for sending changed signal
 
-
-        self._handler_changed = self.connect_after("changed",
-                                                   self._on_changed)
-
-        self.connect("icon-press", self._on_icon_pressed)
+        # setup handlers
+        self._handler_changed = self.connect_after("changed", self._on_changed) # entry text changed
+        self.connect("activate", self._on_activate)         # Return pressed
+        self.connect("icon-press", self._on_icon_pressed)   # entry icon pressed
 
         self.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY,
             'edit-find-symbolic')
         self.set_icon_from_stock(Gtk.EntryIconPosition.SECONDARY, None)
 
         self._timeout_id = 0
+        self._auto_search = True
+
+    def set_auto_search(self, state):
+        '''
+        Turn the automatic emit of current content in entry on/off
+        if off then result will first be emitted when Return is pressed
+        :param state: True = on, False = Off
+        '''
+        self._auto_search = state
+        if state == False: # stop the timeout handler
+            if self._timeout_id > 0:
+                GLib.source_remove(self._timeout_id)
+        else: # start the timeout handler
+            self._on_changed(self)
+            
+
 
     def _on_icon_pressed(self, widget, icon, mouse_button):
         """
@@ -118,10 +135,15 @@ class SearchEntry(Gtk.Entry):
         to enter a longer search term
         """
         self._check_clear_icon()
+        if not self._auto_search:
+            return
         if self._timeout_id > 0:
             GLib.source_remove(self._timeout_id)
         self._timeout_id = GLib.timeout_add(self._timeout,
                                                self._emit_search_changed)
+
+    def _on_activate(self, widget):
+        self._emit_search_changed()
 
     def _check_clear_icon(self):
         """
