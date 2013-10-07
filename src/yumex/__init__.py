@@ -592,7 +592,12 @@ class YumexWindow(BaseWindow):
         '''
         search package name for keyword with wildcards
         '''
-        if len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
+        if data == "":  # revert to the current selected filter
+            self.last_search = None
+            if self.current_filter:
+                widget, flt = self.current_filter
+                self.on_pkg_filter(widget, flt)
+        elif len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
             self.last_search = data
             if self.current_filter:
                 widget, flt = self.current_filter
@@ -604,33 +609,28 @@ class YumexWindow(BaseWindow):
             self.info.set_package(None)
             self.package_view.populate(pkgs)
             self.set_working(False)
-        elif data == "":  # revert to the current selected filter
-            self.last_search = None
-            if self.current_filter:
-                widget, flt = self.current_filter
-                self.on_pkg_filter(widget, flt)
 
     def _search_keys(self, fields, data):
         '''
         search given package attributes for keywords
         '''
-        if data != self.last_search:
+        if data == "":  # revert to the current selected filter
+            self.last_search = None
+            if self.current_filter:
+                widget, flt = self.current_filter
+                self.on_pkg_filter(widget, flt)
+        elif data != self.last_search: # do the search
             self.last_search = data
             if self.current_filter:
                 widget, flt = self.current_filter
                 widget.set_active(False)
-            self.set_working(True)
+            self.set_working(True, True)
             newest_only = CONFIG.session.newest_only
             pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
             self.package_view.populate(pkgs)
             self.set_working(False)
-        elif data == "":  # revert to the current selected filter
-            self.last_search = None
-            if self.current_filter:
-                widget, flt = self.current_filter
-                self.on_pkg_filter(widget, flt)
 
 
 
