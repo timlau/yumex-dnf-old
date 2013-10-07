@@ -469,7 +469,10 @@ class YumexStatusDaemon(dbus.service.Object):
         hide/show the window, based on current state
         '''
         logger.debug('status-icon clicked')
-        self.IconClickSignal()
+        if self.yumex_running:
+            self.IconClickSignal()
+        elif self.status_icon.update_count > 0:
+            self.on_run_yumex()
 
 
     def on_quit(self, *args):
