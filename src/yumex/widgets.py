@@ -444,16 +444,24 @@ class PackageView(SelectionView):
                                       (GObject.TYPE_PYOBJECT,))
                     }
 
-    def __init__(self, qview, arch_menu):
+    def __init__(self, qview, arch_menu, group_mode=False):
         self.logger = logging.getLogger('yumex.PackageView')
         SelectionView.__init__(self)
-        self._click_header_active = False
+        self.group_mode = group_mode
         self._click_header_state = ""
         self.queue = qview.queue
         self.queueView = qview
         self.arch_menu = arch_menu
         self.store = self._setup_model()
         self.connect('cursor-changed', self.on_cursor_changed)
+        self.state = 'normal'
+        self._last_selected = []
+        if self.group_mode:
+            self._click_header_active = True
+        else:
+            self._click_header_active = False
+            
+            
 
     def _setup_model(self):
         '''
@@ -461,10 +469,16 @@ class PackageView(SelectionView):
         '''
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
-        self.create_selection_colunm('selected',
-                                      click_handler=self.on_section_header_clicked,
-                                      popup_handler=self.on_section_header_button,
-                                      tooltip=_("Click to select/deselect all (updates only)"))
+        if self.group_mode:
+            self.create_selection_colunm('selected',
+                                          click_handler=self.on_section_header_clicked_group,
+                                          popup_handler=self.on_section_header_button,
+                                          tooltip=_("Click to install all/remove all"))            
+        else:            
+            self.create_selection_colunm('selected',
+                                          click_handler=self.on_section_header_clicked,
+                                          popup_handler=self.on_section_header_button,
+                                          tooltip=_("Click to select/deselect all (updates only)"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('stock-id', Gtk.STOCK_ADD)
@@ -493,15 +507,36 @@ class PackageView(SelectionView):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
+                
+    def on_section_header_clicked(self, widget):
+        """  Selection column header clicked"""
+        if self.state == 'normal': # deselect all
+            self._last_selected = self.get_selected()
+            self.select_all()
+            self.state = 'selected'
+        elif self.state == 'selected': # select all
+            self.state = 'deselected'
+            self.deselect_all()
+        elif self.state == 'deselected': # select previous selected
+            self.state = 'normal'
+            self.select_by_keys(self._last_selected)
+            self._last_selected = []
+                
+    def on_section_header_clicked_group(self, widget):
+        """  Selection column header clicked"""
+        if self.state == 'normal': # deselect all
+            self._last_selected = self.get_selected()
+            self.install_all()
+            self.state = 'install-all'
+        elif self.state == 'install-all': # select all
+            self.state = 'remove-all'
+            self.deselect_all()
+            self.remove_all()
+        elif self.state == 'remove-all': # select previous selected
+            self.state = 'normal'
+            self.select_by_keys(self._last_selected)
+            self._last_selected = []
 
-    def on_section_header_clicked(self, *args):
-        if self._click_header_active:
-            if self._click_header_state == "":
-                self.selectAll()
-                self._click_header_state = "selected"
-            elif self._click_header_state == "selected":
-                self.deselectAll()
-                self._click_header_state = ""
 
     def on_cursor_changed(self, widget):
         '''
@@ -517,7 +552,7 @@ class PackageView(SelectionView):
         self._click_header_active = state
         self._click_header_state = ""
 
-    def selectAll(self):
+    def select_all(self):
         '''
         Select all packages in the view
         '''
@@ -530,7 +565,7 @@ class PackageView(SelectionView):
         self.queueView.refresh()
         self.queue_draw()
 
-    def deselectAll(self):
+    def deselect_all(self):
         '''
         Deselect all packages in the view
         '''
@@ -542,6 +577,48 @@ class PackageView(SelectionView):
                 obj.set_select(not obj.selected)
         self.queueView.refresh()
         self.queue_draw()
+
+    def select_by_keys(self, keys):
+        '''
+
+        @param keys:
+        '''
+        iterator = self.store.get_iter_first()
+        while iterator != None:
+            obj = self.store.get_value(iterator, 0)
+            if obj in keys and not obj.selected:
+                obj.queued = obj.action
+                self.queue.add(obj)
+                obj.set_select(True)
+            elif obj.selected:
+                obj.queued = None
+                self.queue.remove(obj)
+                obj.set_select(False)
+            iterator = self.store.iter_next(iterator)
+        self.queueView.refresh()
+        self.queue_draw()
+
+    def get_selected(self):
+        '''
+
+        '''
+        selected = []
+        for el in self.store:
+            obj = el[0]
+            if obj.selected:
+                selected.append(obj)
+        return selected
+
+    def get_notselected(self):
+        '''
+
+        '''
+        notselected = []
+        for el in self.store:
+            obj = el[0]
+            if not obj.queued == obj.action:
+                notselected.append(obj)
+        return notselected
 
 
     def new_pixbuf(self, column, cell, model, iterator, data):
@@ -637,6 +714,33 @@ class PackageView(SelectionView):
                 obj.selected = True
                 obj.downgrade_po = pkg
                 self.queue.add(pkg)
+        self.queue_draw()
+
+
+    def install_all(self):
+        '''
+        Select all packages in the view
+        '''
+        for el in self.store:
+            obj = el[0]
+            if not obj.queued == obj.action and obj.action == 'i':
+                obj.queued = obj.action
+                self.queue.add(obj)
+                obj.set_select(not obj.selected)
+        self.queueView.refresh()
+        self.queue_draw()
+
+    def remove_all(self):
+        '''
+        Select all packages in the view
+        '''
+        for el in self.store:
+            obj = el[0]
+            if not obj.queued == obj.action and obj.action == 'r':
+                obj.queued = obj.action
+                self.queue.add(obj)
+                obj.set_select(not obj.selected)
+        self.queueView.refresh()
         self.queue_draw()
 
 class PackageQueue:
@@ -1778,7 +1882,7 @@ class RepoView(SelectionView):
         """  Selection column header clicked"""
         if self.state == 'normal': # deselect all
             self._last_selected = self.get_selected()
-            self.deselect_all()
+            self.select_all()
             self.state = 'deselected'
         elif self.state == 'deselected': # select all
             self.state = 'selected'
@@ -1859,24 +1963,6 @@ class RepoView(SelectionView):
             if not state:
                 notselected.append(name)
         return notselected
-
-    def deselect_all(self):
-        '''
-
-        '''
-        iterator = self.store.get_iter_first()
-        while iterator != None:
-            self.store.set_value(iterator, 0, False)
-            iterator = self.store.iter_next(iterator)
-
-    def select_all(self):
-        '''
-
-        '''
-        iterator = self.store.get_iter_first()
-        while iterator != None:
-            self.store.set_value(iterator, 0, True)
-            iterator = self.store.iter_next(iterator)
 
 
     def select_by_keys(self, keys):

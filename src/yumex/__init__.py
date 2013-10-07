@@ -27,6 +27,7 @@ from .yum_backend import YumReadOnlyBackend, YumRootBackend
 from .status import StatusIcon
 import argparse
 import logging
+from subprocess import call
 
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
@@ -361,7 +362,7 @@ class YumexWindow(BaseWindow):
         #sw.add(hb)
         sw.add(self.groups)
         sw = self.ui.get_object("group_pkg_sw")
-        self.group_package_view = PackageView(self.queue_view, self.arch_menu)
+        self.group_package_view = PackageView(self.queue_view, self.arch_menu, group_mode=True)
         #self.group_package_view.connect("arch-changed", self.on_arch_changed)
         self.group_package_view.connect("pkg_changed", self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
@@ -831,7 +832,8 @@ class YumexApplication(Gtk.Application):
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
-        parser.add_argument('--icononly', action='store_true')
+        parser.add_argument('--icononly', action='store_true', help="Start only the status icon")
+        parser.add_argument('--exit', action='store_true', help="tell session dbus services used by yumex to exit")
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
@@ -842,6 +844,10 @@ class YumexApplication(Gtk.Application):
         else:
             self.doTextLoggerSetup()
         self.logger.debug("cmdline : %s " % repr(self.args))
+        if self.args.exit:
+            call('/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
+            call('/usr/bin/dbus-send --session --print-reply --dest="org.baseurl.YumSession" / org.baseurl.YumSession.Exit',shell=True)
+            sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)
         self.status.Start() # Show the icon
