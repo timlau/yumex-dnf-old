@@ -14,14 +14,6 @@ make get-builddeps
 make test-inst
 ```
 
-Get back to stable yumex
--------------------------
-```
-sudo yum downgrade yumex
-```
-
-
-
 Requirements
 ============
 
