@@ -149,16 +149,15 @@ Available = Packages available for installation</property>
               </packing>
             </child>
             <child>
-              <object class="GtkRadioToolButton" id="tool_queue">
+              <object class="GtkRadioToolButton" id="tool_groups">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Show Pending Changes</property>
-                <property name="tooltip_text" translatable="yes">Show Pending Changes</property>
-                <property name="action_name">win.queue</property>
-                <property name="label" translatable="yes">Queue</property>
+                <property name="tooltip_text" translatable="yes">Groups</property>
+                <property name="action_name">win.groups</property>
+                <property name="label" translatable="yes">Groups</property>
                 <property name="use_underline">True</property>
-                <property name="icon_name">emblem-downloads</property>
+                <property name="stock_id">gtk-orientation-portrait</property>
+                <property name="active">True</property>
                 <property name="group">hidden</property>
               </object>
               <packing>
@@ -185,15 +184,16 @@ Available = Packages available for installation</property>
               </packing>
             </child>
             <child>
-              <object class="GtkRadioToolButton" id="tool_groups">
+              <object class="GtkRadioToolButton" id="tool_queue">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Groups</property>
-                <property name="action_name">win.groups</property>
-                <property name="label" translatable="yes">Groups</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Show Pending Changes</property>
+                <property name="tooltip_text" translatable="yes">Show Pending Changes</property>
+                <property name="action_name">win.queue</property>
+                <property name="label" translatable="yes">Queue</property>
                 <property name="use_underline">True</property>
-                <property name="icon_name">system-file-manager</property>
-                <property name="active">True</property>
+                <property name="icon_name">emblem-downloads</property>
                 <property name="group">hidden</property>
               </object>
               <packing>

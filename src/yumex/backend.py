@@ -170,9 +170,9 @@ class Filters:
     def run(self, pkgs):
         flt_pkgs = pkgs
         for name in self._filters:
-            logger.debug('pre: %s : pkgs : %s' % (name,len(flt_pkgs)))
+            #logger.debug('pre: %s : pkgs : %s' % (name,len(flt_pkgs)))
             flt_pkgs = self._filters[name].run(flt_pkgs)
-            logger.debug('post: %s  pkgs : %s' % (name,len(flt_pkgs)))
+            #logger.debug('post: %s  pkgs : %s' % (name,len(flt_pkgs)))
         return flt_pkgs
             
     def get(self, name):

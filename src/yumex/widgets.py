@@ -847,7 +847,7 @@ class PackageQueue:
         @param grp:
         @param action:
         '''
-        logger.info('addGroup : %s - %s' %(grp, action))
+        logger.debug('addGroup : %s - %s' %(grp, action))
         pkg_list = self.groups[action]
         if not grp in pkg_list:
             pkg_list.append(grp)
@@ -859,7 +859,7 @@ class PackageQueue:
         @param grp:
         @param action:
         '''
-        logger.info('removeGroup : %s - %s' %(grp, action))
+        logger.debug('removeGroup : %s - %s' %(grp, action))
         pkg_list = self.groups[action]
         if grp in pkg_list:
             pkg_list.remove(grp)
@@ -2122,7 +2122,7 @@ class GroupView(Gtk.TreeView):
         '''
         pkgs = self.base.backend.get_group_packages(grpid, 'default')
         for pkg in pkgs:
-            logger.info("   group package : %s" % pkg)
+            logger.debug("   group package : %s" % pkg)
         # Add group packages to queue
         if add:
             for po in pkgs:
