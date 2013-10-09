@@ -19,6 +19,7 @@
 import time
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from yumdaemon import YumDaemonError
 import gettext
 import os.path
@@ -32,6 +33,29 @@ _ = gettext.gettext
 P_ = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')        
+
+
+
+def color_floats(spec):
+    rgba = Gdk.RGBA()
+    rgba.parse(spec)
+    return rgba.red, rgba.green, rgba.blue
+
+def get_color(spec):
+    rgba = Gdk.RGBA()
+    rgba.parse(spec)
+    return rgba
+
+def rgb_to_hex(r, g, b):
+    if isinstance(r, float):
+        r *= 255
+        g *= 255
+        b *= 255
+    return "#%02X%02X%02X" % (r, g, b)
+
+def color_to_hex(color):
+    return rgb_to_hex(color.red, color.green, color.blue)
+
 
 
 def format_block(block, indent):
@@ -135,11 +159,11 @@ class YumexConf(BaseConfig):
     """ Yum Extender Config Setting"""
     debug = BoolOption(False)
     autostart = BoolOption(False)
-    color_install = Option('rgb(78,154,6)')
-    color_update = Option('rgb(204,0,0)')
-    color_normal = Option('rgb(0,0,0)')
-    color_obsolete = Option('rgb(52,101,164)')
-    color_downgrade = Option('rgb(193,125,17)')
+    color_install = Option('#4E9A06')
+    color_update = Option('#CC0000')
+    color_normal = Option('#000000')
+    color_obsolete = Option('#3465A4')
+    color_downgrade = Option('#C17D11')
     history_days = IntOption(180)
     bugzilla_url = Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
     skip_broken = BoolOption(False)

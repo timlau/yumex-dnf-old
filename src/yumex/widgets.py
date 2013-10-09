@@ -27,7 +27,7 @@ import cairo
 import random
 import logging
 
-from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction  # @UnusedImport
+from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction, color_to_hex, get_color  # @UnusedImport
 from .const import *  # @UnusedWildImport
 import shutil
 
@@ -1596,8 +1596,7 @@ class Preferences:
         widget.connect('notify::active', self.on_autocheck_updates)
         # set current colors 
         for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
-            rgba = Gdk.RGBA()
-            rgba.parse(getattr(CONFIG.conf,name))
+            rgba = get_color(getattr(CONFIG.conf,name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
         # Set update checker values
@@ -1638,7 +1637,7 @@ class Preferences:
         for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
-            color =  rgba.to_string()
+            color =  color_to_hex(rgba)
             if color != getattr(CONFIG.conf, name): # changed ??
                 setattr(CONFIG.conf, name, color)
                 changed = True
