@@ -2232,4 +2232,19 @@ class GroupView(Gtk.TreeView):
                                    GdkPixbuf.INTERP_BILINEAR)
         return pix
 
+def ask_for_gpg_import(window, values):
+    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+    pkg_name = pkg_id.split(',')[0]
+    msg = (_( ' Do you want to import this GPG Key\n'
+              ' Needed to verify the the %s package\n\n'
+              ' key        : 0x%s:\n'
+              ' Userid     : "%s"\n'
+              ' From       : %s') %
+                (pkg_name, hexkeyid, userid,
+                keyurl.replace("file://","")))
+
+    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
+    rc = dialog.run()
+    dialog.destroy()
+    return rc == Gtk.ResponseType.YES
 

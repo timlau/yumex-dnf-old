@@ -422,6 +422,8 @@ class YumRootBackend(Backend, YumDaemonClient):
     def __init__(self, frontend):
         Backend.__init__(self, frontend)
         YumDaemonClient.__init__(self)
+        self._gpg_confirm = None
+
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
         logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
@@ -484,6 +486,12 @@ class YumRootBackend(Backend, YumDaemonClient):
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
+
+    def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp ):
+        values =  (pkg_id, userid, hexkeyid, keyurl, timestamp)
+        self._gpg_confirm = values
+        logger.debug("received signal : GPGImport%s" % (repr(values)))
+
 
     @ExceptionHandler
     def setup(self):
