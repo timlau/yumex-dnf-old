@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     StatusIcon, Preferences, GroupView, ArchMenu
+                     StatusIcon, Preferences, GroupView, ArchMenu, ask_for_gpg_import
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend
@@ -744,7 +744,17 @@ class YumexWindow(BaseWindow):
             if ok:  # Ok pressed
                 self.infobar.info(_('Applying changes to the system'))
                 self.set_working(True, True)
-                self.get_root_backend().RunTransaction()
+                rc = self.get_root_backend().RunTransaction()
+                while rc == 1: # This can happen more than once (more gpg keys to be imported)
+                    values = self.get_root_backend()._gpg_confirm # get info about gpgkey to be comfirmed
+                    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+                    self.logger.debug("GPGKey : %s" % repr(values))
+                    ok = ask_for_gpg_import(self, values)
+                    if ok:
+                        self.get_root_backend().ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
+                        rc = self.get_root_backend().RunTransaction()
+                    else:
+                        break
                 self.set_working(False)
                 self.reset()
         elif rc == 0:

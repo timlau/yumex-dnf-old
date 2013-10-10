@@ -847,7 +847,7 @@ class PackageQueue:
         @param grp:
         @param action:
         '''
-        logger.info('addGroup : %s - %s' %(grp, action))
+        logger.debug('addGroup : %s - %s' %(grp, action))
         pkg_list = self.groups[action]
         if not grp in pkg_list:
             pkg_list.append(grp)
@@ -2122,7 +2122,7 @@ class GroupView(Gtk.TreeView):
         '''
         pkgs = self.base.backend.get_group_packages(grpid, 'default')
         for pkg in pkgs:
-            logger.info("   group package : %s" % pkg)
+            logger.debug("   group package : %s" % pkg)
         # Add group packages to queue
         if add:
             for po in pkgs:
@@ -2232,4 +2232,19 @@ class GroupView(Gtk.TreeView):
                                    GdkPixbuf.INTERP_BILINEAR)
         return pix
 
+def ask_for_gpg_import(window, values):
+    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+    pkg_name = pkg_id.split(',')[0]
+    msg = (_( ' Do you want to import this GPG Key\n'
+              ' Needed to verify the the %s package\n\n'
+              ' key        : 0x%s:\n'
+              ' Userid     : "%s"\n'
+              ' From       : %s') %
+                (pkg_name, hexkeyid, userid,
+                keyurl.replace("file://","")))
+
+    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
+    rc = dialog.run()
+    dialog.destroy()
+    return rc == Gtk.ResponseType.YES
 
