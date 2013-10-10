@@ -211,7 +211,7 @@ class YumexWindow(BaseWindow):
         self._root_backend = None
         self._root_locked = False
         self.search_type = ""
-        self.active_archs = ['i686','noarch','x86_64']
+        self.active_archs = PLATFORM_ARCH
         self._grps = None   # Group and Category cache
         self.active_page = None # Active content page  
 

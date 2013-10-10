@@ -22,6 +22,8 @@ import os.path
 import sys
 import re
 from .misc import _, P_  # @UnusedImport
+from subprocess import check_output
+
 
 __yumex_version__ = "3.99.1"
 
@@ -37,6 +39,15 @@ else:
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
 
+ARCH = check_output('/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
+               
+ARCH_DICT = {
+"x86_64" : ['x86_64','i686','noarch'],
+"i686"   : ['i686','noarch'],
+}
+
+# arch for this platform
+PLATFORM_ARCH = ARCH_DICT[ARCH]
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
