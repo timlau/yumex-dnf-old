@@ -801,6 +801,7 @@ class YumexWindow(BaseWindow):
         # reset groups
         self._grps = self.backend.get_groups()
         self.groups.populate(self._grps)
+        self.group_package_view.populate([])
         self.set_working(False)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)
