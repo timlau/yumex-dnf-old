@@ -723,6 +723,9 @@ class YumexWindow(BaseWindow):
         - run the transaction
         '''
         self.set_working(True, True)
+        # switch to queue view
+        self.set_content_page(PAGE_QUEUE)
+        self._set_pkg_relief(Gtk.ReliefStyle.NONE)        
         self.infobar.info(_('Preparing system for applying changes'))
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
