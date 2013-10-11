@@ -391,6 +391,14 @@ class YumexWindow(BaseWindow):
         '''
         self.active_page = page
         self.content.set_current_page(page)
+        if page != PAGE_PACKAGES:
+            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
+            self.search_entry.set_sensitive(False)
+        else:
+            self._set_pkg_relief()
+            self.search_entry.set_sensitive(True)
+
+
 
     def _create_action(self, name, callback, para=None):
         '''
@@ -514,7 +522,6 @@ class YumexWindow(BaseWindow):
         '''
         widget = self.ui.get_object("hidden")
         widget.set_active(True)
-        self._set_pkg_relief()
         self.set_content_page(PAGE_PACKAGES)
 
     def _set_pkg_relief(self, relief=Gtk.ReliefStyle.HALF):
@@ -656,7 +663,6 @@ class YumexWindow(BaseWindow):
         widget = self.ui.get_object("tool_groups")
         if widget.get_active():
             self.set_content_page(PAGE_GROUPS)
-            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
             if not self._grps:
                 self.logger.debug("getting group and categories")
                 self._grps = self.backend.get_groups()
@@ -677,7 +683,6 @@ class YumexWindow(BaseWindow):
                 result = self.get_root_backend().GetHistoryByDays(0, CONFIG.conf.history_days)
                 self.history_view.populate(result)
             self.set_content_page(PAGE_HISTORY)
-            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
         else:
             self.release_root_backend()
 
@@ -688,7 +693,6 @@ class YumexWindow(BaseWindow):
         widget = self.ui.get_object("tool_queue")
         if widget.get_active():
             self.set_content_page(PAGE_QUEUE)
-            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
 
     def on_info(self, action, parameter):
         '''
@@ -737,7 +741,6 @@ class YumexWindow(BaseWindow):
         self.set_working(True, True)
         # switch to queue view
         self.set_content_page(PAGE_QUEUE)
-        self._set_pkg_relief(Gtk.ReliefStyle.NONE)        
         self.infobar.info(_('Preparing system for applying changes'))
         self.get_root_backend().ClearTransaction()
         for action in QUEUE_PACKAGE_TYPES:
