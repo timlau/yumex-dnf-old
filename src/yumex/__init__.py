@@ -65,17 +65,26 @@ class BaseWindow(Gtk.ApplicationWindow):
         """
         if self._root_backend == None:
             self._root_backend = YumRootBackend(self)
-            self._root_backend.setup()
-            self._root_locked = True
-            self.logger.debug("Start the yum root daemon")
-        elif self._root_locked == False:
-            self._root_backend.Lock()
-            if CONFIG.session.enabled_repos:
-                self.logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
-                self._root_backend.SetEnabledRepos(CONFIG.session.enabled_repos)
-
-            self._root_locked = True
-            self.logger.debug("Lock the yum root daemon")
+        if self._root_locked == False:
+            locked, msg = self._root_backend.setup()
+            if locked:
+                self._root_locked = True
+                self.logger.debug("Lock the yum root daemon")
+            else:
+                self.logger.critical("can't get root backend lock")
+                if msg == "not-authorized": # user canceled the polkit dialog
+                    errmsg = _("Yum root backend was not authorized\n Yum Extender will exit")
+                elif msg == "locked-by-other": # yum is locked by another process
+                    errmsg = _("Yum  is locked by another process \n\nYum Extender will exit")
+                show_information(self, errmsg)
+                # close down and exit yum extender
+                self.status.SetWorking(False) # reset working state
+                self.status.SetYumexIsRunning(False)
+                try:
+                    self.backend.Exit()
+                except:
+                    pass
+                sys.exit(1)
         return self._root_backend
 
     @ExceptionHandler
@@ -414,6 +423,9 @@ class YumexWindow(BaseWindow):
         if err == "YumLockedError":
             errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
             close = False
+        elif err == "AccessDeniedError":
+            errmsg = "Root backend was not authorized and can't continue"
+            close = True            
         if errmsg == "":
             errmsg = msg
         show_information(self, errmsg)
@@ -786,7 +798,9 @@ class YumexWindow(BaseWindow):
         # clear search entry
         self.search_entry.clear_with_no_signal()
         self.last_search = None
-        self._grps = None   # Group and Category cache
+        # reset groups
+        self._grps = self.backend.get_groups()
+        self.groups.populate(self._grps)
         self.set_working(False)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)

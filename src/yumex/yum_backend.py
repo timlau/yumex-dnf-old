@@ -492,16 +492,19 @@ class YumRootBackend(Backend, YumDaemonClient):
         self._gpg_confirm = values
         logger.debug("received signal : GPGImport%s" % (repr(values)))
 
-
-    @ExceptionHandler
     def setup(self):
-        self.Lock()
-        self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos:
-            logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
-            self.SetEnabledRepos(CONFIG.session.enabled_repos)
-        return True
-
+        try:
+            self.Lock()
+            self.SetWatchdogState(False)
+            if CONFIG.session.enabled_repos:
+                    logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
+                    self.SetEnabledRepos(CONFIG.session.enabled_repos)
+            return True,""
+        except AccessDeniedError as e:
+            return False,"not-authorized"
+        except YumLockedError as e:
+            return False,"locked-by-other"
+            
     @ExceptionHandler
     def quit(self):
         '''
