@@ -47,7 +47,10 @@ ARCH_DICT = {
 }
 
 # arch for this platform
-PLATFORM_ARCH = ARCH_DICT[ARCH]
+if ARCH in ARCH_DICT:
+    PLATFORM_ARCH = ARCH_DICT[ARCH]
+else: # use x86_64 as fallback
+    PLATFORM_ARCH = ARCH_DICT['x86_64'] 
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
