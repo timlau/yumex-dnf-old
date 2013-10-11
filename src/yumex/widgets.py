@@ -889,11 +889,14 @@ class PackageQueue:
 
 class QueueView(Gtk.TreeView):
 
-    def __init__(self):
+    def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
         self.store = self._setup_model()
         self.queue = PackageQueue()
-
+        self.queue_menu = queue_menu
+        self.connect('button-press-event',self.on_QueueView_button_press_event)
+        remove_menu = self.queue_menu.get_children()[0] # get the first child (remove menu)
+        remove_menu.connect('activate', self.deleteSelected)
 
     def _setup_model(self):
         '''
@@ -914,7 +917,7 @@ class QueueView(Gtk.TreeView):
         self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
         return model
 
-    def deleteSelected(self):
+    def deleteSelected(self, widget=None):
         '''
 
         '''
@@ -933,6 +936,20 @@ class QueueView(Gtk.TreeView):
             pkg.queued = None
             pkg.set_select(not pkg.selected)
         self.refresh()
+
+    def on_QueueView_button_press_event(self, treeview, event):
+        '''
+        Mouse button clicked in package view handler
+        :param treeview:
+        :param event:
+        '''
+        if event.button == 3:  # Right Click
+            x = int(event.x)
+            y = int(event.y)
+            t = event.time
+            popup = self.queue_menu
+            popup.popup(None, None, None, None, event.button, event.time)
+            return True
 
 
     def filter_pkgs_from_list(self, rlist):

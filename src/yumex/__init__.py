@@ -328,7 +328,8 @@ class YumexWindow(BaseWindow):
         '''
         self.content = self.ui.get_object("content")
         # Package Page
-        self.queue_view = QueueView()
+        queue_menu = self.ui.get_object("queue_menu")
+        self.queue_view = QueueView(queue_menu)
         arch_menu_widget = self.ui.get_object('arch_menu')
         self.arch_menu = ArchMenu(arch_menu_widget,self.active_archs)
         self.arch_menu.connect("arch-changed", self.on_arch_changed)
@@ -708,6 +709,7 @@ class YumexWindow(BaseWindow):
         need_reset = self.preferences.run()
         if need_reset:
             self.reset()
+            
 
     @ExceptionHandler
     def process_actions(self):
