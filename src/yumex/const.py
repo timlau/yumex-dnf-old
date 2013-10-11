@@ -43,7 +43,7 @@ ARCH = check_output('/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-
                
 ARCH_DICT = {
 "x86_64" : ['x86_64','i686','noarch'],
-"i386"   : ['i686','noarch'],
+"i386"   : ['i686','noarch']
 }
 
 # arch for this platform

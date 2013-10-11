@@ -427,6 +427,7 @@ class ArchMenu(GObject.GObject):
     
     def __init__(self, arch_menu_widget, archs):
         GObject.GObject.__init__(self)
+        self.all_archs = archs
         self.current_archs = archs
         self.arch_menu_widget= arch_menu_widget
         self.arch_menu = self._setup_archmenu()
@@ -434,12 +435,13 @@ class ArchMenu(GObject.GObject):
         
     def _setup_archmenu(self):
         arch_menu = self.arch_menu_widget
-        for menu in arch_menu.get_children():
-            if menu.get_label() in self.current_archs:
-                menu.set_active(True)
-            else:
-                menu.set_active(False)
-            menu.connect('toggled', self.on_archmenu_clicked)
+        for arch in self.all_archs:
+            cb = Gtk.CheckMenuItem()
+            cb.set_label(arch)
+            cb.set_active(True)
+            cb.show()
+            cb.connect('toggled', self.on_archmenu_clicked)
+            arch_menu.add(cb)
         return arch_menu
  
     def on_arch_clicked(self, button, event=None):

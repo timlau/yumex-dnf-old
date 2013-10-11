@@ -18,28 +18,6 @@
   <object class="GtkMenu" id="arch_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <child>
-      <object class="GtkCheckMenuItem" id="arch_i686">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">i686</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="arch_x86_64">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">x86_64</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="arch_noarch">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">noarch</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
   </object>
   <object class="GtkBox" id="main">
     <property name="visible">True</property>
