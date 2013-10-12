@@ -100,7 +100,6 @@ test-release:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
 	# Build RPMS
-	@rpmdev-wipetree
 	@rpmbuild -ta ${APPNAME}-${NEW_VER}.tar.gz
 	@$(MAKE) test-cleanup
 	
