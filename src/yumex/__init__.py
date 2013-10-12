@@ -738,6 +738,9 @@ class YumexWindow(BaseWindow):
         - ask user for confirmation on result of depsolve
         - run the transaction
         '''
+        if self.queue_view.queue.total() == 0:
+            show_information(self, _("No pending actions in queue"))
+            return
         self.set_working(True, True)
         # switch to queue view
         self.set_content_page(PAGE_QUEUE)
