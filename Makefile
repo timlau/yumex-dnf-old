@@ -13,6 +13,7 @@ BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX
 NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
 NEW_REL=0.1.${GITDATE}
 ORG_NAME = dk.yumex.StatusIcon
+MOCK_DIR=/home/tim/udv/repos
 
 
 all: subdirs
@@ -106,6 +107,16 @@ test-release:
 rpm:
 	@$(MAKE) archive
 	@rpmbuild -ba $(APPNAME).spec
+
+mock-build:
+	@$(MAKE) test-release
+	rm -f ${MOCK_DIR}/fedora-19/mock-build/*
+	mock -r fedora-19-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-19/mock-build
+	rm -f ${MOCK_DIR}/fedora-20/mock-build/*
+	mock -r fedora-20-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-20/mock-build
+	rm -f ${MOCK_DIR}/fedora-21/mock-build/*
+	mock -r fedora-rawhide-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-21/mock-build
+	@tools/update-repo.sh
 	
 test-builds:
 	@$(MAKE) test-release
@@ -116,11 +127,11 @@ test-builds:
 
 test-inst:
 	@$(MAKE) test-release
-	sudo yum install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm
+	sudo yum install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 
 test-reinst:
 	@$(MAKE) test-release
-	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm
+	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 		
 FORCE:
     
