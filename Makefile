@@ -13,7 +13,8 @@ BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX
 NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
 NEW_REL=0.1.${GITDATE}
 ORG_NAME = dk.yumex.StatusIcon
-MOCK_DIR=/home/tim/udv/repos
+DIST=${shell rpm --eval "%{dist}"}
+
 
 
 all: subdirs
@@ -110,13 +111,8 @@ rpm:
 
 mock-build:
 	@$(MAKE) test-release
-	rm -f ${MOCK_DIR}/fedora-19/mock-build/*
-	mock -r fedora-19-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-19/mock-build
-	rm -f ${MOCK_DIR}/fedora-20/mock-build/*
-	mock -r fedora-20-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-20/mock-build
-	rm -f ${MOCK_DIR}/fedora-21/mock-build/*
-	mock -r fedora-rawhide-i386 ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm	--resultdir=${MOCK_DIR}/fedora-21/mock-build
-	@tools/update-repo.sh
+	@tools/repo-build.py --build ${APPNAME} ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}${DIST}.src.rpm 
+	@tools/repo-build.py --copy ${APPNAME} ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}${DIST}.src.rpm 
 	
 test-builds:
 	@$(MAKE) test-release
