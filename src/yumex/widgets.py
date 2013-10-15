@@ -304,7 +304,7 @@ class SelectionView(Gtk.TreeView):
         column1 = Gtk.TreeViewColumn("", cell1)
         column1.set_cell_data_func(cell1, self.get_data_bool, attr)
         column1.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
-        column1.set_fixed_width(20)
+        column1.set_fixed_width(25)
         column1.set_sort_column_id(-1)
         self.append_column(column1)
         cell1.connect("toggled", self.on_toggled)
