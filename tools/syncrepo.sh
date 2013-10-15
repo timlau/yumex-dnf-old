@@ -16,7 +16,7 @@ do
         echo -e "\033[34m\t* $dir3:\033[0m"
         cd $dir3
         createrepo ./
-        ssh $fasLogin@fedorapeople.org rm -f /srv/repos/$fasLogin/$repoName/$dir2/$dir3/*.rpm
+        ssh $fasLogin.fedorapeople.org rm -f /srv/repos/$fasLogin/$repoName/$dir2/$dir3/*.rpm
         rsync "${rsyncParam[@]}" ./* $fasLogin@fedorapeople.org:/srv/repos/$fasLogin/$repoName/$dir2/$dir3
         cd ..
     done
