@@ -168,6 +168,13 @@ class YumexInstallWindow(BaseWindow):
 
     @ExceptionHandler
     def process_actions(self,action, package, always_yes):
+        '''
+        Process the pending actions from the command line
+        
+        :param action: action to perform (install/remove)
+        :param package: package to work on
+        :param always_yes: ask the user or default to yes/ok to all questions
+        '''
         self.status.SetWorking(True)
         if action == 'install':
             self.infobar.info(_("Installing package : %s") % package)
@@ -587,6 +594,11 @@ class YumexWindow(BaseWindow):
                     self.package_view.set_header_click(False)
                     
     def on_arch_changed(self, widget, data):
+        '''
+        arch changes callback handler
+        :param widget:
+        :param data:
+        '''
         self.active_archs = data.split(",")
         self.logger.debug("arch-changed : %s" % self.active_archs)
         if self.last_search:
@@ -678,6 +690,9 @@ class YumexWindow(BaseWindow):
 
 
     def _set_available_active(self):
+        '''
+        Make the 'available' filter active, by selecting 'updates' and the back to 'available'
+        '''
         widget = self.ui.get_object('pkg_updates')
         widget.set_active(True)
         widget = self.ui.get_object('pkg_available')
@@ -696,6 +711,13 @@ class YumexWindow(BaseWindow):
                 self.groups.populate(self._grps)
 
     def on_group_changed(self, widget, grp_id):
+        '''
+        Group changed callback handler
+        called when a new group is selected and the group package view shall be updated
+        with the packages in the group
+        :param widget: 
+        :param grp_id: group id
+        '''
         self.logger.debug('on_group_changed : %s ' % grp_id)
         pkgs = self.backend.get_group_packages(grp_id, 'all')
         self.group_package_view.populate(pkgs)
