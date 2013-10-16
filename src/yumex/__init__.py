@@ -220,6 +220,8 @@ class YumexWindow(BaseWindow):
         self._root_backend = None
         self._root_locked = False
         self.search_type = ""
+        self.last_search_pkgs = []
+        self.current_filter_search = None
         self.active_archs = PLATFORM_ARCH
         self._grps = None   # Group and Category cache
         self.active_page = None # Active content page  
@@ -563,13 +565,17 @@ class YumexWindow(BaseWindow):
             self.on_packages(None, None)
             if data in ["installed", "available", "updates"]:
                 self.infobar.info(PACKAGE_LOAD_MSG[data])
-                self.current_filter = (widget, data)
                 self.set_working(True, True)
-                pkgs = self.backend.get_packages(data)
-                if data == 'updates':
-                    obs_pkgs = self.backend.get_packages('obsoletes')
-                    pkgs.extend(obs_pkgs)
-                    self.status.SetUpdateCount(len(pkgs))
+                if self.last_search: # we are searching
+                    self.current_filter_search = (widget, data)
+                    pkgs = self.filter_search_pkgs(data)
+                else: # normal package filter 
+                    self.current_filter = (widget, data)
+                    pkgs = self.backend.get_packages(data)
+                    if data == 'updates':
+                        obs_pkgs = self.backend.get_packages('obsoletes')
+                        pkgs.extend(obs_pkgs)
+                        self.status.SetUpdateCount(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.info(_("Adding packages to view"))
                 self.package_view.populate(pkgs)
@@ -609,6 +615,18 @@ class YumexWindow(BaseWindow):
             fields = ['name', 'summary', 'description']
             self._search_keys(fields, data)
 
+    def filter_search_pkgs(self, flt):
+        '''
+        return filtered search results (updates, install or all)
+        :param flt:
+        '''
+        if flt == "updates": # get update only
+            pkgs = [po for po in self.last_search_pkgs if po.action in ('u','o')]
+        elif flt == "installed": # get installed only
+            pkgs = [po for po in self.last_search_pkgs if po.is_installed()]
+            return pkgs
+        else: # get all
+            return self.last_search_pkgs
 
     def _search_name(self, data, search_flt):
         '''
@@ -616,21 +634,25 @@ class YumexWindow(BaseWindow):
         '''
         if data == "":  # revert to the current selected filter
             self.last_search = None
+            self.last_search_pkgs = []
+            self.current_filter_search = None
             if self.current_filter:
                 widget, flt = self.current_filter
-                self.on_pkg_filter(widget, flt)
+                widget.set_active(True)
         elif len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
             self.last_search = data
-            if self.current_filter:
-                widget, flt = self.current_filter
-                widget.set_active(False)
             self.set_working(True)
             newest_only = CONFIG.session.newest_only
-            pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
-            self.on_packages(None, None)  # switch to package view
+            self.last_search_pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
             self.info.set_package(None)
-            self.package_view.populate(pkgs)
             self.set_working(False)
+            if self.current_filter_search:
+                widget, flt = self.current_filter_search
+                self.on_pkg_filter(widget, flt)
+            else:
+                widget = self.ui.get_object('pkg_available')
+                widget.set_active(True)
+
 
     def _search_keys(self, fields, data):
         '''
@@ -638,21 +660,25 @@ class YumexWindow(BaseWindow):
         '''
         if data == "":  # revert to the current selected filter
             self.last_search = None
+            self.last_search_pkgs = []
+            self.current_filter_search = None
             if self.current_filter:
                 widget, flt = self.current_filter
-                self.on_pkg_filter(widget, flt)
+                widget.set_active(True)
         elif data != self.last_search: # do the search
             self.last_search = data
-            if self.current_filter:
-                widget, flt = self.current_filter
-                widget.set_active(False)
             self.set_working(True, True)
             newest_only = CONFIG.session.newest_only
-            pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
+            self.last_search_pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
             self.on_packages(None, None)  # switch to package view
             self.info.set_package(None)
-            self.package_view.populate(pkgs)
             self.set_working(False)
+            if self.current_filter_search:
+                widget, flt = self.current_filter_search
+                self.on_pkg_filter(widget, flt)
+            else:
+                widget = self.ui.get_object('pkg_available')
+                widget.set_active(True)
 
 
 

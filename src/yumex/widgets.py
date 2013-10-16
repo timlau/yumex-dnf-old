@@ -676,12 +676,13 @@ class PackageView(SelectionView):
         self.set_model(None)
         self.store.clear()
         self.set_model(self.store)
-        i = 0
-        for po in sorted(pkgs, key=lambda po: po.name):
-            i += 1
-            if i % 500:  # Handle Gtk event, so gui dont freeze
-                doGtkEvents()
-            self.store.append([po, str(po)])
+        if pkgs:
+            i = 0
+            for po in sorted(pkgs, key=lambda po: po.name):
+                i += 1
+                if i % 500:  # Handle Gtk event, so gui dont freeze
+                    doGtkEvents()
+                self.store.append([po, str(po)])
         self.thaw_child_notify()
 
     def on_toggled(self, widget, path):
@@ -1715,7 +1716,7 @@ class TransactionResult:
         self.create_text_column(_("Name"), view, 0, size=250)
         self.create_text_column(_("Arch"), view, 1)
         self.create_text_column(_("Ver"), view, 2)
-        self.create_text_column(_("Repository"), view, 3)
+        self.create_text_column(_("Repository"), view, 3, size=100)
         self.create_text_column(_("Size"), view, 4)
         return model
 
