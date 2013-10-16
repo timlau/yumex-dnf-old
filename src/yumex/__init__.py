@@ -602,18 +602,30 @@ class YumexWindow(BaseWindow):
         '''
         Search callback handler
         '''
-        if self.search_type == "keyword":
-            flt = "*%s*"
-            self._search_name(data, flt)
-        elif self.search_type == "prefix":
-            flt = "%s*"
-            self._search_name(data, flt)
-        elif self.search_type == "summary":
-            fields = ['name', 'summary']
-            self._search_keys(fields, data)
-        elif self.search_type == "desc":
-            fields = ['name', 'summary', 'description']
-            self._search_keys(fields, data)
+        if data == "":  # revert to the current selected filter
+            self.last_search = None
+            self.last_search_pkgs = []
+            self.current_filter_search = None
+            if self.current_filter:
+                widget, flt = self.current_filter
+                state = widget.get_active()
+                if not state:
+                    widget.set_active(True)
+                else:
+                    self.on_pkg_filter(widget, flt)
+        else:
+            if self.search_type == "keyword":
+                flt = "*%s*"
+                self._search_name(data, flt)
+            elif self.search_type == "prefix":
+                flt = "%s*"
+                self._search_name(data, flt)
+            elif self.search_type == "summary":
+                fields = ['name', 'summary']
+                self._search_keys(fields, data)
+            elif self.search_type == "desc":
+                fields = ['name', 'summary', 'description']
+                self._search_keys(fields, data)
 
     def filter_search_pkgs(self, flt):
         '''
@@ -632,14 +644,7 @@ class YumexWindow(BaseWindow):
         '''
         search package name for keyword with wildcards
         '''
-        if data == "":  # revert to the current selected filter
-            self.last_search = None
-            self.last_search_pkgs = []
-            self.current_filter_search = None
-            if self.current_filter:
-                widget, flt = self.current_filter
-                widget.set_active(True)
-        elif len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
+        if len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
             self.last_search = data
             self.set_working(True)
             newest_only = CONFIG.session.newest_only
@@ -650,22 +655,14 @@ class YumexWindow(BaseWindow):
                 widget, flt = self.current_filter_search
                 self.on_pkg_filter(widget, flt)
             else:
-                widget = self.ui.get_object('pkg_available')
-                widget.set_active(True)
+                self._set_available_active()
 
 
     def _search_keys(self, fields, data):
         '''
         search given package attributes for keywords
         '''
-        if data == "":  # revert to the current selected filter
-            self.last_search = None
-            self.last_search_pkgs = []
-            self.current_filter_search = None
-            if self.current_filter:
-                widget, flt = self.current_filter
-                widget.set_active(True)
-        elif data != self.last_search: # do the search
+        if data != self.last_search: # do the search
             self.last_search = data
             self.set_working(True, True)
             newest_only = CONFIG.session.newest_only
@@ -677,10 +674,14 @@ class YumexWindow(BaseWindow):
                 widget, flt = self.current_filter_search
                 self.on_pkg_filter(widget, flt)
             else:
-                widget = self.ui.get_object('pkg_available')
-                widget.set_active(True)
+                self._set_available_active()
 
 
+    def _set_available_active(self):
+        widget = self.ui.get_object('pkg_updates')
+        widget.set_active(True)
+        widget = self.ui.get_object('pkg_available')
+        widget.set_active(True)
 
     def on_groups(self, action, parameter):
         '''
