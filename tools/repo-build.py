@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import os.path
 import os
 import sys
@@ -33,6 +34,23 @@ class RepoBuild:
             print("cleaning : %s" % target_dir)
             shutil.rmtree(target_dir, True)
             
+            
+    def _clean_dir(self, target_dir, pkgname):            
+        print("cleaning : %s" % target_dir)
+        files = glob.glob(target_dir+"/*.rpm")
+        for fn in files:
+            if pkgname in fn:
+                print("   --> Removing : %s " % os.path.basename(fn))
+                os.unlink(fn)
+                
+    def clean_rpms(self, pkgname):
+        for rel in RELEASES:
+            for arch in ARCHS:
+                target_dir = BUILD_ROOT+"/fedora-%s/%s/" % (rel, arch)
+                self._clean_dir(target_dir, pkgname)
+            target_dir = BUILD_ROOT+"/fedora-%s/%s/" % (rel, 'SRPMS')
+            self._clean_dir(target_dir, pkgname)
+
     def build(self):
         for rel in RELEASES:
             build_dir = BUILD_ROOT+"/fedora-%s/mock-build/%s" % (rel,self.args.pkgname)
@@ -73,6 +91,7 @@ def main():
     if args.build:
         rb.build()
     if args.copy:
+        rb.clean_rpms(args.pkgname)
         rb.populate_repo()
         
     

@@ -1495,6 +1495,11 @@ class PackageInfo(PackageInfoWidget):
         tags = self.current_package.pkgtags
         if tags:
             self.view.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
+        url = self.current_package.URL
+        self.view.write(_("Project URL : "), "changelog-header", newline=False)
+        self.view.add_url(url, url, newline=True)
+        self.view.write('\n')
+
         desc = self.current_package.description
         self.view.write(desc)
         self.base.set_working(False)
