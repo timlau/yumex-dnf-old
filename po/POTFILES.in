@@ -1,13 +1,13 @@
-src/dbus_status.py
 src/main.py
-src/yumex/status.py
+src/yumex/config.py
 src/yumex/yum_backend.py
-src/yumex/const.py
 src/yumex/__init__.py
 src/yumex/backend.py
-src/yumex/config.py
-src/yumex/widgets.py
 src/yumex/misc.py
+src/yumex/const.py
+src/yumex/status.py
+src/yumex/widgets.py
+dbus/dbus_status.py
 misc/yumex-nextgen.desktop.in
 misc/yumex-nextgen-local.desktop.in
 [type: gettext/glade]src/yumex.ui

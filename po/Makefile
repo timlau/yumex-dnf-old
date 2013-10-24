@@ -12,7 +12,7 @@ NLSPACKAGE = yumex-nextgen
 CATALOGS = $(shell ls *.po)
 FMTCATALOGS = $(patsubst %.po,%.mo,$(CATALOGS))
 
-PYFILES  = $(wildcard ../src/*.py) $(wildcard ../src/yumex*/*.py) 
+PYFILES  = $(wildcard ../src/*.py) $(wildcard ../src/yumex*/*.py) $(wildcard ../dbus/*.py)
 GLADEFILES = $(wildcard ../src/*.ui)
 OTHERFILES =  $(wildcard ../misc/*.desktop.in)
 POTFILES  = $(PYFILES) $(OTHERFILES)

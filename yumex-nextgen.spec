@@ -43,7 +43,7 @@ make
 
 
 %install
-make DESTDIR=$RPM_BUILD_ROOT install
+make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT DATADIR=%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop    
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}-local.desktop
 
@@ -67,7 +67,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %doc README.md COPYING
 %{_datadir}/%{name}
 %{_bindir}/%{name}
-%{python3_sitelib}/yumex/
+%{python3_sitelib}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
 %{_datadir}/dbus-1/services/*
