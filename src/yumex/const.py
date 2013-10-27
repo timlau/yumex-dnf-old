@@ -42,8 +42,8 @@ else:
 ARCH = check_output('/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
                
 ARCH_DICT = {
-"x86_64" : ['x86_64','i686','noarch'],
-"i386"   : ['i686','noarch'],
+"x86_64" : ['x86_64','i686','i386','noarch'],
+"i386"   : ['i686','i386','noarch'],
 "armhfp"    : ['armv7hl','noarch']
 }
 
