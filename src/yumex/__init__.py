@@ -661,6 +661,7 @@ class YumexWindow(BaseWindow):
             self.set_working(True)
             newest_only = CONFIG.session.newest_only
             self.last_search_pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
+            self.logger.debug("Packages found : %d" % len(self.last_search_pkgs))
             self.info.set_package(None)
             self.set_working(False)
             if self.current_filter_search:
@@ -853,6 +854,7 @@ class YumexWindow(BaseWindow):
         # clear search entry
         self.search_entry.clear_with_no_signal()
         self.last_search = None
+        self.current_filter_search = None        
         # reset groups
         self._grps = self.backend.get_groups()
         self.groups.populate(self._grps)
