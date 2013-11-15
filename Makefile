@@ -36,7 +36,7 @@ clean: $(CLEAN_TARGETS)
 	-rm -rf dist
 
 get-builddeps:
-	@sudo yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject
+	@sudo yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject python2-devel
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
