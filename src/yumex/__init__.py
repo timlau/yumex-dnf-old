@@ -44,6 +44,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         
         self._root_backend = None
         self._root_locked = False
+        self.is_working = False
         
         # setup GtkBuilder
         self.ui = Gtk.Builder()
@@ -161,10 +162,12 @@ class YumexInstallWindow(BaseWindow):
     def on_delete_event(self, *args):
         '''
         windows delete event handler
-        just hide, dont exit application
         '''
-        self.app.quit()
-        return True
+        if CONFIG.conf.hide_on_close or self.is_working:
+            self.hide()
+            return True
+        else:
+            self.app.on_quit()
 
     @ExceptionHandler
     def process_actions(self,action, package, always_yes):
@@ -322,10 +325,12 @@ class YumexWindow(BaseWindow):
     def on_delete_event(self, *args):
         '''
         windows delete event handler
-        just hide, dont exit application
         '''
-        self.hide()
-        return True
+        if CONFIG.conf.hide_on_close or self.is_working:
+            self.hide()
+            return True
+        else:
+            self.app.on_quit()
 
 
     def on_status_icon_clicked(self):
@@ -467,6 +472,7 @@ class YumexWindow(BaseWindow):
         - set/unset the woring state in the status icon
         based on the state.
         '''
+        self.is_working = state
         if state:
             self.spinner.show()
             self.status.SetWorking(True)

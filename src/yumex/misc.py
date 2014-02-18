@@ -172,6 +172,7 @@ class YumexConf(BaseConfig):
     update_interval = IntOption(60)
     update_startup_delay = IntOption(30)
     autocheck_updates = BoolOption(False)
+    hide_on_close = BoolOption(False)
     
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
