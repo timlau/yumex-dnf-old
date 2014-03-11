@@ -38,7 +38,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
         self.status = status
-        icon = Gtk.IconTheme.get_default().load_icon('yumex-nextgen', 128, 0)
+        icon = Gtk.IconTheme.get_default().load_icon('yumex-dnf', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
 
@@ -442,8 +442,8 @@ class YumexWindow(BaseWindow):
         self.logger.error("EXCEPTION : %s " % msg)
         err, errmsg = self._parse_error(msg)
         self.logger.debug("err:  %s - msg: %s" % (err, errmsg))
-        if err == "YumLockedError":
-            errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
+        if err == "LockedError":
+            errmsg = "dnf is locked by another process \n\nYum Extender will exit"
             close = False
         elif err == "AccessDeniedError":
             errmsg = "Root backend was not authorized and can't continue"
@@ -819,7 +819,7 @@ class YumexWindow(BaseWindow):
         rc, result = self.get_root_backend().BuildTransaction()
         self.infobar.info(_('Dependencies resolved'))
         self.set_working(False)
-        if rc == 2:
+        if rc:
             self.transaction_result.populate(result, "")
             ok = self.transaction_result.run()
             if ok:  # Ok pressed
@@ -838,10 +838,8 @@ class YumexWindow(BaseWindow):
                         break
                 self.set_working(False)
                 self.reset()
-        elif rc == 0:
-            show_information(self, _("No actions to process"))
         else:
-            show_information(self, _("Error(s) in search for dependencies"), result[0])
+            show_information(self, _("Error(s) in search for dependencies"), repr(result[0]))
         self.infobar.hide()
         self.release_root_backend()
 
@@ -951,7 +949,7 @@ class YumexApplication(Gtk.Application):
         self.logger.debug("cmdline : %s " % repr(self.args))
         if self.args.exit:
             call('/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
-            call('/usr/bin/dbus-send --session --print-reply --dest="org.baseurl.YumSession" / org.baseurl.YumSession.Exit',shell=True)
+            call('/usr/bin/dbus-send --session --print-reply --dest="org.baseurl.DnfSession" / org.baseurl.DnfSession.Exit',shell=True)
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)

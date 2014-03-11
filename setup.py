@@ -17,11 +17,11 @@ class BuildScripts(build_scripts):
             if os.path.exists(outfile) and outfile.endswith(".py"):
                 if basename(outfile) == "main.py":
                     dn, fn = split(outfile)
-                    newfile = join(dn,"yumex-nextgen")
+                    newfile = join(dn,"yumex-dnf")
                     log.info("renaming %s -> %s", outfile, basename(newfile))
                     os.rename(outfile, newfile)
 
-setup(name="yumex-nextgen",
+setup(name="yumex-dnf",
       version="3.99.1",
       description="Graphical package management tool",
       long_description="",

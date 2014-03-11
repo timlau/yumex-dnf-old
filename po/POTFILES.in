@@ -8,6 +8,6 @@ src/yumex/const.py
 src/yumex/status.py
 src/yumex/widgets.py
 dbus/dbus_status.py
-misc/yumex-nextgen.desktop.in
-misc/yumex-nextgen-local.desktop.in
+misc/yumex-dnf-local.desktop.in
+misc/yumex-dnf.desktop.in
 [type: gettext/glade]src/yumex.ui

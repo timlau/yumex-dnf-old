@@ -29,11 +29,11 @@ import gettext
 from gi.repository import Gtk, GObject, GdkPixbuf
 import cairo
 import random
-from yumdaemon import *
+from dnfdaemon import *
 from subprocess import Popen
 from xdg import BaseDirectory
 import time
-from ConfigParser import SafeConfigParser 
+from ConfigParser import SafeConfigParser
 import os.path
 
 
@@ -50,11 +50,11 @@ P_ = gettext.ngettext
 
 
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
-if BIN_PATH in ["/usr/share/yumex-nextgen"]:
-    DATA_DIR = '/usr/share/yumex-nextgen'
+if BIN_PATH in ["/usr/share/yumex-dnf"]:
+    DATA_DIR = '/usr/share/yumex-dnf'
     PIX_DIR = DATA_DIR + "/gfx"
     MISC_DIR = DATA_DIR
-    YUMEX_BIN = "/usr/bin/yumex-nextgen"
+    YUMEX_BIN = "/usr/bin/yumex-dnf"
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
@@ -67,7 +67,7 @@ ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
 ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
 ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
 
-CONF_DIR = BaseDirectory.save_config_path('yumex-nextgen')
+CONF_DIR = BaseDirectory.save_config_path('yumex-dnf')
 CONF_FILE = os.path.join(CONF_DIR,'yumex.conf')
 TIMESTAMP_FILE = os.path.join(CONF_DIR,'update_timestamp.conf')
 TIMER_STARTUP_DELAY = 30
@@ -135,13 +135,13 @@ def Logger(func):
     newFunc.__dict__.update(func.__dict__)
     return newFunc
 
-class YumReadOnlyBackend(YumDaemonReadOnlyClient):
+class YumReadOnlyBackend(DnfDaemonReadOnlyClient):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
     """
 
     def __init__(self):
-        YumDaemonReadOnlyClient.__init__(self)
+        DnfDaemonReadOnlyClient.__init__(self)
 
 class StatusIcon:
     rel_font_size = 0.7
@@ -297,7 +297,7 @@ class YumexStatusDaemon(dbus.service.Object):
         self.mainloop = mainloop
         bus_name = dbus.service.BusName(DAEMON_ORG, bus = dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/')
-        
+
         # Vars
         self.started = False
         self.status_icon = None
@@ -310,7 +310,7 @@ class YumexStatusDaemon(dbus.service.Object):
 
         # yum daemon client setup
         self.backend = YumReadOnlyBackend()
-        
+
     def setup_statusicon(self):
         self.status_icon = StatusIcon()
         icon = self.status_icon.get_status_icon()
@@ -344,7 +344,7 @@ class YumexStatusDaemon(dbus.service.Object):
         :param sender:
         '''
         self.mainloop.quit()
- 
+
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
                                           in_signature='',
@@ -364,13 +364,13 @@ class YumexStatusDaemon(dbus.service.Object):
             return True
         else:
             return False
-    
+
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
                                           in_signature='b',
                                           out_signature='',
                                           sender_keyword='sender')
- 
+
     def SetWorking(self, is_working, sender=None):
         if self.started:
             self.status_icon.set_is_working(is_working)
@@ -380,7 +380,7 @@ class YumexStatusDaemon(dbus.service.Object):
                                           in_signature='i',
                                           out_signature='',
                                           sender_keyword='sender')
- 
+
     def SetUpdateCount(self, count, sender=None):
         if self.started:
             self.status_icon.set_update_count(count)
@@ -390,7 +390,7 @@ class YumexStatusDaemon(dbus.service.Object):
                                           in_signature='',
                                           out_signature='i',
                                           sender_keyword='sender')
- 
+
     def CheckUpdates(self, sender=None):
         if self.started:
             return self.get_updates()
@@ -401,7 +401,7 @@ class YumexStatusDaemon(dbus.service.Object):
                                           in_signature='b',
                                           out_signature='b',
                                           sender_keyword='sender')
- 
+
     def SetYumexIsRunning(self, state, sender=None):
         if not self.yumex_running == state:
             self.yumex_running = state
@@ -411,11 +411,11 @@ class YumexStatusDaemon(dbus.service.Object):
                 else:
                     self.status_icon.run_yumex.show()
             return True
-        else: # Yumex is already running  
+        else: # Yumex is already running
             return False
-        
-        
-        
+
+
+
 #===============================================================================
 # DBus signals
 #===============================================================================
@@ -430,13 +430,13 @@ class YumexStatusDaemon(dbus.service.Object):
         '''
         '''
         pass
-    
+
     @dbus.service.signal(DAEMON_INTERFACE)
     def CheckUpdateSignal(self):
         '''
         '''
         pass
-    
+
 #===============================================================================
 # yum helpers
 #===============================================================================
@@ -451,14 +451,14 @@ class YumexStatusDaemon(dbus.service.Object):
             logger.debug("# of updates : %d" % rc)
             self.backend.Unlock()
         except: # Get locking errors
-            logger.debug('Error getting the yum lock') 
+            logger.debug('Error getting the yum lock')
             rc = -1
         self.status_icon.set_is_working(False)
         self.status_icon.set_update_count(rc)
         self.update_timestamp.store_current_time()
-        self.start_update_timer() # restart update timer if necessary            
+        self.start_update_timer() # restart update timer if necessary
         return rc
-        
+
 #===============================================================================
 # GUI Callback
 #===============================================================================
@@ -485,7 +485,7 @@ class YumexStatusDaemon(dbus.service.Object):
             self.QuitSignal()
         else:
             self.mainloop.quit()
-        
+
 
     def on_check_updates(self, * args):
         logger.debug('check updates clicked')
@@ -515,12 +515,12 @@ class YumexStatusDaemon(dbus.service.Object):
         if AUTOCHECK_UPDATE:
             if self.update_timer_id != -1:
                 GObject.source_remove(self.update_timer_id)
-    
+
             time_diff = self.update_timestamp.get_last_time_diff() # in seconds
             delay = UPDATE_INTERVAL - int(time_diff/60)
             if time_diff == -1 or delay < 0:
                 delay = 0
-    
+
             logger.debug("Starting update timer with a delay of {0} min (time_diff={1})".format(delay, time_diff))
             self.next_update = delay
             self.last_timestamp = int(time.time())

@@ -1,4 +1,4 @@
-APPNAME = yumex-nextgen
+APPNAME = yumex-dnf
 DATADIR = /usr/share
 PODIR=../po
 

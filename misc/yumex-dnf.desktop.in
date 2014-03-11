@@ -1,9 +1,9 @@
 [Desktop Entry]
-_Name=Yum Extender (next-gen)
+_Name=Yum Extender (dnf)
 _Comment=Install, update and remove applications
 Categories=System;Settings;X-Red-Hat-Base;X-Fedora;
-Icon=yumex-nextgen
-Exec=/usr/bin/yumex-nextgen
+Icon=yumex-dnf
+Exec=/usr/bin/yumex-dnf
 Type=Application
 Terminal=false
 Encoding=UTF-8

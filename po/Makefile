@@ -7,7 +7,7 @@ top_srcdir = "."
 
 MSGMERGE = intltool-update -x --gettext-package=$(NLSPACKAGE) --dist
 
-NLSPACKAGE = yumex-nextgen
+NLSPACKAGE = yumex-dnf
 
 CATALOGS = $(shell ls *.po)
 FMTCATALOGS = $(patsubst %.po,%.mo,$(CATALOGS))

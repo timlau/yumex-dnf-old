@@ -1,6 +1,6 @@
 %global appname yumex
 
-Name:     %{appname}-nextgen
+Name:     %{appname}-dnf
 Version:  3.99.1
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
@@ -20,10 +20,10 @@ BuildRequires: python3-devel
 BuildRequires: python2-devel
 
 # gui requirement (python 3)
-Requires: python3-yumdaemon >= 0.9.2
+Requires: python3-dnfdaemon >= 0.1.1
 Requires: python3-gobject
 # status icon requirement (python2) 
-Requires: python-yumdaemon >= 0.9.2
+Requires: python-dnfdaemon >= 0.1.1
 Requires: pyxdg
 Requires: dbus-python
 Requires: pycairo

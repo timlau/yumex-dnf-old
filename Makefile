@@ -1,4 +1,4 @@
-APPNAME = yumex-nextgen
+APPNAME = yumex-dnf
 DATADIR = /usr/share
 PYTHON = python3 
 SUBDIRS = gfx misc dbus po
@@ -66,7 +66,7 @@ test-cleanup:
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
 	@git checkout -f
-	@git checkout future
+	@git checkout dnf-future
 	@git branch -D release-test
 
 show-vars:

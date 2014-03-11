@@ -116,7 +116,7 @@ class StatusIcon:
             self.app.on_quit()
         elif signal == 'CheckUpdateSignal':
             self.app.win.check_for_updates()
-        
+
 
     def _handle_dbus_error(self, err):
         '''
@@ -194,21 +194,20 @@ class StatusIcon:
 
     def Exit(self):
         self.daemon.Exit()
-        
+
     def Start(self):
         return self.daemon.Start()
-        
+
     def SetWorking(self, is_working):
         self.daemon.SetWorking("(b)",is_working)
-        
+
     def SetUpdateCount(self, count):
         self.daemon.SetUpdateCount("(i)",count)
-    
+
     def CheckUpdates(self):
         return self._run_dbus_async("CheckUpdate")
-        
+
     def SetYumexIsRunning(self, state):
         return self.daemon.SetYumexIsRunning("(b)",state)
-        
 
-    
+

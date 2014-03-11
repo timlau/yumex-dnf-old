@@ -32,7 +32,7 @@ from .const import *  # @UnusedWildImport
 import shutil
 
 
-logger = logging.getLogger('yumex.widget')        
+logger = logging.getLogger('yumex.widget')
 
 #
 # based on SearchEntry by Sebastian Heinlein <glatzor@ubuntu.com>
@@ -83,7 +83,7 @@ class SearchEntry(Gtk.Entry):
                 GLib.source_remove(self._timeout_id)
         else: # start the timeout handler
             self._on_changed(self)
-            
+
 
 
     def _on_icon_pressed(self, widget, icon, mouse_button):
@@ -221,7 +221,7 @@ class InfoProgressBar:
             self.progress.set_fraction(frac)
             # make sure that the main label is shown, else the progres looks bad
             # this is normally happen when changlog or filelist info is needed for at package
-            # and it will trigger the yum daemon to download the need metadata. 
+            # and it will trigger the yum daemon to download the need metadata.
             if not self.label.get_property('visible'):
                 self.info(_("Getting Package metadata"))
 
@@ -290,7 +290,7 @@ class SelectionView(Gtk.TreeView):
             widget.connect('button-release-event', click_handler)
             if tooltip:
                 widget.set_tooltip_text(tooltip)
-            
+
         return column
 
     def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip=None):
@@ -424,15 +424,15 @@ class ArchMenu(GObject.GObject):
     __gsignals__ = {'arch-changed': (GObject.SignalFlags.RUN_FIRST,
                                       None,
                                       (GObject.TYPE_STRING,))}
-    
+
     def __init__(self, arch_menu_widget, archs):
         GObject.GObject.__init__(self)
         self.all_archs = archs
         self.current_archs = archs
         self.arch_menu_widget= arch_menu_widget
         self.arch_menu = self._setup_archmenu()
-        
-        
+
+
     def _setup_archmenu(self):
         arch_menu = self.arch_menu_widget
         for arch in self.all_archs:
@@ -443,7 +443,7 @@ class ArchMenu(GObject.GObject):
             cb.connect('toggled', self.on_archmenu_clicked)
             arch_menu.add(cb)
         return arch_menu
- 
+
     def on_arch_clicked(self, button, event=None):
         #print('clicked : event : %s' % event.type)
         if event:
@@ -458,9 +458,9 @@ class ArchMenu(GObject.GObject):
             self.current_archs.append(label)
         else:
             self.current_archs.remove(label)
-        archs = ",".join(self.current_archs)     
-        self.emit("arch-changed", archs)     
-   
+        archs = ",".join(self.current_archs)
+        self.emit("arch-changed", archs)
+
 
 class PackageView(SelectionView):
     __gsignals__ = { 'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
@@ -484,8 +484,8 @@ class PackageView(SelectionView):
             self._click_header_active = True
         else:
             self._click_header_active = False
-            
-            
+
+
 
     def _setup_model(self):
         '''
@@ -497,8 +497,8 @@ class PackageView(SelectionView):
             self.create_selection_colunm('selected',
                                           click_handler=self.on_section_header_clicked_group,
                                           popup_handler=self.on_section_header_button,
-                                          tooltip=_("Click to install all/remove all"))            
-        else:            
+                                          tooltip=_("Click to install all/remove all"))
+        else:
             self.create_selection_colunm('selected',
                                           click_handler=self.on_section_header_clicked,
                                           popup_handler=self.on_section_header_button,
@@ -526,12 +526,12 @@ class PackageView(SelectionView):
         self.set_reorderable(False)
         return store
 
- 
+
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
-                
+
     def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
         if self.state == 'normal': # deselect all
@@ -545,7 +545,7 @@ class PackageView(SelectionView):
             self.state = 'normal'
             self.select_by_keys(self._last_selected)
             self._last_selected = []
-                
+
     def on_section_header_clicked_group(self, widget):
         """  Selection column header clicked"""
         if self.state == 'normal': # deselect all
@@ -571,7 +571,7 @@ class PackageView(SelectionView):
             if model != None and iterator != None:
                 pkg = model.get_value(iterator, 0)
                 self.emit('pkg-changed', pkg) # send the group-changed signal
-                    
+
     def set_header_click(self, state):
         self._click_header_active = state
         self._click_header_state = ""
@@ -1379,7 +1379,7 @@ class PackageInfoWidget(Gtk.Box):
                                       None,
                                       (GObject.TYPE_STRING,))
                     }
-    
+
     def __init__(self, window, url_handler):
         Gtk.Box.__init__(self)
         vbox = Gtk.Box()
@@ -1397,8 +1397,8 @@ class PackageInfoWidget(Gtk.Box):
         self.view = PackageInfoView( window, url_handler)
         sw.add(self.view)
         self.pack_start(sw, True, True, 0)
-        
-        
+
+
     def _get_radio_button(self,icon_name,name, group=None):
         if group:
             wid = Gtk.RadioButton.new_from_widget(group)
@@ -1505,6 +1505,9 @@ class PackageInfo(PackageInfoWidget):
         self.base.set_working(False)
 
     def _show_updateinfo(self):
+        # FIXME: updateinfo is not supported in dnf yet
+        self.view.write("Updateinfo not supported in dnf yet")
+        return
         self.base.set_working(True)
         updinfo = self.current_package.updateinfo
         for info in updinfo:
@@ -1561,6 +1564,9 @@ class PackageInfo(PackageInfoWidget):
         self.view.write(head)
 
     def _show_changelog(self):
+        # FIXME: Changekog is not supported in dnf yet
+        self.view.write("Changelog not supported in dnf yet")
+        return
         self.base.set_working(True)
         changelog = self.current_package.changelog
         if changelog:
@@ -1577,6 +1583,9 @@ class PackageInfo(PackageInfoWidget):
 
 
     def _show_filelist(self):
+        # FIXME: filelist is not supported in dnf yet
+        self.view.write("filelist not supported in dnfdaemon yet")
+        return
         self.base.set_working(True)
         filelist = self.current_package.filelist
         for fname in sorted(filelist):
@@ -1619,7 +1628,7 @@ class Preferences:
         # autocheck update on/off handler
         widget = self.base.ui.get_object('pref_autocheck_updates')
         widget.connect('notify::active', self.on_autocheck_updates)
-        # set current colors 
+        # set current colors
         for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
             rgba = get_color(getattr(CONFIG.conf,name))
             widget = self.base.ui.get_object(name)
@@ -1629,7 +1638,7 @@ class Preferences:
             widget = self.base.ui.get_object('pref_'+name)
             widget.set_value(getattr(CONFIG.conf,name))
         self.on_autocheck_updates()
-        # get the repositories 
+        # get the repositories
         self.repos = self.base.backend.get_repositories()
         self.repo_view.populate(self.repos)
 
@@ -1676,7 +1685,7 @@ class Preferences:
         # handle repos
         repo_before = CONFIG.session.enabled_repos
         repo_now = self.repo_view.get_selected()
-        if repo_now != repo_before:                     # repo selection changed 
+        if repo_now != repo_before:                     # repo selection changed
             CONFIG.session.enabled_repos = repo_now     # set the new selection
             need_reset = True                           # we need to reset the gui
         if changed:
@@ -1686,10 +1695,10 @@ class Preferences:
     def handle_setting(self, option, state):
         if option == 'autostart':
             if state: # create an autostart .desktop for current user
-                shutil.copy(MISC_DIR+"/yumex-nextgen-autostart.desktop", os.environ['HOME'] +"/.config/autostart/yumex-nextgen.desktop")
+                shutil.copy(MISC_DIR+"/yumex-dnf-autostart.desktop", os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
             else: # remove the autostart file
-                os.unlink(os.environ['HOME'] +"/.config/autostart/yumex-nextgen.desktop")
-        
+                os.unlink(os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
+
 
 class TransactionResult:
 
@@ -2075,7 +2084,7 @@ class GroupView(Gtk.TreeView):
         state.set_property('stock-size', 1)
         column.pack_start(state, False)
         column.set_cell_data_func(state, self.queue_pixbuf)
- 
+
         # category/group icons
         icon = Gtk.CellRendererPixbuf()
         icon.set_property('stock-size', 1)
@@ -2198,7 +2207,7 @@ class GroupView(Gtk.TreeView):
             (catid, name, desc) = cat
             node = self.model.append(None, [None, name, catid, False, True, desc])
             for grp in catgrps:
-                # [group_id, group_name, group_desc, group_is_installed]               
+                # [group_id, group_name, group_desc, group_is_installed]
                 (grpid, grp_name, grp_desc, inst) = grp
                 self.model.append(node, [inst, grp_name, grpid, False, False, grp_desc])
         self.thaw_child_notify()

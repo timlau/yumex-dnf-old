@@ -20,7 +20,7 @@ import time
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from yumdaemon import YumDaemonError
+from dnfdaemon import DaemonError
 import gettext
 import os.path
 import configparser
@@ -32,7 +32,7 @@ gettext.textdomain('yumex')
 _ = gettext.gettext
 P_ = gettext.ngettext
 
-logger = logging.getLogger('yumex.misc')        
+logger = logging.getLogger('yumex.misc')
 
 
 
@@ -91,7 +91,7 @@ def ExceptionHandler(func):
         try:
             rc = func(*args, **kwargs)
             return rc
-        except YumDaemonError as e:
+        except DaemonError as e:
             base = args[0] # get current class
             base.exception_handler(e)
     newFunc.__name__ = func.__name__
@@ -173,7 +173,7 @@ class YumexConf(BaseConfig):
     update_startup_delay = IntOption(30)
     autocheck_updates = BoolOption(False)
     hide_on_close = BoolOption(False)
-    
+
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
     skip_broken = BoolOption(False)     # skip broken for current session
@@ -187,10 +187,10 @@ class Config(object):
     Yum Extender Configuration class
     '''
     WRITE_ALWAYS = ['autostart','update_interval','update_startup_delay','autocheck_updates']
-    
+
     def __init__(self):
         object.__init__(self)
-        self.conf_dir = os.environ['HOME'] + "/.config/yumex-nextgen"
+        self.conf_dir = os.environ['HOME'] + "/.config/yumex-dnf"
         if not os.path.isdir(self.conf_dir):
             print("creating config directory : %s" % self.conf_dir)
             os.makedirs(self.conf_dir, 0o700)
@@ -199,7 +199,7 @@ class Config(object):
         self.conf = YumexConf()
         self.session = SessionConf()
         self.read()
-        
+
     def read(self):
         if not os.path.exists(self.conf_file):
             logger.info("creating default config file : %s" % self.conf_file)
@@ -211,11 +211,11 @@ class Config(object):
             self.parser.add_section('yumex')
         self.conf.populate(self.parser, 'yumex')
         self.session.populate(self.parser, 'yumex')
-            
+
     def write(self):
         fp = open(self.conf_file,"w")
         self.conf.write(fp,"yumex", Config.WRITE_ALWAYS)
         fp.close()
-       
+
 
 CONFIG = Config()

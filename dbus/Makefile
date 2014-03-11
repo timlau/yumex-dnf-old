@@ -1,6 +1,6 @@
 ORG_NAME = dk.yumex.StatusIcon
 DATADIR = /usr/share
-APPNAME = yumex-nextgen
+APPNAME = yumex-dnf
 
 all:
 	@echo notthing to do
