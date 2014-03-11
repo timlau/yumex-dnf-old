@@ -33,7 +33,7 @@ class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
 
     def __init__(self, app, status):
-        Gtk.ApplicationWindow.__init__(self, title="Yum Extender", application=app)
+        Gtk.ApplicationWindow.__init__(self, title="Yum Extender - Powered by dnf", application=app)
         self.logger = logging.getLogger('yumex.Window')
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
@@ -41,11 +41,11 @@ class BaseWindow(Gtk.ApplicationWindow):
         icon = Gtk.IconTheme.get_default().load_icon('yumex-nextgen', 128, 0)
         self.set_icon(icon)
         self.connect('delete_event', self.on_delete_event)
-        
+
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
-        
+
         # setup GtkBuilder
         self.ui = Gtk.Builder()
         try:
@@ -53,10 +53,10 @@ class BaseWindow(Gtk.ApplicationWindow):
         except:
             show_information(self, "GtkBuilder ui file not found : " + DATA_DIR + "/yumex.ui")
             sys.exit()
-            
+
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
-            
+
     @ExceptionHandler
     def get_root_backend(self):
         """
@@ -121,13 +121,13 @@ class BaseWindow(Gtk.ApplicationWindow):
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)            
+                self.release_root_backend(quit=True)
             except:
                 pass
         self.status.SetWorking(False) # reset working state
         self.status.SetYumexIsRunning(False)
         sys.exit(1)
-        
+
     def _parse_error(self, value):
         '''
         parse values from a DBus releated exception
@@ -139,8 +139,8 @@ class BaseWindow(Gtk.ApplicationWindow):
             msg = res.groups()[1]
             return err, msg
         return "", ""
-            
-    
+
+
 class YumexInstallWindow(BaseWindow):
     '''
     Simple ui windows class for doing actions from the command line.
@@ -158,7 +158,7 @@ class YumexInstallWindow(BaseWindow):
         self.infobar.show_all()
         info_spinner = self.ui.get_object("info_spinner")
         info_spinner.set_from_file(PIX_DIR + "/spinner-small.gif")
-        
+
     def on_delete_event(self, *args):
         '''
         windows delete event handler
@@ -173,7 +173,7 @@ class YumexInstallWindow(BaseWindow):
     def process_actions(self,action, package, always_yes):
         '''
         Process the pending actions from the command line
-        
+
         :param action: action to perform (install/remove)
         :param package: package to work on
         :param always_yes: ask the user or default to yes/ok to all questions
@@ -234,7 +234,7 @@ class YumexWindow(BaseWindow):
         self.current_filter_search = None
         self.active_archs = PLATFORM_ARCH
         self._grps = None   # Group and Category cache
-        self.active_page = None # Active content page  
+        self.active_page = None # Active content page
 
         # setup the package manager backend
         # self.backend = TestBackend()
@@ -246,7 +246,7 @@ class YumexWindow(BaseWindow):
         main = self.ui.get_object("main")
         self.add(main)
         main.show()
-        
+
         # build the package filter widget
         button = self.ui.get_object("tool_packages")
         button.set_menu(self.ui.get_object("pkg_filter_menu"))
@@ -295,9 +295,9 @@ class YumexWindow(BaseWindow):
         # infobar
         self.infobar = InfoProgressBar(self.ui)
         self.infobar.hide()
-       
+
         # preferences dialog
-        
+
         self.preferences = Preferences(self)
 
         # setup actions
@@ -309,9 +309,9 @@ class YumexWindow(BaseWindow):
         self._create_action("apply_changes", self.on_apply_changes)
         self._create_action("search_config", self.on_search_config)
 
-        
+
         self.show_now()
-            
+
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
@@ -396,7 +396,7 @@ class YumexWindow(BaseWindow):
         self.info.show_all()
         self.content.set_show_tabs(False)
         self.content.show_all()
-        
+
 
     def set_content_page(self, page):
         '''
@@ -447,7 +447,7 @@ class YumexWindow(BaseWindow):
             close = False
         elif err == "AccessDeniedError":
             errmsg = "Root backend was not authorized and can't continue"
-            close = True            
+            close = True
         if errmsg == "":
             errmsg = msg
         show_information(self, errmsg)
@@ -582,7 +582,7 @@ class YumexWindow(BaseWindow):
                 if self.last_search: # we are searching
                     self.current_filter_search = (widget, data)
                     pkgs = self.filter_search_pkgs(data)
-                else: # normal package filter 
+                else: # normal package filter
                     self.current_filter = (widget, data)
                     pkgs = self.backend.get_packages(data)
                     if data == 'updates':
@@ -598,7 +598,7 @@ class YumexWindow(BaseWindow):
                     self.package_view.set_header_click(True)
                 else:
                     self.package_view.set_header_click(False)
-                    
+
     def on_arch_changed(self, widget, data):
         '''
         arch changes callback handler
@@ -614,7 +614,7 @@ class YumexWindow(BaseWindow):
         elif self.active_page == PAGE_PACKAGES and self.current_filter:
             widget, flt = self.current_filter
             self.on_pkg_filter(widget, flt)
-        
+
 
     def on_search_changed(self, widget, data):
         '''
@@ -722,7 +722,7 @@ class YumexWindow(BaseWindow):
         Group changed callback handler
         called when a new group is selected and the group package view shall be updated
         with the packages in the group
-        :param widget: 
+        :param widget:
         :param grp_id: group id
         '''
         self.logger.debug('on_group_changed : %s ' % grp_id)
@@ -779,11 +779,11 @@ class YumexWindow(BaseWindow):
         '''
         Preferences button callback handler
         '''
-        
+
         need_reset = self.preferences.run()
         if need_reset:
             self.reset()
-            
+
 
     @ExceptionHandler
     def process_actions(self):
@@ -860,7 +860,7 @@ class YumexWindow(BaseWindow):
         # clear search entry
         self.search_entry.clear_with_no_signal()
         self.last_search = None
-        self.current_filter_search = None        
+        self.current_filter_search = None
         # reset groups
         self._grps = self.backend.get_groups()
         self.groups.populate(self._grps)
@@ -895,7 +895,7 @@ class YumexApplication(Gtk.Application):
         elif self.args.remove:
             self.install = YumexInstallWindow(self, self.status)
             self.install.show()
-            self.install.process_actions("remove",self.args.remove, self.args.yes)        
+            self.install.process_actions("remove",self.args.remove, self.args.yes)
         else:
             self.win = YumexWindow(self, self.status)
             self.win.connect('delete_event', self.on_quit)
@@ -924,7 +924,7 @@ class YumexApplication(Gtk.Application):
         quit handler
         '''
         if action == None: # If we quit from the StatusIcon, then quit the status icon also
-            self.keep_icon_running = False 
+            self.keep_icon_running = False
         self.quit() # quit the application
 
     def do_command_line(self, args):

@@ -18,7 +18,7 @@
 
 import logging  # @UnusedImport
 
-from yumdaemon import *
+from dnfdaemon import *
 from .backend import Package, Backend
 from .const import *
 from .misc import format_number, ExceptionHandler, TimeFunction, _, P_ , CONFIG # @UnusedImport @Reimport lint:ok
@@ -214,14 +214,14 @@ class YumPackage(Package):
         else:
             return False
 
-class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
+class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
     """
 
     def __init__(self, frontend):
         Backend.__init__(self, frontend, filters = True)
-        YumDaemonReadOnlyClient.__init__(self)
+        DnfDaemonReadOnlyClient.__init__(self)
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
         logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
@@ -237,7 +237,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             else:
                 self.frontend.infobar.info_sub(name)
                 logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
-            self.frontend.infobar.set_progress(frac)    
+            self.frontend.infobar.set_progress(frac)
         else: # normal file download
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
@@ -334,7 +334,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     def get_repo_ids(self, flt):
         repos = self.GetRepositories(flt)
         return
-    
+
     @ExceptionHandler
     def get_repositories(self,flt="*"):
         repo_list = []
@@ -375,7 +375,7 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
     @ExceptionHandler
     def get_groups(self):
         '''
-        
+
         '''
         result = self.GetGroups()
         return result
@@ -414,14 +414,14 @@ class YumReadOnlyBackend(Backend, YumDaemonReadOnlyClient):
             return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
 
 
-class YumRootBackend(Backend, YumDaemonClient):
+class YumRootBackend(Backend, DnfDaemonClient):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
     """
 
     def __init__(self, frontend):
         Backend.__init__(self, frontend)
-        YumDaemonClient.__init__(self)
+        DnfDaemonClient.__init__(self)
         self._gpg_confirm = None
 
 
@@ -442,7 +442,7 @@ class YumRootBackend(Backend, YumDaemonClient):
             else:
                 self.frontend.infobar.info_sub(name)
                 logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
-            self.frontend.infobar.set_progress(frac)    
+            self.frontend.infobar.set_progress(frac)
         else: # normal file download
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
@@ -455,7 +455,7 @@ class YumRootBackend(Backend, YumDaemonClient):
         elif event == 'pkg-to-download':
             self._dnl_packages = data
         elif event == 'signature-check':
-            #self.frontend.infobar.show_progress(False) 
+            #self.frontend.infobar.show_progress(False)
             self.frontend.infobar.set_progress(0.0)
             self.frontend.infobar.info(_("Checking packages signatures"))
             self.frontend.infobar.set_progress(1.0)
@@ -504,7 +504,7 @@ class YumRootBackend(Backend, YumDaemonClient):
             return False,"not-authorized"
         except YumLockedError as e:
             return False,"locked-by-other"
-            
+
     @ExceptionHandler
     def quit(self):
         '''
