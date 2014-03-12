@@ -423,6 +423,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
         Backend.__init__(self, frontend)
         DnfDaemonClient.__init__(self)
         self._gpg_confirm = None
+        self.dnl_progress = None
 
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
@@ -466,6 +467,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
             self.frontend.infobar.info(_("Applying changes to the system"))
+            self.frontend.infobar.hide_sublabel()
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)
@@ -491,6 +493,34 @@ class YumRootBackend(Backend, DnfDaemonClient):
         values =  (pkg_id, userid, hexkeyid, keyurl, timestamp)
         self._gpg_confirm = values
         logger.debug("received signal : GPGImport%s" % (repr(values)))
+
+    def on_DownloadStart(self, num_files, num_bytes):
+        ''' Starting a new parallel download batch '''
+        #values =  (num_files, num_bytes)
+        #print("on_DownloadStart : %s" % (repr(values)))
+        self.frontend.infobar.set_progress(0.0)
+        self.frontend.infobar.info_sub(_("Downloading %d files (%d bytes)....") % (num_files, num_bytes))
+
+    def on_DownloadProgress(self, name, frac, total_frac, total_files):
+        ''' Progress for a single instance in the batch '''
+        #values =  (name, frac, total_frac, total_files)
+        #print("on_DownloadProgress : %s" % (repr(values)))
+        self.frontend.infobar.set_progress(total_frac)
+
+    def on_DownloadEnd(self, name, status, msg):
+        ''' Download of af single instace ended '''
+        #values =  (name, status, msg)
+        #print("on_DownloadEnd : %s" % (repr(values)))
+        if status == -1: # download OK
+            logger.debug("Downloaded : %s" % name)
+        else:
+            logger.debug("Download Error : %s - %s" % (name, msg))
+
+    def on_RepoMetaDataProgress(self, name, frac):
+        ''' Repository Metadata Download progress '''
+        values =  (name, frac)
+        print("on_RepoMetaDataProgress : %s" % (repr(values)))
+
 
     def setup(self):
         try:
