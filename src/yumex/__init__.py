@@ -45,6 +45,8 @@ class BaseWindow(Gtk.ApplicationWindow):
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
+        self.session_backend_refreshed = False
+        self.system_backend_refreshed = False
 
         # setup GtkBuilder
         self.ui = Gtk.Builder()
@@ -71,6 +73,13 @@ class BaseWindow(Gtk.ApplicationWindow):
             if locked:
                 self._root_locked = True
                 self.logger.debug("Lock the yum root daemon")
+                if not self.system_backend_refreshed:
+                    self.logger.debug("Refresh system cache")
+                    self.set_working(True, True)
+                    self.infobar.info(_('Refreshing Repository Metadata'))
+                    self._root_backend.ExpireCache()
+                    self.set_working(False)
+                    self.system_backend_refreshed = True
             else:
                 self.logger.critical("can't get root backend lock")
                 if msg == "not-authorized": # user canceled the polkit dialog
@@ -311,6 +320,15 @@ class YumexWindow(BaseWindow):
 
 
         self.show_now()
+
+        # Refresh the metadata cache for the readonly API
+        if not self.session_backend_refreshed:
+            self.logger.debug("Refresh session cache")
+            self.set_working(True, True)
+            self.infobar.info(_('Refreshing Repository Metadata'))
+            self.backend.ExpireCache()
+            self.set_working(False)
+            self.session_backend_refreshed = True
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -802,44 +820,56 @@ class YumexWindow(BaseWindow):
         self.set_content_page(PAGE_QUEUE)
         self.infobar.info(_('Preparing system for applying changes'))
         self.get_root_backend().ClearTransaction()
+        errors = 0
+        error_msgs = []
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
                     self.logger.debug('adding : %s %s' % (action, pkg.downgrade_po.pkg_id))
-                    txmbrs = self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
-                    self.logger.debug("%s: %s" % (action, txmbrs))
+                    rc, trans = self.get_root_backend().AddTransaction(pkg.downgrade_po.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug("%s: %s" % (rc, trans))
+                    if not rc:
+                        errors += 1
+                        error_msgs.extend(trans)
                 else:
                     self.logger.debug('adding : %s %s' % (action, pkg.pkg_id))
-                    txmbrs = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
-                    self.logger.debug("%s: %s" % (action, txmbrs))
+                    rc, trans = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
+                    self.logger.debug("%s: %s" % (rc, trans))
+                    if not rc:
+                        errors += 1
+                        error_msgs.extend(trans)
 
-        self.get_root_backend().GetTransaction()
-        self.infobar.info(_('Searching for dependencies'))
-        rc, result = self.get_root_backend().BuildTransaction()
-        self.infobar.info(_('Dependencies resolved'))
+        if not errors:
+            self.get_root_backend().GetTransaction()
+            self.infobar.info(_('Searching for dependencies'))
+            rc, result = self.get_root_backend().BuildTransaction()
+            self.infobar.info(_('Dependencies resolved'))
+            self.set_working(False)
+            if rc:
+                self.transaction_result.populate(result, "")
+                ok = self.transaction_result.run()
+                if ok:  # Ok pressed
+                    self.infobar.info(_('Applying changes to the system'))
+                    self.set_working(True, True)
+                    rc = self.get_root_backend().RunTransaction()
+                    while rc == 1: # This can happen more than once (more gpg keys to be imported)
+                        values = self.get_root_backend()._gpg_confirm # get info about gpgkey to be comfirmed
+                        (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+                        self.logger.debug("GPGKey : %s" % repr(values))
+                        ok = ask_for_gpg_import(self, values)
+                        if ok:
+                            self.get_root_backend().ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
+                            rc = self.get_root_backend().RunTransaction()
+                        else:
+                            break
+            else: # error in depsolve
+                show_information(self, _("Error(s) in search for dependencies"), repr(result))
+        else: # error in population of the transaction
+            show_information(self, _("Error(s) in transaction setup"), "\n".join(error_msgs))
+
         self.set_working(False)
-        if rc:
-            self.transaction_result.populate(result, "")
-            ok = self.transaction_result.run()
-            if ok:  # Ok pressed
-                self.infobar.info(_('Applying changes to the system'))
-                self.set_working(True, True)
-                rc = self.get_root_backend().RunTransaction()
-                while rc == 1: # This can happen more than once (more gpg keys to be imported)
-                    values = self.get_root_backend()._gpg_confirm # get info about gpgkey to be comfirmed
-                    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
-                    self.logger.debug("GPGKey : %s" % repr(values))
-                    ok = ask_for_gpg_import(self, values)
-                    if ok:
-                        self.get_root_backend().ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
-                        rc = self.get_root_backend().RunTransaction()
-                    else:
-                        break
-                self.set_working(False)
-                self.reset()
-        else:
-            show_information(self, _("Error(s) in search for dependencies"), repr(result[0]))
+        self.reset()
         self.infobar.hide()
         self.release_root_backend()
 

@@ -242,6 +242,15 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
             self.frontend.infobar.info_sub(name)
         self.frontend.infobar.set_progress(frac)
 
+    def on_RepoMetaDataProgress(self, name, frac):
+        ''' Repository Metadata Download progress '''
+        values =  (name, frac)
+        print("on_RepoMetaDataProgress : %s" % (repr(values)))
+        if frac == 0.0:
+            self.frontend.infobar.info_sub(name)
+        else:
+            self.frontend.infobar.set_progress(frac)
+
     @ExceptionHandler
     def setup(self):
         self.Lock()
@@ -427,6 +436,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
 
 
     def on_UpdateProgress(self, name, frac, fread, ftime):
+        #TODO: Remove this, not used any more
         logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
         if name == '<locally rebuilding deltarpms>':
             name = _("Building packages from delta packages")
@@ -520,7 +530,10 @@ class YumRootBackend(Backend, DnfDaemonClient):
         ''' Repository Metadata Download progress '''
         values =  (name, frac)
         print("on_RepoMetaDataProgress : %s" % (repr(values)))
-
+        if frac == 0.0:
+            self.frontend.infobar.info_sub(name)
+        else:
+            self.frontend.infobar.set_progress(frac)
 
     def setup(self):
         try:
