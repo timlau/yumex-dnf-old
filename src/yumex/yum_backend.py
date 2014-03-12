@@ -223,29 +223,10 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
         Backend.__init__(self, frontend, filters = True)
         DnfDaemonReadOnlyClient.__init__(self)
 
-    def on_UpdateProgress(self, name, frac, fread, ftime):
-        logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
-        if not '.' in name: # Repo metadata
-            parts = name.split('/')
-            meta_type = parts[-1]
-            repo = parts[0]
-            if len(parts) in [1,3]:
-                meta_type = 'repomd'
-            if meta_type in REPO_META:
-                name = REPO_META[meta_type] % repo
-                self.frontend.infobar.info_sub(name)
-            else:
-                self.frontend.infobar.info_sub(name)
-                logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
-            self.frontend.infobar.set_progress(frac)
-        else: # normal file download
-            self.frontend.infobar.info_sub(name)
-        self.frontend.infobar.set_progress(frac)
-
     def on_RepoMetaDataProgress(self, name, frac):
         ''' Repository Metadata Download progress '''
         values =  (name, frac)
-        print("on_RepoMetaDataProgress : %s" % (repr(values)))
+        logger.debug("on_RepoMetaDataProgress : %s" % (repr(values)))
         if frac == 0.0:
             self.frontend.infobar.info_sub(name)
         else:
@@ -543,7 +524,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
     def on_RepoMetaDataProgress(self, name, frac):
         ''' Repository Metadata Download progress '''
         values =  (name, frac)
-        print("on_RepoMetaDataProgress : %s" % (repr(values)))
+        logger.debug("on_RepoMetaDataProgress (root): %s" % (repr(values)))
         if frac == 0.0:
             self.frontend.infobar.info_sub(name)
         else:
