@@ -107,12 +107,7 @@ test-builds:
 
 test-inst:
 	@$(MAKE) test-release
-	sudo yum install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
-
-test-reinst:
-	@$(MAKE) test-release
-	sudo yum reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
-
+	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 
 .PHONY: all archive install clean build
 .PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
