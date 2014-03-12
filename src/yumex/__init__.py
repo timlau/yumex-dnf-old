@@ -28,6 +28,7 @@ from .status import StatusIcon
 import argparse
 import logging
 from subprocess import call
+import time
 
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
@@ -322,7 +323,7 @@ class YumexWindow(BaseWindow):
         self.show_now()
 
         # Refresh the metadata cache for the readonly API
-        if not self.session_backend_refreshed:
+        if not self.session_backend_refreshed and not self.app.args.norefresh:
             self.logger.debug("Refresh session cache")
             self.set_working(True, True)
             self.infobar.info(_('Refreshing Repository Metadata'))
@@ -744,8 +745,10 @@ class YumexWindow(BaseWindow):
         :param grp_id: group id
         '''
         self.logger.debug('on_group_changed : %s ' % grp_id)
+        self.set_working(True, True)
         pkgs = self.backend.get_group_packages(grp_id, 'all')
         self.group_package_view.populate(pkgs)
+        self.set_working(False)
 
     def on_history(self, action, parameter):
         '''
@@ -966,6 +969,7 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
         parser.add_argument('--icononly', action='store_true', help="Start only the status icon")
+        parser.add_argument('--norefresh', action='store_true', help="don't refresh dnf metadata cache'")
         parser.add_argument('--exit', action='store_true', help="tell session dbus services used by yumex to exit")
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")

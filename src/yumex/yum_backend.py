@@ -309,6 +309,19 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
             po_list.append(YumPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
+    @TimeFunction
+    def _make_pkg_object_with_attr(self, pkgs):
+        '''
+        Make list of po_dict to Package objects
+        :param pkgs: list with (pkg_id, summary, size, action)
+        '''
+        po_list = []
+        for elem in pkgs:
+            (pkg_id,summary,size,action) = elem
+            po_tuple = (pkg_id,summary,size)
+            po_list.append(YumPackage(po_tuple,  BACKEND_ACTIONS[action], self))
+        return self.cache.find_packages(po_list)
+
     def _build_package_list(self, pkg_ids):
         '''
         Build a list of package object, take existing ones from the cache.
@@ -389,14 +402,15 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
         result = self.GetGroups()
         return result
 
+    @TimeFunction
     def get_group_packages(self, grp_id, grp_flt):
         '''
         Get a list of packages from a grp_id and a group filter
         :param grp_id:
         :param grp_flt:
         '''
-        pkgs = self.GetGroupPackages(grp_id, grp_flt)
-        return self._build_package_list(pkgs)
+        pkgs = self.GetGroupPackages(grp_id, grp_flt,['summary','size','action'])
+        return self._make_pkg_object_with_attr(pkgs)
 
     def show_transaction_result(self, output):
         for action, pkgs in output:
