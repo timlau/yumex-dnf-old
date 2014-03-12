@@ -1603,7 +1603,7 @@ class Preferences:
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self._settings = ['autostart','skip_broken', 'clean_unused', 'newest_only','autocheck_updates','hide_on_close']
+        self._settings = ['autostart', 'clean_unused', 'newest_only','autocheck_updates','hide_on_close']
         self.repo_view = RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)

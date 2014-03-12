@@ -128,19 +128,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_skip_broken">
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkSwitch" id="pref_clean_unused">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
@@ -148,7 +135,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">6</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -170,22 +157,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_settings1">
-                    <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
-                    <property name="label" translatable="yes">Default: Skip Broken</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
@@ -196,7 +167,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">6</property>
                     <property name="width">2</property>
                     <property name="height">1</property>
                   </packing>
@@ -1155,14 +1126,6 @@ Available = Packages available for installation</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Show newest only</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="option_skip_broken">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Skip Broken</property>
         <property name="use_underline">True</property>
       </object>
     </child>

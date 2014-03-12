@@ -269,7 +269,7 @@ class YumexWindow(BaseWindow):
         button = self.ui.get_object("tool_pref")
         button.set_menu(self.ui.get_object("options_menu"))
         # Connect menu radio buttons to handler
-        for name in ['newest_only', 'skip_broken', 'clean_unused']:
+        for name in ['newest_only', 'clean_unused']:
             rb = self.ui.get_object("option_" + name)
             rb.set_active(getattr(CONFIG.session, name))
             rb.connect('toggled', self.on_options, name)

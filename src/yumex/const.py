@@ -160,6 +160,7 @@ RPM_ACTIONS = {
 }
 
 
+#TODO : Cleanup, not used with dnf
 REPO_META = {
     'repomd'        : _("Downloading repository information for the %s repository"),
     'primary'       : _("Downloading package information for the %s repository"),
