@@ -178,6 +178,8 @@ class YumexInstallWindow(BaseWindow):
         self.infobar.show_all()
         info_spinner = self.ui.get_object("info_spinner")
         info_spinner.set_from_file(PIX_DIR + "/spinner-small.gif")
+        self.system_backend_refreshed = True # dont refresh metadata
+
 
     def on_delete_event(self, *args):
         '''
