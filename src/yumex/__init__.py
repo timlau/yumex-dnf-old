@@ -60,6 +60,16 @@ class BaseWindow(Gtk.ApplicationWindow):
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
 
+    def set_working(self, state, insensitive=False):
+        '''
+        Set the working state
+
+        subclass and extend in child class
+
+        '''
+        self.is_working = state
+
+
     @ExceptionHandler
     def get_root_backend(self):
         """
