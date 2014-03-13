@@ -36,7 +36,7 @@ clean: $(CLEAN_TARGETS)
 	-rm -rf dist
 
 get-builddeps:
-	@sudo yum install perl-TimeDate python3-devel gettext intltool rpmdevtools python3-gobject python2-devel
+	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool 
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -93,11 +93,6 @@ rpm:
 	@$(MAKE) archive
 	@rpmbuild -ba $(APPNAME).spec
 
-mock-build:
-	@$(MAKE) test-release
-	@tools/repo-build.py --build ${APPNAME} ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}${DIST}.src.rpm 
-	@tools/repo-build.py --copy ${APPNAME} ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}${DIST}.src.rpm 
-	
 test-builds:
 	@$(MAKE) test-release
 	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
