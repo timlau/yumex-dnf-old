@@ -996,6 +996,7 @@ class YumexApplication(Gtk.Application):
         if self.args.exit:
             call('/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
             call('/usr/bin/dbus-send --session --print-reply --dest="org.baseurl.DnfSession" / org.baseurl.DnfSession.Exit',shell=True)
+            call('sudo /usr/bin/dbus-send --system --print-reply --dest="org.baseurl.DnfSystem" / org.baseurl.DnfSystem.Exit',shell=True)
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)
