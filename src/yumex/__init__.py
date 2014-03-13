@@ -214,7 +214,7 @@ class YumexInstallWindow(BaseWindow):
         self.infobar.info(_('Searching for dependencies'))
         rc, result = self.get_root_backend().BuildTransaction()
         self.infobar.info(_('Dependencies resolved'))
-        if rc == 2:
+        if rc:
             self.transaction_result.populate(result, "")
             if not always_yes:
                 ok = self.transaction_result.run()
@@ -227,13 +227,13 @@ class YumexInstallWindow(BaseWindow):
                 self.hide()
                 if not always_yes:
                     show_information(self,_("Changes was successfully applied to the system"))
-        elif rc == 0:
-            if action == 'install':
-                show_information(self, _("the %s package can't be installed") % package)
-            elif action == 'remove':
-                show_information(self, _("the %s package can't be removed") % package)
+        #else:
+            #if action == 'install':
+                #show_information(self, _("the %s package can't be installed") % package)
+            #elif action == 'remove':
+                #show_information(self, _("the %s package can't be removed") % package)
         else:
-            show_information(self, _("Error(s) in search for dependencies"), result[0])
+            show_information(self, _("Error(s) in search for dependencies"), repr(result))
         self.release_root_backend(quit=True)
         self.status.SetWorking(False)
         self.app.quit()
