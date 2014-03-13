@@ -9,6 +9,7 @@ BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX
 NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
 NEW_REL=0.1.${GITDATE}
 DIST=${shell rpm --eval "%{dist}"}
+GIT_MASTER=master
 
 all: build
 
@@ -66,7 +67,7 @@ test-cleanup:
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
 	@git checkout -f
-	@git checkout dnf-future
+	@git checkout ${GIT_MASTER}
 	@git branch -D release-test
 
 show-vars:
