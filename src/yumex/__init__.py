@@ -132,8 +132,8 @@ class BaseWindow(Gtk.ApplicationWindow):
         self.logger.error("EXCEPTION : %s " % msg)
         err, errmsg = self._parse_error(msg)
         self.logger.debug("err:  %s - msg: %s" % (err, errmsg))
-        if err == "YumLockedError":
-            errmsg = "Yum  is locked by another process \n\nYum Extender will exit"
+        if err == "LockedError":
+            errmsg = "DNF is locked by another process \n\nYum Extender will exit"
             close = False
         if errmsg == "":
             errmsg = msg
