@@ -144,6 +144,7 @@ TRANSACTION_RESULT_TYPES = {
 'install'       : _('Installing'),
 'update'        : _('Updating'),
 'remove'        : _('Removing'),
+'downgrade'     : _('Downgrading'),
 'install-deps'  : _('Installing for dependencies'),
 'update-deps'   : _('Updating for dependencies'),
 'remove-deps'   : _('Removing for dependencies'),
