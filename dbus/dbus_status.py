@@ -1,4 +1,4 @@
-#!/usr/bin/python2 -tt
+#!/usr/bin/python3 -tt
 # -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A GUI for yum
 #    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
@@ -18,9 +18,6 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-import dbus
-import dbus.service
-import dbus.glib
 import logging
 import argparse
 import os.path
@@ -33,8 +30,13 @@ from dnfdaemon import *
 from subprocess import Popen
 from xdg import BaseDirectory
 import time
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import os.path
+from gi.repository import Gtk
+import dbus
+import dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
+
 
 
 version = 100 # must be integer
@@ -293,8 +295,7 @@ class StatusIconError(dbus.DBusException):
 #------------------------------------------------------------------------------ Main class
 class YumexStatusDaemon(dbus.service.Object):
 
-    def __init__(self, mainloop):
-        self.mainloop = mainloop
+    def __init__(self):
         bus_name = dbus.service.BusName(DAEMON_ORG, bus = dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/')
 
@@ -343,7 +344,8 @@ class YumexStatusDaemon(dbus.service.Object):
         Exit the daemon
         :param sender:
         '''
-        self.mainloop.quit()
+        Gtk.main_quit()
+
 
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
@@ -484,7 +486,7 @@ class YumexStatusDaemon(dbus.service.Object):
         if self.yumex_running:
             self.QuitSignal()
         else:
-            self.mainloop.quit()
+            Gtk.main_quit()
 
 
     def on_check_updates(self, * args):
@@ -575,9 +577,9 @@ def main():
 
     # setup the DBus mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    mainloop = GObject.MainLoop()
-    yd = YumexStatusDaemon(mainloop)
-    mainloop.run()
+    YumexStatusDaemon()
+    Gtk.main()
+
 
 if __name__ == '__main__':
     main()
