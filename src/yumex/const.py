@@ -94,7 +94,7 @@ PACKAGE_COLORS = {
 }
 
 BACKEND_ACTIONS = {'update' : 'u', 'install': 'i', 'remove' : 'r', \
-                   'obsoletes' : 'o', 'downgrade'  : 'do'}
+                   'obsolete' : 'o', 'downgrade'  : 'do'}
 
 
 QUEUE_PACKAGE_TYPES = {
