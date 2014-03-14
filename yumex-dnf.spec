@@ -14,21 +14,13 @@ BuildArch: noarch
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: intltool
-# gui build requirement (python 3)
 BuildRequires: python3-devel
-# status icon build requirement (python2) 
-BuildRequires: python2-devel
 
-# gui requirement (python 3)
 Requires: python3-dnfdaemon >= 0.1.1
 Requires: python3-gobject
-# status icon requirement (python2) 
-Requires: python-dnfdaemon >= 0.1.1
-Requires: pyxdg
-Requires: dbus-python
-Requires: pycairo
-Requires: pygobject2
-
+Requires: python3-pyxdg
+Requires: python3-dbus
+Requires: python3-cairo
 
 %description
 Graphical package tool for maintain packages on the system
