@@ -879,6 +879,7 @@ class YumexWindow(BaseWindow):
                         else:
                             break
                     self.reset()
+                    return
             else: # error in depsolve
                 show_information(self, _("Error(s) in search for dependencies"), "\n".join(result))
         else: # error in population of the transaction
@@ -892,10 +893,6 @@ class YumexWindow(BaseWindow):
         self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
-        # clear search entry
-        self.search_entry.clear_with_no_signal()
-        self.last_search = None
-        #self.current_filter_search = None
         self.set_content_page(PAGE_QUEUE)
         self.set_working(False)
 
@@ -920,6 +917,7 @@ class YumexWindow(BaseWindow):
         self.groups.populate(self._grps)
         self.group_package_view.populate([])
         self.set_working(False)
+        self.set_content_page(PAGE_PACKAGES)
         widget = self.ui.get_object("pkg_updates")
         widget.set_active(True)
         self.on_pkg_filter(widget, "updates")
