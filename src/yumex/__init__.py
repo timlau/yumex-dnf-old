@@ -233,7 +233,7 @@ class YumexInstallWindow(BaseWindow):
             #elif action == 'remove':
                 #show_information(self, _("the %s package can't be removed") % package)
         else:
-            show_information(self, _("Error(s) in search for dependencies"), repr(result))
+            show_information(self, _("Error(s) in search for dependencies"), "\n".join(result))
         self.release_root_backend(quit=True)
         self.status.SetWorking(False)
         self.app.quit()
@@ -836,7 +836,7 @@ class YumexWindow(BaseWindow):
         self.infobar.info(_('Preparing system for applying changes'))
         self.get_root_backend().ClearTransaction()
         errors = 0
-        error_msgs = []
+        error_msgs = set()
         for action in QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
@@ -846,14 +846,14 @@ class YumexWindow(BaseWindow):
                     self.logger.debug("%s: %s" % (rc, trans))
                     if not rc:
                         errors += 1
-                        error_msgs.extend(trans)
+                        error_msgs |= set(trans)
                 else:
                     self.logger.debug('adding : %s %s' % (action, pkg.pkg_id))
                     rc, trans = self.get_root_backend().AddTransaction(pkg.pkg_id, QUEUE_PACKAGE_TYPES[action])
                     self.logger.debug("%s: %s" % (rc, trans))
                     if not rc:
                         errors += 1
-                        error_msgs.extend(trans)
+                        error_msgs |= set(trans)
 
         if not errors:
             self.get_root_backend().GetTransaction()
@@ -878,15 +878,26 @@ class YumexWindow(BaseWindow):
                             rc = self.get_root_backend().RunTransaction()
                         else:
                             break
+                    self.reset()
             else: # error in depsolve
-                show_information(self, _("Error(s) in search for dependencies"), repr(result))
+                show_information(self, _("Error(s) in search for dependencies"), "\n".join(result))
         else: # error in population of the transaction
-            show_information(self, _("Error(s) in transaction setup"), "\n".join(error_msgs))
+            show_information(self, _("Error(s) in search for dependencies"), "\n".join(error_msgs))
+        self.reset_on_error()
 
-        self.set_working(False)
-        self.reset()
+    def reset_on_error(self):
+        '''
+        Reset gui on transaction issues
+        '''
+        self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
+        # clear search entry
+        self.search_entry.clear_with_no_signal()
+        self.last_search = None
+        #self.current_filter_search = None
+        self.set_content_page(PAGE_QUEUE)
+        self.set_working(False)
 
     @ExceptionHandler
     def reset(self):
