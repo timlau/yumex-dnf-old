@@ -25,7 +25,7 @@ import gettext
 import os.path
 import configparser
 import logging
-from .config import *
+from .config import *  # @UnusedWildImport
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')

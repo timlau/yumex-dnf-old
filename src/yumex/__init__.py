@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     StatusIcon, Preferences, GroupView, ArchMenu, ask_for_gpg_import
+                     Preferences, GroupView, ArchMenu, ask_for_gpg_import
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .yum_backend import YumReadOnlyBackend, YumRootBackend

@@ -18,9 +18,9 @@
 
 import logging  # @UnusedImport
 
-from dnfdaemon import *
+from dnfdaemon import *  # @UnusedWildImport
 from .backend import Package, Backend
-from .const import *
+from .const import *  # @UnusedWildImport
 from .misc import format_number, ExceptionHandler, TimeFunction, _, P_ , CONFIG # @UnusedImport @Reimport lint:ok
 from gi.repository import Gdk
 
@@ -429,30 +429,6 @@ class YumRootBackend(Backend, DnfDaemonClient):
         self._gpg_confirm = None
         self.dnl_progress = None
 
-
-    def on_UpdateProgress(self, name, frac, fread, ftime):
-        #TODO: Remove this, not used any more
-        logger.debug("[%s] - frac : [%.2f] fread : [%s] - ftime : [%s] " % (name, frac, fread, ftime))
-        if name == '<locally rebuilding deltarpms>':
-            name = _("Building packages from delta packages")
-            self.frontend.infobar.info_sub(name)
-        elif not '.' in name: # Repo metadata
-            parts = name.split('/')
-            meta_type = parts[-1]
-            repo = parts[0]
-            if len(parts) in [1,3]:
-                meta_type = 'repomd'
-            if meta_type in REPO_META:
-                name = REPO_META[meta_type] % repo
-                self.frontend.infobar.info_sub(name)
-            else:
-                self.frontend.infobar.info_sub(name)
-                logger.debug("unknown metadata type : %s (%s)" % (meta_type, name))
-            self.frontend.infobar.set_progress(frac)
-        else: # normal file download
-            self.frontend.infobar.info_sub(name)
-        self.frontend.infobar.set_progress(frac)
-
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
             self.frontend.infobar.show_progress(True)
@@ -540,7 +516,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
             return True,""
         except AccessDeniedError as e:
             return False,"not-authorized"
-        except YumLockedError as e:
+        except LockedError as e:
             return False,"locked-by-other"
 
     @ExceptionHandler
