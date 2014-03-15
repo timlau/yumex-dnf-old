@@ -480,7 +480,7 @@ class YumRootBackend(Backend, DnfDaemonClient):
         #values =  (num_files, num_bytes)
         #print("on_DownloadStart : %s" % (repr(values)))
         self.frontend.infobar.set_progress(0.0)
-        self.frontend.infobar.info_sub(_("Downloading %d files (%d bytes)....") % (num_files, num_bytes))
+        self.frontend.infobar.info_sub(_("Downloading %d files (%sb)....") % (num_files, format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         ''' Progress for a single instance in the batch '''
