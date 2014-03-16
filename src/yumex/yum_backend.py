@@ -458,13 +458,12 @@ class YumRootBackend(Backend, DnfDaemonClient):
             logger.debug("TransactionEvent : %s" % event)
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
-        # YumDaemonClient.on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total)
         num = " ( %i/%i )" % (ts_current, ts_total)
         if ',' in package: # this is a pkg_id
             name = self._fullname(package)
         else: # this is just a pkg name (cleanup)
             name = package
-        #logger.debug("on_RPMProgress : [%s]" % package )
+        logger.debug("on_RPMProgress : [%s]" % package )
         self.frontend.infobar.info_sub(RPM_ACTIONS[action] % name)
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
