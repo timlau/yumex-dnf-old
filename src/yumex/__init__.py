@@ -258,12 +258,6 @@ class YumexWindow(BaseWindow):
         self._grps = None   # Group and Category cache
         self.active_page = None # Active content page
 
-        # setup the package manager backend
-        # self.backend = TestBackend()
-        self.backend = YumReadOnlyBackend(self)
-        self.backend.setup()
-        CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled") # get the default enabled repos
-
         # setup the main gui
         main = self.ui.get_object("main")
         self.add(main)
@@ -333,6 +327,13 @@ class YumexWindow(BaseWindow):
 
 
         self.show_now()
+
+        # setup the package manager backend
+        # self.backend = TestBackend()
+        self.backend = YumReadOnlyBackend(self)
+        self.backend.setup()
+        CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled") # get the default enabled repos
+
 
         # Refresh the metadata cache for the readonly API
         if not self.session_backend_refreshed and not self.app.args.norefresh:
