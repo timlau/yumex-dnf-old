@@ -428,6 +428,8 @@ class YumRootBackend(Backend, DnfDaemonClient):
         DnfDaemonClient.__init__(self)
         self._gpg_confirm = None
         self.dnl_progress = None
+        self._files_to_download = 0
+        self._files_downloaded = 0
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
@@ -478,6 +480,8 @@ class YumRootBackend(Backend, DnfDaemonClient):
         ''' Starting a new parallel download batch '''
         #values =  (num_files, num_bytes)
         #print("on_DownloadStart : %s" % (repr(values)))
+        self._files_to_download = num_files
+        self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
         self.frontend.infobar.info_sub(_("Downloading %d files (%sb)....") % (num_files, format_number(num_bytes)))
 
@@ -485,14 +489,16 @@ class YumRootBackend(Backend, DnfDaemonClient):
         ''' Progress for a single instance in the batch '''
         #values =  (name, frac, total_frac, total_files)
         #print("on_DownloadProgress : %s" % (repr(values)))
-        self.frontend.infobar.set_progress(total_frac)
+        num = "( %d/%d )" % (self._files_downloaded, self._files_to_download)
+        self.frontend.infobar.set_progress(total_frac, label=num)
 
     def on_DownloadEnd(self, name, status, msg):
         ''' Download of af single instace ended '''
         #values =  (name, status, msg)
         #print("on_DownloadEnd : %s" % (repr(values)))
-        if status == -1: # download OK
+        if status == -1 or status == 2: # download OK or already exists
             logger.debug("Downloaded : %s" % name)
+            self._files_downloaded += 1
         else:
             logger.debug("Download Error : %s - %s" % (name, msg))
 
