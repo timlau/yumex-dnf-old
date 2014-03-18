@@ -610,6 +610,6 @@ class YumRootBackend(Backend, DnfDaemonClient):
         ''' Package fullname  '''
         (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         if e and e != '0':
-            return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
+            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
         else:
-            return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
+            return "%s-%s-%s.%s" % (n, v, r, a)

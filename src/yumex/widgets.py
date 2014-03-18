@@ -1716,6 +1716,14 @@ class TransactionResult:
     def clear(self):
         self.store.clear()
 
+    def _fullname(self, pkg_id):
+        ''' Package fullname  '''
+        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
+        if e and e != '0':
+            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
+        else:
+            return "%s-%s-%s.%s" % (n, v, r, a)
+
 
     def setup_view(self, view):
         '''
@@ -1766,7 +1774,8 @@ class TransactionResult:
                 if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:  # packages there need to be downloaded
                     total_size += size
                 for r in replaces:
-                    model.append(level2, [ r, "", "", "", ""])
+                    fn = self._fullname(r)
+                    model.append(level2, [ fn, "", "", "", ""])
         self.base.ui.get_object("result_size").set_text(format_number(total_size))
         self.view.expand_all()
 
