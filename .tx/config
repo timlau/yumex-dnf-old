@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[yumex.master]
+file_filter = translations/yumex.master/<lang>.po
+source_lang = en
+type = PO
+
+[yumex.yumex-dnf]
+file_filter = po/<lang>.po
+source_file = po/yumex-dnf.pot
+source_lang = en
+type = PO
+

@@ -37,7 +37,7 @@ clean: $(CLEAN_TARGETS)
 	-rm -rf dist
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool 
+	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool transifex-client
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -104,6 +104,22 @@ test-builds:
 test-inst:
 	@$(MAKE) test-release
 	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	
+transifex-setup:
+	tx init
+	tx set --auto-remote https://www.transifex.com/projects/p/yumex/
+	tx set --auto-local  -r yumex.${APPNAME} 'po/<lang>.po' --source-lang en --source-file po/${APPNAME}.pot --execute
+
+
+transifex-pull:
+	tx pull -a -f
+	@echo "You can now git commit -a -m 'Transfix pull, *.po update'"
+
+transifex-push:
+	make -C po ${APPNAME}.pot
+	tx push -s
+	@echo "You can now git commit -a -m 'Transfix push, ${APPNAME}.pot update'"
+	
 
 .PHONY: all archive install clean build
 .PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
