@@ -2138,7 +2138,7 @@ def ask_for_gpg_import(window, values):
     (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
     pkg_name = pkg_id.split(',')[0]
     msg = (_( ' Do you want to import this GPG Key\n'
-              ' Needed to verify the the %s package\n\n'
+              ' Needed to verify the %s package\n\n'
               ' key        : 0x%s:\n'
               ' Userid     : "%s"\n'
               ' From       : %s') %

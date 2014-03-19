@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-19 09:12+0100\n"
+"POT-Creation-Date: 2014-03-19 13:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,44 +272,44 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ../src/yumex/widgets.py:1728 ../src/yumex/widgets.py:1832
+#: ../src/yumex/widgets.py:1736 ../src/yumex/widgets.py:1841
 msgid "Name"
 msgstr ""
 
-#: ../src/yumex/widgets.py:1729
+#: ../src/yumex/widgets.py:1737
 msgid "Arch"
 msgstr ""
 
-#: ../src/yumex/widgets.py:1730
+#: ../src/yumex/widgets.py:1738
 msgid "Ver"
 msgstr ""
 
 #. Setup reponame & repofile column's
-#: ../src/yumex/widgets.py:1731 ../src/yumex/widgets.py:1784
-#: ../src/yumex/widgets.py:1831
+#: ../src/yumex/widgets.py:1739 ../src/yumex/widgets.py:1793
+#: ../src/yumex/widgets.py:1840
 msgid "Repository"
 msgstr ""
 
-#: ../src/yumex/widgets.py:1732
+#: ../src/yumex/widgets.py:1740
 msgid "Size"
 msgstr ""
 
-#: ../src/yumex/widgets.py:1784
+#: ../src/yumex/widgets.py:1793
 msgid "Filename"
 msgstr ""
 
 #. Setup Selection Column
-#: ../src/yumex/widgets.py:1816
+#: ../src/yumex/widgets.py:1825
 msgid ""
 "Click here to switch between\n"
 " none/all/default selected"
 msgstr ""
 
-#: ../src/yumex/widgets.py:2131
+#: ../src/yumex/widgets.py:2140
 #, python-format
 msgid ""
 " Do you want to import this GPG Key\n"
-" Needed to verify the the %s package\n"
+" Needed to verify the %s package\n"
 "\n"
 " key        : 0x%s:\n"
 " Userid     : \"%s\"\n"
@@ -382,7 +382,7 @@ msgid "Default: Show newest only"
 msgstr ""
 
 #: ../src/yumex.ui.h:5
-msgid "Default: Erase Used Requirments"
+msgid "Default: Erase Used Requirements"
 msgstr ""
 
 #: ../src/yumex.ui.h:6
