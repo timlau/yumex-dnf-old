@@ -7,3 +7,5 @@ __pycache__/
 /yumex-nextgen.nja
 /yumex-dnf.nja
 /src/yumex.ui~
+/po/*.mo
+
