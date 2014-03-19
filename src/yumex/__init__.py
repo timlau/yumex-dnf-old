@@ -29,6 +29,7 @@ import argparse
 import logging
 from subprocess import call
 import time
+from datetime import date
 
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
@@ -84,12 +85,15 @@ class BaseWindow(Gtk.ApplicationWindow):
             if locked:
                 self._root_locked = True
                 self.logger.debug("Lock the yum root daemon")
-                if not self.system_backend_refreshed:
+                today = str(date.today())
+                if not self.system_backend_refreshed and CONFIG.conf.system_refresh != today:
                     self.logger.debug("Refresh system cache")
                     self.set_working(True, True)
                     self.infobar.info(_('Refreshing Repository Metadata'))
                     self._root_backend.ExpireCache()
                     self.set_working(False)
+                    CONFIG.conf.system_refresh = today
+                    CONFIG.write()
                     self.system_backend_refreshed = True
             else:
                 self.logger.critical("can't get root backend lock")
@@ -336,12 +340,15 @@ class YumexWindow(BaseWindow):
 
 
         # Refresh the metadata cache for the readonly API
-        if not self.session_backend_refreshed and not self.app.args.norefresh:
+        today = str(date.today())
+        if not self.session_backend_refreshed and not self.app.args.norefresh and CONFIG.conf.session_refresh != today:
             self.logger.debug("Refresh session cache")
             self.set_working(True, True)
             self.infobar.info(_('Refreshing Repository Metadata'))
             self.backend.ExpireCache()
             self.set_working(False)
+            CONFIG.conf.session_refresh = today
+            CONFIG.write()
             self.session_backend_refreshed = True
 
         # get the arch filter

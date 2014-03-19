@@ -25,7 +25,7 @@ import gettext
 import os.path
 import configparser
 import logging
-from .config import *  # @UnusedWildImport
+from .config import *  
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -173,6 +173,8 @@ class YumexConf(BaseConfig):
     update_startup_delay = IntOption(30)
     autocheck_updates = BoolOption(False)
     hide_on_close = BoolOption(False)
+    session_refresh = Option()
+    system_refresh = Option()
 
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
