@@ -890,7 +890,7 @@ class YumexWindow(BaseWindow):
                 if ok:  # Ok pressed
                     self.infobar.info(_('Applying changes to the system'))
                     self.set_working(True, True)
-                    rc = self.get_root_backend().RunTransaction()
+                    rc,result = self.get_root_backend().RunTransaction()
                     while rc == 1: # This can happen more than once (more gpg keys to be imported)
                         values = self.get_root_backend()._gpg_confirm # get info about gpgkey to be comfirmed
                         (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
@@ -898,11 +898,16 @@ class YumexWindow(BaseWindow):
                         ok = ask_for_gpg_import(self, values)
                         if ok:
                             self.get_root_backend().ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
-                            rc = self.get_root_backend().RunTransaction()
+                            rc,result = self.get_root_backend().RunTransaction()
                         else:
                             break
                     if rc == 4: # Download errors
-                        show_information(self, _("Too many errors in downloading packages"))
+                        error_msgs = []
+                        for fn in result:
+                            for msg in result[fn]:
+                                error_msgs.append("%s : %s" % (fn,msg))
+                                self.logger.debug("  %s : %s" % (fn,msg))
+                        show_information(self, _("Too many errors in downloading packages\n"), "\n".join(error_msgs))
                     self.reset()
                     return
             else: # error in depsolve
