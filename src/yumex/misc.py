@@ -173,8 +173,9 @@ class YumexConf(BaseConfig):
     update_startup_delay = IntOption(30)
     autocheck_updates = BoolOption(False)
     hide_on_close = BoolOption(False)
-    session_refresh = Option()
-    system_refresh = Option()
+    session_refresh = Option('2000-01-01 00:01')
+    system_refresh = Option('2000-01-01 00:01')
+    refresh_interval = IntOption(12)
 
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""

@@ -29,7 +29,7 @@ import argparse
 import logging
 from subprocess import call
 import time
-from datetime import date
+from datetime import date, datetime, timedelta
 
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
@@ -69,17 +69,24 @@ class BaseWindow(Gtk.ApplicationWindow):
         self.is_working = state
         
     def _check_cache_expired(self, cache_type):
-        today = str(date.today())
+        time_fmt = "%Y-%m-%d %H:%M"
+        now = datetime.now()
+        now_str = now.strftime(time_fmt)
+        refresh_period = timedelta(hours=CONFIG.conf.refresh_interval)
         if cache_type == 'session':
-            if CONFIG.conf.session_refresh != today:
-                CONFIG.conf.session_refresh = today
+            last_refresh = datetime.strptime( CONFIG.conf.session_refresh,time_fmt)
+            period = now - last_refresh
+            if period > refresh_period:
+                CONFIG.conf.session_refresh = now_str
                 CONFIG.write()
                 return True
             else:
                 return False
         elif cache_type == 'system':
-            if CONFIG.conf.system_refresh != today:
-                CONFIG.conf.system_refresh = today
+            last_refresh = datetime.strptime( CONFIG.conf.system_refresh,time_fmt)
+            period = now - last_refresh
+            if period > refresh_period:
+                CONFIG.conf.system_refresh = now_str
                 CONFIG.write()
                 return True
             else:
