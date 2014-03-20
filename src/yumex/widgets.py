@@ -1632,7 +1632,7 @@ class Preferences:
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
         # Set update checker values
-        for name in ['update_startup_delay', 'update_interval']:
+        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
             widget = self.base.ui.get_object('pref_'+name)
             widget.set_value(getattr(CONFIG.conf,name))
         self.on_autocheck_updates()
@@ -1674,7 +1674,7 @@ class Preferences:
                 setattr(CONFIG.conf, name, color)
                 changed = True
         # handle update checker values
-        for name in ['update_startup_delay', 'update_interval']:
+        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
             widget = self.base.ui.get_object('pref_'+name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name): # changed ??
