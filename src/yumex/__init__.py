@@ -47,8 +47,6 @@ class BaseWindow(Gtk.ApplicationWindow):
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
-        self.session_backend_refreshed = False
-        self.system_backend_refreshed = False
 
         # setup GtkBuilder
         self.ui = Gtk.Builder()
@@ -69,6 +67,24 @@ class BaseWindow(Gtk.ApplicationWindow):
 
         '''
         self.is_working = state
+        
+    def _check_cache_expired(self, cache_type):
+        today = str(date.today())
+        if cache_type == 'session':
+            if CONFIG.conf.session_refresh != today:
+                CONFIG.conf.session_refresh = today
+                CONFIG.write()
+                return True
+            else:
+                return False
+        elif cache_type == 'system':
+            if CONFIG.conf.system_refresh != today:
+                CONFIG.conf.system_refresh = today
+                CONFIG.write()
+                return True
+            else:
+                return False
+        
 
 
     @ExceptionHandler
@@ -85,16 +101,12 @@ class BaseWindow(Gtk.ApplicationWindow):
             if locked:
                 self._root_locked = True
                 self.logger.debug("Lock the yum root daemon")
-                today = str(date.today())
-                if not self.system_backend_refreshed and CONFIG.conf.system_refresh != today:
+                if self._check_cache_expired('system'):
                     self.logger.debug("Refresh system cache")
                     self.set_working(True, True)
                     self.infobar.info(_('Refreshing Repository Metadata'))
                     self._root_backend.ExpireCache()
                     self.set_working(False)
-                    CONFIG.conf.system_refresh = today
-                    CONFIG.write()
-                    self.system_backend_refreshed = True
             else:
                 self.logger.critical("can't get root backend lock")
                 if msg == "not-authorized": # user canceled the polkit dialog
@@ -340,16 +352,12 @@ class YumexWindow(BaseWindow):
 
 
         # Refresh the metadata cache for the readonly API
-        today = str(date.today())
-        if not self.session_backend_refreshed and not self.app.args.norefresh and CONFIG.conf.session_refresh != today:
+        if self._check_cache_expired('session'):
             self.logger.debug("Refresh session cache")
             self.set_working(True, True)
             self.infobar.info(_('Refreshing Repository Metadata'))
             self.backend.ExpireCache()
             self.set_working(False)
-            CONFIG.conf.session_refresh = today
-            CONFIG.write()
-            self.session_backend_refreshed = True
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -998,7 +1006,6 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
         parser.add_argument('--icononly', action='store_true', help="Start only the status icon")
-        parser.add_argument('--norefresh', action='store_true', help="don't refresh dnf metadata cache'")
         parser.add_argument('--exit', action='store_true', help="tell session dbus services used by yumex to exit")
         parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
         parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
