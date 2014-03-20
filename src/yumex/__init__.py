@@ -67,7 +67,7 @@ class BaseWindow(Gtk.ApplicationWindow):
 
         '''
         self.is_working = state
-        
+
     def _check_cache_expired(self, cache_type):
         time_fmt = "%Y-%m-%d %H:%M"
         now = datetime.now()
@@ -91,7 +91,7 @@ class BaseWindow(Gtk.ApplicationWindow):
                 return True
             else:
                 return False
-        
+
 
 
     @ExceptionHandler
@@ -901,6 +901,8 @@ class YumexWindow(BaseWindow):
                             rc = self.get_root_backend().RunTransaction()
                         else:
                             break
+                    if rc == 4: # Download errors
+                        show_information(self, _("Too many errors in downloading packages"))
                     self.reset()
                     return
             else: # error in depsolve
