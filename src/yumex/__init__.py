@@ -378,7 +378,7 @@ class YumexWindow(BaseWindow):
                 self._set_cache_refreshed('session')
             else:
                 show_information(self,_("The DNF cache could not be refreshed"))
-                
+
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -916,7 +916,7 @@ class YumexWindow(BaseWindow):
                         else:
                             break
                     if rc == 4: # Download errors
-                        show_information(self, _("Too many errors in downloading packages\n"), "\n".join(result))
+                        show_information(self, _("Downloading error(s)\n"), "\n".join(result))
                     self.reset()
                     return
             else: # error in depsolve
