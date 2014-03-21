@@ -176,6 +176,7 @@ class YumexConf(BaseConfig):
     session_refresh = Option('2000-01-01 00:01')
     system_refresh = Option('2000-01-01 00:01')
     refresh_interval = IntOption(12)
+    max_dnl_errors = IntOption(10)
 
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""

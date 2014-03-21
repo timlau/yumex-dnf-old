@@ -71,14 +71,11 @@ class BaseWindow(Gtk.ApplicationWindow):
     def _check_cache_expired(self, cache_type):
         time_fmt = "%Y-%m-%d %H:%M"
         now = datetime.now()
-        now_str = now.strftime(time_fmt)
         refresh_period = timedelta(hours=CONFIG.conf.refresh_interval)
         if cache_type == 'session':
             last_refresh = datetime.strptime( CONFIG.conf.session_refresh,time_fmt)
             period = now - last_refresh
             if period > refresh_period:
-                CONFIG.conf.session_refresh = now_str
-                CONFIG.write()
                 return True
             else:
                 return False
@@ -86,12 +83,20 @@ class BaseWindow(Gtk.ApplicationWindow):
             last_refresh = datetime.strptime( CONFIG.conf.system_refresh,time_fmt)
             period = now - last_refresh
             if period > refresh_period:
-                CONFIG.conf.system_refresh = now_str
-                CONFIG.write()
                 return True
             else:
                 return False
 
+    def _set_cache_refreshed(self, cache_type):
+        time_fmt = "%Y-%m-%d %H:%M"
+        now = datetime.now()
+        now_str = now.strftime(time_fmt)
+        if cache_type == 'session':
+            CONFIG.conf.session_refresh = now_str
+            CONFIG.write()
+        elif cache_type == 'system':
+            CONFIG.conf.system_refresh = now_str
+            CONFIG.write()
 
 
     @ExceptionHandler
@@ -112,8 +117,12 @@ class BaseWindow(Gtk.ApplicationWindow):
                     self.logger.debug("Refresh system cache")
                     self.set_working(True, True)
                     self.infobar.info(_('Refreshing Repository Metadata'))
-                    self._root_backend.ExpireCache()
+                    rc = self._root_backend.ExpireCache()
                     self.set_working(False)
+                    if rc:
+                        self._set_cache_refreshed('system')
+                    else:
+                        show_information( self, _("Could not refresh the DNF cache (root)"))
             else:
                 self.logger.critical("can't get root backend lock")
                 if msg == "not-authorized": # user canceled the polkit dialog
@@ -363,8 +372,13 @@ class YumexWindow(BaseWindow):
             self.logger.debug("Refresh session cache")
             self.set_working(True, True)
             self.infobar.info(_('Refreshing Repository Metadata'))
-            self.backend.ExpireCache()
+            rc =self.backend.ExpireCache()
             self.set_working(False)
+            if rc:
+                self._set_cache_refreshed('session')
+            else:
+                show_information(self,_("The DNF cache could not be refreshed"))
+                
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -890,7 +904,7 @@ class YumexWindow(BaseWindow):
                 if ok:  # Ok pressed
                     self.infobar.info(_('Applying changes to the system'))
                     self.set_working(True, True)
-                    rc,result = self.get_root_backend().RunTransaction()
+                    rc,result = self.get_root_backend().RunTransaction(max_err = CONFIG.conf.max_dnl_errors)
                     while rc == 1: # This can happen more than once (more gpg keys to be imported)
                         values = self.get_root_backend()._gpg_confirm # get info about gpgkey to be comfirmed
                         (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
@@ -898,16 +912,11 @@ class YumexWindow(BaseWindow):
                         ok = ask_for_gpg_import(self, values)
                         if ok:
                             self.get_root_backend().ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
-                            rc,result = self.get_root_backend().RunTransaction()
+                            rc,result = self.get_root_backend().RunTransaction(max_err = CONFIG.conf.max_dnl_errors)
                         else:
                             break
                     if rc == 4: # Download errors
-                        error_msgs = []
-                        for fn in result:
-                            for msg in result[fn]:
-                                error_msgs.append("%s : %s" % (fn,msg))
-                                self.logger.debug("  %s : %s" % (fn,msg))
-                        show_information(self, _("Too many errors in downloading packages\n"), "\n".join(error_msgs))
+                        show_information(self, _("Too many errors in downloading packages\n"), "\n".join(result))
                     self.reset()
                     return
             else: # error in depsolve
