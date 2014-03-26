@@ -53,6 +53,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         try:
             self.ui.add_from_file(DATA_DIR + "/yumex.ui")
         except:
+            raise
             show_information(self, "GtkBuilder ui file not found : " + DATA_DIR + "/yumex.ui")
             sys.exit()
 
@@ -270,6 +271,20 @@ class YumexInstallWindow(BaseWindow):
         self.status.SetWorking(False)
         self.app.quit()
 
+class YumexHeaderBar(Gtk.HeaderBar):
+    """
+    Header bar for main window
+    """
+    def __init__(self, ui):
+        Gtk.HeaderBar.__init__(self)
+        self.props.show_close_button = True
+        self.ui = ui
+        self.pack_start(self.ui.get_object("header_start"))
+        self.pack_end(self.ui.get_object("header_end"))
+        self.ui.get_object("header_menu").set_popup(self.ui.get_object("main_menu"))
+        self.ui.get_object("header_search_options").set_popup(self.ui.get_object("search_menu"))
+        self.ui.get_object("header_filters").set_popup(self.ui.get_object("menu_filters"))
+
 class YumexWindow(BaseWindow):
     '''
     Main application window class
@@ -283,7 +298,7 @@ class YumexWindow(BaseWindow):
         self.current_filter = None
         self._root_backend = None
         self._root_locked = False
-        self.search_type = ""
+        self.search_type = "key"
         self.last_search_pkgs = []
         self.current_filter_search = None
         self.active_archs = PLATFORM_ARCH
@@ -291,43 +306,52 @@ class YumexWindow(BaseWindow):
         self.active_page = None # Active content page
 
         # setup the main gui
+        self.hb = YumexHeaderBar(self.ui)
+        self.set_titlebar(self.hb)
+        self.hb.show()
+
         main = self.ui.get_object("main")
         self.add(main)
         main.show()
 
-        # build the package filter widget
-        button = self.ui.get_object("tool_packages")
-        button.set_menu(self.ui.get_object("pkg_filter_menu"))
+        self.add_accel_group(self.ui.get_object("main_accelgroup"))
 
-        # Connect menu radio buttons to handler
-        for name in ['updates', 'installed', 'available']:
-            rb = self.ui.get_object("pkg_" + name)
+        # Setup package filters
+        for name in ['updates', 'installed', 'available','all']:
+            rb = self.ui.get_object("filter_" + name)
             rb.connect('toggled', self.on_pkg_filter, name)
 
-        # build the option widget
-        button = self.ui.get_object("tool_pref")
-        button.set_menu(self.ui.get_object("options_menu"))
-        # Connect menu radio buttons to handler
+
+        ## Connect menu radio buttons to handler
         for name in ['newest_only', 'clean_unused']:
             rb = self.ui.get_object("option_" + name)
             rb.set_active(getattr(CONFIG.session, name))
             rb.connect('toggled', self.on_options, name)
 
         # build the search_conf widget
-        button = self.ui.get_object("search_conf")
-        button.set_menu(self.ui.get_object("search_menu"))
         # Connect menu radio buttons to handler
-        for name in ['keyword', 'prefix', 'summary', "desc"]:
-            rb = self.ui.get_object("search_" + name)
-            rb.connect('toggled', self.on_search_config, name)
+        # setup search type option
+        for key in ['prefix','key','fields']:
+            wid = self.ui.get_object("search_%s" % key)
+            if key == self.search_type:
+                wid.set_active(True)
+            wid.connect('toggled', self.on_search_config, key)
 
+        self.search_fields = ['name','summary']
+        self.set_fields_active(False)
+
+        # setup search fields
+        for field in ['name','summary','description']:
+            wid = self.ui.get_object("field_%s" % field)
+            if field in self.search_fields:
+                wid.set_active(True)
+            else:
+                wid.set_active(False)
+            wid.connect('toggled', self.on_search_field, field)
 
         # Setup search entry
-        search_widget = self.ui.get_object("seach_entry")
-        self.search_entry = SearchEntry()
-        self.search_entry.connect("search-changed", self.on_search_changed)
-        search_widget.add(self.search_entry)
-        search_widget.show_all()
+        self.search_entry = self.ui.get_object("search")
+        self.search_entry.connect("activate", self.on_search_changed)
 
         # setup the package/queue/history views
         self.setup_main_content()
@@ -349,13 +373,22 @@ class YumexWindow(BaseWindow):
         self.preferences = Preferences(self)
 
         # setup actions
-        self._create_action("pref", self.on_pref)
-        self._create_action("packages", self.on_packages)
-        self._create_action("history", self.on_history)
-        self._create_action("groups", self.on_groups)
-        self._create_action("queue", self.on_queue)
+
+        wid = self.ui.get_object("main_pref")
+        wid.connect('activate', self.on_pref)
+        wid = self.ui.get_object("main_packages")
+        wid.set_active(True)
+        wid.connect('activate', self.on_packages)
+        wid = self.ui.get_object("main_groups")
+        wid.connect('activate', self.on_groups)
+        wid = self.ui.get_object("main_actions")
+        wid.connect('activate', self.on_queue)
+        wid = self.ui.get_object("main_history")
+        wid.connect('activate', self.on_history)
+        wid = self.ui.get_object("header_execute")
+        wid.connect('clicked', self.on_apply_changes)
+
         self._create_action("apply_changes", self.on_apply_changes)
-        self._create_action("search_config", self.on_search_config)
 
 
         self.show_now()
@@ -386,9 +419,13 @@ class YumexWindow(BaseWindow):
         self.arch_filter.change(self.active_archs)
 
         # setup default selections
-        self.ui.get_object("pkg_updates").set_active(True)
-        self.ui.get_object("search_keyword").set_active(True)
+        self.ui.get_object("filter_updates").set_active(True)
+        #self.ui.get_object("search_keyword").set_active(True)
 
+    def set_fields_active(self, state=True):
+        for field in ['name','summary','description']:
+            wid = self.ui.get_object("field_%s" % field)
+            wid.set_sensitive(state)
 
     def on_delete_event(self, *args):
         '''
@@ -399,6 +436,15 @@ class YumexWindow(BaseWindow):
             return True
         else:
             self.app.on_quit()
+
+    def on_search_field(self, widget, field):
+        if widget.get_active():
+            if not field in self.search_fields:
+                self.search_fields.append(field)
+        else:
+            if field in self.search_fields:
+                self.search_fields.remove(field)
+        print(self.search_fields)
 
 
     def on_status_icon_clicked(self):
@@ -473,14 +519,21 @@ class YumexWindow(BaseWindow):
         '''
         self.active_page = page
         self.content.set_current_page(page)
-        if page != PAGE_PACKAGES:
-            self._set_pkg_relief(Gtk.ReliefStyle.NONE)
-            self.search_entry.set_sensitive(False)
-        else:
-            self._set_pkg_relief()
-            self.search_entry.set_sensitive(True)
+        #if page != PAGE_PACKAGES:
+            #self._set_pkg_relief(Gtk.ReliefStyle.NONE)
+            #self.search_entry.set_sensitive(False)
+        #else:
+            #self._set_pkg_relief()
+            #self.search_entry.set_sensitive(True)
 
-
+    def _create_action_hb(self, name, callback, para=None):
+        '''
+        create and action and connect it to a callback handler
+        handles win.<name> actions defined in GtkBuilder ui file.
+        '''
+        action = Gio.SimpleAction.new(name, para)
+        action.connect("activate", callback)
+        self.hb.add_action(action)
 
     def _create_action(self, name, callback, para=None):
         '''
@@ -557,11 +610,11 @@ class YumexWindow(BaseWindow):
         check for updates handller for the status icon menu
         '''
         self.backend.reload()  # Reload backend
-        widget = self.ui.get_object("pkg_updates")
+        widget = self.ui.get_object("filter_updates")
         if widget.get_active():
             self.on_pkg_filter(widget, "updates")
         else:
-            self.ui.get_object("pkg_updates").set_active(True)
+            self.ui.get_object("filter_updates").set_active(True)
 
     def _set_busy_cursor(self, insensitive=False):
         ''' Set busy cursor in mainwin and make it insensitive if selected '''
@@ -569,7 +622,7 @@ class YumexWindow(BaseWindow):
         if win != None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
             if insensitive:
-                for widget in ["tool_quit","tool_pref","tool_history","tool_packages","tool_queue","tool_apply","search_conf","seach_entry",'content']:
+                for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(False)
         doGtkEvents()
 
@@ -578,7 +631,7 @@ class YumexWindow(BaseWindow):
         win = self.get_window()
         if win != None:
             win.set_cursor(None)
-            for widget in ["tool_quit","tool_pref","tool_history","tool_packages","tool_queue","tool_apply","search_conf","seach_entry",'content']:
+            for widget in WIDGETS_INSENSITIVE:
                 self.ui.get_object(widget).set_sensitive(True)
         doGtkEvents()
 
@@ -597,24 +650,15 @@ class YumexWindow(BaseWindow):
         '''
         self.group_info.set_package(pkg)
 
-    def on_packages(self, action, data):
+    def on_packages(self, action, data=None):
         '''
         callback for switching package filter (updates, installed, available)
         :param widget:
         :param data:
         '''
-        widget = self.ui.get_object("hidden")
-        widget.set_active(True)
         self.set_content_page(PAGE_PACKAGES)
+        self.hide_package_buttons(hide=False)
 
-    def _set_pkg_relief(self, relief=Gtk.ReliefStyle.HALF):
-        '''
-        Set the button relief on the package button, so it is visible
-        that it is selected or not
-        '''
-        widget = self.ui.get_object("tool_packages")
-        button = widget.get_children()[0].get_children()[0]
-        button.set_relief(relief)
 
 #
 # Callback handlers
@@ -626,15 +670,16 @@ class YumexWindow(BaseWindow):
         :param data:
         '''
         self.search_type = data
-        if self.search_type in ['keyword','prefix']:
-            self.search_entry.set_auto_search(True)
+        if data == "fields":
+            self.set_fields_active(True)
         else:
-            self.search_entry.set_auto_search(False)
+            self.set_fields_active(False)
         if self.last_search:
-            key = self.last_search
             self.last_search = None
-            self.search_entry.clear_with_no_signal()
-            self.search_entry.set_text(key)
+            # send an active signal from the search entry & grap focus & place cursor
+            self.search_entry.emit("activate")
+            self.search_entry.grab_focus()
+            self.search_entry.emit("move-cursor", Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
     def on_pkg_filter(self, widget, data):
         '''
@@ -644,7 +689,7 @@ class YumexWindow(BaseWindow):
         '''
         if widget.get_active():
             self.on_packages(None, None)
-            if data in ["installed", "available", "updates"]:
+            if data in ["installed", "available", "updates","all"]:
                 self.infobar.info(PACKAGE_LOAD_MSG[data])
                 self.set_working(True, True)
                 if self.last_search: # we are searching
@@ -684,10 +729,11 @@ class YumexWindow(BaseWindow):
             self.on_pkg_filter(widget, flt)
 
 
-    def on_search_changed(self, widget, data):
+    def on_search_changed(self, widget):
         '''
         Search callback handler
         '''
+        data = widget.get_text()
         if data == "":  # revert to the current selected filter
             self.last_search = None
             self.last_search_pkgs = []
@@ -700,18 +746,14 @@ class YumexWindow(BaseWindow):
                 else:
                     self.on_pkg_filter(widget, flt)
         else:
-            if self.search_type == "keyword":
+            if self.search_type == "key":
                 flt = "*%s*"
                 self._search_name(data, flt)
             elif self.search_type == "prefix":
                 flt = "%s*"
                 self._search_name(data, flt)
-            elif self.search_type == "summary":
-                fields = ['name', 'summary']
-                self._search_keys(fields, data)
-            elif self.search_type == "desc":
-                fields = ['name', 'summary', 'description']
-                self._search_keys(fields, data)
+            elif self.search_type == "fields":
+                self._search_keys(self.search_fields, data)
 
     def filter_search_pkgs(self, flt):
         '''
@@ -723,6 +765,8 @@ class YumexWindow(BaseWindow):
         elif flt == "installed": # get installed only
             pkgs = [po for po in self.last_search_pkgs if po.is_installed()]
             return pkgs
+        elif flt == "available":
+            pkgs = [po for po in self.last_search_pkgs if po.action in ('i')]
         else: # get all
             return self.last_search_pkgs
 
@@ -768,18 +812,18 @@ class YumexWindow(BaseWindow):
         '''
         Make the 'available' filter active, by selecting 'updates' and the back to 'available'
         '''
-        widget = self.ui.get_object('pkg_updates')
+        widget = self.ui.get_object('filter_updates')
         widget.set_active(True)
-        widget = self.ui.get_object('pkg_available')
+        widget = self.ui.get_object('filter_all')
         widget.set_active(True)
 
-    def on_groups(self, action, parameter):
+    def on_groups(self, widget):
         '''
         History button callback handler
         '''
-        widget = self.ui.get_object("tool_groups")
         if widget.get_active():
             self.set_content_page(PAGE_GROUPS)
+            self.hide_package_buttons()
             if not self._grps:
                 self.logger.debug("getting group and categories")
                 self._grps = self.backend.get_groups()
@@ -799,26 +843,30 @@ class YumexWindow(BaseWindow):
         self.group_package_view.populate(pkgs)
         self.set_working(False)
 
-    def on_history(self, action, parameter):
+    def hide_package_buttons(self, hide = True):
+        for widget in ["header_filters","header_search_options","search"]:
+                self.ui.get_object(widget).set_visible(not hide)
+
+    def on_history(self, widget):
         '''
         History button callback handler
         '''
-        widget = self.ui.get_object("tool_history")
         if widget.get_active():
             if not self.history_view.is_populated:
                 result = self.get_root_backend().GetHistoryByDays(0, CONFIG.conf.history_days)
                 self.history_view.populate(result)
             self.set_content_page(PAGE_HISTORY)
+            self.hide_package_buttons()
         else:
             self.release_root_backend()
 
-    def on_queue(self, action, parameter):
+    def on_queue(self, widget):
         '''
         Queue button callback handler
         '''
-        widget = self.ui.get_object("tool_queue")
         if widget.get_active():
             self.set_content_page(PAGE_QUEUE)
+            self.hide_package_buttons()
 
     def on_info(self, action, parameter):
         '''
@@ -830,7 +878,7 @@ class YumexWindow(BaseWindow):
             self.info.write(action.get_name())
 
 
-    def on_apply_changes(self, action, parameter):
+    def on_apply_changes(self, widget):
         '''
         Apply Changes button callback handler
         '''
@@ -845,7 +893,7 @@ class YumexWindow(BaseWindow):
         setattr(CONFIG.session, parameter,state )
         self.logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG.session, parameter)))
 
-    def on_pref(self, action, parameter):
+    def on_pref(self, widget):
         '''
         Preferences button callback handler
         '''
@@ -948,7 +996,6 @@ class YumexWindow(BaseWindow):
         self.queue_view.refresh()
         self.backend.reload()
         # clear search entry
-        self.search_entry.clear_with_no_signal()
         self.last_search = None
         self.current_filter_search = None
         # reset groups
@@ -957,7 +1004,7 @@ class YumexWindow(BaseWindow):
         self.group_package_view.populate([])
         self.set_working(False)
         self.set_content_page(PAGE_PACKAGES)
-        widget = self.ui.get_object("pkg_updates")
+        widget = self.ui.get_object("filter_updates")
         widget.set_active(True)
         self.on_pkg_filter(widget, "updates")
 

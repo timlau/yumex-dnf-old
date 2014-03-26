@@ -119,6 +119,7 @@ PACKAGE_LOAD_MSG = {
  'installed'    : _('Getting installed packages'),
  'available'    : _('Getting available packages'),
  'updates'      : _('Getting available updates'),
+ 'all'          : _('Getting all packages')
  }
 
 HISTORY_NEW_STATES = ['Update', 'Downgrade', 'Obsoleting']
@@ -156,3 +157,4 @@ RPM_ACTIONS = {
 'obsolete'  : _("Obsoleting :"),
 }
 
+WIDGETS_INSENSITIVE = ["header_menu","header_filters","header_search_options","header_execute","search",'content']

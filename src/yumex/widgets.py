@@ -20,7 +20,7 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk, GdkPixbuf
-from gi.repository import GObject, GLib
+from gi.repository import GObject, GLib, Gio
 from datetime import date
 from subprocess import call
 import logging
@@ -1383,12 +1383,12 @@ class PackageInfoWidget(Gtk.Box):
         vbox = Gtk.Box()
         vbox.set_orientation(Gtk.Orientation.VERTICAL)
         # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-        rb = self._get_radio_button('gtk-about', "desc")
+        rb = self._get_radio_button('dialog-information-symbolic', "desc")
         vbox.add(rb)
-        vbox.add(self._get_radio_button('gtk-info', "updinfo", rb))
-        vbox.add(self._get_radio_button('gtk-edit', "changelog", rb))
-        vbox.add(self._get_radio_button('gtk-harddisk', "files", rb))
-        vbox.add(self._get_radio_button('gtk-convert', "deps", rb))
+        vbox.add(self._get_radio_button('software-update-available-symbolic', "updinfo", rb))
+        vbox.add(self._get_radio_button('bookmark-new-symbolic', "changelog", rb))
+        vbox.add(self._get_radio_button('drive-multidisk-symbolic', "files", rb))
+        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb))
         vbox.set_margin_right(5)
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
@@ -1402,8 +1402,8 @@ class PackageInfoWidget(Gtk.Box):
             wid = Gtk.RadioButton.new_from_widget(group)
         else:
             wid = Gtk.RadioButton()
-        image = Gtk.Image()
-        image.set_from_stock(icon_name,Gtk.IconSize.MENU)
+        icon = Gio.ThemedIcon(name=icon_name)
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
         wid.set_image(image)
         wid.connect('toggled', self._on_filter_changed, name)
         wid.set_property("draw-indicator", False) # we only want an image, not the black dot indicator

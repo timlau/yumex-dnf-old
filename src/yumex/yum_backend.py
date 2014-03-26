@@ -321,12 +321,19 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
     @ExceptionHandler
     @TimeFunction
     def get_packages(self, flt):
-        if not self.cache.is_populated(flt):  # is this type of packages is already cached ?
-            fields = ['summary', 'size']  # fields to get
-            po_list = self.GetPackageWithAttributes(flt, fields)
-            pkgs = self._make_pkg_object(po_list, flt)
-            self.cache.populate(flt, pkgs)
-        return Backend.get_packages(self, flt)
+        if flt == 'all':
+            filters = ['installed','updates','available']
+        else:
+            filters = [flt]
+        result = []
+        for pkg_flt in filters:
+            if not self.cache.is_populated(pkg_flt):  # is this type of packages is already cached ?
+                fields = ['summary', 'size']  # fields to get
+                po_list = self.GetPackageWithAttributes(pkg_flt, fields)
+                pkgs = self._make_pkg_object(po_list, pkg_flt)
+                self.cache.populate(pkg_flt, pkgs)
+            result.extend(Backend.get_packages(self, pkg_flt))
+        return result
 
     @ExceptionHandler
     def get_downgrades(self, pkg_id):
