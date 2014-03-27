@@ -598,6 +598,126 @@ window when the close button is clicked</property>
       <placeholder/>
     </child>
   </object>
+  <object class="GtkBox" id="header_start">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="valign">start</property>
+    <child>
+      <object class="GtkMenuButton" id="header_menu">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Main options</property>
+        <child>
+          <object class="GtkImage" id="image_main">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">emblem-system-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator" id="separator_mainmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="padding">5</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="header_execute">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Apply pending changes</property>
+        <property name="halign">end</property>
+        <property name="valign">start</property>
+        <child>
+          <object class="GtkImage" id="image_execute">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">media-playback-start-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="header_filters">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Package filter</property>
+        <child>
+          <object class="GtkImage" id="image_filters">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">mail-send-receive-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="header_search_options">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Search options</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="xalign">0</property>
+        <child>
+          <object class="GtkImage" id="image_seach">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="icon_name">find-location-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSearchEntry" id="search">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="margin_left">10</property>
+        <property name="width_chars">60</property>
+        <property name="primary_icon_name">edit-find-symbolic</property>
+        <property name="primary_icon_activatable">False</property>
+        <property name="primary_icon_sensitive">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkBox" id="main">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1061,127 +1181,6 @@ window when the close button is clicked</property>
       </object>
     </child>
   </object>
-  <object class="GtkBox" id="header_start">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="valign">start</property>
-    <child>
-      <object class="GtkMenuButton" id="header_menu">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Main options</property>
-        <child>
-          <object class="GtkImage" id="image_main">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">emblem-system-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSeparator" id="separator_mainmenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="padding">5</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="header_execute">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Apply pending changes</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <child>
-          <object class="GtkImage" id="image_execute">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">media-playback-start-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="header_filters">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Package filter</property>
-        <property name="popup">menu_filters</property>
-        <child>
-          <object class="GtkImage" id="image_filters">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">mail-send-receive-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="header_search_options">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Search options</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="xalign">0</property>
-        <child>
-          <object class="GtkImage" id="image_seach">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <property name="icon_name">find-location-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSearchEntry" id="search">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="margin_left">10</property>
-        <property name="width_chars">60</property>
-        <property name="primary_icon_name">edit-find-symbolic</property>
-        <property name="primary_icon_activatable">False</property>
-        <property name="primary_icon_sensitive">False</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
-      </packing>
-    </child>
-  </object>
   <object class="GtkMenu" id="queue_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1196,6 +1195,15 @@ window when the close button is clicked</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
+      <object class="GtkRadioMenuItem" id="search_prefix">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
+        <property name="label" translatable="yes">Prefix</property>
+        <property name="draw_as_radio">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkRadioMenuItem" id="search_key">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1203,16 +1211,7 @@ window when the close button is clicked</property>
         <property name="label" translatable="yes">Keyword</property>
         <property name="active">True</property>
         <property name="draw_as_radio">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="search_prefix">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
-        <property name="label" translatable="yes">Prefix</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">search_key</property>
+        <property name="group">search_prefix</property>
       </object>
     </child>
     <child>
@@ -1222,7 +1221,7 @@ window when the close button is clicked</property>
         <property name="tooltip_text" translatable="yes">keywords in selected package attributes</property>
         <property name="label" translatable="yes">Fields</property>
         <property name="draw_as_radio">True</property>
-        <property name="group">search_key</property>
+        <property name="group">search_prefix</property>
       </object>
     </child>
     <child>

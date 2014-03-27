@@ -298,7 +298,7 @@ class YumexWindow(BaseWindow):
         self.current_filter = None
         self._root_backend = None
         self._root_locked = False
-        self.search_type = "key"
+        self.search_type = "prefix"
         self.last_search_pkgs = []
         self.current_filter_search = None
         self.active_archs = PLATFORM_ARCH
