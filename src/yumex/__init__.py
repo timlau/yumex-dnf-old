@@ -793,19 +793,18 @@ class YumexWindow(BaseWindow):
         '''
         search given package attributes for keywords
         '''
-        if data != self.last_search: # do the search
-            self.last_search = data
-            self.set_working(True, True)
-            newest_only = CONFIG.session.newest_only
-            self.last_search_pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
-            self.on_packages(None, None)  # switch to package view
-            self.info.set_package(None)
-            self.set_working(False)
-            if self.current_filter_search:
-                widget, flt = self.current_filter_search
-                self.on_pkg_filter(widget, flt)
-            else:
-                self._set_available_active()
+        self.last_search = data
+        self.set_working(True, True)
+        newest_only = CONFIG.session.newest_only
+        self.last_search_pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
+        self.on_packages(None, None)  # switch to package view
+        self.info.set_package(None)
+        self.set_working(False)
+        if self.current_filter_search:
+            widget, flt = self.current_filter_search
+            self.on_pkg_filter(widget, flt)
+        else:
+            self._set_available_active()
 
 
     def _set_available_active(self):

@@ -356,6 +356,7 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
             repo_list.append([repo['enabled'], repo_id, repo['name'], False])
         return sorted(repo_list, key=lambda elem: elem[1])
 
+    @TimeFunction
     @ExceptionHandler
     def get_packages_by_name(self, prefix, newest_only):
         '''
@@ -365,8 +366,8 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
         :param newest_only:
         :type newest_only:
         '''
-        pkgs = self.GetPackagesByName(prefix, newest_only)
-        return self._build_package_list(pkgs)
+        pkgs = self.GetPackagesByNameWithAttr(prefix, newest_only,['summary','size','action'])
+        return self._make_pkg_object_with_attr(pkgs)
 
     @ExceptionHandler
     def search(self, fields, keys, match_all, newest_only, tags):
@@ -379,8 +380,9 @@ class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
         :param match_all:
         :type match_all:
         '''
-        pkgs = self.Search(fields, keys, match_all, newest_only, tags)
-        return self._build_package_list(pkgs)
+        attrs = ['summary','size','action']
+        pkgs = self.SearchWithAttr(fields, keys, attrs, match_all, newest_only, tags)
+        return self._make_pkg_object_with_attr(pkgs)
 
     @ExceptionHandler
     def get_groups(self):
