@@ -17,7 +17,7 @@ BuildRequires: intltool
 BuildRequires: python3-devel
 
 Requires: python3-dnfdaemon >= 0.1.1
-Requires: python3-gobject
+Requires: python3-gobject >= 3.10
 Requires: python3-pyxdg
 Requires: python3-dbus
 Requires: python3-cairo
