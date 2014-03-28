@@ -646,6 +646,9 @@ class YumexWindow(BaseWindow):
         self.set_content_page(PAGE_PACKAGES)
         self.hide_package_buttons(hide=False)
 
+    def set_search_focus(self):
+        self.search_entry.grab_focus()
+        self.search_entry.emit("move-cursor", Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
 #
 # Callback handlers
@@ -665,8 +668,7 @@ class YumexWindow(BaseWindow):
             self.last_search = None
             # send an active signal from the search entry & grap focus & place cursor
             self.search_entry.emit("activate")
-            self.search_entry.grab_focus()
-            self.search_entry.emit("move-cursor", Gtk.MovementStep.BUFFER_ENDS, 1, False)
+            self.set_search_focus()
 
     def on_pkg_filter(self, widget, data):
         '''
@@ -698,6 +700,7 @@ class YumexWindow(BaseWindow):
                     self.package_view.set_header_click(True)
                 else:
                     self.package_view.set_header_click(False)
+                self.set_search_focus()
 
     def on_arch_changed(self, widget, data):
         '''
@@ -984,6 +987,7 @@ class YumexWindow(BaseWindow):
         # clear search entry
         self.last_search = None
         self.current_filter_search = None
+        self.search_entry.set_text('')
         # reset groups
         self._grps = self.backend.get_groups()
         self.groups.populate(self._grps)
