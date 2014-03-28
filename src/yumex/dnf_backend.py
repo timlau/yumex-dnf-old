@@ -436,7 +436,7 @@ class DnfRootBackend(Backend, DnfDaemonClient):
         :param newest_only:
         :type newest_only:
         '''
-        pkgs = self.GetPackagesByNameWithAttr(prefix, newest_only,['summary','size','action'])
+        pkgs = self.GetPackagesByName(prefix,['summary','size','action'], newest_only)
         return self._make_pkg_object_with_attr(pkgs)
 
     @ExceptionHandler
