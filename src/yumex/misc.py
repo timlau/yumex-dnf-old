@@ -25,7 +25,7 @@ import gettext
 import os.path
 import configparser
 import logging
-from .config import *  
+from .config import *
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -173,7 +173,6 @@ class YumexConf(BaseConfig):
     update_startup_delay = IntOption(30)
     autocheck_updates = BoolOption(False)
     hide_on_close = BoolOption(False)
-    session_refresh = Option('2000-01-01 00:01')
     system_refresh = Option('2000-01-01 00:01')
     refresh_interval = IntOption(12)
     max_dnl_errors = IntOption(10)
