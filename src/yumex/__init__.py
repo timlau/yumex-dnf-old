@@ -19,7 +19,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
-from .widgets import SearchEntry, PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
+from .widgets import PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
                      Preferences, GroupView, ArchMenu, ask_for_gpg_import
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
@@ -28,8 +28,7 @@ from .status import StatusIcon
 import argparse
 import logging
 from subprocess import call
-import time
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
