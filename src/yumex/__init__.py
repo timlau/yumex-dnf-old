@@ -201,6 +201,7 @@ class YumexInstallWindow(BaseWindow):
     def __init__(self, app, status):
         BaseWindow.__init__(self, app, status)
         self.set_default_size(600, 80)
+
         grid = Gtk.Grid()
         ib = self.ui.get_object("infobar")
         ib.reparent(grid)
@@ -310,10 +311,22 @@ class YumexWindow(BaseWindow):
         self.set_titlebar(self.hb)
         self.hb.show()
 
-        main = self.ui.get_object("main")
-        self.add(main)
-        main.show()
-
+        # Setup the main window ui
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.add(vbox)
+        # infobar revealer
+        infobar = self.ui.get_object("infobar")
+        vbox.pack_start(infobar,False,False,0)
+        # content Stack
+        self.stack = Gtk.Stack()
+        self.stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
+        self.stack.set_transition_duration(500)
+        for name in ['packages','groups','history','queue']:
+            page = self.ui.get_object("page_%s" % name)
+            self.stack.add_named(page, name)
+        vbox.pack_start(self.stack,True,True,0)
+        self.stack.show()
+        vbox.show()
         self.add_accel_group(self.ui.get_object("main_accelgroup"))
 
         # Setup package filters
@@ -463,7 +476,6 @@ class YumexWindow(BaseWindow):
         setup the main content notebook
         setup the package, history and queue views pages
         '''
-        self.content = self.ui.get_object("content")
         # Package Page
         queue_menu = self.ui.get_object("queue_menu")
         self.queue_view = QueueView(queue_menu)
@@ -508,8 +520,7 @@ class YumexWindow(BaseWindow):
         self.group_info = PackageInfo(self, self)
         info.add(self.group_info)
         self.info.show_all()
-        self.content.set_show_tabs(False)
-        self.content.show_all()
+        self.stack.show_all()
 
 
     def set_content_page(self, page):
@@ -518,13 +529,7 @@ class YumexWindow(BaseWindow):
         :param page: active page (PAGE_PACKAGES, PAGE_QUEUE, PAGE_HISTORY)
         '''
         self.active_page = page
-        self.content.set_current_page(page)
-        #if page != PAGE_PACKAGES:
-            #self._set_pkg_relief(Gtk.ReliefStyle.NONE)
-            #self.search_entry.set_sensitive(False)
-        #else:
-            #self._set_pkg_relief()
-            #self.search_entry.set_sensitive(True)
+        self.stack.set_visible_child_name(page)
 
     def _create_action_hb(self, name, callback, para=None):
         '''
@@ -624,6 +629,7 @@ class YumexWindow(BaseWindow):
             if insensitive:
                 for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(False)
+                self.stack.set_sensitive(False)
         doGtkEvents()
 
     def _set_normal_cursor(self):
@@ -633,6 +639,7 @@ class YumexWindow(BaseWindow):
             win.set_cursor(None)
             for widget in WIDGETS_INSENSITIVE:
                 self.ui.get_object(widget).set_sensitive(True)
+            self.stack.set_sensitive(True)
         doGtkEvents()
 
 

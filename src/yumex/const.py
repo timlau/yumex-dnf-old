@@ -68,11 +68,11 @@ BIG_FONT = Pango.FontDescription("sans 12")
 
 # Constants
 
-# Notebook page numbers
-PAGE_PACKAGES = 0
-PAGE_QUEUE = 1
-PAGE_HISTORY = 2
-PAGE_GROUPS = 3
+# Main UI stack names
+PAGE_PACKAGES = 'packages'
+PAGE_QUEUE = 'queue'
+PAGE_HISTORY = 'history'
+PAGE_GROUPS = 'groups'
 
 ACTIONS_FILTER = { 'u' : 'updates', 'i' : 'available', \
                    'r' : 'installed' , 'o' : 'obsoletes', \
@@ -157,4 +157,4 @@ RPM_ACTIONS = {
 'obsolete'  : _("Obsoleting :"),
 }
 
-WIDGETS_INSENSITIVE = ["header_menu","header_filters","header_search_options","header_execute","search",'content']
+WIDGETS_INSENSITIVE = ["header_menu","header_filters","header_search_options","header_execute","search"]

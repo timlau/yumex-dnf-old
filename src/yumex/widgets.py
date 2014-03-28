@@ -162,13 +162,17 @@ class InfoProgressBar:
 
     def __init__(self, ui):
         self.ui = ui
-        self.infobar = ui.get_object("infobar")
+        self.infobar = ui.get_object("infobar") # infobar revealer
+        frame = ui.get_object("info_frame")
         new_bg = Gdk.RGBA()
         new_bg.parse("rgb(255,255,255)")
-        self.infobar.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
+        frame.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
+
+    def _show_infobar(self, show=True):
+        self.infobar.set_reveal_child(show)
 
     def show_progress(self, state):
         if state:
@@ -180,7 +184,7 @@ class InfoProgressBar:
         self.label.hide()
         self.sublabel.hide()
         self.progress.hide()
-        self.infobar.hide()
+        self._show_infobar(False)
         self.progress.set_text("")
         #self.progress.set_show_text (False)
 
@@ -201,12 +205,12 @@ class InfoProgressBar:
         self.progress.show()
 
     def info(self, msg):
-        self.infobar.show()
+        self._show_infobar(True)
         self.show_label()
         self.label.set_text(msg)
 
     def info_sub(self, msg):
-        self.infobar.show()
+        self._show_infobar(True)
         self.show_sublabel()
         self.sublabel.set_text(msg)
 
