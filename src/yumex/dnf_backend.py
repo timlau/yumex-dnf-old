@@ -451,7 +451,7 @@ class DnfRootBackend(Backend, DnfDaemonClient):
         :type match_all:
         '''
         attrs = ['summary','size','action']
-        pkgs = self.SearchWithAttr(fields, keys, attrs, match_all, newest_only, tags)
+        pkgs = self.Search(fields, keys, attrs, match_all, newest_only, tags)
         return self._make_pkg_object_with_attr(pkgs)
 
     @ExceptionHandler
