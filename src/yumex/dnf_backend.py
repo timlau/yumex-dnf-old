@@ -26,7 +26,7 @@ from gi.repository import Gdk
 
 logger = logging.getLogger('yumex.yum_backend')
 
-class YumPackage(Package):
+class DnfPackage(Package):
     '''
     This is an abstract package object for a package in the package system
    '''
@@ -214,226 +214,13 @@ class YumPackage(Package):
         else:
             return False
 
-class YumReadOnlyBackend(Backend, DnfDaemonReadOnlyClient):
+class DnfRootBackend(Backend, DnfDaemonClient):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
     """
 
     def __init__(self, frontend):
         Backend.__init__(self, frontend, filters = True)
-        DnfDaemonReadOnlyClient.__init__(self)
-
-    def on_RepoMetaDataProgress(self, name, frac):
-        ''' Repository Metadata Download progress '''
-        values =  (name, frac)
-        logger.debug("on_RepoMetaDataProgress : %s" % (repr(values)))
-        if frac == 0.0:
-            self.frontend.infobar.info_sub(name)
-        else:
-            self.frontend.infobar.set_progress(frac)
-
-    @ExceptionHandler
-    def setup(self):
-        self.Lock()
-        self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos:
-            logger.debug("nonroot : Setting repos : %s" % CONFIG.session.enabled_repos)
-            self.SetEnabledRepos(CONFIG.session.enabled_repos)
-        return True
-
-    @ExceptionHandler
-    def quit(self):
-        '''
-        quit the application by unlocking yum and stop the mainloop
-        '''
-        self.Unlock()
-        self.Exit()
-
-    @ExceptionHandler
-    def reload(self):
-        '''
-        Reload the yumdaemon service
-        '''
-        self.Unlock()  # Release the lock
-        # time.sleep(5)
-        self.Lock()  # Load & Lock the daemon
-        self.SetWatchdogState(False)
-        if CONFIG.session.enabled_repos:
-            logger.debug("root: Setting repos : %s" % CONFIG.session.enabled_repos)
-            self.SetEnabledRepos(CONFIG.session.enabled_repos)
-        self.cache.reset()  # Reset the cache
-
-
-    def show_package_list(self, pkgs):
-        '''
-        show a list of packages
-        @param pkgs:
-        '''
-        for pkg_id in pkgs:
-            (n, e, v, r, a, repo_id) = self.to_pkg_tuple(pkg_id)
-            print(" --> %s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id))
-
-    def to_pkg_tuple(self, pkg_id):
-        ''' find the real package nevre & repoid from an package pkg_id'''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        return (n, e, v, r, a, repo_id)
-
-    def _make_pkg_object(self, pkgs, flt):
-        '''
-        Make list of po_dict to Package objects
-        :param pkgs:
-        :param flt:
-        '''
-        po_list = []
-        action = FILTER_ACTIONS[flt]
-        for pkg_values in pkgs:
-            po_list.append(YumPackage(pkg_values, action, self))
-        return self.cache.find_packages(po_list)
-
-    @TimeFunction
-    def _make_pkg_object_with_attr(self, pkgs):
-        '''
-        Make list of po_dict to Package objects
-        :param pkgs: list with (pkg_id, summary, size, action)
-        '''
-        po_list = []
-        for elem in pkgs:
-            (pkg_id,summary,size,action) = elem
-            po_tuple = (pkg_id,summary,size)
-            po_list.append(YumPackage(po_tuple,  BACKEND_ACTIONS[action], self))
-        return self.cache.find_packages(po_list)
-
-    def _build_package_list(self, pkg_ids):
-        '''
-        Build a list of package object, take existing ones from the cache.
-        :param pkg_ids:
-        :type pkg_ids:
-        '''
-        po_list = []
-        for pkg_id in pkg_ids:
-            summary = self.GetAttribute(pkg_id, "summary")
-            size = self.GetAttribute(pkg_id, "size")
-            pkg_values = (pkg_id, summary, size)
-            action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
-            po_list.append(YumPackage(pkg_values, action, self))
-        return self.cache.find_packages(po_list)
-
-    @ExceptionHandler
-    @TimeFunction
-    def get_packages(self, flt):
-        if flt == 'all':
-            filters = ['installed','updates','available']
-        else:
-            filters = [flt]
-        result = []
-        for pkg_flt in filters:
-            if not self.cache.is_populated(pkg_flt):  # is this type of packages is already cached ?
-                fields = ['summary', 'size']  # fields to get
-                po_list = self.GetPackageWithAttributes(pkg_flt, fields)
-                pkgs = self._make_pkg_object(po_list, pkg_flt)
-                self.cache.populate(pkg_flt, pkgs)
-            result.extend(Backend.get_packages(self, pkg_flt))
-        return result
-
-    @ExceptionHandler
-    def get_downgrades(self, pkg_id):
-        pkgs = self.GetAttribute(pkg_id, "downgrades")
-        return self._build_package_list(pkgs)
-
-    @ExceptionHandler
-    def get_repo_ids(self, flt):
-        repos = self.GetRepositories(flt)
-        return
-
-    @ExceptionHandler
-    def get_repositories(self,flt="*"):
-        repo_list = []
-        repos = self.GetRepositories(flt)
-        for repo_id in repos:
-            if repo_id.endswith('-source') or repo_id.endswith('-debuginfo'):
-                continue
-            repo = self.GetRepo(repo_id)
-            repo_list.append([repo['enabled'], repo_id, repo['name'], False])
-        return sorted(repo_list, key=lambda elem: elem[1])
-
-    @TimeFunction
-    @ExceptionHandler
-    def get_packages_by_name(self, prefix, newest_only):
-        '''
-
-        :param prefix:
-        :type prefix:
-        :param newest_only:
-        :type newest_only:
-        '''
-        pkgs = self.GetPackagesByNameWithAttr(prefix, newest_only,['summary','size','action'])
-        return self._make_pkg_object_with_attr(pkgs)
-
-    @ExceptionHandler
-    def search(self, fields, keys, match_all, newest_only, tags):
-        '''
-
-        :param fields:
-        :type fields:
-        :param keys:
-        :type keys:
-        :param match_all:
-        :type match_all:
-        '''
-        attrs = ['summary','size','action']
-        pkgs = self.SearchWithAttr(fields, keys, attrs, match_all, newest_only, tags)
-        return self._make_pkg_object_with_attr(pkgs)
-
-    @ExceptionHandler
-    def get_groups(self):
-        '''
-
-        '''
-        result = self.GetGroups()
-        return result
-
-    @TimeFunction
-    def get_group_packages(self, grp_id, grp_flt):
-        '''
-        Get a list of packages from a grp_id and a group filter
-        :param grp_id:
-        :param grp_flt:
-        '''
-        pkgs = self.GetGroupPackages(grp_id, grp_flt,['summary','size','action'])
-        return self._make_pkg_object_with_attr(pkgs)
-
-    def show_transaction_result(self, output):
-        for action, pkgs in output:
-            print("  %s" % action)
-            for pkg_list in pkgs:
-                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                print ("    --> %-50s : %s" % (self._fullname(pkg_id), size))
-
-    def format_transaction_result(self, output):
-        result = []
-        for action, pkgs in output:
-            result.append("  %s" % action)
-            for pkg_list in pkgs:
-                pkg_id, size, obs_list = pkg_list  # (pkg_id, size, list with pkg_id's obsoleted by this pkg)
-                result.append("    --> %-50s : %s" % (self._fullname(pkg_id), size))
-        return "\n".join(result)
-
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
-        else:
-            return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
-
-
-class YumRootBackend(Backend, DnfDaemonClient):
-    """
-    Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
-    """
-
-    def __init__(self, frontend):
-        Backend.__init__(self, frontend)
         DnfDaemonClient.__init__(self)
         self._gpg_confirm = None
         self.dnl_progress = None
@@ -556,16 +343,6 @@ class YumRootBackend(Backend, DnfDaemonClient):
         self.cache.reset()  # Reset the cache
 
 
-    @ExceptionHandler
-    @TimeFunction
-    def get_packages(self, flt):
-        if not self.cache.is_populated(flt):  # is this type of packages is already cached ?
-            fields = ['summary', 'size']  # fields to get
-            po_list = self.GetPackageWithAttributes(flt, fields)
-            pkgs = self._make_pkg_object(po_list, flt)
-            self.cache.populate(flt, pkgs)
-        return Backend.get_packages(self, flt)
-
     def to_pkg_tuple(self, pkg_id):
         ''' find the real package nevre & repoid from an package pkg_id'''
         (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
@@ -580,7 +357,20 @@ class YumRootBackend(Backend, DnfDaemonClient):
         po_list = []
         action = FILTER_ACTIONS[flt]
         for pkg_values in pkgs:
-            po_list.append(YumPackage(pkg_values, action, self))
+            po_list.append(DnfPackage(pkg_values, action, self))
+        return self.cache.find_packages(po_list)
+
+    @TimeFunction
+    def _make_pkg_object_with_attr(self, pkgs):
+        '''
+        Make list of po_dict to Package objects
+        :param pkgs: list with (pkg_id, summary, size, action)
+        '''
+        po_list = []
+        for elem in pkgs:
+            (pkg_id,summary,size,action) = elem
+            po_tuple = (pkg_id,summary,size)
+            po_list.append(DnfPackage(po_tuple,  BACKEND_ACTIONS[action], self))
         return self.cache.find_packages(po_list)
 
     def _build_package_list(self, pkg_ids):
@@ -595,9 +385,92 @@ class YumRootBackend(Backend, DnfDaemonClient):
             size = self.GetAttribute(pkg_id, "size")
             pkg_values = (pkg_id, summary, size)
             action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
-            po_list.append(YumPackage(pkg_values, action, self))
+            po_list.append(DnfPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
+    @ExceptionHandler
+    @TimeFunction
+    def get_packages(self, flt):
+        if flt == 'all':
+            filters = ['installed','updates','available']
+        else:
+            filters = [flt]
+        result = []
+        for pkg_flt in filters:
+            if not self.cache.is_populated(pkg_flt):  # is this type of packages is already cached ?
+                fields = ['summary', 'size']  # fields to get
+                po_list = self.GetPackageWithAttributes(pkg_flt, fields)
+                pkgs = self._make_pkg_object(po_list, pkg_flt)
+                self.cache.populate(pkg_flt, pkgs)
+            result.extend(Backend.get_packages(self, pkg_flt))
+        return result
+
+    @ExceptionHandler
+    def get_downgrades(self, pkg_id):
+        pkgs = self.GetAttribute(pkg_id, "downgrades")
+        return self._build_package_list(pkgs)
+
+    @ExceptionHandler
+    def get_repo_ids(self, flt):
+        repos = self.GetRepositories(flt)
+        return
+
+    @ExceptionHandler
+    def get_repositories(self,flt="*"):
+        repo_list = []
+        repos = self.GetRepositories(flt)
+        for repo_id in repos:
+            if repo_id.endswith('-source') or repo_id.endswith('-debuginfo'):
+                continue
+            repo = self.GetRepo(repo_id)
+            repo_list.append([repo['enabled'], repo_id, repo['name'], False])
+        return sorted(repo_list, key=lambda elem: elem[1])
+
+    @TimeFunction
+    @ExceptionHandler
+    def get_packages_by_name(self, prefix, newest_only):
+        '''
+
+        :param prefix:
+        :type prefix:
+        :param newest_only:
+        :type newest_only:
+        '''
+        pkgs = self.GetPackagesByNameWithAttr(prefix, newest_only,['summary','size','action'])
+        return self._make_pkg_object_with_attr(pkgs)
+
+    @ExceptionHandler
+    def search(self, fields, keys, match_all, newest_only, tags):
+        '''
+
+        :param fields:
+        :type fields:
+        :param keys:
+        :type keys:
+        :param match_all:
+        :type match_all:
+        '''
+        attrs = ['summary','size','action']
+        pkgs = self.SearchWithAttr(fields, keys, attrs, match_all, newest_only, tags)
+        return self._make_pkg_object_with_attr(pkgs)
+
+    @ExceptionHandler
+    def get_groups(self):
+        '''
+
+        '''
+        result = self.GetGroups()
+        return result
+
+    @TimeFunction
+    def get_group_packages(self, grp_id, grp_flt):
+        '''
+        Get a list of packages from a grp_id and a group filter
+        :param grp_id:
+        :param grp_flt:
+        '''
+        pkgs = self.GetGroupPackages(grp_id, grp_flt,['summary','size','action'])
+        return self._make_pkg_object_with_attr(pkgs)
 
     def show_transaction_result(self, output):
         for action, pkgs in output:
@@ -619,6 +492,6 @@ class YumRootBackend(Backend, DnfDaemonClient):
         ''' Package fullname  '''
         (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
         if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
+            return "%s-%s:%s-%s.%s (%s)" % (n, e, v, r, a, repo_id)
         else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
+            return "%s-%s-%s.%s (%s)" % (n, v, r, a, repo_id)
