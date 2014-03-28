@@ -752,11 +752,13 @@ class YumexWindow(BaseWindow):
         '''
         if flt == "updates": # get update only
             pkgs = [po for po in self.last_search_pkgs if po.action in ('u','o')]
+            return pkgs
         elif flt == "installed": # get installed only
             pkgs = [po for po in self.last_search_pkgs if po.is_installed()]
             return pkgs
         elif flt == "available":
-            pkgs = [po for po in self.last_search_pkgs if po.action in ('i')]
+            pkgs = [po for po in self.last_search_pkgs if po.action == 'i']
+            return pkgs
         else: # get all
             return self.last_search_pkgs
 
