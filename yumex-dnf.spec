@@ -1,14 +1,14 @@
 %global appname yumex
 
 Name:     %{appname}-dnf
-Version:  3.99.1
+Version:  4.0.1
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
 License:  GPLv2+
 URL:      http://yumex.dk
-Source0:  https://fedorahosted.org/releases/y/u/yumex/%{name}-%{version}.tar.gz
+Source0:  https://github.com/timlau/yumex-dnf/archive/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 BuildRequires: desktop-file-utils
@@ -16,7 +16,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel
 
-Requires: python3-dnfdaemon >= 0.1.1
+Requires: python3-dnfdaemon >= 0.1.3
 Requires: python3-gobject >= 3.10
 Requires: python3-pyxdg
 Requires: python3-dbus
@@ -65,6 +65,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/dbus-1/services/*
 
 %changelog
+* Sat Mar 29 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.1
+- bumped release to 4.0.1
+
 * Sun Sep 15 2013 Tim Lauridsen <timlau@fedoraproject.org> 3.99.1-1
 - Initial rpm build
 

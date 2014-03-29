@@ -61,7 +61,7 @@ release:
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
 	@$(MAKE) archive
-	@$(MAKE) upload
+	@$(MAKE) rpm
 
 test-cleanup:	
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz

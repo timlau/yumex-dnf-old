@@ -39,7 +39,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 
 
 
-version = 100 # must be integer
+version = 401 # must be integer
 DAEMON_ORG = 'dk.yumex.StatusIcon'
 DAEMON_INTERFACE = DAEMON_ORG
 LOG_ROOT = 'yumex-statusicon'

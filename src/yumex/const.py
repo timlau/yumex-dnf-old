@@ -25,7 +25,7 @@ from .misc import _, P_  # @UnusedImport
 from subprocess import check_output
 
 
-__yumex_version__ = "3.99.1"
+__yumex_version__ = "4.0.1"
 
 
 # find the data dir for resources
