@@ -9,3 +9,4 @@ __pycache__/
 /src/yumex.ui~
 /po/*.mo
 *~
+/docs/_*
