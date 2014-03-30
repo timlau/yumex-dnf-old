@@ -470,7 +470,8 @@ class DnfRootBackend(Backend, DnfDaemonClient):
         :param grp_id:
         :param grp_flt:
         '''
-        pkgs = self.GetGroupPackages(grp_id, grp_flt,['summary','size','action'])
+        attrs = ['summary','size','action']
+        pkgs = self.GetGroupPackages(grp_id, grp_flt,attrs)
         return self._make_pkg_object_with_attr(pkgs)
 
     def show_transaction_result(self, output):

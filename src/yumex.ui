@@ -615,6 +615,7 @@ window when the close button is clicked</property>
             <property name="icon_name">emblem-system-symbolic</property>
           </object>
         </child>
+        <accelerator key="m" signal="activate" modifiers="GDK_MOD1_MASK"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -952,6 +953,7 @@ window when the close button is clicked</property>
   <object class="GtkMenu" id="menu_filters">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
     <child>
       <object class="GtkRadioMenuItem" id="filter_updates">
         <property name="visible">True</property>
@@ -989,6 +991,82 @@ window when the close button is clicked</property>
         <property name="use_underline">True</property>
         <property name="draw_as_radio">True</property>
         <property name="group">filter_updates</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="queue_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
+    <child>
+      <object class="GtkMenuItem" id="queue_remove_selected">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Delete Selected</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="search_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_prefix">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
+        <property name="label" translatable="yes">Prefix</property>
+        <property name="draw_as_radio">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_key">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">keyword in package name</property>
+        <property name="label" translatable="yes">Keyword</property>
+        <property name="active">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">search_prefix</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="search_fields">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">keywords in selected package attributes</property>
+        <property name="label" translatable="yes">Fields</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">search_prefix</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="field_name">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Name</property>
+        <property name="active">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="field_summary">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Summary</property>
+        <property name="active">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="field_description">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Description</property>
       </object>
     </child>
   </object>
@@ -1153,79 +1231,6 @@ window when the close button is clicked</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
-    </child>
-  </object>
-  <object class="GtkMenu" id="queue_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="queue_remove_selected">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="search_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkRadioMenuItem" id="search_prefix">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
-        <property name="label" translatable="yes">Prefix</property>
-        <property name="draw_as_radio">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="search_key">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">keyword in package name</property>
-        <property name="label" translatable="yes">Keyword</property>
-        <property name="active">True</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">search_prefix</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="search_fields">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">keywords in selected package attributes</property>
-        <property name="label" translatable="yes">Fields</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">search_prefix</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="menuitem1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="field_name">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Name</property>
-        <property name="active">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="field_summary">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Summary</property>
-        <property name="active">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkCheckMenuItem" id="field_description">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Description</property>
-      </object>
     </child>
   </object>
   <object class="GtkDialog" id="transaction-results">
