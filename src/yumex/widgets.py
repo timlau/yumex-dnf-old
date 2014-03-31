@@ -2012,6 +2012,19 @@ class GroupView(Gtk.TreeView):
                                    GdkPixbuf.INTERP_BILINEAR)
         return pix
 
+class AboutDialog(Gtk.AboutDialog):
+
+    def __init__(self):
+        Gtk.AboutDialog.__init__(self)
+        self.props.program_name = 'Yum Extender (dnf)'
+        self.props.version = VERSION
+        self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
+        self.props.license_type = Gtk.License.GPL_2_0
+        self.props.copyright = '(C) 2014 Tim Lauridsen'
+        self.props.website = 'https://github.com/timlau/yumex-dnf'
+        self.props.logo_icon_name = 'yumex-dnf'
+
+
 def ask_for_gpg_import(window, values):
     (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
     pkg_name = pkg_id.split(',')[0]

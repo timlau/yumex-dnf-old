@@ -20,7 +20,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from .widgets import PackageView, QueueView, PackageInfo, InfoProgressBar, HistoryView, TransactionResult, \
-                     Preferences, GroupView, ArchMenu, ask_for_gpg_import
+                     Preferences, GroupView, ArchMenu, ask_for_gpg_import, AboutDialog
 from .misc import show_information, doGtkEvents, _, P_, CONFIG, ExceptionHandler  # lint:ok
 from .const import *  # @UnusedWildImport
 from .dnf_backend import DnfRootBackend
@@ -398,6 +398,11 @@ class YumexWindow(BaseWindow):
         wid.connect('activate', self.on_queue)
         wid = self.ui.get_object("main_history")
         wid.connect('activate', self.on_history)
+        wid = self.ui.get_object("main_about")
+        wid.connect('activate', self.on_about)
+        wid = self.ui.get_object("main_doc")
+        wid.connect('activate', self.on_docs)
+
         wid = self.ui.get_object("header_execute")
         wid.connect('clicked', self.on_apply_changes)
 
@@ -432,6 +437,33 @@ class YumexWindow(BaseWindow):
             return True
         else:
             self.app.on_quit()
+
+    def _is_url(self, url):
+        urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+        if urls:
+            return True
+        else:
+            return False
+
+    def _open_url(self, url):
+        if self._is_url(url):  # just to be sure and prevent shell injection
+            rc = call("xdg-open %s" % url, shell=True)
+            if rc != 0:  # failover to gtk.show_uri, if xdg-open fails or is not installed
+                Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
+        else:
+            show_information("%s is not an url" % url)
+
+
+    def on_about(self,widget):
+        """ Main Menu: Help -> About """
+        dialog = AboutDialog()
+        dialog.run()
+        dialog.destroy()
+
+    def on_docs(self,widget):
+        """ Main Menu: Help -> Documentation"""
+        self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
+        pass
 
     def on_search_field(self, widget, field):
         if widget.get_active():
