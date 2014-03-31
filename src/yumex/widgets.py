@@ -656,8 +656,8 @@ class PackageQueue:
         self.packages = {}
         self._setup_packages()
         self.groups = {}
-        self.groups['i'] = []
-        self.groups['r'] = []
+        self.groups['i'] = {}
+        self.groups['r'] = {}
         self._name_arch_index = {}
 
     def _setup_packages(self):
@@ -672,8 +672,8 @@ class PackageQueue:
         self.packages = {}
         self._setup_packages()
         self.groups = {}
-        self.groups['i'] = []
-        self.groups['r'] = []
+        self.groups['i'] = {}
+        self.groups['r'] = {}
         self._name_arch_index = {}
 
     def get(self, action=None):
@@ -720,29 +720,27 @@ class PackageQueue:
         na = "%s.%s" % (pkg.name, pkg.arch)
         return na in self._name_arch_index
 
-    def addGroup(self, grp, action):
+    def addGroup(self, grp_id, grp_name, action):
         '''
 
         @param grp:
         @param action:
         '''
-        logger.debug('addGroup : %s - %s' %(grp, action))
-        pkg_list = self.groups[action]
-        if not grp in pkg_list:
-            pkg_list.append(grp)
-        self.groups[action] = pkg_list
+        logger.debug('addGroup : %s - %s' %(grp_id, action))
+        grps = self.groups[action]
+        if not grp_id in grps:
+            grps[grp_id] = grp_name
 
-    def removeGroup(self, grp, action):
+    def removeGroup(self, grp_id, action):
         '''
 
         @param grp:
         @param action:
         '''
-        logger.debug('removeGroup : %s - %s' %(grp, action))
-        pkg_list = self.groups[action]
-        if grp in pkg_list:
-            pkg_list.remove(grp)
-        self.groups[action] = pkg_list
+        logger.debug('removeGroup : %s - %s' %(grp_id, action))
+        grps = self.groups[action]
+        if grp_id in grps:
+            del grps[grp_id]
 
     def remove_all_groups(self):
         '''
@@ -821,9 +819,6 @@ class QueueView(Gtk.TreeView):
         :param event:
         '''
         if event.button == 3:  # Right Click
-            x = int(event.x)
-            y = int(event.y)
-            t = event.time
             popup = self.queue_menu
             popup.popup(None, None, None, None, event.button, event.time)
             return True
@@ -864,6 +859,14 @@ class QueueView(Gtk.TreeView):
         label = "<b>%s</b>" % P_("RPM file to install", "RPM files to install", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
+        grps = self.queue.groups['i']
+        label = "<b>%s</b>" % P_("Group to install", "Groups to install", len(pkg_list))
+        if len(grps) > 0:
+            self.populate_group_list(label, grps)
+        grps = self.queue.groups['r']
+        label = "<b>%s</b>" % P_("Group to remove", "Groups files to remove", len(pkg_list))
+        if len(grps) > 0:
+            self.populate_group_list(label, grps)
         self.populate_list_downgrade()
         self.expand_all()
 
@@ -876,6 +879,15 @@ class QueueView(Gtk.TreeView):
         parent = self.store.append(None, [label, ""])
         for pkg in pkg_list:
             self.store.append(parent, [str(pkg), pkg.summary])
+
+    def populate_group_list(self, label, grps):
+        '''
+        @param label:
+        @param pkg_list:
+        '''
+        parent = self.store.append(None, [label, ""])
+        for grp_id in grps:
+            self.store.append(parent, ["%s ( %s )" % (grps[grp_id], grp_id), "" ])
 
     def populate_list_downgrade(self):
         '''
@@ -1864,6 +1876,7 @@ class GroupView(Gtk.TreeView):
     def on_toggled(self, widget, path):
         """ Group selection handler """
         iterator = self.model.get_iter(path)
+        grp_name = self.model.get_value(iterator, 1)
         grpid = self.model.get_value(iterator, 2)
         inst = self.model.get_value(iterator, 0)
         action = self.queue.hasGroup(grpid)
@@ -1873,10 +1886,10 @@ class GroupView(Gtk.TreeView):
             self.model.set_value(iterator, 3, False)
         else:
             if inst: # Group is installed add it to queue for removal
-                self.queue.addGroup(grpid, 'r') # Add for remove
+                self.queue.addGroup(grpid, grp_name, 'r') # Add for remove
                 self._updatePackages(grpid, True, 'r')
             else: # Group is not installed, add it to queue for installation
-                self.queue.addGroup(grpid, 'i') # Add for install
+                self.queue.addGroup(grpid, grp_name, 'i') # Add for install
                 self._updatePackages(grpid, True, 'i')
             self.model.set_value(iterator, 3, True)
         self.model.set_value(iterator, 0, not inst)
@@ -1900,28 +1913,28 @@ class GroupView(Gtk.TreeView):
         @param add:
         @param action:
         '''
-        pkgs = self.base.backend.get_group_packages(grpid, 'default')
-        for pkg in pkgs:
-            logger.debug("   group package : %s" % pkg)
-        # Add group packages to queue
-        if add:
-            for po in pkgs:
-                if not po.queued:
-                    if action == 'i' and not po.is_installed() : # Install
-                        po.queued = po.action
-                        self.queue.add(po)
-                        po.set_select(True)
-                    elif action == 'r' and po.is_installed() : # Remove
-                        po.queued = po.action
-                        self.queue.add(po)
-                        po.set_select(False)
-        # Remove group packages from queue
-        else:
-            for po in pkgs:
-                if po.queued:
-                    po.queued = None
-                    self.queue.remove(po)
-                    po.set_select(False)
+        #pkgs = self.base.backend.get_group_packages(grpid, 'default')
+        #for pkg in pkgs:
+            #logger.debug("   group package : %s" % pkg)
+        ## Add group packages to queue
+        #if add:
+            #for po in pkgs:
+                #if not po.queued:
+                    #if action == 'i' and not po.is_installed() : # Install
+                        #po.queued = po.action
+                        #self.queue.add(po)
+                        #po.set_select(True)
+                    #elif action == 'r' and po.is_installed() : # Remove
+                        #po.queued = po.action
+                        #self.queue.add(po)
+                        #po.set_select(False)
+        ## Remove group packages from queue
+        #else:
+            #for po in pkgs:
+                #if po.queued:
+                    #po.queued = None
+                    #self.queue.remove(po)
+                    #po.set_select(False)
         self.queueView.refresh()
 
     def reset_queued(self):
