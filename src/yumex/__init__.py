@@ -115,7 +115,7 @@ class BaseWindow(Gtk.ApplicationWindow):
             locked, msg = self._root_backend.setup()
             if locked:
                 self._root_locked = True
-                self.logger.debug("Lock the yum root daemon")
+                self.logger.debug("Lock the Dnf root daemon")
                 if self._check_cache_expired('system'):
                     self.logger.debug("Refresh system cache")
                     self.set_working(True, True)
@@ -129,9 +129,9 @@ class BaseWindow(Gtk.ApplicationWindow):
             else:
                 self.logger.critical("can't get root backend lock")
                 if msg == "not-authorized": # user canceled the polkit dialog
-                    errmsg = _("Yum root backend was not authorized\n Yum Extender will exit")
-                elif msg == "locked-by-other": # yum is locked by another process
-                    errmsg = _("Yum  is locked by another process \n\nYum Extender will exit")
+                    errmsg = _("Dnf root backend was not authorized\n Yum Extender will exit")
+                elif msg == "locked-by-other": # Dnf is locked by another process
+                    errmsg = _("Dnf  is locked by another process \n\nYum Extender will exit")
                 show_information(self, errmsg)
                 # close down and exit yum extender
                 self.status.SetWorking(False) # reset working state
@@ -147,11 +147,11 @@ class BaseWindow(Gtk.ApplicationWindow):
         if self._root_backend == None:
             return
         if self._root_locked == True:
-            self.logger.debug("Unlock the yum root daemon")
+            self.logger.debug("Unlock the Dnf root daemon")
             self._root_backend.Unlock()
             self._root_locked = False
         if quit:
-            self.logger.debug("Exit the yum root daemon")
+            self.logger.debug("Exit the Dnf root daemon")
             self._root_backend.Exit()
 
     def exception_handler(self, e):
@@ -929,7 +929,7 @@ class YumexWindow(BaseWindow):
     def process_actions(self):
         '''
         Process the current action in the queue
-        - setup the yum transaction
+        - setup the Dnf transaction
         - resolve dependencies
         - ask user for confirmation on result of depsolve
         - run the transaction

@@ -12,11 +12,13 @@ Yum Extender (yumex-dnf) is a graphical software manager to control the software
 
 Links
 ------
-* Yum Extender Homepage_
-* Yum Extender Development_
+* Homepage_
+* Development_
+* Translation_
 
 .. _Homepage: http://yumex.dk
 .. _Development: https://github.com/timlau/yumex-dnf
+.. _Translation: https://www.transifex.com/projects/p/yumex/resource/yumex-dnf/
 
 Usage
 ======
