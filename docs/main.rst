@@ -114,19 +114,31 @@ clicking on the column header will switch between there states
 
 Groups View
 --------------
+The group view shows packages ordered by categories and groups, the selection of packages is the same as for the package view.
+
 The group view is selected from the main menu |main-menu|
 
 .. image::  img/groups.png
 
+It is possible to install/remove groups also by selecting the checkbox in the group/category tree.
+
 History View
 --------------
+The history shows the history of transaction performed by dnf on the system.
+
 The history view is selected from the main menu |main-menu|
 
 .. image::  img/history.png
 
+.. warning:: If your are using both yum & dnf on the system, they will both have there own history, not including the transactions by the other tool.
+
 Pending Actions View
 --------------------------
+The pending action queue show the pending actions for the packages selected by the user
+
 The pending action view is selected from the main menu |main-menu|
+
+Pending actions is exeucted by pressing the apply button |apply|
 
 .. image::  img/queue.png
    
@@ -134,7 +146,7 @@ The pending action view is selected from the main menu |main-menu|
 .. |filters| image:: img/button-filters.png
 .. |search-options| image:: img/button-search-options.png
 .. |main-menu| image:: img/button-main-menu.png   
-   
+.. |apply| image:: img/button-apply.png   
 
 
 
