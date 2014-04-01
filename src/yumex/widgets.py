@@ -400,6 +400,7 @@ class PackageView(SelectionView):
         self.set_enable_search(True)
         # store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
         self.set_reorderable(False)
+        self.set_fixed_height_mode(True)
         return store
 
 
