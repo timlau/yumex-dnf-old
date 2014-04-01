@@ -1,128 +1,130 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Tim Lauridsen <tla@rasmil.dk>, 2011
+# Yuri Chornoivan <yurchor@ukr.net>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-01 18:16+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2014-03-31 12:50+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian (http://www.transifex.com/projects/p/yumex/language/uk/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/yumex/const.py:119
 msgid "Getting installed packages"
-msgstr ""
+msgstr "Отримуємо список установлених пакунків"
 
 #: ../src/yumex/const.py:120
 msgid "Getting available packages"
-msgstr ""
+msgstr "Отримання списку доступних пакунків"
 
 #: ../src/yumex/const.py:121
 msgid "Getting available updates"
-msgstr ""
+msgstr "Отримання списку доступних оновлень"
 
 #: ../src/yumex/const.py:122
 msgid "Getting all packages"
-msgstr ""
+msgstr "Отримання списку всіх пакунків"
 
 #: ../src/yumex/const.py:133
 msgid "Updated packages"
-msgstr ""
+msgstr "Оновлені пакунки"
 
 #: ../src/yumex/const.py:134
 msgid "Downgraded packages"
-msgstr ""
+msgstr "Пакунки, версію яких понижено"
 
 #: ../src/yumex/const.py:135
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Вилучення застарілих пакунків"
 
 #: ../src/yumex/const.py:136
 msgid "Obsoleted packages"
-msgstr ""
+msgstr "Застарілі пакунки"
 
 #: ../src/yumex/const.py:137
 msgid "Erased packages"
-msgstr ""
+msgstr "Вилучені пакунки"
 
 #: ../src/yumex/const.py:138 ../src/yumex/const.py:139
 msgid "Installed packages"
-msgstr ""
+msgstr "Встановлені пакунки"
 
 #: ../src/yumex/const.py:140
 msgid "Installed for dependencies"
-msgstr ""
+msgstr "Встановлено як залежність"
 
 #: ../src/yumex/const.py:141
 msgid "Reinstalled packages"
-msgstr ""
+msgstr "Повторно встановлені пакунки"
 
 #: ../src/yumex/const.py:145
 msgid "Installing"
-msgstr ""
+msgstr "Встановлення"
 
 #: ../src/yumex/const.py:146
 msgid "Updating"
-msgstr ""
+msgstr "Оновлення"
 
 #: ../src/yumex/const.py:147
 msgid "Removing"
-msgstr ""
+msgstr "Вилучення"
 
 #: ../src/yumex/const.py:148
 msgid "Downgrading"
-msgstr ""
+msgstr "Зниження версії пакунка"
 
 #: ../src/yumex/const.py:149
 msgid "Replacing"
-msgstr ""
+msgstr "Заміна"
 
 #: ../src/yumex/const.py:153
 #, python-format
 msgid "Updating : %s"
-msgstr ""
+msgstr "Оновлення: %s"
 
 #: ../src/yumex/const.py:154
 #, python-format
 msgid "Installing : %s"
-msgstr ""
+msgstr "Встановлення: %s"
 
 #: ../src/yumex/const.py:155
 #, python-format
 msgid "Cleanup : %s"
-msgstr ""
+msgstr "Чищення: %s"
 
 #: ../src/yumex/const.py:156
 #, python-format
 msgid "Removing : %s"
-msgstr ""
+msgstr "Вилучення: %s"
 
 #: ../src/yumex/const.py:157
 msgid "Obsoleting :"
-msgstr ""
+msgstr "Вилучення застарілих пакунків:"
 
 #: ../src/yumex/__init__.py:122
 msgid "Refreshing Repository Metadata"
-msgstr ""
+msgstr "Оновлення метаданих сховища"
 
 #: ../src/yumex/__init__.py:128
 msgid "Could not refresh the DNF cache (root)"
-msgstr ""
+msgstr "Не вдалося оновити кеш DNF (root)"
 
 #. user canceled the polkit dialog
 #: ../src/yumex/__init__.py:132
 msgid ""
 "Dnf root backend was not authorized\n"
 " Yum Extender will exit"
-msgstr ""
+msgstr "Кореневий модуль DNF не уповноважено на виконання дій\nYum Extender завершує роботу"
 
 #. Dnf is locked by another process
 #: ../src/yumex/__init__.py:134
@@ -130,195 +132,195 @@ msgid ""
 "Dnf  is locked by another process \n"
 "\n"
 "Yum Extender will exit"
-msgstr ""
+msgstr "DNF заблоковано іншим процесом\n\nYum Extender завершує роботу"
 
 #: ../src/yumex/__init__.py:239
 #, python-format
 msgid "Installing package : %s"
-msgstr ""
+msgstr "Встановлюємо пакунок: %s"
 
 #: ../src/yumex/__init__.py:244
 #, python-format
 msgid "Removing package : %s"
-msgstr ""
+msgstr "Вилучаємо пакунок: %s"
 
 #: ../src/yumex/__init__.py:248 ../src/yumex/__init__.py:976
 msgid "Searching for dependencies"
-msgstr ""
+msgstr "Шукаємо залежності"
 
 #: ../src/yumex/__init__.py:250 ../src/yumex/__init__.py:978
 msgid "Dependencies resolved"
-msgstr ""
+msgstr "Залежності розв’язано"
 
 #. Ok pressed
 #: ../src/yumex/__init__.py:258 ../src/yumex/__init__.py:984
 #: ../src/yumex/dnf_backend.py:249
 msgid "Applying changes to the system"
-msgstr ""
+msgstr "Застосовуємо зміни до системи"
 
 #: ../src/yumex/__init__.py:263
 msgid "Changes was successfully applied to the system"
-msgstr ""
+msgstr "Зміни до системи було успішно застосовано"
 
 #. error in depsolve
 #. error in population of the transaction
 #: ../src/yumex/__init__.py:270 ../src/yumex/__init__.py:1002
 #: ../src/yumex/__init__.py:1004
 msgid "Error(s) in search for dependencies"
-msgstr ""
+msgstr "Помилки під час пошуку залежностей"
 
 #: ../src/yumex/__init__.py:726
 msgid "Adding packages to view"
-msgstr ""
+msgstr "Додавання пакунків для перегляду"
 
 #: ../src/yumex/__init__.py:938
 msgid "No pending actions in queue"
-msgstr ""
+msgstr "У черзі немає записів дій"
 
 #: ../src/yumex/__init__.py:943
 msgid "Preparing system for applying changes"
-msgstr ""
+msgstr "Готуємо систему до застосування змін"
 
 #. Download errors
 #: ../src/yumex/__init__.py:998
 msgid "Downloading error(s)\n"
-msgstr ""
+msgstr "Помилки під час спроби отримання даних\n"
 
 #: ../src/yumex/dnf_backend.py:235
 msgid "Downloading packages"
-msgstr ""
+msgstr "Отримуємо пакунки"
 
 #: ../src/yumex/dnf_backend.py:241
 msgid "Checking packages signatures"
-msgstr ""
+msgstr "Перевіряємо підписи пакунків"
 
 #: ../src/yumex/dnf_backend.py:283
 #, python-format
 msgid "Downloading %d files (%sb)...."
-msgstr ""
+msgstr "Отримуємо %d файлів (%sb)…"
 
 #: ../src/yumex/widgets.py:102
 msgid "Getting Package metadata"
-msgstr ""
+msgstr "Отримання метаданих пакунків"
 
 #: ../src/yumex/widgets.py:376
 msgid "Click to install all/remove all"
-msgstr ""
+msgstr "Натисніть, щоб встановити або вилучити усі"
 
 #: ../src/yumex/widgets.py:381
 msgid "Click to select/deselect all (updates only)"
-msgstr ""
+msgstr "Натисніть, щоб позначити усі або зняти позначення з усіх (лише оновлення)"
 
 #: ../src/yumex/widgets.py:393
 msgid "Package"
-msgstr ""
+msgstr "Пакунок"
 
 #: ../src/yumex/widgets.py:394
 msgid "Ver."
-msgstr ""
+msgstr "Вер."
 
 #: ../src/yumex/widgets.py:395
 msgid "Arch."
-msgstr ""
+msgstr "Арх."
 
 #: ../src/yumex/widgets.py:395
 msgid "click to filter archs"
-msgstr ""
+msgstr "натисніть, щоб виконати фільтрування за архітектурою"
 
 #: ../src/yumex/widgets.py:396 ../src/yumex/widgets.py:810
 #: ../src/yumex.ui.h:60
 msgid "Summary"
-msgstr ""
+msgstr "Резюме"
 
 #: ../src/yumex/widgets.py:397
 msgid "Repo."
-msgstr ""
+msgstr "Схов."
 
 #: ../src/yumex/widgets.py:398
 msgid "Size."
-msgstr ""
+msgstr "Розмір"
 
 #: ../src/yumex/widgets.py:805 ../src/yumex.ui.h:29
 msgid "Packages"
-msgstr ""
+msgstr "Пакунки"
 
 #: ../src/yumex/widgets.py:925
 #, python-format
 msgid "<b>Downgrade to</b> %s "
-msgstr ""
+msgstr "<b>Повернення до версії</b> %s "
 
 #: ../src/yumex/widgets.py:948
 msgid "History (Date/Time)"
-msgstr ""
+msgstr "Журнал (дата/час)"
 
 #: ../src/yumex/widgets.py:1015
 msgid "History Packages"
-msgstr ""
+msgstr "Журнал пакунків"
 
 #: ../src/yumex/widgets.py:1408
 #, python-format
 msgid ""
 "Tags : %s\n"
 " "
-msgstr ""
+msgstr "Мітки: %s\n "
 
 #: ../src/yumex/widgets.py:1410
 msgid "Project URL : "
-msgstr ""
+msgstr "Адреса проекту: "
 
 #: ../src/yumex/widgets.py:1432
 msgid "Release"
-msgstr ""
+msgstr "Випуск"
 
 #: ../src/yumex/widgets.py:1433
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: ../src/yumex/widgets.py:1434
 msgid "Status"
-msgstr ""
+msgstr "Стан"
 
 #: ../src/yumex/widgets.py:1435
 msgid "Issued"
-msgstr ""
+msgstr "Випущено"
 
 #: ../src/yumex/widgets.py:1472 ../src/yumex.ui.h:61
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
 #: ../src/yumex/widgets.py:1649 ../src/yumex/widgets.py:1754
 #: ../src/yumex.ui.h:59
 msgid "Name"
-msgstr ""
+msgstr "Назва"
 
 #: ../src/yumex/widgets.py:1650
 msgid "Arch"
-msgstr ""
+msgstr "Арх."
 
 #: ../src/yumex/widgets.py:1651
 msgid "Ver"
-msgstr ""
+msgstr "Вер."
 
 #. Setup reponame & repofile column's
 #: ../src/yumex/widgets.py:1652 ../src/yumex/widgets.py:1706
 #: ../src/yumex/widgets.py:1753
 msgid "Repository"
-msgstr ""
+msgstr "Сховище"
 
 #: ../src/yumex/widgets.py:1653
 msgid "Size"
-msgstr ""
+msgstr "Розмір"
 
 #: ../src/yumex/widgets.py:1706
 msgid "Filename"
-msgstr ""
+msgstr "Назва файла"
 
 #. Setup Selection Column
 #: ../src/yumex/widgets.py:1738
 msgid ""
 "Click here to switch between\n"
 " none/all/default selected"
-msgstr ""
+msgstr "Натисніть тут, щоб перемкнути режим\n позначення: нічого, усе або типове."
 
 #: ../src/yumex/widgets.py:2038
 #, python-format
@@ -329,283 +331,283 @@ msgid ""
 " key        : 0x%s:\n"
 " Userid     : \"%s\"\n"
 " From       : %s"
-msgstr ""
+msgstr " Хочете імпортувати ключ GPG,\nпотрібний для виконання перевірки пакунка %s\n\n ключ       : 0x%s:\n Ід. кор.    : «%s»\n Від           : %s"
 
 #: ../dbus/dbus_status.py:174 ../src/yumex.ui.h:47
 msgid "Quit"
-msgstr ""
+msgstr "Вийти"
 
 #: ../dbus/dbus_status.py:175
 msgid "Search for Updates"
-msgstr ""
+msgstr "Пошук оновлень"
 
 #: ../dbus/dbus_status.py:176
 msgid "Start Yum Extender"
-msgstr ""
+msgstr "Запустити Yum Extender"
 
 #: ../dbus/dbus_status.py:214
 msgid "Yum Extender"
-msgstr ""
+msgstr "Yum Extender"
 
 #: ../dbus/dbus_status.py:217
 msgid "Yum Extender: Error"
-msgstr ""
+msgstr "Yum Extender: помилка"
 
 #: ../dbus/dbus_status.py:220
 msgid "Yum Extender: No Updates"
-msgstr ""
+msgstr "Yum Extender: оновлень не виявлено"
 
 #: ../dbus/dbus_status.py:223
 #, python-format
 msgid "Yum Extender: %s Updates available"
-msgstr ""
+msgstr "Yum Extender: доступні декілька оновлень (%s)"
 
 #: ../misc/yumex-dnf-local.desktop.in.h:1
 msgid "Yumex Package Installer"
-msgstr ""
+msgstr "Програма для встановлення пакунків Yumex"
 
 #: ../misc/yumex-dnf-local.desktop.in.h:2
 msgid "Install local packages on system"
-msgstr ""
+msgstr "Встановити локальні пакунки у системі"
 
 #: ../misc/yumex-dnf.desktop.in.h:1
 msgid "Yum Extender (dnf)"
-msgstr ""
+msgstr "Yum Extender (dnf)"
 
 #: ../misc/yumex-dnf.desktop.in.h:2
 msgid "Install, update and remove applications"
-msgstr ""
+msgstr "Встановлення, оновлення та вилучення програм"
 
 #: ../misc/yumex-dnf.desktop.in.h:3
 msgid "Software Installer"
-msgstr ""
+msgstr "Встановлювач програм"
 
 #: ../src/yumex.ui.h:1
 msgid "Preferences"
-msgstr ""
+msgstr "Параметри"
 
 #: ../src/yumex.ui.h:2
 msgid "Autostart the yumex notification icon at user login"
-msgstr ""
+msgstr "Автоматично завантажувати піктограму сповіщення yumex після входу користувача до системи"
 
 #: ../src/yumex.ui.h:3
 msgid "Start Yum Extender status icon at user logon"
-msgstr ""
+msgstr "Показувати піктограму стану Yum Extender після входу до системи"
 
 #: ../src/yumex.ui.h:4
 msgid "Default: Show newest only"
-msgstr ""
+msgstr "Типово: показувати найновіші"
 
 #: ../src/yumex.ui.h:5
 msgid "Default: Erase Used Requirements"
-msgstr ""
+msgstr "Типово: вилучати використані вимоги"
 
 #: ../src/yumex.ui.h:6
 msgid "Update check interval (minutes)"
-msgstr ""
+msgstr "Інтервал між перевірками оновлень (у хвилинах)"
 
 #: ../src/yumex.ui.h:7
 msgid "Update checker startup delay (seconds)"
-msgstr ""
+msgstr "Затримка запуску засобу пошуку оновлень (у секундах)"
 
 #: ../src/yumex.ui.h:8
 msgid "Enable scheduled check for updates"
-msgstr ""
+msgstr "Увімкнути пошук оновлень за розкладом"
 
 #: ../src/yumex.ui.h:9
 msgid "Scheduled check for new updates"
-msgstr ""
+msgstr "Пошук оновлень за розкладом"
 
 #: ../src/yumex.ui.h:10
 msgid ""
 "Change the close action for the main window, so it just hides the\n"
 "window when the close button is clicked"
-msgstr ""
+msgstr "Змінити дію у відповідь на закриття вікна програми: просто\nприховувати вікно після натискання кнопки закриття."
 
 #: ../src/yumex.ui.h:12
 msgid "Close will only minimize window"
-msgstr ""
+msgstr "Кнопка закриття згортає вікно"
 
 #: ../src/yumex.ui.h:13
 msgid "The interval in hour, where the dnf cache will be expired and updated"
-msgstr ""
+msgstr "Проміжок часу (у годинах), протягом якого слід оновити застарілий кеш DNF"
 
 #: ../src/yumex.ui.h:14
 msgid "Cache expire interval (hours)"
-msgstr ""
+msgstr "Проміжок часу між оновленнями кешу (у годинах)"
 
 #: ../src/yumex.ui.h:15
 msgid "Settings"
-msgstr ""
+msgstr "Параметри"
 
 #: ../src/yumex.ui.h:16
 msgid "Color for installed packages"
-msgstr ""
+msgstr "Колір пунктів встановлених пакунків"
 
 #: ../src/yumex.ui.h:17
 msgid "Color for available updates"
-msgstr ""
+msgstr "Колір пунктів доступних оновлень"
 
 #: ../src/yumex.ui.h:18
 msgid "Color for available packages"
-msgstr ""
+msgstr "Колір пунктів доступних пакунків"
 
 #: ../src/yumex.ui.h:19
 msgid "Color for obsoleted packages"
-msgstr ""
+msgstr "Колір пунктів застарілих пакунків"
 
 #: ../src/yumex.ui.h:20
 msgid "Color for available downgrades"
-msgstr ""
+msgstr "Колір пунктів можливих знижень версії"
 
 #: ../src/yumex.ui.h:21
 msgid "Advanced"
-msgstr ""
+msgstr "Додатково"
 
 #: ../src/yumex.ui.h:22
 msgid "Repositories"
-msgstr ""
+msgstr "Сховища"
 
 #: ../src/yumex.ui.h:23
 msgid "Main options"
-msgstr ""
+msgstr "Основні параметри"
 
 #: ../src/yumex.ui.h:24
 msgid "Apply pending changes"
-msgstr ""
+msgstr "Застосувати зміни з черги"
 
 #: ../src/yumex.ui.h:25
 msgid "Package filter"
-msgstr ""
+msgstr "Фільтр пакунків"
 
 #: ../src/yumex.ui.h:26
 msgid "Search options"
-msgstr ""
+msgstr "Параметри пошуку"
 
 #: ../src/yumex.ui.h:27
 msgid "label"
-msgstr ""
+msgstr "мітка"
 
 #: ../src/yumex.ui.h:28
 msgid "Show packages"
-msgstr ""
+msgstr "Показати пакунки"
 
 #: ../src/yumex.ui.h:30
 msgid "Show group & categories"
-msgstr ""
+msgstr "Показати групи і категорії"
 
 #: ../src/yumex.ui.h:31
 msgid "Groups"
-msgstr ""
+msgstr "Групи"
 
 #: ../src/yumex.ui.h:32
 msgid "Show history of changes"
-msgstr ""
+msgstr "Показати журнал змін"
 
 #: ../src/yumex.ui.h:33
 msgid "History"
-msgstr ""
+msgstr "Журнал"
 
 #: ../src/yumex.ui.h:34
 msgid "Show pending changes"
-msgstr ""
+msgstr "Показати зміни з черги"
 
 #: ../src/yumex.ui.h:35
 msgid "Pending Actions"
-msgstr ""
+msgstr "Дії у черзі"
 
 #: ../src/yumex.ui.h:36
 msgid "Edit Preferences"
-msgstr ""
+msgstr "Зміна налаштувань"
 
 #: ../src/yumex.ui.h:37
 msgid "Options"
-msgstr ""
+msgstr "Параметри"
 
 #: ../src/yumex.ui.h:38
 msgid "Show only newest version of packages"
-msgstr ""
+msgstr "Показували лише найновіші версії пакунків"
 
 #: ../src/yumex.ui.h:39
 msgid "Newest Only"
-msgstr ""
+msgstr "Лише найновіші"
 
 #: ../src/yumex.ui.h:40
 msgid "Uninstall unused requeriments, when removing a package"
-msgstr ""
+msgstr "Вилучати невикористані залежності під час вилучення пакунка"
 
 #: ../src/yumex.ui.h:41
 msgid "Erase Unused Requirements"
-msgstr ""
+msgstr "Вилучити невикористані вимоги"
 
 #: ../src/yumex.ui.h:42
 msgid "Help"
-msgstr ""
+msgstr "Довідка"
 
 #: ../src/yumex.ui.h:43
 msgid "About Yum Extender"
-msgstr ""
+msgstr "Про Yum Extender"
 
 #: ../src/yumex.ui.h:44
 msgid "About"
-msgstr ""
+msgstr "Про програму"
 
 #: ../src/yumex.ui.h:45
 msgid "Documentation (online)"
-msgstr ""
+msgstr "Документація (у інтернеті)"
 
 #: ../src/yumex.ui.h:46
 msgid "Quit Yum Extender"
-msgstr ""
+msgstr "Вийти з Yum Extender"
 
 #: ../src/yumex.ui.h:48
 msgid "Updates"
-msgstr ""
+msgstr "Оновлення"
 
 #: ../src/yumex.ui.h:49
 msgid "Installed"
-msgstr ""
+msgstr "Встановлені"
 
 #: ../src/yumex.ui.h:50
 msgid "Available"
-msgstr ""
+msgstr "Доступні"
 
 #: ../src/yumex.ui.h:51
 msgid "All"
-msgstr ""
+msgstr "Усі"
 
 #: ../src/yumex.ui.h:52
 msgid "Delete Selected"
-msgstr ""
+msgstr "Вилучити позначені"
 
 #: ../src/yumex.ui.h:53
 msgid "package name start with <keyword>"
-msgstr ""
+msgstr "назва пакунка починається з <keyword>"
 
 #: ../src/yumex.ui.h:54
 msgid "Prefix"
-msgstr ""
+msgstr "Префікс"
 
 #: ../src/yumex.ui.h:55
 msgid "keyword in package name"
-msgstr ""
+msgstr "ключове слово у назві пакунка"
 
 #: ../src/yumex.ui.h:56
 msgid "Keyword"
-msgstr ""
+msgstr "Ключове слово"
 
 #: ../src/yumex.ui.h:57
 msgid "keywords in selected package attributes"
-msgstr ""
+msgstr "ключові слова у атрибутах позначеного пакунка"
 
 #: ../src/yumex.ui.h:58
 msgid "Fields"
-msgstr ""
+msgstr "Поля"
 
 #: ../src/yumex.ui.h:62
 msgid "Package actions to perform"
-msgstr ""
+msgstr "Дії з пакунками, які слід виконати"
 
 #: ../src/yumex.ui.h:63
 msgid "Size:"
-msgstr ""
+msgstr "Розмір:"
