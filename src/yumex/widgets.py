@@ -693,6 +693,8 @@ class PackageQueue:
         num = 0
         for key in QUEUE_PACKAGE_TYPES:
             num += len(self.packages[key])
+        num += len(self.groups['i'].keys())
+        num += len(self.groups['r'].keys())
         return num
 
     def add(self, pkg):
@@ -773,6 +775,12 @@ class PackageQueue:
             if grp_id in grps:
                 return action
         return None
+
+    def get_groups(self):
+        """ get (grp_id, action) generator"""
+        for action in ('i', 'r'):
+            for grp in self.groups[action].values():
+                yield grp.id, action
 
 
 class QueueView(Gtk.TreeView):

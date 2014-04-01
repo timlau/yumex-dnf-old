@@ -961,6 +961,15 @@ class YumexWindow(BaseWindow):
                     if not rc:
                         errors += 1
                         error_msgs |= set(trans)
+        for grp_id,action in self.queue_view.queue.get_groups():
+            if action == 'i':
+                rc, trans = self.backend.GroupInstall(grp_id)
+            else:
+                rc, trans = self.backend.GroupRemove(grp_id)
+            self.logger.debug("%s: %s" % (rc, trans))
+            if not rc:
+                errors += 1
+                error_msgs |= set(trans)
 
         if not errors:
             self.backend.GetTransaction()
