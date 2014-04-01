@@ -214,6 +214,7 @@ class DnfPackage(Package):
         else:
             return False
 
+
 class DnfRootBackend(Backend, DnfDaemonClient):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)

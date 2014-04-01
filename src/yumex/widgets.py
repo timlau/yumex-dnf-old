@@ -720,27 +720,29 @@ class PackageQueue:
         na = "%s.%s" % (pkg.name, pkg.arch)
         return na in self._name_arch_index
 
-    def addGroup(self, grp_id, grp_name, action):
+    def add_group(self, grp, action):
         '''
 
-        @param grp:
+        @param grp: Group object
         @param action:
         '''
-        logger.debug('addGroup : %s - %s' %(grp_id, action))
+        logger.debug('add_group : %s - %s' %(grp.id, action))
         grps = self.groups[action]
-        if not grp_id in grps:
-            grps[grp_id] = grp_name
+        if not grp.id in grps:
+            grps[grp.id] = grp
+            grp.selected = True
 
-    def removeGroup(self, grp_id, action):
+    def remove_group(self, grp, action):
         '''
 
-        @param grp:
+        @param grp: Group object
         @param action:
         '''
-        logger.debug('removeGroup : %s - %s' %(grp_id, action))
+        logger.debug('removeGroup : %s - %s' %(grp.id, action))
         grps = self.groups[action]
-        if grp_id in grps:
-            del grps[grp_id]
+        if grp.id in grps:
+            del grps[grp.id]
+            grp.selected = False
 
     def remove_all_groups(self):
         '''
@@ -748,16 +750,27 @@ class PackageQueue:
         '''
         for action in ('i', 'r'):
             for grp in self.groups[action]:
-                self.removeGroup(grp, action)
+                self.remove_group(grp, action)
 
-
-    def hasGroup(self, grp):
+    def remove_groups(self, group_names):
         '''
-
-        @param grp:
+        remove groups from queue based on list of grp_ids
         '''
+        for action in ('i', 'r'):
+            new_dict = {}
+            grps = self.groups[action]
+            for grp in grps.values():
+                if not grp.name in group_names:
+                    new_dict[grp.id] = grp # copy to new dict
+                else: # unselect the group object
+                    grp.selected = False
+            self.groups[action] = new_dict
+
+    def has_group(self, grp_id):
+        """ check if group is in package queue """
         for action in ['i', 'r']:
-            if grp in self.groups[action]:
+            grps = self.groups[action]
+            if grp_id in grps:
                 return action
         return None
 
@@ -810,6 +823,7 @@ class QueueView(Gtk.TreeView):
                 pkg.action = "r"  # reset action type of installed package
             pkg.queued = None
             pkg.set_select(not pkg.selected)
+        self.queue.remove_groups(rmvlist)
         self.refresh()
 
     def on_QueueView_button_press_event(self, treeview, event):
@@ -886,8 +900,8 @@ class QueueView(Gtk.TreeView):
         @param pkg_list:
         '''
         parent = self.store.append(None, [label, ""])
-        for grp_id in grps:
-            self.store.append(parent, ["%s ( %s )" % (grps[grp_id], grp_id), "" ])
+        for grp in grps.values():
+            self.store.append(parent, [grp.name, grp.description ])
 
     def populate_list_downgrade(self):
         '''
@@ -1793,6 +1807,19 @@ class RepoView(SelectionView):
             iterator = self.store.iter_next(iterator)
 
 
+class Group:
+    """ Object to represent a dnf group/category """
+
+    def __init__(self,grpid, grp_name, grp_desc, inst, is_category = False ):
+        self.id = grpid
+        self.name = grp_name
+        self.description = grp_desc
+        self.installed = inst
+        self.category = is_category
+        self.selected = False
+
+
+
 class GroupView(Gtk.TreeView):
     '''
     '''
@@ -1801,12 +1828,6 @@ class GroupView(Gtk.TreeView):
                                       (GObject.TYPE_STRING,))}
 
     def __init__(self, qview, base):
-        '''
-
-        @param treeview:
-        @param qview:
-        @param base:
-        '''
         Gtk.TreeView.__init__(self)
         self.base = base
         self.model = self.setup_view()
@@ -1814,18 +1835,13 @@ class GroupView(Gtk.TreeView):
         self.queueView = qview
         self.currentCategory = None
         self._groups = None
+        self.selected_group = None
         self.connect('cursor-changed', self.on_cursor_changed)
 
 
     def setup_view(self):
         """ Setup Group View  """
-        model = Gtk.TreeStore(GObject.TYPE_BOOLEAN, # 0 Installed
-                              GObject.TYPE_STRING, # 1 Group Name
-                              GObject.TYPE_STRING, # 2 Group Id
-                              GObject.TYPE_BOOLEAN, # 3 In queue
-                              GObject.TYPE_BOOLEAN, # 4 isCategory
-                              GObject.TYPE_STRING)  # 5 Description
-
+        model = Gtk.TreeStore(GObject.TYPE_PYOBJECT)
 
         self.set_model(model)
         column = Gtk.TreeViewColumn(None, None)
@@ -1833,7 +1849,7 @@ class GroupView(Gtk.TreeView):
         selection = Gtk.CellRendererToggle()    # Selection
         selection.set_property('activatable', True)
         column.pack_start(selection, False)
-        column.set_cell_data_func(selection, self.setCheckbox)
+        column.set_cell_data_func(selection, self.set_checkbox)
         selection.connect("toggled", self.on_toggled)
         self.append_column(column)
         column = Gtk.TreeViewColumn(None, None)
@@ -1851,13 +1867,28 @@ class GroupView(Gtk.TreeView):
 
         category = Gtk.CellRendererText()
         column.pack_start(category, False)
-        column.add_attribute(category, 'markup', 1)
+        #column.add_attribute(category, 'markup', 1)
+        column.set_cell_data_func(category, self.get_data_text, 'name')
 
         self.append_column(column)
         self.set_headers_visible(False)
         return model
 
-    def setCheckbox(self, column, cell, model, iterator, data=None):
+    def get_data_text(self, column, cell, model, iterator, prop):
+        '''
+        a property function to get string data from a object in the TreeStore based on
+        an attributes key
+        @param column:
+        @param cell:
+        @param model:
+        @param iterator:
+        @param prop: attribute key
+        '''
+        obj = model.get_value(iterator, 0)
+        if obj:
+            cell.set_property('text', getattr(obj, prop))
+
+    def set_checkbox(self, column, cell, model, iterator, data=None):
         '''
 
         @param column:
@@ -1865,34 +1896,27 @@ class GroupView(Gtk.TreeView):
         @param model:
         @param iterator:
         '''
-        isCategory = model.get_value(iterator, 4)
-        state = model.get_value(iterator, 0)
-        if isCategory:
-            cell.set_property('visible', False)
-        else:
-            cell.set_property('visible', True)
-            cell.set_property('active', state)
+        obj = model.get_value(iterator, 0)
+        if obj:
+            if obj.category:
+                cell.set_property('visible', False)
+            else:
+                cell.set_property('visible', True)
+                cell.set_property('active', obj.selected)
 
     def on_toggled(self, widget, path):
         """ Group selection handler """
         iterator = self.model.get_iter(path)
-        grp_name = self.model.get_value(iterator, 1)
-        grpid = self.model.get_value(iterator, 2)
-        inst = self.model.get_value(iterator, 0)
-        action = self.queue.hasGroup(grpid)
+        obj = self.model.get_value(iterator, 0)
+        action = self.queue.has_group(obj)
         if action: # Group is in the queue, remove it from the queue
-            self.queue.removeGroup(grpid, action)
-            self._updatePackages(grpid, False, None)
-            self.model.set_value(iterator, 3, False)
+            self.queue.remove_group(obj, action)
         else:
-            if inst: # Group is installed add it to queue for removal
-                self.queue.addGroup(grpid, grp_name, 'r') # Add for remove
-                self._updatePackages(grpid, True, 'r')
+            if obj.installed: # Group is installed add it to queue for removal
+                self.queue.add_group(obj, 'r') # Add for remove
             else: # Group is not installed, add it to queue for installation
-                self.queue.addGroup(grpid, grp_name, 'i') # Add for install
-                self._updatePackages(grpid, True, 'i')
-            self.model.set_value(iterator, 3, True)
-        self.model.set_value(iterator, 0, not inst)
+                self.queue.add_group(obj, 'i') # Add for install
+        self.queueView.refresh()
 
     def on_cursor_changed(self, widget):
         '''
@@ -1901,54 +1925,10 @@ class GroupView(Gtk.TreeView):
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
             if model != None and iterator != None:
-                grp_id = model.get_value(iterator, 2)
-                isCategory = model.get_value(iterator, 4)
-                if not isCategory:
-                    self.emit('group-changed', grp_id) # send the group-changed signal
-
-    def _updatePackages(self, grpid, add, action):
-        '''
-
-        @param grpid:
-        @param add:
-        @param action:
-        '''
-        #pkgs = self.base.backend.get_group_packages(grpid, 'default')
-        #for pkg in pkgs:
-            #logger.debug("   group package : %s" % pkg)
-        ## Add group packages to queue
-        #if add:
-            #for po in pkgs:
-                #if not po.queued:
-                    #if action == 'i' and not po.is_installed() : # Install
-                        #po.queued = po.action
-                        #self.queue.add(po)
-                        #po.set_select(True)
-                    #elif action == 'r' and po.is_installed() : # Remove
-                        #po.queued = po.action
-                        #self.queue.add(po)
-                        #po.set_select(False)
-        ## Remove group packages from queue
-        #else:
-            #for po in pkgs:
-                #if po.queued:
-                    #po.queued = None
-                    #self.queue.remove(po)
-                    #po.set_select(False)
-        self.queueView.refresh()
-
-    def reset_queued(self):
-        '''
-        Reset the selection of all queued groups
-        used to undo the selection
-        '''
-        for row in self.model: # Loop trough the categories
-            children = row.iterchildren() # get the children
-            if children: # is there any children
-                for elem in children: # loop trough the groups
-                    if elem[3] == True: # if in queue
-                        elem[3] = False
-                        elem[0] = not elem[0] # invert the section
+                obj = self.model.get_value(iterator, 0)
+                if not obj.category and obj.id != self.selected_group:
+                    self.selected_group = obj.id
+                    self.emit('group-changed', obj.id) # send the group-changed signal
 
     def populate(self, data):
         '''
@@ -1964,45 +1944,47 @@ class GroupView(Gtk.TreeView):
             #print( cat, catgrps)
             # cat: [category_id, category_name, category_desc]
             (catid, name, desc) = cat
-            node = self.model.append(None, [None, name, catid, False, True, desc])
+            obj = Group(catid, name, desc, False, True)
+            node = self.model.append(None, [obj])
             for grp in catgrps:
                 # [group_id, group_name, group_desc, group_is_installed]
                 (grpid, grp_name, grp_desc, inst) = grp
-                self.model.append(node, [inst, grp_name, grpid, False, False, grp_desc])
+                obj = Group(grpid, grp_name, grp_desc, inst, False)
+                self.model.append(node, [obj])
         self.thaw_child_notify()
 
 
     def queue_pixbuf(self, column, cell, model, iterator, data=None):
         """
-        Cell Data function for recent Column, shows pixmap
-        if recent Value is True.
+        Cell Data function for
         """
-        grpid = model.get_value(iterator, 2)
-        queued = model.get_value(iterator, 3)
-        action = self.queue.hasGroup(grpid)
-        if action:
-            if action == 'i':
-                icon = 'network-server'
+        obj = model.get_value(iterator, 0)
+        if obj:
+            action = self.queue.has_group(obj.id)
+            if action:
+                if action == 'i':
+                    icon = 'network-server'
+                else:
+                    icon = 'edit-delete'
+                cell.set_property('visible', True)
+                cell.set_property('icon-name', icon)
             else:
-                icon = 'edit-delete'
-            cell.set_property('visible', True)
-            cell.set_property('icon-name', icon)
-        cell.set_property('visible', queued)
+                cell.set_property('visible', False)
 
     def grp_pixbuf(self, column, cell, model, iterator, data=None):
         """
         Cell Data function for recent Column, shows pixmap
         if recent Value is True.
         """
-        grpid = model.get_value(iterator, 2)
+        obj = model.get_value(iterator, 0)
         pix = None
-        fn = "/usr/share/pixmaps/comps/%s.png" % grpid
+        fn = "/usr/share/pixmaps/comps/%s.png" % obj.id
         if os.access(fn, os.R_OK):
             pix = self._get_pix(fn)
         else: # Try to get the parent icon
             parent = model.iter_parent(iterator)
             if parent:
-                cat_id =model[parent][2] # get the parent cat_id
+                cat_id =model[parent][0].id # get the parent cat_id
                 fn = "/usr/share/pixmaps/comps/%s.png" % cat_id
                 if os.access(fn, os.R_OK):
                     pix = self._get_pix(fn)
