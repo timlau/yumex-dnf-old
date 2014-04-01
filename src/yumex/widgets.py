@@ -1959,17 +1959,20 @@ class GroupView(Gtk.TreeView):
         Cell Data function for
         """
         obj = model.get_value(iterator, 0)
-        if obj:
+        if not obj.category:
             action = self.queue.has_group(obj.id)
+            icon = 'non-starred-symbolic'
+            if obj.installed:
+                icon = 'starred'
             if action:
                 if action == 'i':
                     icon = 'network-server'
                 else:
                     icon = 'edit-delete'
-                cell.set_property('visible', True)
-                cell.set_property('icon-name', icon)
-            else:
-                cell.set_property('visible', False)
+            cell.set_property('icon-name', icon)
+            cell.set_property('visible',True)
+        else:
+            cell.set_property('visible', False)
 
     def grp_pixbuf(self, column, cell, model, iterator, data=None):
         """
