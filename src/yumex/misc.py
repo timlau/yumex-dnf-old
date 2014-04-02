@@ -67,13 +67,6 @@ def format_block(block, indent):
             result += spaces + line + '\n'
         return result
 
-def show_information(window, msg, add_msg = None):
-    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, msg)
-    if add_msg:
-        dialog.format_secondary_text(add_msg)
-    dialog.run()
-    dialog.destroy()
-
 
 def doGtkEvents():
     '''

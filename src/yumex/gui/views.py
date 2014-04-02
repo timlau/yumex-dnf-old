@@ -1,6 +1,6 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 #    Yum Exteder (yumex) - A graphic package management tool
-#    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
+#    Copyright (C) 2013 -2014 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -16,92 +16,21 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+from __future__ import absolute_import
 
-
-from gi.repository import Gtk
-from gi.repository import Gdk, GdkPixbuf
-from gi.repository import GObject, GLib, Gio
-from datetime import date
-from subprocess import call
+import os
 import logging
 
-from .misc import _, P_, CONFIG, format_number, doGtkEvents, format_block, TimeFunction, color_to_hex, get_color  # @UnusedImport
-from .const import *  # @UnusedWildImport
-import shutil
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
+from gi.repository import Pango
 
+from yumex import const
+from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction
 
-logger = logging.getLogger('yumex.widget')
-
-class InfoProgressBar:
-
-    def __init__(self, ui):
-        self.ui = ui
-        self.infobar = ui.get_object("infobar") # infobar revealer
-        frame = ui.get_object("info_frame")
-        new_bg = Gdk.RGBA()
-        new_bg.parse("rgb(255,255,255)")
-        frame.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
-        self.label = ui.get_object("infobar_label")
-        self.sublabel = ui.get_object("infobar_sublabel")
-        self.progress = ui.get_object("infobar_progress")
-
-    def _show_infobar(self, show=True):
-        self.infobar.set_reveal_child(show)
-
-    def show_progress(self, state):
-        if state:
-            self.show_label()
-        else:
-            self.hide()
-
-    def hide(self):
-        self.label.hide()
-        self.sublabel.hide()
-        self.progress.hide()
-        self._show_infobar(False)
-        self.progress.set_text("")
-        #self.progress.set_show_text (False)
-
-    def hide_sublabel(self):
-        self.sublabel.hide()
-
-    def show_label(self):
-        self.label.show()
-        self.label.set_text("")
-
-    def show_sublabel(self):
-        self.sublabel.show()
-        self.sublabel.set_text("")
-
-    def show_all(self):
-        self.show_label()
-        self.show_sublabel()
-        self.progress.show()
-
-    def info(self, msg):
-        self._show_infobar(True)
-        self.show_label()
-        self.label.set_text(msg)
-
-    def info_sub(self, msg):
-        self._show_infobar(True)
-        self.show_sublabel()
-        self.sublabel.set_text(msg)
-
-    def set_progress(self, frac, label=None):
-        if label:
-            self.progress.set_text(label)
-        if frac >= 0.0 and frac <= 1.0:
-            self.infobar.show()
-            self.progress.show()
-            self.progress.set_fraction(frac)
-            # make sure that the main label is shown, else the progres looks bad
-            # this is normally happen when changlog or filelist info is needed for at package
-            # and it will trigger the yum daemon to download the need metadata.
-            if not self.label.get_property('visible'):
-                self.info(_("Getting Package metadata"))
-
-
+logger = logging.getLogger('yumex.gui.views')
 
 
 class SelectionView(Gtk.TreeView):
@@ -292,51 +221,6 @@ class SelectionView(Gtk.TreeView):
         overload in child class
         '''
         pass
-
-class ArchMenu(GObject.GObject):
-    '''
-    Class to handle a menu to select what arch to show in package view
-    '''
-    __gsignals__ = {'arch-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_STRING,))}
-
-    def __init__(self, arch_menu_widget, archs):
-        GObject.GObject.__init__(self)
-        self.all_archs = archs
-        self.current_archs = archs
-        self.arch_menu_widget= arch_menu_widget
-        self.arch_menu = self._setup_archmenu()
-
-
-    def _setup_archmenu(self):
-        arch_menu = self.arch_menu_widget
-        for arch in self.all_archs:
-            cb = Gtk.CheckMenuItem()
-            cb.set_label(arch)
-            cb.set_active(True)
-            cb.show()
-            cb.connect('toggled', self.on_archmenu_clicked)
-            arch_menu.add(cb)
-        return arch_menu
-
-    def on_arch_clicked(self, button, event=None):
-        #print('clicked : event : %s' % event.type)
-        if event:
-            self.arch_menu.popup(None, None, None, None, event.button, event.time)
-            return True
-
-
-    def on_archmenu_clicked(self, widget):
-        state = widget.get_active()
-        label = widget.get_label()
-        if state:
-            self.current_archs.append(label)
-        else:
-            self.current_archs.remove(label)
-        archs = ",".join(self.current_archs)
-        self.emit("arch-changed", archs)
-
 
 class PackageView(SelectionView):
     __gsignals__ = { 'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
@@ -662,7 +546,7 @@ class PackageQueue:
         self._name_arch_index = {}
 
     def _setup_packages(self):
-        for key in QUEUE_PACKAGE_TYPES:
+        for key in const.QUEUE_PACKAGE_TYPES:
             self.packages[key] = []
 
     def clear(self):
@@ -692,7 +576,7 @@ class PackageQueue:
 
         '''
         num = 0
-        for key in QUEUE_PACKAGE_TYPES:
+        for key in const.QUEUE_PACKAGE_TYPES:
             num += len(self.packages[key])
         num += len(self.groups['i'].keys())
         num += len(self.groups['r'].keys())
@@ -783,7 +667,6 @@ class PackageQueue:
             for grp in self.groups[action].values():
                 yield grp.id, action
 
-
 class QueueView(Gtk.TreeView):
 
     def __init__(self, queue_menu):
@@ -853,7 +736,7 @@ class QueueView(Gtk.TreeView):
         @param rlist:
         '''
         rclist = []
-        for action in QUEUE_PACKAGE_TYPES:
+        for action in const.QUEUE_PACKAGE_TYPES:
             pkg_list = self.queue.packages[action]
             if pkg_list:
                 rclist.extend([x for x in pkg_list if str(x) in rlist])
@@ -933,7 +816,7 @@ class HistoryView(Gtk.TreeView):
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
-        self.modify_font(SMALL_FONT)
+        self.modify_font(const.SMALL_FONT)
         self.model = self.setup_view()
         self.base = base
         self.pkg_view = HistoryPackageView(self.base)
@@ -1003,7 +886,7 @@ class HistoryPackageView(Gtk.TreeView):
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
-        self.modify_font(SMALL_FONT)
+        self.modify_font(const.SMALL_FONT)
         self.model = self.setup_view()
         self.base = base
 
@@ -1031,9 +914,9 @@ class HistoryPackageView(Gtk.TreeView):
             pkg_id, state, is_inst = elem
             (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
             na = "%s.%s" % (n, a)
-            if state in HISTORY_UPDATE_STATES:  # part of a pair
+            if state in const.HISTORY_UPDATE_STATES:  # part of a pair
                 if na in names_pair:
-                    if state in HISTORY_NEW_STATES:  # this is the updating pkg
+                    if state in const.HISTORY_NEW_STATES:  # this is the updating pkg
                         names_pair[na].insert(0, elem)  # add first in list
                     else:
                         names_pair[na].append(elem)
@@ -1061,9 +944,9 @@ class HistoryPackageView(Gtk.TreeView):
             else:
                 states[state] = [pkg_list]
         # apply packages to model in right order
-        for state in HISTORY_SORT_ORDER:
+        for state in const.HISTORY_SORT_ORDER:
             if state in states:
-                cat = self.model.append(None, ["<b>%s</b>" % HISTORY_STATE_LABLES[state]])
+                cat = self.model.append(None, ["<b>%s</b>" % const.HISTORY_STATE_LABLES[state]])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
@@ -1156,7 +1039,7 @@ class TextViewBase(Gtk.TextView):
         # Try to see if we already got the current url as a tag
         tag = self.get_style(text)
         if not tag:
-            tag = self.buffer.create_tag(text, foreground="blue", font_desc=SMALL_FONT)
+            tag = self.buffer.create_tag(text, foreground="blue", font_desc=const.SMALL_FONT)
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -1284,415 +1167,6 @@ class PackageInfoView(TextViewBase):
         style.set_property("size_points", font_size)
         self.add_style(tag, style)
 
-
-class PackageInfoWidget(Gtk.Box):
-    __gsignals__ = { 'info-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_STRING,))
-                    }
-
-    def __init__(self, window, url_handler):
-        Gtk.Box.__init__(self)
-        vbox = Gtk.Box()
-        vbox.set_orientation(Gtk.Orientation.VERTICAL)
-        # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-        rb = self._get_radio_button('dialog-information-symbolic', "desc")
-        vbox.add(rb)
-        vbox.add(self._get_radio_button('software-update-available-symbolic', "updinfo", rb))
-        vbox.add(self._get_radio_button('bookmark-new-symbolic', "changelog", rb))
-        vbox.add(self._get_radio_button('drive-multidisk-symbolic', "files", rb))
-        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb))
-        vbox.set_margin_right(5)
-        self.pack_start(vbox, False, False, 0)
-        sw = Gtk.ScrolledWindow()
-        self.view = PackageInfoView( window, url_handler)
-        sw.add(self.view)
-        self.pack_start(sw, True, True, 0)
-
-
-    def _get_radio_button(self,icon_name,name, group=None):
-        if group:
-            wid = Gtk.RadioButton.new_from_widget(group)
-        else:
-            wid = Gtk.RadioButton()
-        icon = Gio.ThemedIcon(name=icon_name)
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
-        wid.set_image(image)
-        wid.connect('toggled', self._on_filter_changed, name)
-        wid.set_property("draw-indicator", False) # we only want an image, not the black dot indicator
-        return wid
-
-    def _on_filter_changed(self, button, data):
-        '''
-        Radio Button changed handler
-        Change the info in the view to match the selection
-Gtk.Image()
-        :param button:
-        :param data:
-        '''
-        if button.get_active():
-            logger.debug("pkginfo: %s selected" % data)
-            self.emit("info-changed",data)
-
-class PackageInfo(PackageInfoWidget):
-    '''
-    class for handling the Package Information view
-    '''
-
-    def __init__(self, window, base):
-        PackageInfoWidget.__init__(self, window, url_handler=self._url_handler)
-        self.window = window
-        self.base = base
-        self.current_package = None
-        self.active_filter = PKGINFO_FILTERS[0]
-        self.connect('info-changed',self.on_filter_changed)
-        self.update()
-
-    def on_filter_changed(self, widget, data):
-        self.active_filter = data
-        self.update()
-
-    def set_package(self, pkg):
-        '''
-        Set current active package to show information about in the
-        Package Info view.
-
-        :param pkg: package to set as active package
-        '''
-        self.current_package = pkg
-        self.update()
-
-    def update(self):
-        '''
-        update the information in the Package info view
-        '''
-        self.view.clear()
-        self.view.write("\n")
-        if self.current_package:
-            if self.active_filter == 'desc':
-                self._show_description()
-            elif self.active_filter == 'updinfo':
-                self._show_updateinfo()
-
-            elif self.active_filter == 'changelog':
-                self._show_changelog()
-
-            elif self.active_filter == 'files':
-                self._show_filelist()
-
-            elif self.active_filter == 'deps':
-                self._show_requirements()
-            else:
-                print("Package info not found : ", self.active_filter)
-        self.view.goTop()
-
-    def _is_url(self, url):
-        urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-        if urls:
-            return True
-        else:
-            return False
-
-    def _url_handler(self, url):
-        print('Url activated : ' + url)
-        if self._is_url(url):  # just to be sure and prevent shell injection
-            rc = call("xdg-open %s" % url, shell=True)
-            if rc != 0:  # failover to gtk.show_uri, if xdg-open fails or is not installed
-                Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
-        else:
-            self.frontend.warning("%s is not an url" % url)
-
-    def _show_description(self):
-        tags = self.current_package.pkgtags
-        if tags:
-            self.view.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
-        url = self.current_package.URL
-        self.view.write(_("Project URL : "), "changelog-header", newline=False)
-        self.view.add_url(url, url, newline=True)
-        self.view.write('\n')
-
-        desc = self.current_package.description
-        self.view.write(desc)
-        self.base.set_working(False)
-
-    def _show_updateinfo(self):
-        # FIXME: updateinfo is not supported in dnf yet
-        self.view.write("Updateinfo not supported in dnf yet")
-        return
-        self.base.set_working(True)
-        updinfo = self.current_package.updateinfo
-        for info in updinfo:
-            self._write_update_info(info)
-        if len(updinfo) == 0:
-            self.view.write("No Update information is available")
-        self.base.set_working(False)
-
-    def _write_update_info(self, upd_info):
-        head = ""
-        head += ("%14s " % _("Release")) + ": %(release)s\n"
-        head += ("%14s " % _("Type")) + ": %(type)s\n"
-        head += ("%14s " % _("Status")) + ": %(status)s\n"
-        head += ("%14s " % _("Issued")) + ": %(issued)s\n"
-        head = head % upd_info
-
-        if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
-            head += "    Updated : %s" % upd_info['updated']
-
-        self.view.write(head)
-        head = ""
-
-        # Add our bugzilla references
-        if upd_info['references']:
-            bzs = [ r for r in upd_info['references'] if r and r['type'] == 'bugzilla']
-            if len(bzs):
-                header = "Bugzilla"
-                for bz in bzs:
-                    if 'title' in bz and bz['title']:
-                        bug_msg = ' - %s' % bz['title']
-                    else:
-                        bug_msg = ''
-                    self.view.write("%14s : " % header, newline=False)
-                    self.view.add_url(bz['id'], BUGZILLA_URL + bz['id'])
-                    self.view.write(bug_msg)
-                    header = " "
-
-        # Add our CVE references
-        if upd_info['references']:
-            cves = [ r for r in upd_info['references'] if r and r['type'] == 'cve']
-            if len(cves):
-                cvelist = ""
-                header = "CVE"
-                for cve in cves:
-                    cvelist += "%14s : %s\n" % (header, cve['id'])
-                    header = " "
-                head += cvelist[:-1].rstrip() + '\n\n'
-
-        if upd_info['description'] is not None:
-            desc = upd_info['description']
-            head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
-
-        head += "\n"
-        self.view.write(head)
-
-    def _show_changelog(self):
-        # FIXME: Changekog is not supported in dnf yet
-        self.view.write("Changelog not supported in dnf yet")
-        return
-        self.base.set_working(True)
-        changelog = self.current_package.changelog
-        if changelog:
-            i = 0
-            for (c_date, c_ver, msg) in changelog:
-                i += 1
-                self.view.write("* %s %s" % (date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
-                for line in msg.split('\n'):
-                    self.view.write("%s" % line, "changelog")
-                self.view.write('\n')
-                if i == 5:  # only show the last 5 entries
-                    break
-        self.base.set_working(False)
-
-
-    def _show_filelist(self):
-        # FIXME: filelist is not supported in dnf yet
-        self.view.write("filelist not supported in dnfdaemon yet")
-        return
-        self.base.set_working(True)
-        filelist = self.current_package.filelist
-        for fname in sorted(filelist):
-            self.view.write(fname)
-        self.base.set_working(False)
-
-    def _show_requirements(self):
-        self.view.write("Requirements for " + str(self.current_package))
-
-
-
-class Preferences:
-
-    def __init__(self, base):
-        self.base = base
-        self.dialog = self.base.ui.get_object("preferences")
-        self.dialog.set_transient_for(base)
-        self._settings = ['autostart', 'clean_unused', 'newest_only','autocheck_updates','hide_on_close']
-        self.repo_view = RepoView()
-        widget = self.base.ui.get_object('repo_sw')
-        widget.add(self.repo_view)
-        self.repos = []
-
-    def run(self):
-        self.get_settings()
-        self.dialog.show_all()
-        rc = self.dialog.run()
-        self.dialog.hide()
-        need_reset = False
-        if rc == 1:
-            need_reset = self.set_settings()
-        return need_reset
-
-    def get_settings(self):
-        # set settings states
-        for option in self._settings:
-            logger.debug("%s : %s " % (option,getattr(CONFIG.conf,option) ))
-            widget = self.base.ui.get_object('pref_'+option)
-            widget.set_active(getattr(CONFIG.conf,option))
-        # autocheck update on/off handler
-        widget = self.base.ui.get_object('pref_autocheck_updates')
-        widget.connect('notify::active', self.on_autocheck_updates)
-        # set current colors
-        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
-            rgba = get_color(getattr(CONFIG.conf,name))
-            widget = self.base.ui.get_object(name)
-            widget.set_rgba(rgba)
-        # Set update checker values
-        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
-            widget = self.base.ui.get_object('pref_'+name)
-            widget.set_value(getattr(CONFIG.conf,name))
-        self.on_autocheck_updates()
-        # get the repositories
-        self.repos = self.base.backend.get_repositories()
-        self.repo_view.populate(self.repos)
-
-    def on_autocheck_updates(self, *args):
-        widget = self.base.ui.get_object('pref_autocheck_updates')
-        state = widget.get_active()
-        if state:
-            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(True)
-            self.base.ui.get_object('pref_update_interval').set_sensitive(True)
-            self.base.ui.get_object('label_update_delay').set_sensitive(True)
-            self.base.ui.get_object('label_update_interval').set_sensitive(True)
-        else:
-            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(False)
-            self.base.ui.get_object('pref_update_interval').set_sensitive(False)
-            self.base.ui.get_object('label_update_delay').set_sensitive(False)
-            self.base.ui.get_object('label_update_interval').set_sensitive(False)
-
-    def set_settings(self):
-        changed = False
-        need_reset = False
-        # handle options
-        for option in self._settings:
-            widget = self.base.ui.get_object('pref_'+option)
-            state = widget.get_active()
-            if state != getattr(CONFIG.conf, option): # changed ??
-                setattr(CONFIG.conf, option, state)
-                changed = True
-                self.handle_setting(option, state)
-        # handle colors
-        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
-            widget = self.base.ui.get_object(name)
-            rgba = widget.get_rgba()
-            color =  color_to_hex(rgba)
-            if color != getattr(CONFIG.conf, name): # changed ??
-                setattr(CONFIG.conf, name, color)
-                changed = True
-        # handle update checker values
-        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
-            widget = self.base.ui.get_object('pref_'+name)
-            value = widget.get_value_as_int()
-            if value != getattr(CONFIG.conf, name): # changed ??
-                setattr(CONFIG.conf, name, value)
-                changed = True
-        # handle repos
-        repo_before = CONFIG.session.enabled_repos
-        repo_now = self.repo_view.get_selected()
-        if repo_now != repo_before:                     # repo selection changed
-            CONFIG.session.enabled_repos = repo_now     # set the new selection
-            need_reset = True                           # we need to reset the gui
-        if changed:
-            CONFIG.write()
-        return need_reset
-
-    def handle_setting(self, option, state):
-        if option == 'autostart':
-            if state: # create an autostart .desktop for current user
-                shutil.copy(MISC_DIR+"/yumex-dnf-autostart.desktop", os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
-            else: # remove the autostart file
-                os.unlink(os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
-
-
-class TransactionResult:
-
-    def __init__(self, base):
-        self.base = base
-        self.dialog = self.base.ui.get_object("transaction-results")
-        self.dialog.set_transient_for(base)
-        self.view = self.base.ui.get_object("result_view")
-        self.store = self.setup_view(self.view)
-
-    def run(self):
-        self.dialog.show_all()
-        rc = self.dialog.run()
-        self.dialog.hide()
-        return rc == 1
-
-    def clear(self):
-        self.store.clear()
-
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
-
-
-    def setup_view(self, view):
-        '''
-        Setup the TreeView
-        @param view: the TreeView widget
-        '''
-        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
-                              GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_STRING)
-        view.set_model(model)
-        self.create_text_column(_("Name"), view, 0, size=250)
-        self.create_text_column(_("Arch"), view, 1)
-        self.create_text_column(_("Ver"), view, 2)
-        self.create_text_column(_("Repository"), view, 3, size=100)
-        self.create_text_column(_("Size"), view, 4)
-        return model
-
-    def create_text_column(self, hdr, view, colno, size=None):
-        '''
-        Create at TreeViewColumn
-        @param hdr: column header text
-        @param view: the TreeView widget
-        @param colno: the TreeStore column containing data for the column
-        @param min_width: the min column view (optional)
-        '''
-        cell = Gtk.CellRendererText()  # Size Column
-        column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
-        column.set_resizable(True)
-        if size:
-            column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
-            column.set_fixed_width(size)
-        view.append_column(column)
-
-
-    def populate(self, pkglist, dnl_size):
-        '''
-        Populate the TreeView with data
-        @param pkglist: list containing view data
-        '''
-        model = self.store
-        self.store.clear()
-        total_size = 0
-        for sub, lvl1 in pkglist:
-            label = "<b>%s</b>" % TRANSACTION_RESULT_TYPES[sub]
-            level1 = model.append(None, [label, "", "", "", ""])
-            for id, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id) = str(id).split(',')
-                level2 = model.append(level1, [n, a, "%s.%s" % (v, r), repo_id, format_number(size)])
-                if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:  # packages there need to be downloaded
-                    total_size += size
-                for r in replaces:
-                    fn = self._fullname(r)
-                    model.append(level2, [ fn, "", "", "", ""])
-        self.base.ui.get_object("result_size").set_text(format_number(total_size))
-        self.view.expand_all()
-
-
 class RepoView(SelectionView):
     """
     This class controls the repo TreeView
@@ -1814,7 +1288,6 @@ class RepoView(SelectionView):
             else:
                 self.store.set_value(iterator, 0, False)
             iterator = self.store.iter_next(iterator)
-
 
 class Group:
     """ Object to represent a dnf group/category """
@@ -2018,33 +1491,4 @@ class GroupView(Gtk.TreeView):
             pix = pix.scale_simple(imgsize, imgsize,
                                    GdkPixbuf.INTERP_BILINEAR)
         return pix
-
-class AboutDialog(Gtk.AboutDialog):
-
-    def __init__(self):
-        Gtk.AboutDialog.__init__(self)
-        self.props.program_name = 'Yum Extender (dnf)'
-        self.props.version = VERSION
-        self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
-        self.props.license_type = Gtk.License.GPL_2_0
-        self.props.copyright = '(C) 2014 Tim Lauridsen'
-        self.props.website = 'https://github.com/timlau/yumex-dnf'
-        self.props.logo_icon_name = 'yumex-dnf'
-
-
-def ask_for_gpg_import(window, values):
-    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
-    pkg_name = pkg_id.split(',')[0]
-    msg = (_( ' Do you want to import this GPG Key\n'
-              ' Needed to verify the %s package\n\n'
-              ' key        : 0x%s:\n'
-              ' Userid     : "%s"\n'
-              ' From       : %s') %
-                (pkg_name, hexkeyid, userid,
-                keyurl.replace("file://","")))
-
-    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
-    rc = dialog.run()
-    dialog.destroy()
-    return rc == Gtk.ResponseType.YES
 
