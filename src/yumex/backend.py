@@ -22,6 +22,7 @@ import logging
 
 logger = logging.getLogger('yumex.backend')
 
+
 class Package:
     '''
     Base class for a package, must be implemented in a sub class
@@ -42,7 +43,6 @@ class Package:
         self.recent = False
         self.selected = False
 
-
     def __str__(self):
         '''
         Return a string representation of the package
@@ -55,7 +55,6 @@ class Package:
         fullname for the package :name-version.arch
         '''
         return "%s-%s.%s" % (self.name, self.version, self.arch)
-
 
     def get_attribute(self, attr):
         '''
@@ -85,7 +84,7 @@ class Backend:
     must be implemented in a sub class
     '''
 
-    def __init__(self, frontend, filters= False):
+    def __init__(self, frontend, filters=False):
         if filters:
             self.cache = PackageCacheWithFilters()
         else:
@@ -114,59 +113,60 @@ class Backend:
         return pkgs
 
 
-
 class BaseFilter:
     '''
     Base filter, used at base for filters there can filter a list of packages based on a different conditions
     '''
-    
-    def __init__(self, name, active = False):
+
+    def __init__(self, name, active=False):
         self.name = name
         self.active = active
-    
-    def run(self,pkgs):
+
+    def run(self, pkgs):
         if not self.active:
             return pkgs
-        
+
     def change(self):
         pass
-    
+
     def set_active(self, state):
         self.active = state
-        
+
+
 class ArchFilter(BaseFilter):
     '''
     Arch Filter to filter a list of packages by arch
     '''
-    
-    def __init__(self, name, active = False):
+
+    def __init__(self, name, active=False):
         BaseFilter.__init__(self, name, active)
-        self.archs = ['noarch','i686','x86_64']
-            
+        self.archs = ['noarch', 'i686', 'x86_64']
+
     def run(self, pkgs):
         BaseFilter.run(self, pkgs)
         filtered = [po for po in pkgs if po.arch in self.archs]
         return filtered
-        
+
     def change(self, archs):
         self.archs = archs
+
 
 class Filters:
     '''
     Container to contain a number of filters based on the BaseFilter class
     '''
-    
+
     def __init__(self):
         self._filters = {}
-        
+
     def add(self, filter_cls):
         if not filter_cls.name in self._filters:
             self._filters[filter_cls.name] = filter_cls
-            
+
     def delete(self, name):
         if name in self._filters:
             del self._filters[name]
-            
+
     def run(self, pkgs):
         flt_pkgs = pkgs
         for name in self._filters:
@@ -174,13 +174,14 @@ class Filters:
             flt_pkgs = self._filters[name].run(flt_pkgs)
             #logger.debug('post: %s  pkgs : %s' % (name,len(flt_pkgs)))
         return flt_pkgs
-            
+
     def get(self, name):
         if name in self._filters:
             return self._filters[name]
         else:
             return None
-        
+
+
 class PackageCache:
     '''
     Package cache to contain packages from backend, so we dont have get them more
@@ -195,7 +196,6 @@ class PackageCache:
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
-        
 
     def reset(self):
         '''
@@ -223,7 +223,6 @@ class PackageCache:
         self.find_packages(pkgs)
         self._populated.append(str(pkg_filter))
 
-
     def _add(self, po):
         if str(po) in self._index:  # package is in cache
             return self._index[str(po)]
@@ -245,7 +244,6 @@ class PackageCache:
         else:
             return []
 
-                   
 
 class PackageCacheWithFilters(PackageCache):
     '''
@@ -277,4 +275,3 @@ class PackageCacheWithFilters(PackageCache):
         pkgs = PackageCache.find_packages(self, packages)
         pkgs = self.filters.run(pkgs)
         return pkgs
-

@@ -35,15 +35,16 @@ import yumex.gui.views
 
 logger = logging.getLogger('yumex.gui.widget')
 
+
 class InfoProgressBar:
 
     def __init__(self, ui):
         self.ui = ui
-        self.infobar = ui.get_object("infobar") # infobar revealer
+        self.infobar = ui.get_object("infobar")  # infobar revealer
         frame = ui.get_object("info_frame")
         new_bg = Gdk.RGBA()
         new_bg.parse("rgb(255,255,255)")
-        frame.override_background_color (Gtk.StateFlags.NORMAL, new_bg)
+        frame.override_background_color(Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
@@ -105,24 +106,20 @@ class InfoProgressBar:
                 self.info(_("Getting Package metadata"))
 
 
-
-
-
 class ArchMenu(GObject.GObject):
     '''
     Class to handle a menu to select what arch to show in package view
     '''
     __gsignals__ = {'arch-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_STRING,))}
+                                     None,
+                                     (GObject.TYPE_STRING,))}
 
     def __init__(self, arch_menu_widget, archs):
         GObject.GObject.__init__(self)
         self.all_archs = archs
         self.current_archs = archs
-        self.arch_menu_widget= arch_menu_widget
+        self.arch_menu_widget = arch_menu_widget
         self.arch_menu = self._setup_archmenu()
-
 
     def _setup_archmenu(self):
         arch_menu = self.arch_menu_widget
@@ -138,9 +135,9 @@ class ArchMenu(GObject.GObject):
     def on_arch_clicked(self, button, event=None):
         #print('clicked : event : %s' % event.type)
         if event:
-            self.arch_menu.popup(None, None, None, None, event.button, event.time)
+            self.arch_menu.popup(
+                None, None, None, None, event.button, event.time)
             return True
-
 
     def on_archmenu_clicked(self, widget):
         state = widget.get_active()
@@ -153,12 +150,10 @@ class ArchMenu(GObject.GObject):
         self.emit("arch-changed", archs)
 
 
-
-
 class PackageInfoWidget(Gtk.Box):
-    __gsignals__ = { 'info-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_STRING,))
+    __gsignals__ = {'info-changed': (GObject.SignalFlags.RUN_FIRST,
+                                     None,
+                                     (GObject.TYPE_STRING,))
                     }
 
     def __init__(self, window, url_handler):
@@ -168,19 +163,21 @@ class PackageInfoWidget(Gtk.Box):
         # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
         rb = self._get_radio_button('dialog-information-symbolic', "desc")
         vbox.add(rb)
-        vbox.add(self._get_radio_button('software-update-available-symbolic', "updinfo", rb))
-        vbox.add(self._get_radio_button('bookmark-new-symbolic', "changelog", rb))
-        vbox.add(self._get_radio_button('drive-multidisk-symbolic', "files", rb))
+        vbox.add(self._get_radio_button(
+            'software-update-available-symbolic', "updinfo", rb))
+        vbox.add(self._get_radio_button(
+            'bookmark-new-symbolic', "changelog", rb))
+        vbox.add(self._get_radio_button(
+            'drive-multidisk-symbolic', "files", rb))
         vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb))
         vbox.set_margin_right(5)
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
-        self.view = yumex.gui.views.PackageInfoView( window, url_handler)
+        self.view = yumex.gui.views.PackageInfoView(window, url_handler)
         sw.add(self.view)
         self.pack_start(sw, True, True, 0)
 
-
-    def _get_radio_button(self,icon_name,name, group=None):
+    def _get_radio_button(self, icon_name, name, group=None):
         if group:
             wid = Gtk.RadioButton.new_from_widget(group)
         else:
@@ -189,7 +186,8 @@ class PackageInfoWidget(Gtk.Box):
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
         wid.set_image(image)
         wid.connect('toggled', self._on_filter_changed, name)
-        wid.set_property("draw-indicator", False) # we only want an image, not the black dot indicator
+        # we only want an image, not the black dot indicator
+        wid.set_property("draw-indicator", False)
         return wid
 
     def _on_filter_changed(self, button, data):
@@ -202,7 +200,8 @@ Gtk.Image()
         '''
         if button.get_active():
             logger.debug("pkginfo: %s selected" % data)
-            self.emit("info-changed",data)
+            self.emit("info-changed", data)
+
 
 class PackageInfo(PackageInfoWidget):
     '''
@@ -215,7 +214,7 @@ class PackageInfo(PackageInfoWidget):
         self.base = base
         self.current_package = None
         self.active_filter = const.PKGINFO_FILTERS[0]
-        self.connect('info-changed',self.on_filter_changed)
+        self.connect('info-changed', self.on_filter_changed)
         self.update()
 
     def on_filter_changed(self, widget, data):
@@ -257,7 +256,8 @@ class PackageInfo(PackageInfoWidget):
         self.view.goTop()
 
     def _is_url(self, url):
-        urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+        urls = re.findall(
+            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
         if urls:
             return True
         else:
@@ -267,7 +267,8 @@ class PackageInfo(PackageInfoWidget):
         print('Url activated : ' + url)
         if self._is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open %s" % url, shell=True)
-            if rc != 0:  # failover to gtk.show_uri, if xdg-open fails or is not installed
+            # failover to gtk.show_uri, if xdg-open fails or is not installed
+            if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             self.frontend.warning("%s is not an url" % url)
@@ -275,7 +276,8 @@ class PackageInfo(PackageInfoWidget):
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
-            self.view.write(_("Tags : %s\n ") % ", ".join(tags),"changelog-header")
+            self.view.write(_("Tags : %s\n ") %
+                            ", ".join(tags), "changelog-header")
         url = self.current_package.URL
         self.view.write(_("Project URL : "), "changelog-header", newline=False)
         self.view.add_url(url, url, newline=True)
@@ -313,7 +315,8 @@ class PackageInfo(PackageInfoWidget):
 
         # Add our bugzilla references
         if upd_info['references']:
-            bzs = [ r for r in upd_info['references'] if r and r['type'] == 'bugzilla']
+            bzs = [r for r in upd_info['references']
+                   if r and r['type'] == 'bugzilla']
             if len(bzs):
                 header = "Bugzilla"
                 for bz in bzs:
@@ -328,7 +331,8 @@ class PackageInfo(PackageInfoWidget):
 
         # Add our CVE references
         if upd_info['references']:
-            cves = [ r for r in upd_info['references'] if r and r['type'] == 'cve']
+            cves = [r for r in upd_info['references']
+                    if r and r['type'] == 'cve']
             if len(cves):
                 cvelist = ""
                 header = "CVE"
@@ -339,7 +343,8 @@ class PackageInfo(PackageInfoWidget):
 
         if upd_info['description'] is not None:
             desc = upd_info['description']
-            head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
+            head += "\n%14s : %s\n" % (_("Description"),
+                                       format_block(desc, 17))
 
         head += "\n"
         self.view.write(head)
@@ -354,14 +359,14 @@ class PackageInfo(PackageInfoWidget):
             i = 0
             for (c_date, c_ver, msg) in changelog:
                 i += 1
-                self.view.write("* %s %s" % (datetime.date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
+                self.view.write(
+                    "* %s %s" % (datetime.date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
                 for line in msg.split('\n'):
                     self.view.write("%s" % line, "changelog")
                 self.view.write('\n')
                 if i == 5:  # only show the last 5 entries
                     break
         self.base.set_working(False)
-
 
     def _show_filelist(self):
         # FIXME: filelist is not supported in dnf yet
@@ -377,23 +382,19 @@ class PackageInfo(PackageInfoWidget):
         self.view.write("Requirements for " + str(self.current_package))
 
 
-
-
-
-
 def ask_for_gpg_import(window, values):
     (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
     pkg_name = pkg_id.split(',')[0]
-    msg = (_( ' Do you want to import this GPG Key\n'
-              ' Needed to verify the %s package\n\n'
-              ' key        : 0x%s:\n'
-              ' Userid     : "%s"\n'
-              ' From       : %s') %
-                (pkg_name, hexkeyid, userid,
-                keyurl.replace("file://","")))
+    msg = (_(' Do you want to import this GPG Key\n'
+             ' Needed to verify the %s package\n\n'
+             ' key        : 0x%s:\n'
+             ' Userid     : "%s"\n'
+             ' From       : %s') %
+          (pkg_name, hexkeyid, userid,
+           keyurl.replace("file://", "")))
 
-    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
+    dialog = Gtk.MessageDialog(
+        window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
     rc = dialog.run()
     dialog.destroy()
     return rc == Gtk.ResponseType.YES
-

@@ -23,6 +23,7 @@ from urllib.parse import urlparse
 import glob
 import re
 
+
 def read_in_items_from_dot_dir(thisglob, line_as_list=True):
     """takes a glob of a dir (like /etc/foo.d/*.foo)
        returns a list of all the lines in all the files matching
@@ -34,8 +35,8 @@ def read_in_items_from_dot_dir(thisglob, line_as_list=True):
         for line in open(fname):
             if re.match('\s*(#|$)', line):
                 continue
-            line = line.rstrip() # no more trailing \n's
-            line = line.lstrip() # be nice
+            line = line.rstrip()  # no more trailing \n's
+            line = line.lstrip()  # be nice
             if not line:
                 continue
             if line_as_list:
@@ -94,8 +95,9 @@ class Option(object):
                 value = self.parse(value)
             except ValueError as e:
                 # Add the field name onto the error
-                raise ValueError('Error parsing "%s = %r": %s' % (self._optname,
-                                                                 value, str(e)))
+                raise ValueError(
+                    'Error parsing "%s = %r": %s' % (self._optname,
+                                                     value, str(e)))
         setattr(obj, self._attrname, value)
 
     def setup(self, obj, name):
@@ -137,6 +139,7 @@ class Option(object):
         """
         return str(value)
 
+
 def Inherit(option_obj):
     """Clone an :class:`Option` instance for the purposes of inheritance. The returned
     instance has all the same properties as the input :class:`Option` and shares items
@@ -149,6 +152,7 @@ def Inherit(option_obj):
     new_option = option_obj.clone()
     new_option.inherit = True
     return new_option
+
 
 class ListOption(Option):
     """An option containing a list of strings."""
@@ -189,13 +193,14 @@ class ListOption(Option):
         """
         return '\n '.join(value)
 
+
 class UrlOption(Option):
     """This option handles lists of URLs with validation of the URL
     scheme.
     """
 
-    def __init__(self, default=None, schemes=('http', 'ftp', 'file', 'https'), 
-            allow_none=False):
+    def __init__(self, default=None, schemes=('http', 'ftp', 'file', 'https'),
+                 allow_none=False):
         super(UrlOption, self).__init__(default)
         self.schemes = schemes
         self.allow_none = allow_none
@@ -218,9 +223,10 @@ class UrlOption(Option):
                 raise ValueError('"_none_" is not a valid value')
 
         # Check that scheme is valid
-        (s,b,p,q,f,o) = urlparse(url)
+        (s, b, p, q, f, o) = urlparse(url)
         if s not in self.schemes:
-            raise ValueError('URL must be %s not "%s"' % (self._schemelist(), s))
+            raise ValueError(
+                'URL must be %s not "%s"' % (self._schemelist(), s))
 
         return url
 
@@ -234,6 +240,7 @@ class UrlOption(Option):
         else:
             return '%s or %s' % (', '.join(self.schemes[:-1]), self.schemes[-1])
 
+
 class IntOption(Option):
     """An option representing an integer value."""
 
@@ -241,7 +248,7 @@ class IntOption(Option):
         super(IntOption, self).__init__(default)
         self._range_min = range_min
         self._range_max = range_max
-        
+
     def parse(self, s):
         """Parse a string containing an integer.
 
@@ -259,6 +266,7 @@ class IntOption(Option):
         if self._range_min is not None and val < self._range_min:
             raise ValueError('out of range integer value')
         return val
+
 
 class PositiveIntOption(IntOption):
     """An option representing a positive integer value, where 0 can
@@ -282,6 +290,7 @@ class PositiveIntOption(IntOption):
             return 0
         return super(PositiveIntOption, self).parse(s)
 
+
 class SecondsOption(Option):
     """An option representing an integer value of seconds, or a human
     readable variation specifying days, hours, minutes or seconds
@@ -294,7 +303,7 @@ class SecondsOption(Option):
 
     Return value will always be an integer
     """
-    MULTS = {'d': 60 * 60 * 24, 'h' : 60 * 60, 'm' : 60, 's': 1}
+    MULTS = {'d': 60 * 60 * 24, 'h': 60 * 60, 'm': 60, 's': 1}
 
     def parse(self, s):
         """Parse a string containing an integer value of seconds, or a human
@@ -314,7 +323,7 @@ class SecondsOption(Option):
         if len(s) < 1:
             raise ValueError("no value specified")
 
-        if s == "-1" or s == "never": # Special cache timeout, meaning never
+        if s == "-1" or s == "never":  # Special cache timeout, meaning never
             return -1
         if s[-1].isalpha():
             n = s[:-1]
@@ -335,6 +344,7 @@ class SecondsOption(Option):
             raise ValueError("seconds value may not be negative")
 
         return int(n * mult)
+
 
 class BoolOption(Option):
     """An option representing a boolean value.  The value can be one
@@ -371,6 +381,7 @@ class BoolOption(Option):
         else:
             return "0"
 
+
 class FloatOption(Option):
     """An option representing a numeric float value."""
 
@@ -387,6 +398,7 @@ class FloatOption(Option):
         except (ValueError, TypeError):
             raise ValueError('invalid float value')
 
+
 class SelectionOption(Option):
     """Handles string values where only specific values are
     allowed.
@@ -394,8 +406,8 @@ class SelectionOption(Option):
     def __init__(self, default=None, allowed=(), mapper={}):
         super(SelectionOption, self).__init__(default)
         self._allowed = allowed
-        self._mapper  = mapper
-        
+        self._mapper = mapper
+
     def parse(self, s):
         """Parse a string for specific values.
 
@@ -408,6 +420,7 @@ class SelectionOption(Option):
         if s not in self._allowed:
             raise ValueError('"%s" is not an allowed value' % s)
         return s
+
 
 class CaselessSelectionOption(SelectionOption):
     """Mainly for compatibility with :class:`BoolOption`, works like
@@ -422,6 +435,7 @@ class CaselessSelectionOption(SelectionOption):
         """
         return super(CaselessSelectionOption, self).parse(s.lower())
 
+
 class BytesOption(Option):
     """An option representing a value in bytes. The value may be given
     in bytes, kilobytes, megabytes, or gigabytes.
@@ -429,8 +443,8 @@ class BytesOption(Option):
     # Multipliers for unit symbols
     MULTS = {
         'k': 1024,
-        'm': 1024*1024,
-        'g': 1024*1024*1024,
+        'm': 1024 * 1024,
+        'g': 1024 * 1024 * 1024,
     }
 
     def parse(self, s):
@@ -459,7 +473,7 @@ class BytesOption(Option):
         else:
             n = s
             mult = 1
-             
+
         try:
             n = float(n)
         except ValueError:
@@ -469,6 +483,7 @@ class BytesOption(Option):
             raise ValueError("bytes value may not be negative")
 
         return int(n * mult)
+
 
 class ThrottleOption(BytesOption):
     """An option representing a bandwidth throttle value. See
@@ -503,6 +518,7 @@ class ThrottleOption(BytesOption):
             return n / 100.0
         else:
             return BytesOption.parse(self, s)
+
 
 class BaseConfig(object):
     """Base class for storing configuration definitions. Subclass when
@@ -548,7 +564,7 @@ class BaseConfig(object):
                 # No matching option in this section, try inheriting
                 if parent and option.inherit:
                     value = getattr(parent, name)
-               
+
             if value is not None:
                 setattr(self, name, value)
 
@@ -617,12 +633,11 @@ class BaseConfig(object):
                 raise ValueError("not populated, don't know section")
             section = self._section
 
-        # Updated the ConfigParser with the changed values    
+        # Updated the ConfigParser with the changed values
         cfgOptions = self.cfg.options(section)
-        for name,value in self.iteritems():
+        for name, value in self.iteritems():
             option = self.optionobj(name)
-            if always is None or name in always or option.default != value or name in cfgOptions :
-                self.cfg.set(section,name, option.tostring(value))
+            if always is None or name in always or option.default != value or name in cfgOptions:
+                self.cfg.set(section, name, option.tostring(value))
         # write the updated ConfigParser to the fileobj.
         self.cfg.write(fileobj)
-

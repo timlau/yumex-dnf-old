@@ -90,7 +90,7 @@ class SelectionView(Gtk.TreeView):
             label.show()
             column.set_widget(label)
             widget = column.get_button()
-            while not isinstance(widget, Gtk.Button) :
+            while not isinstance(widget, Gtk.Button):
                 widget = widget.get_parent()
             widget.connect('button-release-event', click_handler)
             if tooltip:
@@ -126,8 +126,6 @@ class SelectionView(Gtk.TreeView):
             widget.connect('button-release-event', popup_handler)
             if tooltip:
                 widget.set_tooltip_text(tooltip)
-
-
 
     def create_selection_column_num(self, num, data_func=None, tooltip=None):
         '''
@@ -214,7 +212,6 @@ class SelectionView(Gtk.TreeView):
         if obj:
             cell.set_property("active", getattr(obj, prop))
 
-
     def on_toggled(self, widget, path):
         '''
         selection togged handler
@@ -222,10 +219,11 @@ class SelectionView(Gtk.TreeView):
         '''
         pass
 
+
 class PackageView(SelectionView):
-    __gsignals__ = { 'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_PYOBJECT,))
+    __gsignals__ = {'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
+                                    None,
+                                    (GObject.TYPE_PYOBJECT,))
                     }
 
     def __init__(self, qview, arch_menu, group_mode=False):
@@ -245,8 +243,6 @@ class PackageView(SelectionView):
         else:
             self._click_header_active = False
 
-
-
     def _setup_model(self):
         '''
         Setup the model and view
@@ -255,14 +251,14 @@ class PackageView(SelectionView):
         self.set_model(store)
         if self.group_mode:
             self.create_selection_colunm('selected',
-                                          click_handler=self.on_section_header_clicked_group,
-                                          popup_handler=self.on_section_header_button,
-                                          tooltip=_("Click to install all/remove all"))
+                                         click_handler=self.on_section_header_clicked_group,
+                                         popup_handler=self.on_section_header_button,
+                                         tooltip=_("Click to install all/remove all"))
         else:
             self.create_selection_colunm('selected',
-                                          click_handler=self.on_section_header_clicked,
-                                          popup_handler=self.on_section_header_button,
-                                          tooltip=_("Click to select/deselect all (updates only)"))
+                                         click_handler=self.on_section_header_clicked,
+                                         popup_handler=self.on_section_header_button,
+                                         tooltip=_("Click to select/deselect all (updates only)"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('stock-id', Gtk.STOCK_ADD)
@@ -274,12 +270,13 @@ class PackageView(SelectionView):
         self.append_column(column2)
         column2.set_clickable(True)
 
-        self.create_text_column(_("Package"), 'name' , size=200)
+        self.create_text_column(_("Package"), 'name', size=200)
         self.create_text_column(_("Ver."), 'fullver', size=120)
-        self.create_text_column(_("Arch."), 'arch' , size=60, click_handler=self.arch_menu.on_arch_clicked, tooltip=_('click to filter archs'))
+        self.create_text_column(
+            _("Arch."), 'arch', size=60, click_handler=self.arch_menu.on_arch_clicked, tooltip=_('click to filter archs'))
         self.create_text_column(_("Summary"), 'summary', size=400)
-        self.create_text_column(_("Repo."), 'repository' , size=90)
-        self.create_text_column(_("Size."), 'sizeM' , size=90)
+        self.create_text_column(_("Repo."), 'repository', size=90)
+        self.create_text_column(_("Size."), 'sizeM', size=90)
         self.set_search_column(1)
         self.set_enable_search(True)
         # store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
@@ -287,41 +284,38 @@ class PackageView(SelectionView):
         self.set_fixed_height_mode(True)
         return store
 
-
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
-
     def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
-        if self.state == 'normal': # deselect all
+        if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
             self.select_all()
             self.state = 'selected'
-        elif self.state == 'selected': # select all
+        elif self.state == 'selected':  # select all
             self.state = 'deselected'
             self.deselect_all()
-        elif self.state == 'deselected': # select previous selected
+        elif self.state == 'deselected':  # select previous selected
             self.state = 'normal'
             self.select_by_keys(self._last_selected)
             self._last_selected = []
 
     def on_section_header_clicked_group(self, widget):
         """  Selection column header clicked"""
-        if self.state == 'normal': # deselect all
+        if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
             self.install_all()
             self.state = 'install-all'
-        elif self.state == 'install-all': # select all
+        elif self.state == 'install-all':  # select all
             self.state = 'remove-all'
             self.deselect_all()
             self.remove_all()
-        elif self.state == 'remove-all': # select previous selected
+        elif self.state == 'remove-all':  # select previous selected
             self.state = 'normal'
             self.select_by_keys(self._last_selected)
             self._last_selected = []
-
 
     def on_cursor_changed(self, widget):
         '''
@@ -331,7 +325,7 @@ class PackageView(SelectionView):
             (model, iterator) = widget.get_selection().get_selected()
             if model != None and iterator != None:
                 pkg = model.get_value(iterator, 0)
-                self.emit('pkg-changed', pkg) # send the group-changed signal
+                self.emit('pkg-changed', pkg)  # send the group-changed signal
 
     def set_header_click(self, state):
         self._click_header_active = state
@@ -405,7 +399,6 @@ class PackageView(SelectionView):
                 notselected.append(obj)
         return notselected
 
-
     def new_pixbuf(self, column, cell, model, iterator, data):
         """
         Cell Data function for recent Column, shows pixmap
@@ -470,7 +463,6 @@ class PackageView(SelectionView):
                 self.queue.add(obj)
                 obj.selected = not obj.selected
 
-
     def _toggle_downgrade(self, obj):
         if obj.queued == 'do':  # all-ready queued
             related_po = obj.downgrade_po
@@ -490,7 +482,8 @@ class PackageView(SelectionView):
             if pkgs:
                 # downgrade the po
                 pkg = pkgs[0]
-                if pkg.action == 'do' or self.queue.has_pkg_with_name_arch(pkg):  # Installed pkg is all-ready downgraded by another package
+                # Installed pkg is all-ready downgraded by another package
+                if pkg.action == 'do' or self.queue.has_pkg_with_name_arch(pkg):
                     return
                 pkg.action = 'do'
                 pkg.queued = 'do'
@@ -501,7 +494,6 @@ class PackageView(SelectionView):
                 obj.downgrade_po = pkg
                 self.queue.add(pkg)
         self.queue_draw()
-
 
     def install_all(self):
         '''
@@ -528,6 +520,7 @@ class PackageView(SelectionView):
                 obj.set_select(not obj.selected)
         self.queueView.refresh()
         self.queue_draw()
+
 
 class PackageQueue:
     '''
@@ -588,7 +581,7 @@ class PackageQueue:
         @param pkg:
         '''
         na = "%s.%s" % (pkg.name, pkg.arch)
-        if not pkg in self.packages[pkg.action] and not na in self._name_arch_index :
+        if not pkg in self.packages[pkg.action] and not na in self._name_arch_index:
             self.packages[pkg.action].append(pkg)
             na = "%s.%s" % (pkg.name, pkg.arch)
             self._name_arch_index[na] = 1
@@ -613,7 +606,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('add_group : %s - %s' %(grp.id, action))
+        logger.debug('add_group : %s - %s' % (grp.id, action))
         grps = self.groups[action]
         if not grp.id in grps:
             grps[grp.id] = grp
@@ -625,7 +618,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('removeGroup : %s - %s' %(grp.id, action))
+        logger.debug('removeGroup : %s - %s' % (grp.id, action))
         grps = self.groups[action]
         if grp.id in grps:
             del grps[grp.id]
@@ -648,8 +641,8 @@ class PackageQueue:
             grps = self.groups[action]
             for grp in grps.values():
                 if not grp.name in group_names:
-                    new_dict[grp.id] = grp # copy to new dict
-                else: # unselect the group object
+                    new_dict[grp.id] = grp  # copy to new dict
+                else:  # unselect the group object
                     grp.selected = False
             self.groups[action] = new_dict
 
@@ -667,6 +660,7 @@ class PackageQueue:
             for grp in self.groups[action].values():
                 yield grp.id, action
 
+
 class QueueView(Gtk.TreeView):
 
     def __init__(self, queue_menu):
@@ -674,8 +668,10 @@ class QueueView(Gtk.TreeView):
         self.store = self._setup_model()
         self.queue = PackageQueue()
         self.queue_menu = queue_menu
-        self.connect('button-press-event',self.on_QueueView_button_press_event)
-        remove_menu = self.queue_menu.get_children()[0] # get the first child (remove menu)
+        self.connect('button-press-event',
+                     self.on_QueueView_button_press_event)
+        remove_menu = self.queue_menu.get_children()[
+            0]  # get the first child (remove menu)
         remove_menu.connect('activate', self.deleteSelected)
 
     def _setup_model(self):
@@ -729,7 +725,6 @@ class QueueView(Gtk.TreeView):
             popup.popup(None, None, None, None, event.button, event.time)
             return True
 
-
     def filter_pkgs_from_list(self, rlist):
         '''
         return packages in queue where str(pkg) is in a list
@@ -742,35 +737,42 @@ class QueueView(Gtk.TreeView):
                 rclist.extend([x for x in pkg_list if str(x) in rlist])
         return rclist
 
-    def refresh (self):
+    def refresh(self):
         """ Populate view with data from queue """
         self.store.clear()
         pkg_list = self.queue.packages['u'] + self.queue.packages['o']
-        label = "<b>%s</b>" % P_("Package to update", "Packages to update", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Package to update", "Packages to update", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['i']
-        label = "<b>%s</b>" % P_("Package to install", "Packages to install", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Package to install", "Packages to install", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['r']
-        label = "<b>%s</b>" % P_("Package to remove", "Packages to remove", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Package to remove", "Packages to remove", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['ri']
-        label = "<b>%s</b>" % P_("Package to reinstall", "Packages to reinstall", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Package to reinstall", "Packages to reinstall", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['li']
-        label = "<b>%s</b>" % P_("RPM file to install", "RPM files to install", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "RPM file to install", "RPM files to install", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         grps = self.queue.groups['i']
-        label = "<b>%s</b>" % P_("Group to install", "Groups to install", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Group to install", "Groups to install", len(pkg_list))
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         grps = self.queue.groups['r']
-        label = "<b>%s</b>" % P_("Group to remove", "Groups files to remove", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Group to remove", "Groups files to remove", len(pkg_list))
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         self.populate_list_downgrade()
@@ -793,19 +795,21 @@ class QueueView(Gtk.TreeView):
         '''
         parent = self.store.append(None, [label, ""])
         for grp in grps.values():
-            self.store.append(parent, [grp.name, grp.description ])
+            self.store.append(parent, [grp.name, grp.description])
 
     def populate_list_downgrade(self):
         '''
 
         '''
         pkg_list = self.queue.packages['do']
-        label = "<b>%s</b>" % P_("Package to downgrade", "Packages to downgrade", len(pkg_list))
+        label = "<b>%s</b>" % P_(
+            "Package to downgrade", "Packages to downgrade", len(pkg_list))
         if len(pkg_list) > 0:
             parent = self.store.append(None, [label, ""])
             for pkg in pkg_list:
                 item = self.store.append(parent, [str(pkg), pkg.summary])
-                self.store.append(item, [_("<b>Downgrade to</b> %s ") % str(pkg.downgrade_po), ""])
+                self.store.append(
+                    item, [_("<b>Downgrade to</b> %s ") % str(pkg.downgrade_po), ""])
 
 
 class HistoryView(Gtk.TreeView):
@@ -878,6 +882,7 @@ class HistoryView(Gtk.TreeView):
                     pkgs = self.base.get_root_backend().GetHistoryPackages(tid)
                     self.pkg_view.populate(pkgs)
 
+
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
     def __init__(self, base):
@@ -916,7 +921,8 @@ class HistoryPackageView(Gtk.TreeView):
             na = "%s.%s" % (n, a)
             if state in const.HISTORY_UPDATE_STATES:  # part of a pair
                 if na in names_pair:
-                    if state in const.HISTORY_NEW_STATES:  # this is the updating pkg
+                    # this is the updating pkg
+                    if state in const.HISTORY_NEW_STATES:
                         names_pair[na].insert(0, elem)  # add first in list
                     else:
                         names_pair[na].append(elem)
@@ -930,7 +936,8 @@ class HistoryPackageView(Gtk.TreeView):
         # pkgs without relatives
         for na in sorted(list(names)):
             pkg_list = names[na]
-            pkg_id, state, is_inst = pkg_list[0]  # Get first element (the primary (new) one )
+            pkg_id, state, is_inst = pkg_list[
+                0]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -938,7 +945,8 @@ class HistoryPackageView(Gtk.TreeView):
         # pkgs with releatives
         for na in sorted(list(names_pair)):
             pkg_list = names_pair[na]
-            pkg_id, state, is_inst = pkg_list[0]  # Get first element (the primary (new) one )
+            pkg_id, state, is_inst = pkg_list[
+                0]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -946,11 +954,13 @@ class HistoryPackageView(Gtk.TreeView):
         # apply packages to model in right order
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
-                cat = self.model.append(None, ["<b>%s</b>" % const.HISTORY_STATE_LABLES[state]])
+                cat = self.model.append(
+                    None, ["<b>%s</b>" % const.HISTORY_STATE_LABLES[state]])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
-                        name = '<span foreground="%s">%s</span>' % (CONFIG.conf.color_install, self._fullname(pkg_id))
+                        name = '<span foreground="%s">%s</span>' % (
+                            CONFIG.conf.color_install, self._fullname(pkg_id))
                     else:
                         name = self._fullname(pkg_id)
                     pkg_cat = self.model.append(cat, [name])
@@ -968,7 +978,6 @@ class HistoryPackageView(Gtk.TreeView):
             return "%s-%s-%s.%s" % (n, v, r, a)
 
 
-
 class TextViewBase(Gtk.TextView):
     '''  Encapsulate a Gtk.TextView with support for adding and using Pango styles'''
     def __init__(self, window=None, url_handler=None):
@@ -984,8 +993,10 @@ class TextViewBase(Gtk.TextView):
         self.set_editable(False)
         self.set_cursor_visible(False)
         self.buffer = self.get_buffer()
-        self.endMark = self.buffer.create_mark("End", self.buffer.get_end_iter(), False)
-        self.startMark = self.buffer.create_mark("Start", self.buffer.get_start_iter(), False)
+        self.endMark = self.buffer.create_mark(
+            "End", self.buffer.get_end_iter(), False)
+        self.startMark = self.buffer.create_mark(
+            "Start", self.buffer.get_start_iter(), False)
         self._styles = {}
         self.default_style = None  # the default style (text tag)
         self.window = window
@@ -1029,23 +1040,23 @@ class TextViewBase(Gtk.TextView):
             if tag in self.url_tags:
                 # underline the tags and change mouse pointer to hand
                 tag.set_property("underline", Pango.Underline.SINGLE)
-                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
+                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+                    Gdk.Cursor(Gdk.CursorType.HAND2))
                 self.underlined_url = tag
         return False
-
 
     def add_url(self, text, url, newline=False):
         """ Append URL to textbuffer and connect an event """
         # Try to see if we already got the current url as a tag
         tag = self.get_style(text)
         if not tag:
-            tag = self.buffer.create_tag(text, foreground="blue", font_desc=const.SMALL_FONT)
+            tag = self.buffer.create_tag(text,
+                                         foreground="blue", font_desc=const.SMALL_FONT)
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
             self._styles[text] = tag
         self.write(text, style=text, newline=newline)
-
 
     def add_style(self, tag, style):
         '''
@@ -1095,7 +1106,7 @@ class TextViewBase(Gtk.TextView):
         '''
         if not txt:
             return
-        if newline and txt[ -1] != '\n':
+        if newline and txt[-1] != '\n':
             txt += '\n'
         start, end = self.buffer.get_bounds()
         style = self.get_style(style)
@@ -1112,7 +1123,6 @@ class TextViewBase(Gtk.TextView):
         '''
         self.buffer.set_text('')
 
-
     def goTop(self):
         '''
         Set the cursor to the start of the text view
@@ -1125,7 +1135,7 @@ class PackageInfoView(TextViewBase):
     TextView handler for showing package information
     '''
 
-    def __init__(self, window=None, url_handler=None,  font_size=9):
+    def __init__(self, window=None, url_handler=None, font_size=9):
         '''
         Setup the textview
 
@@ -1167,6 +1177,7 @@ class PackageInfoView(TextViewBase):
         style.set_property("size_points", font_size)
         self.add_style(tag, style)
 
+
 class RepoView(SelectionView):
     """
     This class controls the repo TreeView
@@ -1190,26 +1201,25 @@ class RepoView(SelectionView):
 
     def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
-        if self.state == 'normal': # deselect all
+        if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
             self.select_all()
             self.state = 'deselected'
-        elif self.state == 'deselected': # select all
+        elif self.state == 'deselected':  # select all
             self.state = 'selected'
             self.select_all()
-        elif self.state == 'selected': # select previous selected
+        elif self.state == 'selected':  # select previous selected
             self.state = 'normal'
             self.select_by_keys(self._last_selected)
             self._last_selected = []
-
-
 
     def setup_view(self):
         """ Create models and columns for the Repo TextView  """
         store = Gtk.ListStore('gboolean', str, str, 'gboolean')
         self.set_model(store)
         # Setup Selection Column
-        col = self.create_selection_column_num(0, tooltip = _("Click here to switch between\n none/all/default selected"))
+        col = self.create_selection_column_num(
+            0, tooltip=_("Click here to switch between\n none/all/default selected"))
         col.set_clickable(True)
         col.connect('clicked', self.on_section_header_clicked)
 
@@ -1236,7 +1246,7 @@ class RepoView(SelectionView):
         for state, ident, name, gpg in data:
             self.store.append([state, ident, name, gpg])
 
-    def new_pixbuf(self, column, cell, model, iterator,data):
+    def new_pixbuf(self, column, cell, model, iterator, data):
         '''
 
         @param column:
@@ -1274,7 +1284,6 @@ class RepoView(SelectionView):
                 notselected.append(name)
         return notselected
 
-
     def select_by_keys(self, keys):
         '''
 
@@ -1289,17 +1298,17 @@ class RepoView(SelectionView):
                 self.store.set_value(iterator, 0, False)
             iterator = self.store.iter_next(iterator)
 
+
 class Group:
     """ Object to represent a dnf group/category """
 
-    def __init__(self,grpid, grp_name, grp_desc, inst, is_category = False ):
+    def __init__(self, grpid, grp_name, grp_desc, inst, is_category=False):
         self.id = grpid
         self.name = grp_name
         self.description = grp_desc
         self.installed = inst
         self.category = is_category
         self.selected = False
-
 
 
 class GroupView(Gtk.TreeView):
@@ -1319,7 +1328,6 @@ class GroupView(Gtk.TreeView):
         self._groups = None
         self.selected_group = None
         self.connect('cursor-changed', self.on_cursor_changed)
-
 
     def setup_view(self):
         """ Setup Group View  """
@@ -1391,13 +1399,13 @@ class GroupView(Gtk.TreeView):
         iterator = self.model.get_iter(path)
         obj = self.model.get_value(iterator, 0)
         action = self.queue.has_group(obj)
-        if action: # Group is in the queue, remove it from the queue
+        if action:  # Group is in the queue, remove it from the queue
             self.queue.remove_group(obj, action)
         else:
-            if obj.installed: # Group is installed add it to queue for removal
-                self.queue.add_group(obj, 'r') # Add for remove
-            else: # Group is not installed, add it to queue for installation
-                self.queue.add_group(obj, 'i') # Add for install
+            if obj.installed:  # Group is installed add it to queue for removal
+                self.queue.add_group(obj, 'r')  # Add for remove
+            else:  # Group is not installed, add it to queue for installation
+                self.queue.add_group(obj, 'i')  # Add for install
         self.queueView.refresh()
 
     def on_cursor_changed(self, widget):
@@ -1410,7 +1418,8 @@ class GroupView(Gtk.TreeView):
                 obj = self.model.get_value(iterator, 0)
                 if not obj.category and obj.id != self.selected_group:
                     self.selected_group = obj.id
-                    self.emit('group-changed', obj.id) # send the group-changed signal
+                    # send the group-changed signal
+                    self.emit('group-changed', obj.id)
 
     def populate(self, data):
         '''
@@ -1435,7 +1444,6 @@ class GroupView(Gtk.TreeView):
                 self.model.append(node, [obj])
         self.thaw_child_notify()
 
-
     def queue_pixbuf(self, column, cell, model, iterator, data=None):
         """
         Cell Data function for
@@ -1452,7 +1460,7 @@ class GroupView(Gtk.TreeView):
                 else:
                     icon = 'edit-delete'
             cell.set_property('icon-name', icon)
-            cell.set_property('visible',True)
+            cell.set_property('visible', True)
         else:
             cell.set_property('visible', False)
 
@@ -1466,10 +1474,10 @@ class GroupView(Gtk.TreeView):
         fn = "/usr/share/pixmaps/comps/%s.png" % obj.id
         if os.access(fn, os.R_OK):
             pix = self._get_pix(fn)
-        else: # Try to get the parent icon
+        else:  # Try to get the parent icon
             parent = model.iter_parent(iterator)
             if parent:
-                cat_id =model[parent][0].id # get the parent cat_id
+                cat_id = model[parent][0].id  # get the parent cat_id
                 fn = "/usr/share/pixmaps/comps/%s.png" % cat_id
                 if os.access(fn, os.R_OK):
                     pix = self._get_pix(fn)
@@ -1478,7 +1486,6 @@ class GroupView(Gtk.TreeView):
             cell.set_property('pixbuf', pix)
         else:
             cell.set_property('visible', False)
-
 
     def _get_pix(self, fn):
         '''
@@ -1491,4 +1498,3 @@ class GroupView(Gtk.TreeView):
             pix = pix.scale_simple(imgsize, imgsize,
                                    GdkPixbuf.INTERP_BILINEAR)
         return pix
-

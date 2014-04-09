@@ -35,16 +35,17 @@ P_ = gettext.ngettext
 logger = logging.getLogger('yumex.misc')
 
 
-
 def color_floats(spec):
     rgba = Gdk.RGBA()
     rgba.parse(spec)
     return rgba.red, rgba.green, rgba.blue
 
+
 def get_color(spec):
     rgba = Gdk.RGBA()
     rgba.parse(spec)
     return rgba
+
 
 def rgb_to_hex(r, g, b):
     if isinstance(r, float):
@@ -53,16 +54,16 @@ def rgb_to_hex(r, g, b):
         b *= 255
     return "#%02X%02X%02X" % (r, g, b)
 
+
 def color_to_hex(color):
     return rgb_to_hex(color.red, color.green, color.blue)
-
 
 
 def format_block(block, indent):
         ''' Format a block of text so they get the same indentation'''
         spaces = " " * indent
         lines = str(block).split('\n')
-        result = lines[0]+"\n"
+        result = lines[0] + "\n"
         for line in lines[1:]:
             result += spaces + line + '\n'
         return result
@@ -85,12 +86,13 @@ def ExceptionHandler(func):
             rc = func(*args, **kwargs)
             return rc
         except DaemonError as e:
-            base = args[0] # get current class
+            base = args[0]  # get current class
             base.exception_handler(e)
     newFunc.__name__ = func.__name__
     newFunc.__doc__ = func.__doc__
     newFunc.__dict__.update(func.__dict__)
     return newFunc
+
 
 def TimeFunction(func):
     """
@@ -109,20 +111,23 @@ def TimeFunction(func):
     newFunc.__dict__.update(func.__dict__)
     return newFunc
 
+
 def format_number(number, SI=0, space=' '):
     """Turn numbers into human-readable metric-like numbers"""
     symbols = ['',  # (none)
-               'k', # kilo
-               'M', # mega
-               'G', # giga
-               'T', # tera
-               'P', # peta
-               'E', # exa
-               'Z', # zetta
-               'Y'] # yotta
+               'k',  # kilo
+               'M',  # mega
+               'G',  # giga
+               'T',  # tera
+               'P',  # peta
+               'E',  # exa
+               'Z',  # zetta
+               'Y']  # yotta
 
-    if SI: step = 1000.0
-    else: step = 1024.0
+    if SI:
+        step = 1000.0
+    else:
+        step = 1024.0
 
     thresh = 999
     depth = 0
@@ -132,7 +137,7 @@ def format_number(number, SI=0, space=' '):
     # of our list.  In that event, the formatting will be screwed up,
     # but it'll still show the right number.
     while number > thresh and depth < max_depth:
-        depth  = depth + 1
+        depth = depth + 1
         number = number / step
 
     if type(number) == type(1) or type(number) == type(1):
@@ -148,6 +153,7 @@ def format_number(number, SI=0, space=' '):
 
     return(fmt % (float(number or 0), space, symbols[depth]))
 
+
 class YumexConf(BaseConfig):
     """ Yum Extender Config Setting"""
     debug = BoolOption(False)
@@ -160,7 +166,7 @@ class YumexConf(BaseConfig):
     history_days = IntOption(180)
     bugzilla_url = Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
     skip_broken = BoolOption(False)
-    newest_only= BoolOption(True)
+    newest_only = BoolOption(True)
     clean_unused = BoolOption(False)
     update_interval = IntOption(60)
     update_startup_delay = IntOption(30)
@@ -170,11 +176,14 @@ class YumexConf(BaseConfig):
     refresh_interval = IntOption(12)
     max_dnl_errors = IntOption(10)
 
+
 class SessionConf(BaseConfig):
     """ Yum Extender current session Setting"""
     skip_broken = BoolOption(False)     # skip broken for current session
-    newest_only= BoolOption(True)       # show newest package version only for current session
-    clean_unused = BoolOption(False)    # Clean orphan dependencies for this session
+    # show newest package version only for current session
+    newest_only = BoolOption(True)
+    # Clean orphan dependencies for this session
+    clean_unused = BoolOption(False)
     enabled_repos = ListOption([])      # enabled repositories for this session
 
 
@@ -182,7 +191,8 @@ class Config(object):
     '''
     Yum Extender Configuration class
     '''
-    WRITE_ALWAYS = ['autostart','update_interval','update_startup_delay','autocheck_updates']
+    WRITE_ALWAYS = ['autostart', 'update_interval',
+                    'update_startup_delay', 'autocheck_updates']
 
     def __init__(self):
         object.__init__(self)
@@ -190,7 +200,7 @@ class Config(object):
         if not os.path.isdir(self.conf_dir):
             print("creating config directory : %s" % self.conf_dir)
             os.makedirs(self.conf_dir, 0o700)
-        self.conf_file = self.conf_dir+"/yumex.conf"
+        self.conf_file = self.conf_dir + "/yumex.conf"
         self.parser = configparser.ConfigParser()
         self.conf = YumexConf()
         self.session = SessionConf()
@@ -199,18 +209,18 @@ class Config(object):
     def read(self):
         if not os.path.exists(self.conf_file):
             logger.info("creating default config file : %s" % self.conf_file)
-            fh = open(self.conf_file,"w")
+            fh = open(self.conf_file, "w")
             print('[yumex]\n', file=fh)
             fh.close()
-        self.parser.read_file(open(self.conf_file,"r"))
+        self.parser.read_file(open(self.conf_file, "r"))
         if not self.parser.has_section('yumex'):
             self.parser.add_section('yumex')
         self.conf.populate(self.parser, 'yumex')
         self.session.populate(self.parser, 'yumex')
 
     def write(self):
-        fp = open(self.conf_file,"w")
-        self.conf.write(fp,"yumex", Config.WRITE_ALWAYS)
+        fp = open(self.conf_file, "w")
+        self.conf.write(fp, "yumex", Config.WRITE_ALWAYS)
         fp.close()
 
 

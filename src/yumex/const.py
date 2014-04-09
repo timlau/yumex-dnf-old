@@ -39,18 +39,19 @@ else:
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
 
-ARCH = check_output('/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
+ARCH = check_output(
+    '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {
-"x86_64" : ['x86_64','i686','i386','noarch'],
-"i386"   : ['i686','i386','noarch'],
-"armhfp"    : ['armv7hl','noarch']
+    "x86_64": ['x86_64', 'i686', 'i386', 'noarch'],
+    "i386": ['i686', 'i386', 'noarch'],
+    "armhfp": ['armv7hl', 'noarch']
 }
 
 # arch for this platform
 if ARCH in ARCH_DICT:
     PLATFORM_ARCH = ARCH_DICT[ARCH]
-else: # use x86_64 as fallback
+else:  # use x86_64 as fallback
     PLATFORM_ARCH = ARCH_DICT['x86_64']
 
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
@@ -74,37 +75,37 @@ PAGE_QUEUE = 'queue'
 PAGE_HISTORY = 'history'
 PAGE_GROUPS = 'groups'
 
-ACTIONS_FILTER = { 'u' : 'updates', 'i' : 'available', \
-                   'r' : 'installed' , 'o' : 'obsoletes', \
-                    'do' : 'downgrade', 'ri' : 'reinstall', 'li' : 'localinstall' }
+ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
+                  'r': 'installed', 'o': 'obsoletes',
+                  'do': 'downgrade', 'ri': 'reinstall', 'li': 'localinstall'}
 
-FILTER_ACTIONS = {'updates' : 'u', 'available': 'i', 'installed' : 'r', \
-                   'obsoletes' : 'o', 'downgrade'  : 'do', 'reinstall' : 'ri', 'localinstall' : 'li'}
+FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
+                  'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri', 'localinstall': 'li'}
 
 
 PACKAGE_COLORS = {
-'i' : 'black',
-'u' : 'red',
-'r' : 'darkgreen',
-'o' : 'blue',
-'ri' : 'red',
-'do' : 'goldenrod',
-'li' : 'black'
+    'i': 'black',
+    'u': 'red',
+    'r': 'darkgreen',
+    'o': 'blue',
+    'ri': 'red',
+    'do': 'goldenrod',
+    'li': 'black'
 
 }
 
-BACKEND_ACTIONS = {'update' : 'u', 'install': 'i', 'remove' : 'r', \
-                   'obsolete' : 'o', 'downgrade'  : 'do'}
+BACKEND_ACTIONS = {'update': 'u', 'install': 'i', 'remove': 'r',
+                   'obsolete': 'o', 'downgrade': 'do'}
 
 
 QUEUE_PACKAGE_TYPES = {
-'i' : 'install',
-'u' : 'update',
-'r' : 'remove',
-'o' : 'obsolete',
-'ri' : 'reinstall',
-'do' : 'downgrade',
-'li' : 'localinstall'
+    'i': 'install',
+    'u': 'update',
+    'r': 'remove',
+    'o': 'obsolete',
+    'ri': 'reinstall',
+    'do': 'downgrade',
+    'li': 'localinstall'
 }
 
 # Package info filters (widget : info_xxxxxx)
@@ -114,47 +115,48 @@ PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
 BUGZILLA_URL = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 
 
-
 PACKAGE_LOAD_MSG = {
- 'installed'    : _('Getting installed packages'),
- 'available'    : _('Getting available packages'),
- 'updates'      : _('Getting available updates'),
- 'all'          : _('Getting all packages')
- }
+    'installed': _('Getting installed packages'),
+    'available': _('Getting available packages'),
+    'updates': _('Getting available updates'),
+    'all': _('Getting all packages')
+}
 
 HISTORY_NEW_STATES = ['Update', 'Downgrade', 'Obsoleting']
 HISTORY_OLD_STATES = ['Updated', 'Downgraded', 'Obsoleted']
 
 HISTORY_UPDATE_STATES = ['Update', 'Downgrade', 'Updated', 'Downgraded']
 
-HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update', 'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Dep-Install' ]
+HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update',
+                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Dep-Install']
 
 HISTORY_STATE_LABLES = {
-     'Update' : _('Updated packages'),
-     'Downgrade' : _('Downgraded packages'),
-     'Obsoleting' : _('Obsoleting packages'),
-     'Obsoleted' : _('Obsoleted packages'),
-     'Erase' : _('Erased packages'),
-     'Install' : _('Installed packages'),
-     'True-Install' : _('Installed packages'),
-     'Dep-Install' : _('Installed for dependencies'),
-     'Reinstall' : _('Reinstalled packages')}
+    'Update': _('Updated packages'),
+    'Downgrade': _('Downgraded packages'),
+    'Obsoleting': _('Obsoleting packages'),
+    'Obsoleted': _('Obsoleted packages'),
+    'Erase': _('Erased packages'),
+    'Install': _('Installed packages'),
+    'True-Install': _('Installed packages'),
+    'Dep-Install': _('Installed for dependencies'),
+    'Reinstall': _('Reinstalled packages')}
 
 
 TRANSACTION_RESULT_TYPES = {
-'install'       : _('Installing'),
-'update'        : _('Updating'),
-'remove'        : _('Removing'),
-'downgrade'     : _('Downgrading'),
-'reinstall'     : _('Replacing')
+    'install': _('Installing'),
+    'update': _('Updating'),
+    'remove': _('Removing'),
+    'downgrade': _('Downgrading'),
+    'reinstall': _('Replacing')
 }
 
 RPM_ACTIONS = {
-'update'    : _("Updating : %s"),
-'install'   : _("Installing : %s"),
-'cleanup'   : _("Cleanup : %s"),
-'erase'     : _("Removing : %s"),
-'obsolete'  : _("Obsoleting :"),
+    'update': _("Updating : %s"),
+    'install': _("Installing : %s"),
+    'cleanup': _("Cleanup : %s"),
+    'erase': _("Removing : %s"),
+    'obsolete': _("Obsoleting :"),
 }
 
-WIDGETS_INSENSITIVE = ["header_menu","header_filters","header_search_options","header_execute","search"]
+WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
+                       "header_search_options", "header_execute", "search"]

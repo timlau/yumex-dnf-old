@@ -32,18 +32,20 @@ from gi.repository import Gio
 from yumex.views import PackageView, QueueView, HistoryView, GroupView
 from yumex.dialogs import Preferences, AboutDialog, TransactionResult, show_information
 from yumex.widgets import PackageInfo, InfoProgressBar, ArchMenu, ask_for_gpg_import
-from yumex.misc import  doGtkEvents, _, CONFIG, ExceptionHandler
+from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler
 from yumex import const
 from yumex.dnf_backend import DnfRootBackend
 from yumex.status import StatusIcon
 
 logger = logging.getLogger('yumex')
 
+
 class BaseWindow(Gtk.ApplicationWindow):
     """ Common Yumex Base window """
 
     def __init__(self, app, status):
-        Gtk.ApplicationWindow.__init__(self, title="Yum Extender - Powered by dnf", application=app)
+        Gtk.ApplicationWindow.__init__(
+            self, title="Yum Extender - Powered by dnf", application=app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
         self.status = status
@@ -61,7 +63,8 @@ class BaseWindow(Gtk.ApplicationWindow):
             self.ui.add_from_file(const.DATA_DIR + "/yumex.ui")
         except:
             raise
-            show_information(self, "GtkBuilder ui file not found : " + const.DATA_DIR + "/yumex.ui")
+            show_information(
+                self, "GtkBuilder ui file not found : " + const.DATA_DIR + "/yumex.ui")
             sys.exit()
 
         # transaction result dialog
@@ -81,14 +84,16 @@ class BaseWindow(Gtk.ApplicationWindow):
         now = datetime.datetime.now()
         refresh_period = datetime.timedelta(hours=CONFIG.conf.refresh_interval)
         if cache_type == 'session':
-            last_refresh = datetime.datetime.strptime( CONFIG.conf.session_refresh,time_fmt)
+            last_refresh = datetime.datetime.strptime(
+                CONFIG.conf.session_refresh, time_fmt)
             period = now - last_refresh
             if period > refresh_period:
                 return True
             else:
                 return False
         elif cache_type == 'system':
-            last_refresh = datetime.datetime.strptime( CONFIG.conf.system_refresh,time_fmt)
+            last_refresh = datetime.datetime.strptime(
+                CONFIG.conf.system_refresh, time_fmt)
             period = now - last_refresh
             if period > refresh_period:
                 return True
@@ -133,16 +138,20 @@ class BaseWindow(Gtk.ApplicationWindow):
                     if rc:
                         self._set_cache_refreshed('system')
                     else:
-                        show_information( self, _("Could not refresh the DNF cache (root)"))
+                        show_information(
+                            self, _("Could not refresh the DNF cache (root)"))
             else:
                 logger.critical("can't get root backend lock")
-                if msg == "not-authorized": # user canceled the polkit dialog
-                    errmsg = _("Dnf root backend was not authorized\n Yum Extender will exit")
-                elif msg == "locked-by-other": # Dnf is locked by another process
-                    errmsg = _("Dnf  is locked by another process \n\nYum Extender will exit")
+                if msg == "not-authorized":  # user canceled the polkit dialog
+                    errmsg = _(
+                        "Dnf root backend was not authorized\n Yum Extender will exit")
+                # Dnf is locked by another process
+                elif msg == "locked-by-other":
+                    errmsg = _(
+                        "Dnf  is locked by another process \n\nYum Extender will exit")
                 show_information(self, errmsg)
                 # close down and exit yum extender
-                self.status.SetWorking(False) # reset working state
+                self.status.SetWorking(False)  # reset working state
                 self.status.SetYumexIsRunning(False)
                 sys.exit(1)
         return self._root_backend
@@ -183,7 +192,7 @@ class BaseWindow(Gtk.ApplicationWindow):
                 self.release_root_backend(quit=True)
             except:
                 pass
-        self.status.SetWorking(False) # reset working state
+        self.status.SetWorking(False)  # reset working state
         self.status.SetYumexIsRunning(False)
         sys.exit(1)
 
@@ -213,15 +222,14 @@ class YumexInstallWindow(BaseWindow):
         self.add(vbox)
         # infobar revealer
         infobar = self.ui.get_object("infobar")
-        vbox.pack_start(infobar,False,False,0)
+        vbox.pack_start(infobar, False, False, 0)
         self.add(vbox)
         vbox.show()
         self.infobar = InfoProgressBar(self.ui)
         self.infobar.show_all()
         info_spinner = self.ui.get_object("info_spinner")
         info_spinner.set_from_file(const.PIX_DIR + "/spinner-small.gif")
-        self.system_backend_refreshed = True # dont refresh metadata
-
+        self.system_backend_refreshed = True  # dont refresh metadata
 
     def on_delete_event(self, *args):
         '''
@@ -234,7 +242,7 @@ class YumexInstallWindow(BaseWindow):
             self.app.on_quit()
 
     @ExceptionHandler
-    def process_actions(self,action, package, always_yes):
+    def process_actions(self, action, package, always_yes):
         '''
         Process the pending actions from the command line
 
@@ -268,17 +276,20 @@ class YumexInstallWindow(BaseWindow):
                 self.release_root_backend()
                 self.hide()
                 if not always_yes:
-                    show_information(self,_("Changes was successfully applied to the system"))
-        #else:
-            #if action == 'install':
+                    show_information(
+                        self, _("Changes was successfully applied to the system"))
+        # else:
+            # if action == 'install':
                 #show_information(self, _("the %s package can't be installed") % package)
-            #elif action == 'remove':
+            # elif action == 'remove':
                 #show_information(self, _("the %s package can't be removed") % package)
         else:
-            show_information(self, _("Error(s) in search for dependencies"), "\n".join(result))
+            show_information(
+                self, _("Error(s) in search for dependencies"), "\n".join(result))
         self.release_root_backend(quit=True)
         self.status.SetWorking(False)
         self.app.quit()
+
 
 class YumexHeaderBar(Gtk.HeaderBar):
     """
@@ -290,9 +301,13 @@ class YumexHeaderBar(Gtk.HeaderBar):
         self.ui = ui
         self.pack_start(self.ui.get_object("header_start"))
         self.pack_end(self.ui.get_object("header_end"))
-        self.ui.get_object("header_menu").set_popup(self.ui.get_object("main_menu"))
-        self.ui.get_object("header_search_options").set_popup(self.ui.get_object("search_menu"))
-        self.ui.get_object("header_filters").set_popup(self.ui.get_object("menu_filters"))
+        self.ui.get_object("header_menu").set_popup(
+            self.ui.get_object("main_menu"))
+        self.ui.get_object("header_search_options").set_popup(
+            self.ui.get_object("search_menu"))
+        self.ui.get_object("header_filters").set_popup(
+            self.ui.get_object("menu_filters"))
+
 
 class YumexWindow(BaseWindow):
     '''
@@ -312,7 +327,7 @@ class YumexWindow(BaseWindow):
         self.current_filter_search = None
         self.active_archs = const.PLATFORM_ARCH
         self._grps = None   # Group and Category cache
-        self.active_page = None # Active content page
+        self.active_page = None  # Active content page
 
         # setup the main gui
         self.hb = YumexHeaderBar(self.ui)
@@ -324,26 +339,25 @@ class YumexWindow(BaseWindow):
         self.add(vbox)
         # infobar revealer
         infobar = self.ui.get_object("infobar")
-        vbox.pack_start(infobar,False,False,0)
+        vbox.pack_start(infobar, False, False, 0)
         # content Stack
         self.stack = Gtk.Stack()
         self.stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
         self.stack.set_transition_duration(500)
-        for name in ['packages','groups','history','queue']:
+        for name in ['packages', 'groups', 'history', 'queue']:
             page = self.ui.get_object("page_%s" % name)
             self.stack.add_named(page, name)
-        vbox.pack_start(self.stack,True,True,0)
+        vbox.pack_start(self.stack, True, True, 0)
         self.stack.show()
         vbox.show()
         self.add_accel_group(self.ui.get_object("main_accelgroup"))
 
         # Setup package filters
-        for name in ['updates', 'installed', 'available','all']:
+        for name in ['updates', 'installed', 'available', 'all']:
             rb = self.ui.get_object("filter_" + name)
             rb.connect('toggled', self.on_pkg_filter, name)
 
-
-        ## Connect menu radio buttons to handler
+        # Connect menu radio buttons to handler
         for name in ['newest_only', 'clean_unused']:
             rb = self.ui.get_object("option_" + name)
             rb.set_active(getattr(CONFIG.session, name))
@@ -352,17 +366,17 @@ class YumexWindow(BaseWindow):
         # build the search_conf widget
         # Connect menu radio buttons to handler
         # setup search type option
-        for key in ['prefix','key','fields']:
+        for key in ['prefix', 'key', 'fields']:
             wid = self.ui.get_object("search_%s" % key)
             if key == self.search_type:
                 wid.set_active(True)
             wid.connect('toggled', self.on_search_config, key)
 
-        self.search_fields = ['name','summary']
+        self.search_fields = ['name', 'summary']
         self.set_fields_active(False)
 
         # setup search fields
-        for field in ['name','summary','description']:
+        for field in ['name', 'summary', 'description']:
             wid = self.ui.get_object("field_%s" % field)
             if field in self.search_fields:
                 wid.set_active(True)
@@ -376,7 +390,6 @@ class YumexWindow(BaseWindow):
 
         # setup the package/queue/history views
         self.setup_main_content()
-
 
         # spinner
         self.spinner = self.ui.get_object("progress_spinner")
@@ -416,11 +429,11 @@ class YumexWindow(BaseWindow):
 
         self._create_action("apply_changes", self.on_apply_changes)
 
-
         self.show_now()
 
         # setup the package manager backend
-        CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled") # get the default enabled repos
+        # get the default enabled repos
+        CONFIG.session.enabled_repos = self.backend.get_repo_ids("enabled")
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -429,10 +442,10 @@ class YumexWindow(BaseWindow):
 
         # setup default selections
         self.ui.get_object("filter_updates").set_active(True)
-        #self.ui.get_object("search_keyword").set_active(True)
+        # self.ui.get_object("search_keyword").set_active(True)
 
     def set_fields_active(self, state=True):
-        for field in ['name','summary','description']:
+        for field in ['name', 'summary', 'description']:
             wid = self.ui.get_object("field_%s" % field)
             wid.set_sensitive(state)
 
@@ -447,7 +460,8 @@ class YumexWindow(BaseWindow):
             self.app.on_quit()
 
     def _is_url(self, url):
-        urls = re.findall('^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+        urls = re.findall(
+            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
         if urls:
             return True
         else:
@@ -456,19 +470,19 @@ class YumexWindow(BaseWindow):
     def _open_url(self, url):
         if self._is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open %s" % url, shell=True)
-            if rc != 0:  # failover to gtk.show_uri, if xdg-open fails or is not installed
+            # failover to gtk.show_uri, if xdg-open fails or is not installed
+            if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             show_information("%s is not an url" % url)
 
-
-    def on_about(self,widget):
+    def on_about(self, widget):
         """ Main Menu: Help -> About """
         dialog = AboutDialog()
         dialog.run()
         dialog.destroy()
 
-    def on_docs(self,widget):
+    def on_docs(self, widget):
         """ Main Menu: Help -> Documentation"""
         self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
         pass
@@ -482,7 +496,6 @@ class YumexWindow(BaseWindow):
                 self.search_fields.remove(field)
         print(self.search_fields)
 
-
     def on_status_icon_clicked(self):
         '''
         left click on status icon handler
@@ -493,7 +506,6 @@ class YumexWindow(BaseWindow):
         else:
             self.show()
 
-
     def setup_main_content(self):
         '''
         setup the main content notebook
@@ -503,16 +515,17 @@ class YumexWindow(BaseWindow):
         queue_menu = self.ui.get_object("queue_menu")
         self.queue_view = QueueView(queue_menu)
         arch_menu_widget = self.ui.get_object('arch_menu')
-        self.arch_menu = ArchMenu(arch_menu_widget,self.active_archs)
+        self.arch_menu = ArchMenu(arch_menu_widget, self.active_archs)
         self.arch_menu.connect("arch-changed", self.on_arch_changed)
         self.package_view = PackageView(self.queue_view, self.arch_menu)
-        self.package_view.connect("pkg_changed", self.on_pkg_view_selection_changed)
+        self.package_view.connect(
+            "pkg_changed", self.on_pkg_view_selection_changed)
         sw = self.ui.get_object("package_sw")
         sw.add(self.package_view)
         # setup info view
         info = self.ui.get_object("info_box")
         self.info = PackageInfo(self, self)
-        info.pack_start(self.info,True,True,0)
+        info.pack_start(self.info, True, True, 0)
         self.info.show_all()
         # Queue Page
         sw = self.ui.get_object("queue_sw")
@@ -525,26 +538,27 @@ class YumexWindow(BaseWindow):
         hb.pack_start(self.history_view, False, False, 0)
         hb.pack_start(self.history_view.pkg_view, True, True, 0)
         sw.add(hb)
-        #Groups
+        # Groups
         sw = self.ui.get_object("groups_sw")
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.groups = GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
         #hb.pack_start(self.groups, True, True, 0)
-        #sw.add(hb)
+        # sw.add(hb)
         sw.add(self.groups)
         sw = self.ui.get_object("group_pkg_sw")
-        self.group_package_view = PackageView(self.queue_view, self.arch_menu, group_mode=True)
+        self.group_package_view = PackageView(
+            self.queue_view, self.arch_menu, group_mode=True)
         #self.group_package_view.connect("arch-changed", self.on_arch_changed)
-        self.group_package_view.connect("pkg_changed", self.on_group_pkg_view_selection_changed)
+        self.group_package_view.connect(
+            "pkg_changed", self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
         info = self.ui.get_object("group_pkg_info_sw")
         self.group_info = PackageInfo(self, self)
         info.add(self.group_info)
         self.info.show_all()
         self.stack.show_all()
-
 
     def set_content_page(self, page):
         '''
@@ -628,7 +642,6 @@ class YumexWindow(BaseWindow):
             self.status.SetWorking(False)
             self._set_normal_cursor()
 
-
     def check_for_updates(self, widget=None):
         '''
         check for updates handller for the status icon menu
@@ -661,7 +674,6 @@ class YumexWindow(BaseWindow):
             self.stack.set_sensitive(True)
         doGtkEvents()
 
-
     def on_pkg_view_selection_changed(self, widget, pkg):
         '''
         package selected in the view
@@ -687,7 +699,8 @@ class YumexWindow(BaseWindow):
 
     def set_search_focus(self):
         self.search_entry.grab_focus()
-        self.search_entry.emit("move-cursor", Gtk.MovementStep.BUFFER_ENDS, 1, False)
+        self.search_entry.emit(
+            "move-cursor", Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
 #
 # Callback handlers
@@ -705,7 +718,8 @@ class YumexWindow(BaseWindow):
             self.set_fields_active(False)
         if self.last_search:
             self.last_search = None
-            # send an active signal from the search entry & grap focus & place cursor
+            # send an active signal from the search entry & grap focus & place
+            # cursor
             self.search_entry.emit("activate")
             self.set_search_focus()
 
@@ -717,13 +731,13 @@ class YumexWindow(BaseWindow):
         '''
         if widget.get_active():
             self.on_packages(None, None)
-            if data in ["installed", "available", "updates","all"]:
+            if data in ["installed", "available", "updates", "all"]:
                 self.infobar.info(const.PACKAGE_LOAD_MSG[data])
                 self.set_working(True, True)
-                if self.last_search: # we are searching
+                if self.last_search:  # we are searching
                     self.current_filter_search = (widget, data)
                     pkgs = self.filter_search_pkgs(data)
-                else: # normal package filter
+                else:  # normal package filter
                     self.current_filter = (widget, data)
                     pkgs = self.backend.get_packages(data)
                     if data == 'updates':
@@ -757,7 +771,6 @@ class YumexWindow(BaseWindow):
             widget, flt = self.current_filter
             self.on_pkg_filter(widget, flt)
 
-
     def on_search_changed(self, widget):
         '''
         Search callback handler
@@ -789,27 +802,30 @@ class YumexWindow(BaseWindow):
         return filtered search results (updates, install or all)
         :param flt:
         '''
-        if flt == "updates": # get update only
-            pkgs = [po for po in self.last_search_pkgs if po.action in ('u','o')]
+        if flt == "updates":  # get update only
+            pkgs = [
+                po for po in self.last_search_pkgs if po.action in ('u', 'o')]
             return pkgs
-        elif flt == "installed": # get installed only
+        elif flt == "installed":  # get installed only
             pkgs = [po for po in self.last_search_pkgs if po.is_installed()]
             return pkgs
         elif flt == "available":
             pkgs = [po for po in self.last_search_pkgs if po.action == 'i']
             return pkgs
-        else: # get all
+        else:  # get all
             return self.last_search_pkgs
 
     def _search_name(self, data, search_flt):
         '''
         search package name for keyword with wildcards
         '''
-        if len(data) >= 3 and data != self.last_search:  # only search for word larger than 3 chars
+        # only search for word larger than 3 chars
+        if len(data) >= 3 and data != self.last_search:
             self.last_search = data
             self.set_working(True)
             newest_only = CONFIG.session.newest_only
-            self.last_search_pkgs = self.backend.get_packages_by_name(search_flt % data, newest_only)
+            self.last_search_pkgs = self.backend.get_packages_by_name(
+                search_flt % data, newest_only)
             logger.debug("Packages found : %d" % len(self.last_search_pkgs))
             self.info.set_package(None)
             self.set_working(False)
@@ -819,7 +835,6 @@ class YumexWindow(BaseWindow):
             else:
                 self._set_available_active()
 
-
     def _search_keys(self, fields, data):
         '''
         search given package attributes for keywords
@@ -827,7 +842,8 @@ class YumexWindow(BaseWindow):
         self.last_search = data
         self.set_working(True, True)
         newest_only = CONFIG.session.newest_only
-        self.last_search_pkgs = self.backend.search(fields, data.split(' '), True, newest_only, True)
+        self.last_search_pkgs = self.backend.search(
+            fields, data.split(' '), True, newest_only, True)
         self.on_packages(None, None)  # switch to package view
         self.info.set_package(None)
         self.set_working(False)
@@ -836,7 +852,6 @@ class YumexWindow(BaseWindow):
             self.on_pkg_filter(widget, flt)
         else:
             self._set_available_active()
-
 
     def _set_available_active(self):
         '''
@@ -873,8 +888,8 @@ class YumexWindow(BaseWindow):
         self.group_package_view.populate(pkgs)
         self.set_working(False)
 
-    def hide_package_buttons(self, hide = True):
-        for widget in ["header_filters","header_search_options","search"]:
+    def hide_package_buttons(self, hide=True):
+        for widget in ["header_filters", "header_search_options", "search"]:
                 self.ui.get_object(widget).set_visible(not hide)
 
     def on_history(self, widget):
@@ -883,7 +898,8 @@ class YumexWindow(BaseWindow):
         '''
         if widget.get_active():
             if not self.history_view.is_populated:
-                result = self.backend.GetHistoryByDays(0, CONFIG.conf.history_days)
+                result = self.backend.GetHistoryByDays(
+                    0, CONFIG.conf.history_days)
                 self.history_view.populate(result)
             self.set_content_page(const.PAGE_HISTORY)
             self.hide_package_buttons()
@@ -907,7 +923,6 @@ class YumexWindow(BaseWindow):
             self.info.clear()
             self.info.write(action.get_name())
 
-
     def on_apply_changes(self, widget):
         '''
         Apply Changes button callback handler
@@ -920,8 +935,9 @@ class YumexWindow(BaseWindow):
         set the CONFIG parameter values based on the menu checkbox states
         '''
         state = widget.get_active()
-        setattr(CONFIG.session, parameter,state )
-        logger.debug("Option : %s = %s" % (parameter, getattr(CONFIG.session, parameter)))
+        setattr(CONFIG.session, parameter, state)
+        logger.debug("Option : %s = %s" %
+                     (parameter, getattr(CONFIG.session, parameter)))
 
     def on_pref(self, widget):
         '''
@@ -931,7 +947,6 @@ class YumexWindow(BaseWindow):
         need_reset = self.preferences.run()
         if need_reset:
             self.reset()
-
 
     @ExceptionHandler
     def process_actions(self):
@@ -956,20 +971,23 @@ class YumexWindow(BaseWindow):
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    logger.debug('adding : %s %s' % (action, pkg.downgrade_po.pkg_id))
-                    rc, trans = self.backend.AddTransaction(pkg.downgrade_po.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                    logger.debug('adding : %s %s' %
+                                 (action, pkg.downgrade_po.pkg_id))
+                    rc, trans = self.backend.AddTransaction(
+                        pkg.downgrade_po.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
                     logger.debug("%s: %s" % (rc, trans))
                     if not rc:
                         errors += 1
                         error_msgs |= set(trans)
                 else:
                     logger.debug('adding : %s %s' % (action, pkg.pkg_id))
-                    rc, trans = self.backend.AddTransaction(pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                    rc, trans = self.backend.AddTransaction(
+                        pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
                     logger.debug("%s: %s" % (rc, trans))
                     if not rc:
                         errors += 1
                         error_msgs |= set(trans)
-        for grp_id,action in self.queue_view.queue.get_groups():
+        for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, trans = self.backend.GroupInstall(grp_id)
             else:
@@ -991,25 +1009,34 @@ class YumexWindow(BaseWindow):
                 if ok:  # Ok pressed
                     self.infobar.info(_('Applying changes to the system'))
                     self.set_working(True, True)
-                    rc,result = self.backend.RunTransaction(max_err = CONFIG.conf.max_dnl_errors)
-                    while rc == 1: # This can happen more than once (more gpg keys to be imported)
-                        values = self.backend._gpg_confirm # get info about gpgkey to be comfirmed
+                    rc, result = self.backend.RunTransaction(
+                        max_err=CONFIG.conf.max_dnl_errors)
+                    # This can happen more than once (more gpg keys to be
+                    # imported)
+                    while rc == 1:
+                        # get info about gpgkey to be comfirmed
+                        values = self.backend._gpg_confirm
                         (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
                         logger.debug("GPGKey : %s" % repr(values))
                         ok = ask_for_gpg_import(self, values)
                         if ok:
-                            self.backend.ConfirmGPGImport(hexkeyid, True) # tell the backend that the gpg key is confirmed
-                            rc,result = self.backend.RunTransaction(max_err = CONFIG.conf.max_dnl_errors)
+                            # tell the backend that the gpg key is confirmed
+                            self.backend.ConfirmGPGImport(hexkeyid, True)
+                            rc, result = self.backend.RunTransaction(
+                                max_err=CONFIG.conf.max_dnl_errors)
                         else:
                             break
-                    if rc == 4: # Download errors
-                        show_information(self, _("Downloading error(s)\n"), "\n".join(result))
+                    if rc == 4:  # Download errors
+                        show_information(
+                            self, _("Downloading error(s)\n"), "\n".join(result))
                     self.reset()
                     return
-            else: # error in depsolve
-                show_information(self, _("Error(s) in search for dependencies"), "\n".join(result))
-        else: # error in population of the transaction
-            show_information(self, _("Error(s) in search for dependencies"), "\n".join(error_msgs))
+            else:  # error in depsolve
+                show_information(
+                    self, _("Error(s) in search for dependencies"), "\n".join(result))
+        else:  # error in population of the transaction
+            show_information(
+                self, _("Error(s) in search for dependencies"), "\n".join(error_msgs))
         self.reset_on_error()
 
     def reset_on_error(self):
@@ -1049,14 +1076,13 @@ class YumexWindow(BaseWindow):
         self.on_pkg_filter(widget, "updates")
 
 
-
-
 class YumexApplication(Gtk.Application):
     '''
     Main application class
     '''
     def __init__(self):
-        Gtk.Application.__init__(self,flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gtk.Application.__init__(
+            self, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
 
@@ -1068,11 +1094,13 @@ class YumexApplication(Gtk.Application):
         if self.args.install:
             self.install = YumexInstallWindow(self, self.status)
             self.install.show()
-            self.install.process_actions("install",self.args.install, self.args.yes)
+            self.install.process_actions(
+                "install", self.args.install, self.args.yes)
         elif self.args.remove:
             self.install = YumexInstallWindow(self, self.status)
             self.install.show()
-            self.install.process_actions("remove",self.args.remove, self.args.yes)
+            self.install.process_actions(
+                "remove", self.args.remove, self.args.yes)
         else:
             self.win = YumexWindow(self, self.status)
             self.win.connect('delete_event', self.on_quit)
@@ -1100,9 +1128,10 @@ class YumexApplication(Gtk.Application):
         '''
         quit handler
         '''
-        if action == None: # If we quit from the StatusIcon, then quit the status icon also
+        # If we quit from the StatusIcon, then quit the status icon also
+        if action == None:
             self.keep_icon_running = False
-        self.quit() # quit the application
+        self.quit()  # quit the application
 
     def do_command_line(self, args):
         '''
@@ -1113,29 +1142,38 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_command_line(self, args)
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
-        parser.add_argument('-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
-        parser.add_argument('--icononly', action='store_true', help="Start only the status icon")
-        parser.add_argument('--exit', action='store_true', help="tell session dbus services used by yumex to exit")
-        parser.add_argument("-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
-        parser.add_argument("-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
+        parser.add_argument(
+            '-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
+        parser.add_argument(
+            '--icononly', action='store_true', help="Start only the status icon")
+        parser.add_argument('--exit', action='store_true',
+                            help="tell session dbus services used by yumex to exit")
+        parser.add_argument(
+            "-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
+        parser.add_argument(
+            "-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
             # setup log handler for yumdaemon API
-            self.doTextLoggerSetup(logroot='yumdaemon', logfmt = "%(asctime)s: [%(name)s] - %(message)s",loglvl=logging.DEBUG)
+            self.doTextLoggerSetup(
+                logroot='yumdaemon', logfmt="%(asctime)s: [%(name)s] - %(message)s", loglvl=logging.DEBUG)
         else:
             self.doTextLoggerSetup()
         logger.debug("cmdline : %s " % repr(self.args))
         if self.args.exit:
-            subprocess.call('/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
-            subprocess.call('/usr/bin/dbus-send --system --print-reply --dest="org.baseurl.DnfSystem" / org.baseurl.DnfSystem.Exit',shell=True)
+            subprocess.call(
+                '/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
+            subprocess.call(
+                '/usr/bin/dbus-send --system --print-reply --dest="org.baseurl.DnfSystem" / org.baseurl.DnfSystem.Exit', shell=True)
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)
-        self.status.Start() # Show the icon
-        if self.args.icononly: # Only start the icon and exit
+        self.status.Start()  # Show the icon
+        if self.args.icononly:  # Only start the icon and exit
             sys.exit(0)
-        if self.status.SetYumexIsRunning(True): # Check if yumex is running already
+        # Check if yumex is running already
+        if self.status.SetYumexIsRunning(True):
             self.do_activate()
         else:
             show_information(None, "Yum Extender is already running")
@@ -1152,7 +1190,8 @@ class YumexApplication(Gtk.Application):
             self.status.SetYumexIsRunning(False)
             if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
                 self.status.Exit()
-        if hasattr(self,"win"): # if windows object exist, unlock and exit backends
+        # if windows object exist, unlock and exit backends
+        if hasattr(self, "win"):
             self.win.release_root_backend(quit=True)
 
     def doTextLoggerSetup(self, logroot='yumex', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
@@ -1164,5 +1203,3 @@ class YumexApplication(Gtk.Application):
         handler.setFormatter(formatter)
         handler.propagate = False
         logger.addHandler(handler)
-
-

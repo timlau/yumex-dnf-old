@@ -27,10 +27,11 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 from yumex import const
-from yumex.misc import _, CONFIG, format_number,  color_to_hex, get_color
+from yumex.misc import _, CONFIG, format_number, color_to_hex, get_color
 import yumex.gui.views
 
 logger = logging.getLogger('yumex.gui.dialogs')
+
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -44,13 +45,15 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.website = 'https://github.com/timlau/yumex-dnf'
         self.props.logo_icon_name = 'yumex-dnf'
 
+
 class Preferences:
 
     def __init__(self, base):
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self._settings = ['autostart', 'clean_unused', 'newest_only','autocheck_updates','hide_on_close']
+        self._settings = ['autostart', 'clean_unused',
+                          'newest_only', 'autocheck_updates', 'hide_on_close']
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
@@ -69,21 +72,21 @@ class Preferences:
     def get_settings(self):
         # set settings states
         for option in self._settings:
-            logger.debug("%s : %s " % (option,getattr(CONFIG.conf,option) ))
-            widget = self.base.ui.get_object('pref_'+option)
-            widget.set_active(getattr(CONFIG.conf,option))
+            logger.debug("%s : %s " % (option, getattr(CONFIG.conf, option)))
+            widget = self.base.ui.get_object('pref_' + option)
+            widget.set_active(getattr(CONFIG.conf, option))
         # autocheck update on/off handler
         widget = self.base.ui.get_object('pref_autocheck_updates')
         widget.connect('notify::active', self.on_autocheck_updates)
         # set current colors
-        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
-            rgba = get_color(getattr(CONFIG.conf,name))
+        for name in ['color_install', 'color_update', 'color_normal', 'color_obsolete', 'color_downgrade']:
+            rgba = get_color(getattr(CONFIG.conf, name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
         # Set update checker values
-        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
-            widget = self.base.ui.get_object('pref_'+name)
-            widget.set_value(getattr(CONFIG.conf,name))
+        for name in ['update_startup_delay', 'update_interval', 'refresh_interval']:
+            widget = self.base.ui.get_object('pref_' + name)
+            widget.set_value(getattr(CONFIG.conf, name))
         self.on_autocheck_updates()
         # get the repositories
         self.repos = self.base.backend.get_repositories()
@@ -93,58 +96,67 @@ class Preferences:
         widget = self.base.ui.get_object('pref_autocheck_updates')
         state = widget.get_active()
         if state:
-            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(True)
+            self.base.ui.get_object(
+                'pref_update_startup_delay').set_sensitive(True)
             self.base.ui.get_object('pref_update_interval').set_sensitive(True)
             self.base.ui.get_object('label_update_delay').set_sensitive(True)
-            self.base.ui.get_object('label_update_interval').set_sensitive(True)
+            self.base.ui.get_object(
+                'label_update_interval').set_sensitive(True)
         else:
-            self.base.ui.get_object('pref_update_startup_delay').set_sensitive(False)
-            self.base.ui.get_object('pref_update_interval').set_sensitive(False)
+            self.base.ui.get_object(
+                'pref_update_startup_delay').set_sensitive(False)
+            self.base.ui.get_object(
+                'pref_update_interval').set_sensitive(False)
             self.base.ui.get_object('label_update_delay').set_sensitive(False)
-            self.base.ui.get_object('label_update_interval').set_sensitive(False)
+            self.base.ui.get_object(
+                'label_update_interval').set_sensitive(False)
 
     def set_settings(self):
         changed = False
         need_reset = False
         # handle options
         for option in self._settings:
-            widget = self.base.ui.get_object('pref_'+option)
+            widget = self.base.ui.get_object('pref_' + option)
             state = widget.get_active()
-            if state != getattr(CONFIG.conf, option): # changed ??
+            if state != getattr(CONFIG.conf, option):  # changed ??
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
         # handle colors
-        for name in ['color_install','color_update' ,'color_normal','color_obsolete','color_downgrade']:
+        for name in ['color_install', 'color_update', 'color_normal', 'color_obsolete', 'color_downgrade']:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
-            color =  color_to_hex(rgba)
-            if color != getattr(CONFIG.conf, name): # changed ??
+            color = color_to_hex(rgba)
+            if color != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, color)
                 changed = True
         # handle update checker values
-        for name in ['update_startup_delay', 'update_interval','refresh_interval']:
-            widget = self.base.ui.get_object('pref_'+name)
+        for name in ['update_startup_delay', 'update_interval', 'refresh_interval']:
+            widget = self.base.ui.get_object('pref_' + name)
             value = widget.get_value_as_int()
-            if value != getattr(CONFIG.conf, name): # changed ??
+            if value != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, value)
                 changed = True
         # handle repos
         repo_before = CONFIG.session.enabled_repos
         repo_now = self.repo_view.get_selected()
-        if repo_now != repo_before:                     # repo selection changed
+        # repo selection changed
+        if repo_now != repo_before:
             CONFIG.session.enabled_repos = repo_now     # set the new selection
-            need_reset = True                           # we need to reset the gui
+            # we need to reset the gui
+            need_reset = True
         if changed:
             CONFIG.write()
         return need_reset
 
     def handle_setting(self, option, state):
         if option == 'autostart':
-            if state: # create an autostart .desktop for current user
-                shutil.copy(const.MISC_DIR+"/yumex-dnf-autostart.desktop", os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
-            else: # remove the autostart file
-                os.unlink(os.environ['HOME'] +"/.config/autostart/yumex-dnf.desktop")
+            if state:  # create an autostart .desktop for current user
+                shutil.copy(const.MISC_DIR + "/yumex-dnf-autostart.desktop",
+                            os.environ['HOME'] + "/.config/autostart/yumex-dnf.desktop")
+            else:  # remove the autostart file
+                os.unlink(
+                    os.environ['HOME'] + "/.config/autostart/yumex-dnf.desktop")
 
 
 class TransactionResult:
@@ -172,7 +184,6 @@ class TransactionResult:
             return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
         else:
             return "%s-%s-%s.%s" % (n, v, r, a)
-
 
     def setup_view(self, view):
         '''
@@ -205,7 +216,6 @@ class TransactionResult:
             column.set_fixed_width(size)
         view.append_column(column)
 
-
     def populate(self, pkglist, dnl_size):
         '''
         Populate the TreeView with data
@@ -219,20 +229,23 @@ class TransactionResult:
             level1 = model.append(None, [label, "", "", "", ""])
             for id, size, replaces in lvl1:
                 (n, e, v, r, a, repo_id) = str(id).split(',')
-                level2 = model.append(level1, [n, a, "%s.%s" % (v, r), repo_id, format_number(size)])
-                if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:  # packages there need to be downloaded
+                level2 = model.append(
+                    level1, [n, a, "%s.%s" % (v, r), repo_id, format_number(size)])
+                # packages there need to be downloaded
+                if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:
                     total_size += size
                 for r in replaces:
                     fn = self._fullname(r)
-                    model.append(level2, [ fn, "", "", "", ""])
-        self.base.ui.get_object("result_size").set_text(format_number(total_size))
+                    model.append(level2, [fn, "", "", "", ""])
+        self.base.ui.get_object("result_size").set_text(
+            format_number(total_size))
         self.view.expand_all()
 
 
-def show_information(window, msg, add_msg = None):
-    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, msg)
+def show_information(window, msg, add_msg=None):
+    dialog = Gtk.MessageDialog(
+        window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, msg)
     if add_msg:
         dialog.format_secondary_text(add_msg)
     dialog.run()
     dialog.destroy()
-

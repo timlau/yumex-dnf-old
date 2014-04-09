@@ -31,9 +31,9 @@ INTERFACE = ORG
 DBUS_ERR_RE = re.compile('^GDBus.Error:([\w\.]*): (.*)$')
 
 
-###############################################################################
+#
 # Helper Classes
-###############################################################################
+#
 
 
 class DBus:
@@ -57,6 +57,7 @@ class DBus:
             self.conn, 0, None, bus, obj, iface, None, callback, None
         )
 
+
 class WeakMethod:
     '''
     helper class to work with a weakref class method
@@ -72,24 +73,29 @@ class WeakMethod:
 # Get the system bus
 session = DBus(Gio.bus_get_sync(Gio.BusType.SESSION, None))
 
-###############################################################################
+#
 # Main Client Class
-###############################################################################
+#
+
+
 class StatusIcon:
     def __init__(self, app):
         self.app = app
         self.bus = session
         self.dbus_org = ORG
         self.dbus_interface = INTERFACE
-        self.daemon = self._get_daemon(self.bus, self.dbus_org, self.dbus_interface)
-        logger.debug("%s daemon loaded - version :  %s" % (self.dbus_interface,self.daemon.GetVersion()))
+        self.daemon = self._get_daemon(
+            self.bus, self.dbus_org, self.dbus_interface)
+        logger.debug("%s daemon loaded - version :  %s" %
+                     (self.dbus_interface, self.daemon.GetVersion()))
 
-    def _get_daemon(self,bus, org, interface):
+    def _get_daemon(self, bus, org, interface):
         ''' Get the daemon dbus proxy object'''
         try:
-            proxy = bus.get( org, "/", interface)
-            proxy.GetVersion() # Get daemon version, to check if it is alive
-            proxy.connect('g-signal', WeakMethod(self, '_on_g_signal')) # Connect the Dbus signal handler
+            proxy = bus.get(org, "/", interface)
+            proxy.GetVersion()  # Get daemon version, to check if it is alive
+            # Connect the Dbus signal handler
+            proxy.connect('g-signal', WeakMethod(self, '_on_g_signal'))
             return proxy
         except Exception as err:
             self._handle_dbus_error(err)
@@ -102,7 +108,7 @@ class StatusIcon:
         :param signal: DBus signal
         :param params: DBus signal parameters
         '''
-        args = params.unpack() # unpack the glib variant
+        args = params.unpack()  # unpack the glib variant
         self.handle_dbus_signals(proxy, sender, signal, args)
 
     def handle_dbus_signals(self, proxy, sender, signal, args):
@@ -117,7 +123,6 @@ class StatusIcon:
         elif signal == 'CheckUpdateSignal':
             self.app.win.check_for_updates()
 
-
     def _handle_dbus_error(self, err):
         '''
         Parse error from service and raise python Exceptions
@@ -125,7 +130,7 @@ class StatusIcon:
         :type err:
         '''
         exc, msg = self._parse_error()
-        print (exc,msg)
+        print (exc, msg)
 
     def _parse_error(self):
         '''
@@ -135,7 +140,7 @@ class StatusIcon:
         res = DBUS_ERR_RE.match(str(value))
         if res:
             return res.groups()
-        return "",""
+        return "", ""
 
     def _return_handler(self, obj, result, user_data):
         '''
@@ -148,7 +153,7 @@ class StatusIcon:
         :type user_data:
         '''
         if isinstance(result, Exception):
-            #print(result)
+            # print(result)
             user_data['result'] = None
             user_data['error'] = result
         else:
@@ -162,7 +167,7 @@ class StatusIcon:
         :param user_data:
         :type user_data:
         '''
-        if user_data['error']: # Errors
+        if user_data['error']:  # Errors
             self._handle_dbus_error(user_data['error'])
         else:
             return user_data['result']
@@ -175,12 +180,13 @@ class StatusIcon:
         '''
         main_loop = GObject.MainLoop()
         data = {'main_loop': main_loop}
-        func = getattr(self.daemon,cmd)
-        func(*args, result_handler=self._return_handler, user_data=data, timeout=GObject.G_MAXINT) # timeout = infinite
+        func = getattr(self.daemon, cmd)
+        # timeout = infinite
+        func(*args, result_handler=self._return_handler,
+             user_data=data, timeout=GObject.G_MAXINT)
         data['main_loop'].run()
         result = self._get_result(data)
         return result
-
 
     def _run_dbus_sync(self, cmd, *args):
         '''
@@ -188,9 +194,8 @@ class StatusIcon:
         :param cmd:
         :type cmd:
         '''
-        func = getattr(self.daemon,cmd)
+        func = getattr(self.daemon, cmd)
         return func(*args)
-
 
     def Exit(self):
         self.daemon.Exit()
@@ -199,15 +204,13 @@ class StatusIcon:
         return self.daemon.Start()
 
     def SetWorking(self, is_working):
-        self.daemon.SetWorking("(b)",is_working)
+        self.daemon.SetWorking("(b)", is_working)
 
     def SetUpdateCount(self, count):
-        self.daemon.SetUpdateCount("(i)",count)
+        self.daemon.SetUpdateCount("(i)", count)
 
     def CheckUpdates(self):
         return self._run_dbus_async("CheckUpdate")
 
     def SetYumexIsRunning(self, state):
-        return self.daemon.SetYumexIsRunning("(b)",state)
-
-
+        return self.daemon.SetYumexIsRunning("(b)", state)
