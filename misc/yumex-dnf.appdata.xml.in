@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2013 Tim Lauridsen <timlau@fedoraproject.org> -->
+<application>
+ <id type="desktop">yumex-dnf.desktop</id>
+ <licence>CC0</licence>
+ <name>Yum Extender (DNF)</name>
+ <_summary>Graphical package manager</_summary>
+ <_description>
+  <p>Yum extender is a graphical package management application, it will allow you to search and browse for packages to install,
+  remove and update on your computer.</p>
+  <p>It is designed to give you full control over the packages on your computer and to be used by all users.</p>
+  <p>Features:</p>
+  <ul>
+   <li>Browse packages available for installation or update</li>
+   <li>Browse packages installed on your computer</li>
+   <li>Search packages by name, summary, description</li>
+   <li>Watch the history of package action on your sytem</li>
+   <li>Browse and install/remove package groups</li>
+   <li>Browse packages by Size, Repository</li>
+   <li>Control what package repositories are enabled for the current session</li>   
+  </ul>
+ </_description>
+ <screenshots>
+  <screenshot type="default" width="1026" height="726">http://yumex-dnf.readthedocs.org/en/latest/_images/updates.png</screenshot>
+ </screenshots>
+ <url type="homepage">https://github.com/timlau/yumex-dnf</url>
+ <updatecontact>timlau_at_fedoraproject.org</updatecontact>
+</application>

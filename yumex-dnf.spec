@@ -63,6 +63,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
 %{_datadir}/dbus-1/services/*
+%{_datadir}/appdata/*.xml
 
 %changelog
 * Tue Apr 01 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.2
