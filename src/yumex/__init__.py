@@ -29,9 +29,11 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 
-from yumex.views import PackageView, QueueView, HistoryView, GroupView
-from yumex.dialogs import Preferences, AboutDialog, TransactionResult, show_information
-from yumex.widgets import PackageInfo, InfoProgressBar, ArchMenu, ask_for_gpg_import
+from yumex.gui.views import PackageView, QueueView, HistoryView, GroupView
+from yumex.gui.dialogs import Preferences, AboutDialog, TransactionResult, \
+                              show_information
+from yumex.gui.widgets import PackageInfo, InfoProgressBar, ArchMenu,\
+                              ask_for_gpg_import
 from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler
 from yumex import const
 from yumex.dnf_backend import DnfRootBackend
