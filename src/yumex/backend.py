@@ -106,17 +106,16 @@ class Backend:
         self.frontend.exception_handler(e)
 
     def get_packages(self, pkg_filter):
-        '''
-        Get a list of Package objects based on a filter ('installed', 'available'...)
-        :param pkg_filter:
+        ''' Get a list of Package objects based on a filter
+        ('installed', 'available'...)
         '''
         pkgs = self.cache._get_packages(pkg_filter)
         return pkgs
 
 
 class BaseFilter:
-    '''
-    Base filter, used at base for filters there can filter a list of packages based on a different conditions
+    '''Used as base for filters, there can filter a list of packages
+    based on a different conditions
     '''
 
     def __init__(self, name, active=False):
@@ -185,8 +184,8 @@ class Filters:
 
 class PackageCache:
     '''
-    Package cache to contain packages from backend, so we dont have get them more
-    than once.
+    Package cache to contain packages from backend,
+    so we dont have get them more than once.
     '''
 
     def __init__(self):
@@ -247,9 +246,8 @@ class PackageCache:
 
 
 class PackageCacheWithFilters(PackageCache):
-    '''
-    Package cache to contain packages from backend, so we dont have get them more
-    than once.
+    ''' Package cache to contain packages from backend,
+    so we dont have get them more than once.
     This version has filtering, so we can filter packages by fx. arch
     '''
 

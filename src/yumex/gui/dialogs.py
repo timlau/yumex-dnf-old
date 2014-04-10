@@ -79,12 +79,14 @@ class Preferences:
         widget = self.base.ui.get_object('pref_autocheck_updates')
         widget.connect('notify::active', self.on_autocheck_updates)
         # set current colors
-        for name in ['color_install', 'color_update', 'color_normal', 'color_obsolete', 'color_downgrade']:
+        for name in ['color_install', 'color_update', 'color_normal',
+                     'color_obsolete', 'color_downgrade']:
             rgba = get_color(getattr(CONFIG.conf, name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
         # Set update checker values
-        for name in ['update_startup_delay', 'update_interval', 'refresh_interval']:
+        for name in ['update_startup_delay', 'update_interval',
+                     'refresh_interval']:
             widget = self.base.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_autocheck_updates()
@@ -123,7 +125,8 @@ class Preferences:
                 changed = True
                 self.handle_setting(option, state)
         # handle colors
-        for name in ['color_install', 'color_update', 'color_normal', 'color_obsolete', 'color_downgrade']:
+        for name in ['color_install', 'color_update', 'color_normal',
+                     'color_obsolete', 'color_downgrade']:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
             color = color_to_hex(rgba)
@@ -131,7 +134,8 @@ class Preferences:
                 setattr(CONFIG.conf, name, color)
                 changed = True
         # handle update checker values
-        for name in ['update_startup_delay', 'update_interval', 'refresh_interval']:
+        for name in ['update_startup_delay', 'update_interval',
+                     'refresh_interval']:
             widget = self.base.ui.get_object('pref_' + name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name):  # changed ??
@@ -153,10 +157,12 @@ class Preferences:
         if option == 'autostart':
             if state:  # create an autostart .desktop for current user
                 shutil.copy(const.MISC_DIR + "/yumex-dnf-autostart.desktop",
-                            os.environ['HOME'] + "/.config/autostart/yumex-dnf.desktop")
+                            os.environ['HOME'] +
+                                       "/.config/autostart/yumex-dnf.desktop")
             else:  # remove the autostart file
                 os.unlink(
-                    os.environ['HOME'] + "/.config/autostart/yumex-dnf.desktop")
+                    os.environ['HOME'] +
+                    "/.config/autostart/yumex-dnf.desktop")
 
 
 class TransactionResult:
@@ -191,7 +197,8 @@ class TransactionResult:
         @param view: the TreeView widget
         '''
         model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
-                              GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_STRING)
+                              GObject.TYPE_STRING, GObject.TYPE_STRING,
+                              GObject.TYPE_STRING)
         view.set_model(model)
         self.create_text_column(_("Name"), view, 0, size=250)
         self.create_text_column(_("Arch"), view, 1)
@@ -230,9 +237,11 @@ class TransactionResult:
             for id, size, replaces in lvl1:
                 (n, e, v, r, a, repo_id) = str(id).split(',')
                 level2 = model.append(
-                    level1, [n, a, "%s.%s" % (v, r), repo_id, format_number(size)])
+                    level1, [n, a, "%s.%s" % (v, r), repo_id,
+                    format_number(size)])
                 # packages there need to be downloaded
-                if sub in ['install', 'update', 'install-deps', 'update-deps', 'obsoletes']:
+                if sub in ['install', 'update', 'install-deps',
+                           'update-deps', 'obsoletes']:
                     total_size += size
                 for r in replaces:
                     fn = self._fullname(r)

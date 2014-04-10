@@ -46,7 +46,8 @@ class SelectionView(Gtk.TreeView):
         Gtk.TreeView.__init__(self)
         self.store = None
 
-    def create_text_column_num(self, hdr, colno, resize=True, size=None, markup=False):
+    def create_text_column_num(self, hdr, colno, resize=True, size=None,
+                               markup=False):
         '''
         Create a TreeViewColumn with data from a TreeStore column
         @param hdr: column header text
@@ -65,7 +66,8 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_text_column(self, hdr, prop, size, sortcol=None, click_handler=None, tooltip=None):
+    def create_text_column(self, hdr, prop, size, sortcol=None,
+                           click_handler=None, tooltip=None):
         """
         Create a TreeViewColumn with text and set
         the sorting properties and add it to the view
@@ -98,9 +100,11 @@ class SelectionView(Gtk.TreeView):
 
         return column
 
-    def create_selection_colunm(self, attr, click_handler=None, popup_handler=None, tooltip=None):
-        '''
-        Create an selection column, there get data via property function and a key attr
+    def create_selection_colunm(self, attr, click_handler=None,
+                                popup_handler=None, tooltip=None):
+        '''Create an selection column, there get data via property function
+        and a key attr
+
         @param attr: key attr for property funtion
         '''
         # Setup a selection column using a object attribute
@@ -158,7 +162,8 @@ class SelectionView(Gtk.TreeView):
 
         return column
 
-    def create_selection_text_column(self, hdr, select_func, text_attr, size=200):
+    def create_selection_text_column(self, hdr, select_func, text_attr,
+                                     size=200):
         '''
         Create an selection column, there get data an TreeStore Column
         @param num: TreeStore column to get data from
@@ -182,14 +187,8 @@ class SelectionView(Gtk.TreeView):
         return column
 
     def get_data_text(self, column, cell, model, iterator, prop):
-        '''
-        a property function to get string data from a object in the TreeStore based on
-        an attributes key
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        @param prop: attribute key
+        '''property function to get string data from a object in
+        the TreeStore based on an attributes key
         '''
         obj = model.get_value(iterator, 0)
         if obj:
@@ -197,15 +196,8 @@ class SelectionView(Gtk.TreeView):
             cell.set_property('foreground-rgba', obj.color)
 
     def get_data_bool(self, column, cell, model, iterator, prop):
-        '''
-        a property function to get boolean data from a object in the TreeStore based on
-        an attributes key
-
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        @param prop: attribute key
+        '''Property function to get boolean data from a object in
+        the TreeStore based on an attributes key
         '''
         obj = model.get_value(iterator, 0)
         cell.set_property("visible", True)
@@ -251,14 +243,14 @@ class PackageView(SelectionView):
         self.set_model(store)
         if self.group_mode:
             self.create_selection_colunm('selected',
-                                         click_handler=self.on_section_header_clicked_group,
-                                         popup_handler=self.on_section_header_button,
-                                         tooltip=_("Click to install all/remove all"))
+                click_handler=self.on_section_header_clicked_group,
+                popup_handler=self.on_section_header_button,
+                tooltip=_("Click to install all/remove all"))
         else:
             self.create_selection_colunm('selected',
-                                         click_handler=self.on_section_header_clicked,
-                                         popup_handler=self.on_section_header_button,
-                                         tooltip=_("Click to select/deselect all (updates only)"))
+                click_handler=self.on_section_header_clicked,
+                popup_handler=self.on_section_header_button,
+                tooltip=_("Click to select/deselect all (updates only)"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('stock-id', Gtk.STOCK_ADD)
@@ -273,7 +265,9 @@ class PackageView(SelectionView):
         self.create_text_column(_("Package"), 'name', size=200)
         self.create_text_column(_("Ver."), 'fullver', size=120)
         self.create_text_column(
-            _("Arch."), 'arch', size=60, click_handler=self.arch_menu.on_arch_clicked, tooltip=_('click to filter archs'))
+            _("Arch."), 'arch', size=60,
+            click_handler=self.arch_menu.on_arch_clicked,
+            tooltip=_('click to filter archs'))
         self.create_text_column(_("Summary"), 'summary', size=400)
         self.create_text_column(_("Repo."), 'repository', size=90)
         self.create_text_column(_("Size."), 'sizeM', size=90)
@@ -323,7 +317,7 @@ class PackageView(SelectionView):
         '''
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
-            if model != None and iterator != None:
+            if model is not None and iterator is not None:
                 pkg = model.get_value(iterator, 0)
                 self.emit('pkg-changed', pkg)  # send the group-changed signal
 
@@ -363,7 +357,7 @@ class PackageView(SelectionView):
         @param keys:
         '''
         iterator = self.store.get_iter_first()
-        while iterator != None:
+        while iterator is not None:
             obj = self.store.get_value(iterator, 0)
             if obj in keys and not obj.selected:
                 obj.queued = obj.action
@@ -483,8 +477,9 @@ class PackageView(SelectionView):
                 # downgrade the po
                 pkg = pkgs[0]
                 # Installed pkg is all-ready downgraded by another package
-                if pkg.action == 'do' or self.queue.has_pkg_with_name_arch(pkg):
-                    return
+                if pkg.action == 'do' or \
+                    self.queue.has_pkg_with_name_arch(pkg):
+                        return
                 pkg.action = 'do'
                 pkg.queued = 'do'
                 pkg.selected = True
@@ -559,7 +554,7 @@ class PackageQueue:
 
         @param action:
         '''
-        if action == None:
+        if action is None:
             return self.packages
         else:
             return self.packages[action]
@@ -581,10 +576,11 @@ class PackageQueue:
         @param pkg:
         '''
         na = "%s.%s" % (pkg.name, pkg.arch)
-        if not pkg in self.packages[pkg.action] and not na in self._name_arch_index:
-            self.packages[pkg.action].append(pkg)
-            na = "%s.%s" % (pkg.name, pkg.arch)
-            self._name_arch_index[na] = 1
+        if not pkg in self.packages[pkg.action] and \
+            not na in self._name_arch_index:
+                self.packages[pkg.action].append(pkg)
+                na = "%s.%s" % (pkg.name, pkg.arch)
+                self._name_arch_index[na] = 1
 
     def remove(self, pkg):
         '''
@@ -701,7 +697,7 @@ class QueueView(Gtk.TreeView):
         model, paths = self.get_selection().get_selected_rows()
         for path in paths:
             row = model[path]
-            if row.parent != None:
+            if row.parent is not None:
                 rmvlist.append(row[0])
         for pkg in self.filter_pkgs_from_list(rmvlist):
             self.queue.remove(pkg)
@@ -809,7 +805,8 @@ class QueueView(Gtk.TreeView):
             for pkg in pkg_list:
                 item = self.store.append(parent, [str(pkg), pkg.summary])
                 self.store.append(
-                    item, [_("<b>Downgrade to</b> %s ") % str(pkg.downgrade_po), ""])
+                    item, [_("<b>Downgrade to</b> %s ") %
+                    str(pkg.downgrade_po), ""])
 
 
 class HistoryView(Gtk.TreeView):
@@ -876,7 +873,7 @@ class HistoryView(Gtk.TreeView):
         '''
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
-            if model != None and iterator != None:
+            if model is not None and iterator is not None:
                 tid = model.get_value(iterator, 1)
                 if tid != -1:
                     pkgs = self.base.get_root_backend().GetHistoryPackages(tid)
@@ -979,7 +976,9 @@ class HistoryPackageView(Gtk.TreeView):
 
 
 class TextViewBase(Gtk.TextView):
-    '''  Encapsulate a Gtk.TextView with support for adding and using Pango styles'''
+    ''' Encapsulate a Gtk.TextView with support for adding
+    and using Pango styles'''
+
     def __init__(self, window=None, url_handler=None):
         '''
         Setup the textview
@@ -1051,7 +1050,8 @@ class TextViewBase(Gtk.TextView):
         tag = self.get_style(text)
         if not tag:
             tag = self.buffer.create_tag(text,
-                                         foreground="blue", font_desc=const.SMALL_FONT)
+                                         foreground="blue",
+                                         font_desc=const.SMALL_FONT)
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -1102,7 +1102,8 @@ class TextViewBase(Gtk.TextView):
 
         :param txt: Text to write to textview
         :param style: text tag to indentify the style to use
-        :param newline: if True, then add newline to the text it not there already
+        :param newline: if True, then add newline to the text
+                        it not there already
         '''
         if not txt:
             return
@@ -1219,7 +1220,8 @@ class RepoView(SelectionView):
         self.set_model(store)
         # Setup Selection Column
         col = self.create_selection_column_num(
-            0, tooltip=_("Click here to switch between\n none/all/default selected"))
+            0, tooltip=_("Click here to switch between\n"
+                         " none/all/default selected"))
         col.set_clickable(True)
         col.connect('clicked', self.on_section_header_clicked)
 
@@ -1290,7 +1292,7 @@ class RepoView(SelectionView):
         @param keys:
         '''
         iterator = self.store.get_iter_first()
-        while iterator != None:
+        while iterator is not None:
             repoid = self.store.get_value(iterator, 1)
             if repoid in keys:
                 self.store.set_value(iterator, 0, True)
@@ -1365,27 +1367,14 @@ class GroupView(Gtk.TreeView):
         return model
 
     def get_data_text(self, column, cell, model, iterator, prop):
-        '''
-        a property function to get string data from a object in the TreeStore based on
-        an attributes key
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        @param prop: attribute key
+        '''property function to get string data from a object in the
+        TreeStore based on  an attributes key
         '''
         obj = model.get_value(iterator, 0)
         if obj:
             cell.set_property('text', getattr(obj, prop))
 
     def set_checkbox(self, column, cell, model, iterator, data=None):
-        '''
-
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        '''
         obj = model.get_value(iterator, 0)
         if obj:
             if obj.category:
@@ -1414,7 +1403,7 @@ class GroupView(Gtk.TreeView):
         '''
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
-            if model != None and iterator != None:
+            if model is not None and iterator is not None:
                 obj = self.model.get_value(iterator, 0)
                 if not obj.category and obj.id != self.selected_group:
                     self.selected_group = obj.id

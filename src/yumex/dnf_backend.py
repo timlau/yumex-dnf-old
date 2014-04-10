@@ -23,7 +23,7 @@ from dnfdaemon import *  # @UnusedWildImport
 from yumex.backend import Package, Backend
 from yumex.const import *  # @UnusedWildImport
 # @UnusedImport @Reimport lint:ok
-from yumex.misc import format_number, ExceptionHandler, TimeFunction, _, P_, CONFIG
+from yumex.misc import format_number, ExceptionHandler, TimeFunction, _, CONFIG
 from gi.repository import Gdk
 
 import logging
@@ -102,7 +102,8 @@ class DnfPackage(Package):
         if self.action == 'li':
             return self.repoid
         else:
-            return "%s-%s.%s.%s.rpm" % (self.name, self.version, self.release, self.arch)
+            return "%s-%s.%s.%s.rpm" % (self.name, self.version,
+                                        self.release, self.arch)
 
     @property
     def fullver(self):
@@ -212,8 +213,8 @@ class DnfPackage(Package):
 
 
 class DnfRootBackend(Backend, DnfDaemonClient):
-    """
-    Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
+    """ Yumex Package Backend including Yum Daemon backend (ReadOnly,
+    Running as current user)
     """
 
     def __init__(self, frontend):
@@ -415,7 +416,7 @@ class DnfRootBackend(Backend, DnfDaemonClient):
     @ExceptionHandler
     def get_repo_ids(self, flt):
         repos = self.GetRepositories(flt)
-        return
+        return repos
 
     @ExceptionHandler
     def get_repositories(self, flt="*"):

@@ -99,8 +99,9 @@ class InfoProgressBar:
             self.infobar.show()
             self.progress.show()
             self.progress.set_fraction(frac)
-            # make sure that the main label is shown, else the progres looks bad
-            # this is normally happen when changlog or filelist info is needed for at package
+            # make sure that the main label is shown, else the progres
+            # looks bad. this is normally happen when changlog
+            # or filelist info is needed for at package
             # and it will trigger the yum daemon to download the need metadata.
             if not self.label.get_property('visible'):
                 self.info(_("Getting Package metadata"))
@@ -257,7 +258,8 @@ class PackageInfo(PackageInfoWidget):
 
     def _is_url(self, url):
         urls = re.findall(
-            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
+            '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
         if urls:
             return True
         else:
@@ -360,7 +362,9 @@ class PackageInfo(PackageInfoWidget):
             for (c_date, c_ver, msg) in changelog:
                 i += 1
                 self.view.write(
-                    "* %s %s" % (datetime.date.fromtimestamp(c_date).isoformat(), c_ver), "changelog-header")
+                    "* %s %s" %
+                    (datetime.date.fromtimestamp(c_date).isoformat(), c_ver),
+                    "changelog-header")
                 for line in msg.split('\n'):
                     self.view.write("%s" % line, "changelog")
                 self.view.write('\n')

@@ -81,7 +81,8 @@ ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
                   'do': 'downgrade', 'ri': 'reinstall', 'li': 'localinstall'}
 
 FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
-                  'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri', 'localinstall': 'li'}
+                  'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri',
+                  'localinstall': 'li'}
 
 
 PACKAGE_COLORS = {
@@ -129,7 +130,8 @@ HISTORY_OLD_STATES = ['Updated', 'Downgraded', 'Obsoleted']
 HISTORY_UPDATE_STATES = ['Update', 'Downgrade', 'Updated', 'Downgraded']
 
 HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update',
-                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Dep-Install']
+                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase',
+                      'Dep-Install']
 
 HISTORY_STATE_LABLES = {
     'Update': _('Updated packages'),
