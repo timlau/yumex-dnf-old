@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-from distutils.core import setup, Command
+from distutils.core import setup
 from distutils.util import convert_path
 from distutils.command.build_scripts import build_scripts
 from distutils import log
@@ -31,7 +31,7 @@ setup(name="yumex-dnf",
       packages=['yumex','yumex.gui'],
       package_dir = {'': 'src'},
       scripts=['src/main.py'],
-      data_files=[('', ['src/yumex.ui'])],     
+      data_files=[('', ['src/yumex.ui'])],
       cmdclass={
         'build_scripts': BuildScripts,
       })
