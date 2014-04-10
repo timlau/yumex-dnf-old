@@ -12,10 +12,9 @@
 # along with this program; if not, write to the Free Software
 
 """
-The Option/BaseConfig classes is taken from config.py from the yum project (http://yum.baseurl.org )
-
+The Option/BaseConfig classes is taken from config.py from the yum project
+(http://yum.baseurl.org )
 It is modified to work in Python 3
-
 """
 
 import copy
@@ -70,7 +69,7 @@ class Option(object):
         self._attrname = '__opt%d' % id(self)
 
     def __get__(self, obj, objtype):
-        """Called when the option is read (via the descriptor protocol). 
+        """Called when the option is read (via the descriptor protocol).
 
         :param obj: The configuration instance to modify.
         :param objtype: The type of the config instance (not used).
@@ -84,7 +83,7 @@ class Option(object):
         return getattr(obj, self._attrname, None)
 
     def __set__(self, obj, value):
-        """Called when the option is set (via the descriptor protocol). 
+        """Called when the option is set (via the descriptor protocol).
 
         :param obj: The configuration instance to modify.
         :param value: The value to set the option to.
@@ -101,8 +100,8 @@ class Option(object):
         setattr(obj, self._attrname, value)
 
     def setup(self, obj, name):
-        """Initialise the option for a config instance. 
-        This must be called before the option can be set or retrieved. 
+        """Initialise the option for a config instance.
+        This must be called before the option can be set or retrieved.
 
         :param obj: :class:`BaseConfig` (or subclass) instance.
         :param name: Name of the option.
@@ -311,10 +310,10 @@ class SecondsOption(Option):
         until something happens. Works like :class:`BytesOption`.  Note
         that due to historical president -1 means "never", so this accepts
         that and allows the word never, too.
-    
+
         Valid inputs: 100, 1.5m, 90s, 1.2d, 1d, 0xF, 0.1, -1, never.
         Invalid inputs: -10, -0.1, 45.6Z, 1d6h, 1day, 1y.
-    
+
         :param s: the string to parse
         :return: an integer representing the number of seconds
            specified by *s*
@@ -355,7 +354,7 @@ class BoolOption(Option):
         """Parse a string containing a boolean value.  1, yes, and
         true will evaluate to True; and 0, no, and false will evaluate
         to False.  Case is ignored.
-        
+
         :param s: the string containing the boolean value
         :return: the boolean value contained in *s*
         :raises: :class:`ValueError` if there is an error in parsing
@@ -372,7 +371,7 @@ class BoolOption(Option):
     def tostring(self, value):
         """Convert a boolean value to a string value.  This does the
         opposite of the :func:`parse` method above.
-        
+
         :param value: the boolean value to convert
         :return: a string representation of *value*
         """
@@ -453,7 +452,7 @@ class BytesOption(Option):
         number followed by an optional single character unit. Valid
         units are 'k', 'M', 'G'. Case is ignored. The convention that
         1k = 1024 bytes is used.
-       
+
         Valid inputs: 100, 123M, 45.6k, 12.4G, 100K, 786.3, 0.
         Invalid inputs: -10, -0.1, 45.6L, 123Mb.
 

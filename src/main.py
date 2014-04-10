@@ -23,8 +23,8 @@ import os.path
 here = sys.path[0]
 if here != '/usr/bin':
     # git checkout
-    toplevel = os.path.dirname(here)
-    sys.path[0] = toplevel
+    sys.path[0] = here
+    print("set PYTHONPATH to %s" % here)
 
 
 from yumex import YumexApplication

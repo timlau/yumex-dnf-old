@@ -66,7 +66,8 @@ class BaseWindow(Gtk.ApplicationWindow):
         except:
             raise
             show_information(
-                self, "GtkBuilder ui file not found : " + const.DATA_DIR + "/yumex.ui")
+                self, "GtkBuilder ui file not found : " +
+                const.DATA_DIR + "/yumex.ui")
             sys.exit()
 
         # transaction result dialog
@@ -104,7 +105,7 @@ class BaseWindow(Gtk.ApplicationWindow):
 
     def _set_cache_refreshed(self, cache_type):
         time_fmt = "%Y-%m-%d %H:%M"
-        now = datetime.now()
+        now = datetime.datetime.now()
         now_str = now.strftime(time_fmt)
         if cache_type == 'session':
             CONFIG.conf.session_refresh = now_str
@@ -124,9 +125,9 @@ class BaseWindow(Gtk.ApplicationWindow):
         if it is not setup yet, the create it
         if it is not locked, then lock it
         """
-        if self._root_backend == None:
+        if self._root_backend is None:
             self._root_backend = DnfRootBackend(self)
-        if self._root_locked == False:
+        if self._root_locked is False:
             locked, msg = self._root_backend.setup()
             if locked:
                 self._root_locked = True
@@ -146,11 +147,13 @@ class BaseWindow(Gtk.ApplicationWindow):
                 logger.critical("can't get root backend lock")
                 if msg == "not-authorized":  # user canceled the polkit dialog
                     errmsg = _(
-                        "Dnf root backend was not authorized\n Yum Extender will exit")
+                        "Dnf root backend was not authorized\n"
+                        " Yum Extender will exit")
                 # Dnf is locked by another process
                 elif msg == "locked-by-other":
                     errmsg = _(
-                        "Dnf  is locked by another process \n\nYum Extender will exit")
+                        "Dnf  is locked by another process \n\n"
+                        "Yum Extender will exit")
                 show_information(self, errmsg)
                 # close down and exit yum extender
                 self.status.SetWorking(False)  # reset working state
@@ -163,9 +166,9 @@ class BaseWindow(Gtk.ApplicationWindow):
         """
         Release the current root backend, if it is setup and locked
         """
-        if self._root_backend == None:
+        if self._root_backend is None:
             return
-        if self._root_locked == True:
+        if self._root_locked is True:
             logger.debug("Unlock the Dnf root daemon")
             self._root_backend.Unlock()
             self._root_locked = False
@@ -175,7 +178,8 @@ class BaseWindow(Gtk.ApplicationWindow):
 
     def exception_handler(self, e):
         '''
-        Called if exception occours in methods with the @ExceptionHandler decorator
+        Called if exception occours in methods with the
+        @ExceptionHandler decorator
         '''
         close = True
         msg = str(e)
@@ -183,7 +187,8 @@ class BaseWindow(Gtk.ApplicationWindow):
         err, errmsg = self._parse_error(msg)
         logger.debug("err:  %s - msg: %s" % (err, errmsg))
         if err == "LockedError":
-            errmsg = "DNF is locked by another process \n\nYum Extender will exit"
+            errmsg = "DNF is locked by another process \n"
+            "\nYum Extender will exit"
             close = False
         if errmsg == "":
             errmsg = msg
@@ -279,15 +284,12 @@ class YumexInstallWindow(BaseWindow):
                 self.hide()
                 if not always_yes:
                     show_information(
-                        self, _("Changes was successfully applied to the system"))
-        # else:
-            # if action == 'install':
-                #show_information(self, _("the %s package can't be installed") % package)
-            # elif action == 'remove':
-                #show_information(self, _("the %s package can't be removed") % package)
+                        self,
+                        _("Changes was successfully applied to the system"))
         else:
             show_information(
-                self, _("Error(s) in search for dependencies"), "\n".join(result))
+                self, _("Error(s) in search for dependencies"),
+                        "\n".join(result))
         self.release_root_backend(quit=True)
         self.status.SetWorking(False)
         self.app.quit()
@@ -463,7 +465,8 @@ class YumexWindow(BaseWindow):
 
     def _is_url(self, url):
         urls = re.findall(
-            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]'
+            '|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
         if urls:
             return True
         else:
@@ -600,7 +603,8 @@ class YumexWindow(BaseWindow):
 
     def exception_handler(self, e):
         '''
-        Called if exception occours in methods with the @ExceptionHandler decorator
+        Called if exception occours in methods with the
+        @ExceptionHandler decorator
         '''
         close = True
         msg = str(e)
@@ -608,7 +612,8 @@ class YumexWindow(BaseWindow):
         err, errmsg = self._parse_error(msg)
         logger.debug("err:  %s - msg: %s" % (err, errmsg))
         if err == "LockedError":
-            errmsg = "dnf is locked by another process \n\nYum Extender will exit"
+            errmsg = "dnf is locked by another process \n' \
+                     '\nYum Extender will exit"
             close = False
         elif err == "AccessDeniedError":
             errmsg = "Root backend was not authorized and can't continue"
@@ -658,7 +663,7 @@ class YumexWindow(BaseWindow):
     def _set_busy_cursor(self, insensitive=False):
         ''' Set busy cursor in mainwin and make it insensitive if selected '''
         win = self.get_window()
-        if win != None:
+        if win is not None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
             if insensitive:
                 for widget in const.WIDGETS_INSENSITIVE:
@@ -669,7 +674,7 @@ class YumexWindow(BaseWindow):
     def _set_normal_cursor(self):
         ''' Set Normal cursor in mainwin and make it sensitive '''
         win = self.get_window()
-        if win != None:
+        if win is not None:
             win.set_cursor(None)
             for widget in const.WIDGETS_INSENSITIVE:
                 self.ui.get_object(widget).set_sensitive(True)
@@ -857,7 +862,8 @@ class YumexWindow(BaseWindow):
 
     def _set_available_active(self):
         '''
-        Make the 'available' filter active, by selecting 'updates' and the back to 'available'
+        Make the 'available' filter active, by selecting 'updates' and
+        the back to 'available'
         '''
         widget = self.ui.get_object('filter_updates')
         widget.set_active(True)
@@ -877,10 +883,11 @@ class YumexWindow(BaseWindow):
                 self.groups.populate(self._grps)
 
     def on_group_changed(self, widget, grp_id):
-        '''
-        Group changed callback handler
-        called when a new group is selected and the group package view shall be updated
-        with the packages in the group
+        ''' Group changed callback handler
+
+        called when a new group is selected and the group package view
+        shall be updated with the packages in the group
+
         :param widget:
         :param grp_id: group id
         '''
@@ -895,9 +902,7 @@ class YumexWindow(BaseWindow):
                 self.ui.get_object(widget).set_visible(not hide)
 
     def on_history(self, widget):
-        '''
-        History button callback handler
-        '''
+        ''' History button callback handler '''
         if widget.get_active():
             if not self.history_view.is_populated:
                 result = self.backend.GetHistoryByDays(
@@ -976,7 +981,8 @@ class YumexWindow(BaseWindow):
                     logger.debug('adding : %s %s' %
                                  (action, pkg.downgrade_po.pkg_id))
                     rc, trans = self.backend.AddTransaction(
-                        pkg.downgrade_po.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                        pkg.downgrade_po.pkg_id,
+                        const.QUEUE_PACKAGE_TYPES[action])
                     logger.debug("%s: %s" % (rc, trans))
                     if not rc:
                         errors += 1
@@ -1030,15 +1036,18 @@ class YumexWindow(BaseWindow):
                             break
                     if rc == 4:  # Download errors
                         show_information(
-                            self, _("Downloading error(s)\n"), "\n".join(result))
+                            self, _("Downloading error(s)\n"),
+                                     "\n".join(result))
                     self.reset()
                     return
             else:  # error in depsolve
                 show_information(
-                    self, _("Error(s) in search for dependencies"), "\n".join(result))
+                    self, _("Error(s) in search for dependencies"),
+                            "\n".join(result))
         else:  # error in population of the transaction
             show_information(
-                self, _("Error(s) in search for dependencies"), "\n".join(error_msgs))
+                self, _("Error(s) in search for dependencies"),
+                        "\n".join(error_msgs))
         self.reset_on_error()
 
     def reset_on_error(self):
@@ -1131,7 +1140,7 @@ class YumexApplication(Gtk.Application):
         quit handler
         '''
         # If we quit from the StatusIcon, then quit the status icon also
-        if action == None:
+        if action is None:
             self.keep_icon_running = False
         self.quit()  # quit the application
 
@@ -1145,29 +1154,39 @@ class YumexApplication(Gtk.Application):
         parser = argparse.ArgumentParser(prog='yumex')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument(
-            '-y', '--yes', action='store_true', help="Answer yes/ok to all questions")
+            '-y', '--yes', action='store_true',
+             help="Answer yes/ok to all questions")
         parser.add_argument(
-            '--icononly', action='store_true', help="Start only the status icon")
+            '--icononly', action='store_true',
+            help="Start only the status icon")
         parser.add_argument('--exit', action='store_true',
-                            help="tell session dbus services used by yumex to exit")
+            help="tell session dbus services used by yumex to exit")
         parser.add_argument(
-            "-I", "--install", type=str, metavar="PACKAGE", help="Install Package")
+            "-I", "--install", type=str, metavar="PACKAGE",
+            help="Install Package")
         parser.add_argument(
-            "-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package")
+            "-R", "--remove", type=str, metavar="PACKAGE",
+            help="Remove Package")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
             # setup log handler for yumdaemon API
             self.doTextLoggerSetup(
-                logroot='yumdaemon', logfmt="%(asctime)s: [%(name)s] - %(message)s", loglvl=logging.DEBUG)
+                logroot='yumdaemon',
+                logfmt="%(asctime)s: [%(name)s] - %(message)s",
+                loglvl=logging.DEBUG)
         else:
             self.doTextLoggerSetup()
         logger.debug("cmdline : %s " % repr(self.args))
         if self.args.exit:
             subprocess.call(
-                '/usr/bin/dbus-send --session --print-reply --dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit', shell=True)
+                '/usr/bin/dbus-send --session --print-reply '
+                '--dest="dk.yumex.StatusIcon" / dk.yumex.StatusIcon.Exit',
+                shell=True)
             subprocess.call(
-                '/usr/bin/dbus-send --system --print-reply --dest="org.baseurl.DnfSystem" / org.baseurl.DnfSystem.Exit', shell=True)
+                '/usr/bin/dbus-send --system --print-reply '
+                '--dest="org.baseurl.DnfSystem" / org.baseurl.DnfSystem.Exit',
+                shell=True)
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = StatusIcon(self)
@@ -1196,7 +1215,9 @@ class YumexApplication(Gtk.Application):
         if hasattr(self, "win"):
             self.win.release_root_backend(quit=True)
 
-    def doTextLoggerSetup(self, logroot='yumex', logfmt='%(asctime)s: %(message)s', loglvl=logging.INFO):
+    def doTextLoggerSetup(self, logroot='yumex',
+                          logfmt='%(asctime)s: %(message)s',
+                          loglvl=logging.INFO):
         ''' Setup Python logging  '''
         logger = logging.getLogger(logroot)
         logger.setLevel(loglvl)

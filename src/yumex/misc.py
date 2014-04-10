@@ -16,6 +16,8 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+from __future__ import absolute_import
+
 import time
 
 from gi.repository import Gtk
@@ -25,7 +27,7 @@ import gettext
 import os.path
 import configparser
 import logging
-from .config import *
+from yumex.config import *
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')

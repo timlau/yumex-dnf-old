@@ -16,15 +16,17 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-import logging  # @UnusedImport
+from __future__ import absolute_import
+
 
 from dnfdaemon import *  # @UnusedWildImport
-from .backend import Package, Backend
-from .const import *  # @UnusedWildImport
+from yumex.backend import Package, Backend
+from yumex.const import *  # @UnusedWildImport
 # @UnusedImport @Reimport lint:ok
-from .misc import format_number, ExceptionHandler, TimeFunction, _, P_, CONFIG
+from yumex.misc import format_number, ExceptionHandler, TimeFunction, _, P_, CONFIG
 from gi.repository import Gdk
 
+import logging
 logger = logging.getLogger('yumex.yum_backend')
 
 

@@ -16,12 +16,13 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+from __future__ import absolute_import
 
 from gi.repository import Pango
 import os.path
 import sys
 import re
-from .misc import _, P_  # @UnusedImport
+from yumex.misc import _, P_  # @UnusedImport
 from subprocess import check_output
 
 
