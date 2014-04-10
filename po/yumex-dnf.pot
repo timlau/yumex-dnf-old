@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-09 20:43+0200\n"
+"POT-Creation-Date: 2014-04-10 06:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -380,16 +380,47 @@ msgstr ""
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:2
 msgid ""
-"<p>Yum extender is a graphical package management application, it will allow "
+"Yum extender is a graphical package management application, it will allow "
 "you to search and browse for packages to install, remove and update on your "
-"computer.</p> <p>It is designed to give you full control over the packages "
-"on your computer and to be used by all users.</p> <p>Features:</p> <ul> "
-"<li>Browse packages available for installation or update</li> <li>Browse "
-"packages installed on your computer</li> <li>Search packages by name, "
-"summary, description</li> <li>Watch the history of package action on your "
-"sytem</li> <li>Browse and install/remove package groups</li> <li>Browse "
-"packages by Size, Repository</li> <li>Control what package repositories are "
-"enabled for the current session</li> </ul>"
+"computer."
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:3
+msgid ""
+"It is designed to give you full control over the packages on your computer "
+"and to be used by all users."
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:4
+msgid "Features:"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:5
+msgid "Browse packages available for installation or update"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:6
+msgid "Browse packages installed on your computer"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:7
+msgid "Search packages by name, summary, description"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:8
+msgid "Watch the history of package action on your sytem"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:9
+msgid "Browse and install/remove package groups"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:10
+msgid "Browse packages by Size, Repository"
+msgstr ""
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:11
+msgid "Control what package repositories are enabled for the current session"
 msgstr ""
 
 #: ../src/yumex.ui.h:1
