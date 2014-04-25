@@ -23,11 +23,11 @@ import time
 from gi.repository import Gtk
 from gi.repository import Gdk
 from dnfdaemon import DaemonError
+import yumex.config as config
 import gettext
 import os.path
 import configparser
 import logging
-from yumex.config import *
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -156,37 +156,39 @@ def format_number(number, SI=0, space=' '):
     return(fmt % (float(number or 0), space, symbols[depth]))
 
 
-class YumexConf(BaseConfig):
+class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
-    debug = BoolOption(False)
-    autostart = BoolOption(False)
-    color_install = Option('#4E9A06')
-    color_update = Option('#CC0000')
-    color_normal = Option('#000000')
-    color_obsolete = Option('#3465A4')
-    color_downgrade = Option('#C17D11')
-    history_days = IntOption(180)
-    bugzilla_url = Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
-    skip_broken = BoolOption(False)
-    newest_only = BoolOption(True)
-    clean_unused = BoolOption(False)
-    update_interval = IntOption(60)
-    update_startup_delay = IntOption(30)
-    autocheck_updates = BoolOption(False)
-    hide_on_close = BoolOption(False)
-    system_refresh = Option('2000-01-01 00:01')
-    refresh_interval = IntOption(12)
-    max_dnl_errors = IntOption(10)
+    debug = config.BoolOption(False)
+    autostart = config.BoolOption(False)
+    color_install = config.Option('#4E9A06')
+    color_update = config.Option('#CC0000')
+    color_normal = config.Option('#000000')
+    color_obsolete = config.Option('#3465A4')
+    color_downgrade = config.Option('#C17D11')
+    history_days = config.IntOption(180)
+    bugzilla_url = config.Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
+    skip_broken = config.BoolOption(False)
+    newest_only = config.BoolOption(True)
+    clean_unused = config.BoolOption(False)
+    update_interval = config.IntOption(60)
+    update_startup_delay = config.IntOption(30)
+    autocheck_updates = config.BoolOption(False)
+    hide_on_close = config.BoolOption(False)
+    system_refresh = config.Option('2000-01-01 00:01')
+    refresh_interval = config.IntOption(12)
+    max_dnl_errors = config.IntOption(10)
 
 
-class SessionConf(BaseConfig):
+class SessionConf(config.BaseConfig):
     """ Yum Extender current session Setting"""
-    skip_broken = BoolOption(False)     # skip broken for current session
+    # skip broken for current session
+    skip_broken = config.BoolOption(False)
     # show newest package version only for current session
-    newest_only = BoolOption(True)
+    newest_only = config.BoolOption(True)
     # Clean orphan dependencies for this session
-    clean_unused = BoolOption(False)
-    enabled_repos = ListOption([])      # enabled repositories for this session
+    clean_unused = config.BoolOption(False)
+    # enabled repositories for this session
+    enabled_repos = config.ListOption([])
 
 
 class Config(object):

@@ -140,10 +140,11 @@ class Option(object):
 
 
 def Inherit(option_obj):
-    """Clone an :class:`Option` instance for the purposes of inheritance. The returned
-    instance has all the same properties as the input :class:`Option` and shares items
-    such as the default value. Use this to avoid redefinition of reused
-    options.
+    """Clone an :class:`Option` instance for the purposes of inheritance.
+
+    The returned instance has all the same properties as the input
+    :class:`Option` and shares items such as the default value.
+    Use this to avoid redefinition of reused options.
 
     :param option_obj: :class:`Option` instance to inherit
     :return: New :class:`Option` instance inherited from the input
@@ -237,7 +238,8 @@ class UrlOption(Option):
         elif len(self.schemes) == 1:
             return self.schemes[0]
         else:
-            return '%s or %s' % (', '.join(self.schemes[:-1]), self.schemes[-1])
+            return '%s or %s' % (', '.join(self.schemes[:-1]),
+                   self.schemes[-1])
 
 
 class IntOption(Option):
@@ -258,7 +260,7 @@ class IntOption(Option):
         """
         try:
             val = int(s)
-        except (ValueError, TypeError) as e:
+        except (ValueError, TypeError):
             raise ValueError('invalid integer value')
         if self._range_max is not None and val > self._range_max:
             raise ValueError('out of range integer value')
@@ -336,7 +338,7 @@ class SecondsOption(Option):
 
         try:
             n = float(n)
-        except (ValueError, TypeError) as e:
+        except (ValueError, TypeError):
             raise ValueError('invalid value')
 
         if n < 0:
@@ -636,7 +638,8 @@ class BaseConfig(object):
         cfgOptions = self.cfg.options(section)
         for name, value in self.iteritems():
             option = self.optionobj(name)
-            if always is None or name in always or option.default != value or name in cfgOptions:
+            if always is None or name in always or option.default != value \
+               or name in cfgOptions:
                 self.cfg.set(section, name, option.tostring(value))
         # write the updated ConfigParser to the fileobj.
         self.cfg.write(fileobj)
