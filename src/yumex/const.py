@@ -26,7 +26,7 @@ from yumex.misc import _, P_  # @UnusedImport
 from subprocess import check_output
 
 
-VERSION = "4.0.2"
+VERSION = "4.0.3"
 
 
 # find the data dir for resources
