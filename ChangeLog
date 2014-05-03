@@ -1,3 +1,91 @@
+2014-05-03  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* docs/conf.py, src/yumex/const.py, yumex-dnf.spec: bumped version
+	to 4.0.3
+
+2014-04-25  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/config.py, src/yumex/misc.py: code cleanup
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py: cleanup: removed unused exports
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* .tx/config, misc/yumex-dnf.appdata.xml.in, po/yumex-dnf.pot: fix:
+	typo in appdata file
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/yumex-dnf.pot: i18n: update .pot file
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/backend.py, src/yumex/const.py,
+	src/yumex/dnf_backend.py, src/yumex/gui/dialogs.py,
+	src/yumex/gui/views.py, src/yumex/gui/widgets.py: cleanup: PEP8
+	issues
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py, src/yumex/__init__.py, src/yumex/backend.py,
+	src/yumex/config.py, src/yumex/const.py, src/yumex/dnf_backend.py,
+	src/yumex/misc.py: fix. use absolute imports in all modules
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix absolute imports
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py: build: install yumex.gui sub module
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
+	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
+	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
+	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
+	po/zh_CN.po, po/zh_TW.po: pull translations from transifex
+
+2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* misc/yumex-dnf.appdata.xml.in, po/yumex-dnf.pot: fix: split up
+	appdata translation in more elements
+
+2014-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* misc/Makefile, misc/yumex-dnf.appdata.xml.in, po/Makefile,
+	po/POTFILES.in, po/yumex-dnf.pot, yumex-dnf.spec: add appdata file
+
+2014-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/config.py,
+	src/yumex/const.py, src/yumex/dnf_backend.py,
+	src/yumex/gui/__init__.py, src/yumex/gui/dialogs.py,
+	src/yumex/gui/views.py, src/yumex/gui/widgets.py,
+	src/yumex/misc.py, src/yumex/status.py: cleanup: make the code
+	follow PEP8
+
+2014-04-02  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py, src/yumex/__init__.py, src/yumex/gui/__init__.py,
+	src/yumex/gui/dialogs.py, src/yumex/gui/views.py,
+	src/yumex/gui/widgets.py, src/yumex/misc.py, src/yumex/widgets.py: 
+	refactor: split yumex.widget into yumex.gui.views, dialogs, widgets
+
+
+2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* .tx/config: fix: only pull yumex-dnf translations from transiflex
+
+
+2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* docs/conf.py, setup.py, src/yumex/const.py, yumex-dnf.spec: bumped
