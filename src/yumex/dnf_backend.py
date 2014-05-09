@@ -19,13 +19,12 @@
 from __future__ import absolute_import
 
 
-from dnfdaemon import *  # @UnusedWildImport
 from yumex.backend import Package, Backend
 from yumex.const import *  # @UnusedWildImport
-# @UnusedImport @Reimport lint:ok
 from yumex.misc import format_number, ExceptionHandler, TimeFunction, _, CONFIG
 from gi.repository import Gdk
 
+import dnfdaemon.client
 import logging
 logger = logging.getLogger('yumex.yum_backend')
 
@@ -195,7 +194,7 @@ class DnfPackage(Package):
         '''
         get update info for package
         '''
-        return self.backend.GetUpdateInfo(self.pkg_id)
+        return self.get_attribute('updateinfo')
 
     @property
     def dependencies(self):
@@ -212,14 +211,14 @@ class DnfPackage(Package):
             return False
 
 
-class DnfRootBackend(Backend, DnfDaemonClient):
+class DnfRootBackend(Backend, dnfdaemon.client.Client):
     """ Yumex Package Backend including Yum Daemon backend (ReadOnly,
     Running as current user)
     """
 
     def __init__(self, frontend):
         Backend.__init__(self, frontend, filters=True)
-        DnfDaemonClient.__init__(self)
+        dnfdaemon.client.Client.__init__(self)
         self._gpg_confirm = None
         self.dnl_progress = None
         self._files_to_download = 0

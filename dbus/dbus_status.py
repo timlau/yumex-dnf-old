@@ -17,27 +17,23 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
-import logging
-import argparse
-import os.path
-import sys
-import gettext
+from configparser import SafeConfigParser
+from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, GObject, GdkPixbuf
-import cairo
-import random
-from dnfdaemon import *
 from subprocess import Popen
 from xdg import BaseDirectory
-import time
-from configparser import SafeConfigParser
-import os.path
-from gi.repository import Gtk
+
+import argparse
+import cairo
+import dnfdaemon.client
 import dbus
 import dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
-
-
+import gettext
+import logging
+import os.path
+import random
+import sys
+import time
 
 version = 401 # must be integer
 DAEMON_ORG = 'dk.yumex.StatusIcon'
@@ -137,13 +133,13 @@ def Logger(func):
     newFunc.__dict__.update(func.__dict__)
     return newFunc
 
-class YumReadOnlyBackend(DnfDaemonReadOnlyClient):
+class YumReadOnlyBackend(dnfdaemon.client.ClientReadOnly):
     """
     Yumex Package Backend including Yum Daemon backend (ReadOnly, Running as current user)
     """
 
     def __init__(self):
-        DnfDaemonReadOnlyClient.__init__(self)
+        dnfdaemon.client.ClientReadOnly.__init__(self)
 
 class StatusIcon:
     rel_font_size = 0.7

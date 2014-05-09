@@ -22,7 +22,7 @@ import time
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from dnfdaemon import DaemonError
+from dnfdaemon.client import DaemonError
 import yumex.config as config
 import gettext
 import os.path

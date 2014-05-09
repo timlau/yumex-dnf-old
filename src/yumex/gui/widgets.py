@@ -290,15 +290,13 @@ class PackageInfo(PackageInfoWidget):
         self.base.set_working(False)
 
     def _show_updateinfo(self):
-        # FIXME: updateinfo is not supported in dnf yet
-        self.view.write("Updateinfo not supported in dnf yet")
-        return
         self.base.set_working(True)
         updinfo = self.current_package.updateinfo
-        for info in updinfo:
-            self._write_update_info(info)
-        if len(updinfo) == 0:
-            self.view.write("No Update information is available")
+        if updinfo:
+            for info in updinfo:
+                self._write_update_info(info)
+        else:
+            self.view.write(_("No Update information is available"))
         self.base.set_working(False)
 
     def _write_update_info(self, upd_info):
@@ -352,9 +350,6 @@ class PackageInfo(PackageInfoWidget):
         self.view.write(head)
 
     def _show_changelog(self):
-        # FIXME: Changekog is not supported in dnf yet
-        self.view.write("Changelog not supported in dnf yet")
-        return
         self.base.set_working(True)
         changelog = self.current_package.changelog
         if changelog:
@@ -370,16 +365,19 @@ class PackageInfo(PackageInfoWidget):
                 self.view.write('\n')
                 if i == 5:  # only show the last 5 entries
                     break
+        else:
+            self.view.write(_("No Changelog information is available"))
+
         self.base.set_working(False)
 
     def _show_filelist(self):
-        # FIXME: filelist is not supported in dnf yet
-        self.view.write("filelist not supported in dnfdaemon yet")
-        return
         self.base.set_working(True)
         filelist = self.current_package.filelist
-        for fname in sorted(filelist):
-            self.view.write(fname)
+        if filelist:
+            for fname in sorted(filelist):
+                self.view.write(fname)
+        else:
+            self.view.write(_("No Filelist information is available"))
         self.base.set_working(False)
 
     def _show_requirements(self):
