@@ -401,7 +401,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             # is this type of packages is already cached ?
             if not self.cache.is_populated(pkg_flt):
                 fields = ['summary', 'size']  # fields to get
-                po_list = self.GetPackageWithAttributes(pkg_flt, fields)
+                po_list = self.GetPackages(pkg_flt, fields)
                 pkgs = self._make_pkg_object(po_list, pkg_flt)
                 self.cache.populate(pkg_flt, pkgs)
             result.extend(Backend.get_packages(self, pkg_flt))
