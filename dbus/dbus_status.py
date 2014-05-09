@@ -35,7 +35,7 @@ import random
 import sys
 import time
 
-version = 401 # must be integer
+version = 404 # must be integer
 DAEMON_ORG = 'dk.yumex.StatusIcon'
 DAEMON_INTERFACE = DAEMON_ORG
 LOG_ROOT = 'yumex-statusicon'
