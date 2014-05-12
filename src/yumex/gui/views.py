@@ -460,7 +460,7 @@ class PackageView(SelectionView):
     def _toggle_downgrade(self, obj):
         if obj.queued == 'do':  # all-ready queued
             related_po = obj.downgrade_po
-            if obj.is_installed():  # is obj the installed pkg ?
+            if obj.installed:  # is obj the installed pkg ?
                 self.queue.remove(obj)
                 obj.action = "r"
             else:
@@ -701,7 +701,7 @@ class QueueView(Gtk.TreeView):
                 rmvlist.append(row[0])
         for pkg in self.filter_pkgs_from_list(rmvlist):
             self.queue.remove(pkg)
-            if pkg.queued == "do" and pkg.is_installed():
+            if pkg.queued == "do" and pkg.installed:
                 pkg.downgrade_po.queued = None
                 pkg.downgrade_po.set_select(not pkg.selected)
                 pkg.action = "r"  # reset action type of installed package

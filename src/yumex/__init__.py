@@ -812,7 +812,7 @@ class YumexWindow(BaseWindow):
                 po for po in self.last_search_pkgs if po.action in ('u', 'o')]
             return pkgs
         elif flt == "installed":  # get installed only
-            pkgs = [po for po in self.last_search_pkgs if po.is_installed()]
+            pkgs = [po for po in self.last_search_pkgs if po.installed]
             return pkgs
         elif flt == "available":
             pkgs = [po for po in self.last_search_pkgs if po.action == 'i']
