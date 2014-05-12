@@ -19,19 +19,21 @@
 
 from __future__ import absolute_import
 
-import re
-import datetime
-import subprocess
-import logging
-
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gio
+from yumex.misc import _
 
-from yumex.misc import _, format_block
-from yumex import const
+import datetime
+import logging
+import re
+import subprocess
+
+
+import yumex.const as const
 import yumex.gui.views
+import yumex.misc
 
 logger = logging.getLogger('yumex.gui.widget')
 
@@ -344,7 +346,7 @@ class PackageInfo(PackageInfoWidget):
         if upd_info['description'] is not None:
             desc = upd_info['description']
             head += "\n%14s : %s\n" % (_("Description"),
-                                       format_block(desc, 17))
+                                       yumex.misc.format_block(desc, 17))
 
         head += "\n"
         self.view.write(head)
