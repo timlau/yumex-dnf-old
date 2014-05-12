@@ -18,24 +18,25 @@
 
 from __future__ import absolute_import
 
-
-from yumex.backend import Package, Backend
-from yumex.const import *  # @UnusedWildImport
-from yumex.misc import format_number, ExceptionHandler, TimeFunction, _, CONFIG
+from yumex.misc import ExceptionHandler, TimeFunction, _, CONFIG
 from gi.repository import Gdk
 
 import dnfdaemon.client
 import logging
+import yumex.backend
+import yumex.misc
+import yumex.const as const
+
 logger = logging.getLogger('yumex.yum_backend')
 
 
-class DnfPackage(Package):
+class DnfPackage(yumex.backend.Package):
     '''
     This is an abstract package object for a package in the package system
    '''
 
     def __init__(self, po_tuple, action, backend):
-        Package.__init__(self, backend)
+        yumex.backend.Package.__init__(self, backend)
         (pkg_id, summary, size) = po_tuple
         self.pkg_id = pkg_id
         self.action = action
@@ -50,7 +51,7 @@ class DnfPackage(Package):
         self.downgrade_po = None
         self.summary = summary
         self.size = size
-        self.sizeM = format_number(size)
+        self.sizeM = yumex.misc.format_number(size)
         # cache
         self._description = None
 
@@ -69,7 +70,8 @@ class DnfPackage(Package):
     def fullname(self):
         ''' Package fullname  '''
         if self.epoch and self.epoch != '0':
-            return "%s-%s:%s-%s.%s" % (self.name, self.epoch, self.ver, self.rel, self.arch)
+            return "%s-%s:%s-%s.%s" %\
+                   (self.name, self.epoch, self.ver, self.rel, self.arch)
         else:
             return "%s-%s-%s.%s" % (self.name, self.ver, self.rel, self.arch)
 
@@ -211,13 +213,13 @@ class DnfPackage(Package):
             return False
 
 
-class DnfRootBackend(Backend, dnfdaemon.client.Client):
+class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     """ Yumex Package Backend including Yum Daemon backend (ReadOnly,
     Running as current user)
     """
 
     def __init__(self, frontend):
-        Backend.__init__(self, frontend, filters=True)
+        yumex.backend.Backend.__init__(self, frontend, filters=True)
         dnfdaemon.client.Client.__init__(self)
         self._gpg_confirm = None
         self.dnl_progress = None
@@ -253,14 +255,15 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         else:
             logger.debug("TransactionEvent : %s" % event)
 
-    def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
+    def on_RPMProgress(self, package, action, te_current,
+                       te_total, ts_current, ts_total):
         num = " ( %i/%i )" % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
             name = self._fullname(package)
         else:  # this is just a pkg name (cleanup)
             name = package
         logger.debug("on_RPMProgress : [%s]" % package)
-        self.frontend.infobar.info_sub(RPM_ACTIONS[action] % name)
+        self.frontend.infobar.info_sub(const.RPM_ACTIONS[action] % name)
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
@@ -278,7 +281,8 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
         self.frontend.infobar.info_sub(
-            _("Downloading %d files (%sb)....") % (num_files, format_number(num_bytes)))
+            _("Downloading %d files (%sb)....") %
+            (num_files, yumex.misc.format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         ''' Progress for a single instance in the batch '''
@@ -315,9 +319,9 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
                                  CONFIG.session.enabled_repos)
                     self.SetEnabledRepos(CONFIG.session.enabled_repos)
             return True, ""
-        except AccessDeniedError as e:
+        except yumex.backend.AccessDeniedError:
             return False, "not-authorized"
-        except LockedError as e:
+        except yumex.backend.LockedError:
             return False, "locked-by-other"
 
     @ExceptionHandler
@@ -355,7 +359,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         :param flt:
         '''
         po_list = []
-        action = FILTER_ACTIONS[flt]
+        action = const.FILTER_ACTIONS[flt]
         for pkg_values in pkgs:
             po_list.append(DnfPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
@@ -371,7 +375,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             (pkg_id, summary, size, action) = elem
             po_tuple = (pkg_id, summary, size)
             po_list.append(
-                DnfPackage(po_tuple, BACKEND_ACTIONS[action], self))
+                DnfPackage(po_tuple, const.BACKEND_ACTIONS[action], self))
         return self.cache.find_packages(po_list)
 
     def _build_package_list(self, pkg_ids):
@@ -385,7 +389,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             summary = self.GetAttribute(pkg_id, "summary")
             size = self.GetAttribute(pkg_id, "size")
             pkg_values = (pkg_id, summary, size)
-            action = BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
+            action = const.BACKEND_ACTIONS[self.GetAttribute(pkg_id, "action")]
             po_list.append(DnfPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
@@ -404,7 +408,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
                 po_list = self.GetPackages(pkg_flt, fields)
                 pkgs = self._make_pkg_object(po_list, pkg_flt)
                 self.cache.populate(pkg_flt, pkgs)
-            result.extend(Backend.get_packages(self, pkg_flt))
+            result.extend(yumex.backend.Backend.get_packages(self, pkg_flt))
         return result
 
     @ExceptionHandler
