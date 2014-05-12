@@ -1,6 +1,5 @@
-# -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A graphic package management tool
-#    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
+#    Copyright (C) 2013-2014 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,8 +17,8 @@
 
 from __future__ import absolute_import
 
-from yumex.const import *
 import logging
+import yumex.const as const
 
 logger = logging.getLogger('yumex.backend')
 
@@ -192,7 +191,7 @@ class PackageCache:
         '''
         setup the cache
         '''
-        for flt in ACTIONS_FILTER.values():
+        for flt in const.ACTIONS_FILTER.values():
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
@@ -201,7 +200,7 @@ class PackageCache:
         '''
         reset the cache
         '''
-        for flt in ACTIONS_FILTER.values():
+        for flt in const.ACTIONS_FILTER.values():
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
@@ -227,7 +226,7 @@ class PackageCache:
         if str(po) in self._index:  # package is in cache
             return self._index[str(po)]
         else:
-            target = getattr(self, ACTIONS_FILTER[po.action])
+            target = getattr(self, const.ACTIONS_FILTER[po.action])
             self._index[str(po)] = po
             target.add(po)
             return po

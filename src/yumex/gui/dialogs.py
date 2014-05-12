@@ -19,16 +19,16 @@
 
 from __future__ import absolute_import
 
-import os
-import shutil
-import logging
-
 from gi.repository import Gtk
 from gi.repository import GObject
-
 from yumex import const
-from yumex.misc import _, CONFIG, format_number, color_to_hex, get_color
+from yumex.misc import _, CONFIG
+
+import logging
+import os
+import shutil
 import yumex.gui.views
+import yumex.misc
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
@@ -81,7 +81,7 @@ class Preferences:
         # set current colors
         for name in ['color_install', 'color_update', 'color_normal',
                      'color_obsolete', 'color_downgrade']:
-            rgba = get_color(getattr(CONFIG.conf, name))
+            rgba = yumex.misc.get_color(getattr(CONFIG.conf, name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
         # Set update checker values
@@ -129,7 +129,7 @@ class Preferences:
                      'color_obsolete', 'color_downgrade']:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
-            color = color_to_hex(rgba)
+            color = yumex.misc.color_to_hex(rgba)
             if color != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, color)
                 changed = True
@@ -238,7 +238,7 @@ class TransactionResult:
                 (n, e, v, r, a, repo_id) = str(id).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
-                    format_number(size)])
+                    yumex.misc.format_number(size)])
                 # packages there need to be downloaded
                 if sub in ['install', 'update', 'install-deps',
                            'update-deps', 'obsoletes']:
@@ -247,7 +247,7 @@ class TransactionResult:
                     fn = self._fullname(r)
                     model.append(level2, [fn, "", "", "", ""])
         self.base.ui.get_object("result_size").set_text(
-            format_number(total_size))
+            yumex.misc.format_number(total_size))
         self.view.expand_all()
 
 

@@ -18,26 +18,23 @@
 
 from __future__ import absolute_import
 
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Gio
+from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler
+
 import argparse
 import logging
 import datetime
 import subprocess
 import sys
 import re
-
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Gio
-
-from yumex.gui.views import PackageView, QueueView, HistoryView, GroupView
-from yumex.gui.dialogs import Preferences, AboutDialog, TransactionResult, \
-                              show_information
-from yumex.gui.widgets import PackageInfo, InfoProgressBar, ArchMenu,\
-                              ask_for_gpg_import
-from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler
-from yumex import const
-from yumex.dnf_backend import DnfRootBackend
-from yumex.status import StatusIcon
+import yumex.const as const
+import yumex.status
+import yumex.dnf_backend
+import yumex.gui.dialogs as dialogs
+import yumex.gui.views as views
+import yumex.gui.widgets
 
 logger = logging.getLogger('yumex')
 
@@ -65,13 +62,13 @@ class BaseWindow(Gtk.ApplicationWindow):
             self.ui.add_from_file(const.DATA_DIR + "/yumex.ui")
         except:
             raise
-            show_information(
+            dialogs.show_information(
                 self, "GtkBuilder ui file not found : " +
                 const.DATA_DIR + "/yumex.ui")
             sys.exit()
 
         # transaction result dialog
-        self.transaction_result = TransactionResult(self)
+        self.transaction_result = dialogs.TransactionResult(self)
 
     def set_working(self, state, insensitive=False):
         '''
@@ -126,7 +123,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         if it is not locked, then lock it
         """
         if self._root_backend is None:
-            self._root_backend = DnfRootBackend(self)
+            self._root_backend = yumex.dnf_backend.DnfRootBackend(self)
         if self._root_locked is False:
             locked, msg = self._root_backend.setup()
             if locked:
@@ -141,7 +138,7 @@ class BaseWindow(Gtk.ApplicationWindow):
                     if rc:
                         self._set_cache_refreshed('system')
                     else:
-                        show_information(
+                        dialogs.show_information(
                             self, _("Could not refresh the DNF cache (root)"))
             else:
                 logger.critical("can't get root backend lock")
@@ -154,7 +151,7 @@ class BaseWindow(Gtk.ApplicationWindow):
                     errmsg = _(
                         "Dnf  is locked by another process \n\n"
                         "Yum Extender will exit")
-                show_information(self, errmsg)
+                dialogs.show_information(self, errmsg)
                 # close down and exit yum extender
                 self.status.SetWorking(False)  # reset working state
                 self.status.SetYumexIsRunning(False)
@@ -192,7 +189,7 @@ class BaseWindow(Gtk.ApplicationWindow):
             close = False
         if errmsg == "":
             errmsg = msg
-        show_information(self, errmsg)
+        dialogs.show_information(self, errmsg)
         # try to exit the backends, ignore errors
         if close:
             try:
@@ -232,7 +229,7 @@ class YumexInstallWindow(BaseWindow):
         vbox.pack_start(infobar, False, False, 0)
         self.add(vbox)
         vbox.show()
-        self.infobar = InfoProgressBar(self.ui)
+        self.infobar = yumex.gui.widgets.InfoProgressBar(self.ui)
         self.infobar.show_all()
         info_spinner = self.ui.get_object("info_spinner")
         info_spinner.set_from_file(const.PIX_DIR + "/spinner-small.gif")
@@ -283,11 +280,11 @@ class YumexInstallWindow(BaseWindow):
                 self.release_root_backend()
                 self.hide()
                 if not always_yes:
-                    show_information(
+                    dialogs.show_information(
                         self,
                         _("Changes was successfully applied to the system"))
         else:
-            show_information(
+            dialogs.show_information(
                 self, _("Error(s) in search for dependencies"),
                         "\n".join(result))
         self.release_root_backend(quit=True)
@@ -403,12 +400,12 @@ class YumexWindow(BaseWindow):
         self.spinner.hide()
 
         # infobar
-        self.infobar = InfoProgressBar(self.ui)
+        self.infobar = yumex.gui.widgets.InfoProgressBar(self.ui)
         self.infobar.hide()
 
         # preferences dialog
 
-        self.preferences = Preferences(self)
+        self.preferences = dialogs.Preferences(self)
 
         # setup actions
 
@@ -479,11 +476,11 @@ class YumexWindow(BaseWindow):
             if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
-            show_information("%s is not an url" % url)
+            dialogs.show_information("%s is not an url" % url)
 
     def on_about(self, widget):
         """ Main Menu: Help -> About """
-        dialog = AboutDialog()
+        dialog = dialogs.AboutDialog()
         dialog.run()
         dialog.destroy()
 
@@ -518,18 +515,19 @@ class YumexWindow(BaseWindow):
         '''
         # Package Page
         queue_menu = self.ui.get_object("queue_menu")
-        self.queue_view = QueueView(queue_menu)
+        self.queue_view = views.QueueView(queue_menu)
         arch_menu_widget = self.ui.get_object('arch_menu')
-        self.arch_menu = ArchMenu(arch_menu_widget, self.active_archs)
+        self.arch_menu = yumex.gui.widgets.ArchMenu(arch_menu_widget,
+                                                    self.active_archs)
         self.arch_menu.connect("arch-changed", self.on_arch_changed)
-        self.package_view = PackageView(self.queue_view, self.arch_menu)
+        self.package_view = views.PackageView(self.queue_view, self.arch_menu)
         self.package_view.connect(
             "pkg_changed", self.on_pkg_view_selection_changed)
         sw = self.ui.get_object("package_sw")
         sw.add(self.package_view)
         # setup info view
         info = self.ui.get_object("info_box")
-        self.info = PackageInfo(self, self)
+        self.info = yumex.gui.widgets.PackageInfo(self, self)
         info.pack_start(self.info, True, True, 0)
         self.info.show_all()
         # Queue Page
@@ -539,7 +537,7 @@ class YumexWindow(BaseWindow):
         sw = self.ui.get_object("history_sw")
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
-        self.history_view = HistoryView(self)
+        self.history_view = views.HistoryView(self)
         hb.pack_start(self.history_view, False, False, 0)
         hb.pack_start(self.history_view.pkg_view, True, True, 0)
         sw.add(hb)
@@ -547,20 +545,20 @@ class YumexWindow(BaseWindow):
         sw = self.ui.get_object("groups_sw")
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
-        self.groups = GroupView(self.queue_view, self)
+        self.groups = views.GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
         #hb.pack_start(self.groups, True, True, 0)
         # sw.add(hb)
         sw.add(self.groups)
         sw = self.ui.get_object("group_pkg_sw")
-        self.group_package_view = PackageView(
+        self.group_package_view = views.PackageView(
             self.queue_view, self.arch_menu, group_mode=True)
         #self.group_package_view.connect("arch-changed", self.on_arch_changed)
         self.group_package_view.connect(
             "pkg_changed", self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
         info = self.ui.get_object("group_pkg_info_sw")
-        self.group_info = PackageInfo(self, self)
+        self.group_info = yumex.gui.widgets.PackageInfo(self, self)
         info.add(self.group_info)
         self.info.show_all()
         self.stack.show_all()
@@ -620,7 +618,7 @@ class YumexWindow(BaseWindow):
             close = True
         if errmsg == "":
             errmsg = msg
-        show_information(self, errmsg)
+        dialogs.show_information(self, errmsg)
         # try to exit the backends, ignore errors
         if close:
             try:
@@ -965,7 +963,7 @@ class YumexWindow(BaseWindow):
         - run the transaction
         '''
         if self.queue_view.queue.total() == 0:
-            show_information(self, _("No pending actions in queue"))
+            dialogs.show_information(self, _("No pending actions in queue"))
             return
         self.set_working(True, True)
         # switch to queue view
@@ -1026,7 +1024,7 @@ class YumexWindow(BaseWindow):
                         values = self.backend._gpg_confirm
                         (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
                         logger.debug("GPGKey : %s" % repr(values))
-                        ok = ask_for_gpg_import(self, values)
+                        ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
                         if ok:
                             # tell the backend that the gpg key is confirmed
                             self.backend.ConfirmGPGImport(hexkeyid, True)
@@ -1035,17 +1033,17 @@ class YumexWindow(BaseWindow):
                         else:
                             break
                     if rc == 4:  # Download errors
-                        show_information(
+                        dialogs.show_information(
                             self, _("Downloading error(s)\n"),
                                      "\n".join(result))
                     self.reset()
                     return
             else:  # error in depsolve
-                show_information(
+                dialogs.show_information(
                     self, _("Error(s) in search for dependencies"),
                             "\n".join(result))
         else:  # error in population of the transaction
-            show_information(
+            dialogs.show_information(
                 self, _("Error(s) in search for dependencies"),
                         "\n".join(error_msgs))
         self.reset_on_error()
@@ -1189,7 +1187,7 @@ class YumexApplication(Gtk.Application):
                 shell=True)
             sys.exit(0)
         # Start the StatusIcon dbus client
-        self.status = StatusIcon(self)
+        self.status = yumex.status.StatusIcon(self)
         self.status.Start()  # Show the icon
         if self.args.icononly:  # Only start the icon and exit
             sys.exit(0)
@@ -1197,7 +1195,7 @@ class YumexApplication(Gtk.Application):
         if self.status.SetYumexIsRunning(True):
             self.do_activate()
         else:
-            show_information(None, "Yum Extender is already running")
+            dialogs.show_information(None, "Yum Extender is already running")
             sys.exit(1)
         return 0
 

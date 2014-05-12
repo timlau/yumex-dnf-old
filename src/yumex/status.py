@@ -16,14 +16,14 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-import sys
-import re
-import weakref
+from gi.repository import Gio, GObject
+
 import logging
+import re
+import sys
+import weakref
 
 logger = logging.getLogger("yumex.status")
-
-from gi.repository import Gio, GObject
 
 ORG = 'dk.yumex.StatusIcon'
 INTERFACE = ORG

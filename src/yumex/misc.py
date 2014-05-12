@@ -22,12 +22,13 @@ import time
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from dnfdaemon.client import DaemonError
-import yumex.config as config
-import gettext
-import os.path
+
 import configparser
+import dnfdaemon.client
+import gettext
 import logging
+import os.path
+import yumex.config as config
 
 gettext.bindtextdomain('yumex')
 gettext.textdomain('yumex')
@@ -87,7 +88,7 @@ def ExceptionHandler(func):
         try:
             rc = func(*args, **kwargs)
             return rc
-        except DaemonError as e:
+        except dnfdaemon.client.DaemonError as e:
             base = args[0]  # get current class
             base.exception_handler(e)
     newFunc.__name__ = func.__name__
@@ -166,7 +167,8 @@ class YumexConf(config.BaseConfig):
     color_obsolete = config.Option('#3465A4')
     color_downgrade = config.Option('#C17D11')
     history_days = config.IntOption(180)
-    bugzilla_url = config.Option('https://bugzilla.redhat.com/show_bug.cgi?id=')
+    bugzilla_url = config.Option(
+        'https://bugzilla.redhat.com/show_bug.cgi?id=')
     skip_broken = config.BoolOption(False)
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)

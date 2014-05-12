@@ -19,12 +19,12 @@
 from __future__ import absolute_import
 
 from gi.repository import Pango
-import os.path
-import sys
-import re
-from yumex.misc import _, P_  # @UnusedImport
-from subprocess import check_output
+from yumex.misc import _
 
+import os.path
+import re
+import subprocess
+import sys
 
 VERSION = "4.0.4"
 
@@ -40,7 +40,7 @@ else:
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
 
-ARCH = check_output(
+ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {

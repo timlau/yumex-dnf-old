@@ -17,8 +17,9 @@ The Option/BaseConfig classes is taken from config.py from the yum project
 It is modified to work in Python 3
 """
 
-import copy
 from urllib.parse import urlparse
+
+import copy
 import glob
 import re
 
@@ -575,8 +576,8 @@ class BaseConfig(object):
         :param cls: the class to return the :class:`Option` instance from
         :param name: the name of the :class:`Option` instance to return
         :param exceptions: defines what action to take if the
-           specified :class:`Option` instance does not exist. If *exceptions* is
-           True, a :class:`KeyError` will be raised. If *exceptions*
+           specified :class:`Option` instance does not exist. If *exceptions*
+           is True, a :class:`KeyError` will be raised. If *exceptions*
            is False, None will be returned
         :return: the :class:`Option` instance specified by *name*, or None if
            it does not exist and *exceptions* is False
