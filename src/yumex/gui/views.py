@@ -1432,6 +1432,7 @@ class GroupView(Gtk.TreeView):
                 obj = Group(grpid, grp_name, grp_desc, inst, False)
                 self.model.append(node, [obj])
         self.thaw_child_notify()
+        self.selected_group = None
 
     def queue_pixbuf(self, column, cell, model, iterator, data=None):
         """
