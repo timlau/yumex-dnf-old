@@ -990,6 +990,8 @@ class YumexWindow(BaseWindow):
         self.groups.populate(self._grps)
         self.group_package_view.populate([])
         self.set_working(False)
+        widget = self.ui.get_object('main_packages')
+        widget.set_active(True)
         self.set_content_page(const.PAGE_PACKAGES)
         widget = self.ui.get_object('filter_updates')
         widget.set_active(True)
