@@ -29,6 +29,7 @@ import datetime
 import logging
 import re
 import subprocess
+import urllib.parse
 
 
 import yumex.const as const
@@ -270,12 +271,15 @@ class PackageInfo(PackageInfoWidget):
     def _url_handler(self, url):
         print('Url activated : ' + url)
         if self._is_url(url):  # just to be sure and prevent shell injection
-            rc = subprocess.call("xdg-open %s" % url, shell=True)
+            rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             self.frontend.warning("%s is not an url" % url)
+
+    def _get_name_for_url(self):
+        return urllib.parse.quote_plus(self.current_package.name)
 
     def _show_description(self):
         tags = self.current_package.pkgtags
@@ -286,13 +290,12 @@ class PackageInfo(PackageInfoWidget):
         self.view.write(desc)
         self.view.write('\n')
         self.view.write(_("Links : "), "changelog-header", newline=True)
-        url = self.current_package.URL
         self.view.write('  ', newline=False)
-        self.view.add_url(_('Project Homepage '), url, newline=True)
-        url = const.FEDORA_PACKAGES_URL + self.current_package.name
+        url_hp = self.current_package.URL
+        self.view.add_url(_('Project Homepage '), url_hp, newline=True)
         self.view.write('  ', newline=False)
-        self.view.add_url(_("Fedora Packages"), url, newline=True)
-
+        url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
+        self.view.add_url(_("Fedora Packages"), url_fp, newline=True)
         self.base.set_working(False)
 
     def _show_updateinfo(self):
@@ -305,7 +308,7 @@ class PackageInfo(PackageInfoWidget):
             self.view.write(_("No Update information is available"))
             self.view.write(_("\nFedora Updates :"), "changelog-header",
                             newline=True)
-            url = const.FEDORA_PACKAGES_URL + self.current_package.name \
+            url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                             + "/updates"
             self.view.add_url(url, url, newline=True)
 
@@ -381,7 +384,7 @@ class PackageInfo(PackageInfoWidget):
             self.view.write(_("No Changelog information is available"))
             self.view.write(_("\nOnline Changelog :"), "changelog-header",
                             newline=True)
-            url = const.FEDORA_PACKAGES_URL + self.current_package.name \
+            url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                             + "/changelog"
             self.view.add_url(url, url, newline=True)
 
