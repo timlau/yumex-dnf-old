@@ -282,13 +282,17 @@ class PackageInfo(PackageInfoWidget):
         if tags:
             self.view.write(_("Tags : %s\n ") %
                             ", ".join(tags), "changelog-header")
-        url = self.current_package.URL
-        self.view.write(_("Project URL : "), "changelog-header", newline=False)
-        self.view.add_url(url, url, newline=True)
-        self.view.write('\n')
-
         desc = self.current_package.description
         self.view.write(desc)
+        self.view.write('\n')
+        self.view.write(_("Links : "), "changelog-header", newline=True)
+        url = self.current_package.URL
+        self.view.write('  ', newline=False)
+        self.view.add_url(_('Project Homepage '), url, newline=True)
+        url = const.FEDORA_PACKAGES_URL + self.current_package.name
+        self.view.write('  ', newline=False)
+        self.view.add_url(_("Fedora Packages"), url, newline=True)
+
         self.base.set_working(False)
 
     def _show_updateinfo(self):
@@ -299,6 +303,12 @@ class PackageInfo(PackageInfoWidget):
                 self._write_update_info(info)
         else:
             self.view.write(_("No Update information is available"))
+            self.view.write(_("\nFedora Updates :"), "changelog-header",
+                            newline=True)
+            url = const.FEDORA_PACKAGES_URL + self.current_package.name \
+                                            + "/updates"
+            self.view.add_url(url, url, newline=True)
+
         self.base.set_working(False)
 
     def _write_update_info(self, upd_info):
@@ -369,6 +379,11 @@ class PackageInfo(PackageInfoWidget):
                     break
         else:
             self.view.write(_("No Changelog information is available"))
+            self.view.write(_("\nOnline Changelog :"), "changelog-header",
+                            newline=True)
+            url = const.FEDORA_PACKAGES_URL + self.current_package.name \
+                                            + "/changelog"
+            self.view.add_url(url, url, newline=True)
 
         self.base.set_working(False)
 

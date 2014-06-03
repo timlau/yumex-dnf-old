@@ -115,6 +115,7 @@ PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
 
 # FIXME: The url should not be hardcoded
 BUGZILLA_URL = 'https://bugzilla.redhat.com/show_bug.cgi?id='
+FEDORA_PACKAGES_URL = 'https://apps.fedoraproject.org/packages/'
 
 
 PACKAGE_LOAD_MSG = {

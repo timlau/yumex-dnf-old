@@ -432,6 +432,9 @@ class PackageView(SelectionView):
                     doGtkEvents()
                 self.store.append([po, str(po)])
         self.thaw_child_notify()
+        # reset the selection column header selection state
+        self.state = 'normal'
+        self._last_selected = []
 
     def on_toggled(self, widget, path):
         """ Package selection handler """
