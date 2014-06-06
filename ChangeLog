@@ -1,3 +1,67 @@
+2014-06-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
+	4.0.5
+
+2014-06-03  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: encode package names with '-', when used
+	in url
+
+2014-06-03  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/const.py,
+	src/yumex/gui/views.py, src/yumex/gui/widgets.py: added fedora
+	packages links to package info
+
+2014-06-02  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: reset main menu selection on reload after
+	processed transaction
+
+2014-06-02  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: reset group selection state when populated
+
+
+2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: cleanup: docstring, single/double quotes,
+	remove unused code
+
+2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/dnf_backend.py,
+	src/yumex/gui/views.py: cleanup: doc strings and minor refactoring
+
+2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: cleanup : imports
+
+2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/config.py,
+	src/yumex/const.py, src/yumex/gui/dialogs.py, src/yumex/misc.py,
+	src/yumex/status.py: cleanup imports
+
+2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/dnf_backend.py: cleanup code (PEP8) and no wildcard
+	imports
+
+2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/dnf_backend.py, src/yumex/misc.py: use new dnfdaemon
+	GetPackges, the works with attrs
+
+2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: cleanup: fixed pep8 issues
+
+2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* dbus/dbus_status.py, src/yumex/const.py, yumex-dnf.spec: bumped
