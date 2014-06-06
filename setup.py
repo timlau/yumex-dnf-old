@@ -22,7 +22,7 @@ class BuildScripts(build_scripts):
                     os.rename(outfile, newfile)
 
 setup(name="yumex-dnf",
-      version="4.0.2",
+      version="4.0.5",
       description="Graphical package management tool",
       long_description="",
       author="Tim Lauridsen",
