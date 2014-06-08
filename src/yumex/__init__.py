@@ -817,7 +817,7 @@ class YumexWindow(BaseWindow):
     def hide_search_buttons(self, hide=True):
         """Hide search releated button, only shown on package page."""
         for widget in ['header_filters', 'header_search_options', 'search']:
-                self.ui.get_object(widget).set_visible(not hide)
+                self.ui.get_object(widget).set_sensitive(not hide)
 
     def on_history(self, widget):
         """History page selected callback"""

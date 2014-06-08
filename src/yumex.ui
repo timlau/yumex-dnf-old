@@ -601,7 +601,8 @@ window when the close button is clicked</property>
   <object class="GtkBox" id="header_start">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="valign">start</property>
+    <property name="halign">start</property>
+    <property name="resize_mode">immediate</property>
     <child>
       <object class="GtkMenuButton" id="header_menu">
         <property name="visible">True</property>
@@ -641,8 +642,6 @@ window when the close button is clicked</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Apply pending changes</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
         <child>
           <object class="GtkImage" id="image_execute">
             <property name="visible">True</property>
@@ -683,15 +682,11 @@ window when the close button is clicked</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Search options</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
         <property name="xalign">0</property>
         <child>
           <object class="GtkImage" id="image_seach">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
             <property name="icon_name">find-location-symbolic</property>
           </object>
         </child>
@@ -706,6 +701,7 @@ window when the close button is clicked</property>
       <object class="GtkSearchEntry" id="search">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="halign">end</property>
         <property name="margin_left">10</property>
         <property name="width_chars">60</property>
         <property name="primary_icon_name">edit-find-symbolic</property>
