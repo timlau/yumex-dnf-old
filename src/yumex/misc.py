@@ -30,8 +30,8 @@ import logging
 import os.path
 import yumex.config as config
 
-gettext.bindtextdomain('yumex')
-gettext.textdomain('yumex')
+gettext.bindtextdomain('yumex-dnf')
+gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
 P_ = gettext.ngettext
 
