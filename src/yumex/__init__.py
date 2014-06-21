@@ -58,6 +58,7 @@ class BaseWindow(Gtk.ApplicationWindow):
 
         # setup GtkBuilder
         self.ui = Gtk.Builder()
+        self.ui.set_translation_domain('yumex-dnf')
         try:
             self.ui.add_from_file(const.DATA_DIR + '/yumex.ui')
         except:

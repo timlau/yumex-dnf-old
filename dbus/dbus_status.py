@@ -42,8 +42,8 @@ DAEMON_INTERFACE = DAEMON_ORG
 LOG_ROOT = 'yumex-statusicon'
 
 logger = logging.getLogger(LOG_ROOT)
-gettext.bindtextdomain('yumex')
-gettext.textdomain('yumex')
+gettext.bindtextdomain('yumex-dnf')
+gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
 P_ = gettext.ngettext
 
