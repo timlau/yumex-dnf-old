@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 06:33+0200\n"
-"PO-Revision-Date: 2014-04-10 04:34+0000\n"
+"POT-Creation-Date: 2014-06-21 09:20+0200\n"
+"PO-Revision-Date: 2014-06-21 07:20+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/yumex/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -18,223 +18,223 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/yumex/const.py:119
-msgid "Getting installed packages"
-msgstr "获取已经安装的软件包"
-
-#: ../src/yumex/const.py:120
-msgid "Getting available packages"
-msgstr "获取可用软件包"
-
-#: ../src/yumex/const.py:121
-msgid "Getting available updates"
-msgstr "获取可用更新"
-
 #: ../src/yumex/const.py:122
+msgid "Getting installed packages"
+msgstr "正在获取已经安装的软件包"
+
+#: ../src/yumex/const.py:123
+msgid "Getting available packages"
+msgstr "正在获取可用软件包"
+
+#: ../src/yumex/const.py:124
+msgid "Getting available updates"
+msgstr "正在获取可用更新"
+
+#: ../src/yumex/const.py:125
 msgid "Getting all packages"
 msgstr "获取所有软件包"
 
-#: ../src/yumex/const.py:134
+#: ../src/yumex/const.py:138
 msgid "Updated packages"
 msgstr "已更新的软件包"
 
-#: ../src/yumex/const.py:135
+#: ../src/yumex/const.py:139
 msgid "Downgraded packages"
 msgstr "已降级的软件包"
 
-#: ../src/yumex/const.py:136
+#: ../src/yumex/const.py:140
 msgid "Obsoleting packages"
 msgstr "可淘汰的软件包"
 
-#: ../src/yumex/const.py:137
+#: ../src/yumex/const.py:141
 msgid "Obsoleted packages"
 msgstr "已淘汰的软件包"
 
-#: ../src/yumex/const.py:138
+#: ../src/yumex/const.py:142
 msgid "Erased packages"
 msgstr "已删除的软件包"
 
-#: ../src/yumex/const.py:139 ../src/yumex/const.py:140
+#: ../src/yumex/const.py:143 ../src/yumex/const.py:144
 msgid "Installed packages"
 msgstr "已安装的软件包"
 
-#: ../src/yumex/const.py:141
+#: ../src/yumex/const.py:145
 msgid "Installed for dependencies"
 msgstr "因依赖而安装"
 
-#: ../src/yumex/const.py:142
+#: ../src/yumex/const.py:146
 msgid "Reinstalled packages"
 msgstr "重新安装的软件包"
 
-#: ../src/yumex/const.py:146
-msgid "Installing"
-msgstr "安装中"
-
-#: ../src/yumex/const.py:147
-msgid "Updating"
-msgstr "更新中"
-
-#: ../src/yumex/const.py:148
-msgid "Removing"
-msgstr "卸载中"
-
-#: ../src/yumex/const.py:149
-msgid "Downgrading"
-msgstr "降级中"
-
 #: ../src/yumex/const.py:150
-msgid "Replacing"
-msgstr "替换中"
+msgid "Installing"
+msgstr "正在安装"
+
+#: ../src/yumex/const.py:151
+msgid "Updating"
+msgstr "正在更新"
+
+#: ../src/yumex/const.py:152
+msgid "Removing"
+msgstr "正在卸载"
+
+#: ../src/yumex/const.py:153
+msgid "Downgrading"
+msgstr "正在降级"
 
 #: ../src/yumex/const.py:154
+msgid "Replacing"
+msgstr "正在替换"
+
+#: ../src/yumex/const.py:158
 #, python-format
 msgid "Updating : %s"
 msgstr "正在更新 : %s"
 
-#: ../src/yumex/const.py:155
+#: ../src/yumex/const.py:159
 #, python-format
 msgid "Installing : %s"
 msgstr "正在安装 : %s"
 
-#: ../src/yumex/const.py:156
+#: ../src/yumex/const.py:160
 #, python-format
 msgid "Cleanup : %s"
 msgstr "正在清理 : %s"
 
-#: ../src/yumex/const.py:157
+#: ../src/yumex/const.py:161
 #, python-format
 msgid "Removing : %s"
 msgstr "正在卸载 : %s"
 
-#: ../src/yumex/const.py:158
+#: ../src/yumex/const.py:162
 msgid "Obsoleting :"
 msgstr "可淘汰:"
 
-#: ../src/yumex/__init__.py:135
+#: ../src/yumex/__init__.py:131
 msgid "Refreshing Repository Metadata"
-msgstr "刷新软件库元数据中"
+msgstr "正在刷新软件库元数据"
 
-#: ../src/yumex/__init__.py:142
+#: ../src/yumex/__init__.py:138
 msgid "Could not refresh the DNF cache (root)"
 msgstr "无法恢复 DNF 的缓存(ROOT)"
 
-#: ../src/yumex/__init__.py:147
+#: ../src/yumex/__init__.py:143
 msgid ""
 "Dnf root backend was not authorized\n"
 " Yum Extender will exit"
 msgstr "DNF root 后端没有授权\nYum Extender 将会退出"
 
-#: ../src/yumex/__init__.py:151
+#: ../src/yumex/__init__.py:148
 msgid ""
 "Dnf  is locked by another process \n"
 "\n"
 "Yum Extender will exit"
 msgstr "DNF 已经被其他的进程锁定\n\nYum Extender 将会退出"
 
-#: ../src/yumex/__init__.py:255
+#: ../src/yumex/__init__.py:244
 #, python-format
 msgid "Installing package : %s"
 msgstr "正在安装软件包 : %s"
 
-#: ../src/yumex/__init__.py:260
+#: ../src/yumex/__init__.py:249
 #, python-format
 msgid "Removing package : %s"
 msgstr "正在卸载软件包 : %s"
 
-#: ../src/yumex/__init__.py:264 ../src/yumex/__init__.py:1002
+#: ../src/yumex/__init__.py:253 ../src/yumex/__init__.py:921
 msgid "Searching for dependencies"
-msgstr "查找依赖关系"
+msgstr "正在查找依赖关系"
 
-#: ../src/yumex/__init__.py:266 ../src/yumex/__init__.py:1004
+#: ../src/yumex/__init__.py:255 ../src/yumex/__init__.py:923
 msgid "Dependencies resolved"
-msgstr "依赖关系以解决"
+msgstr "依赖关系已解决"
 
 #. Ok pressed
-#: ../src/yumex/__init__.py:274 ../src/yumex/__init__.py:1010
-#: ../src/yumex/dnf_backend.py:244
+#: ../src/yumex/__init__.py:263 ../src/yumex/__init__.py:929
+#: ../src/yumex/dnf_backend.py:200
 msgid "Applying changes to the system"
-msgstr "将更改应用到系统"
+msgstr "正在将更改应用到系统"
 
-#: ../src/yumex/__init__.py:280
+#: ../src/yumex/__init__.py:270
 msgid "Changes was successfully applied to the system"
-msgstr "对系统的更改应用成功"
+msgstr "成功将更改应用到系统"
 
-#: ../src/yumex/__init__.py:288 ../src/yumex/__init__.py:1036
-#: ../src/yumex/__init__.py:1039
+#: ../src/yumex/__init__.py:273 ../src/yumex/__init__.py:956
+#: ../src/yumex/__init__.py:960
 msgid "Error(s) in search for dependencies"
 msgstr "依赖查找出错"
 
-#: ../src/yumex/__init__.py:748
+#: ../src/yumex/__init__.py:687
 msgid "Adding packages to view"
 msgstr "正在添加软件包到视图"
 
-#: ../src/yumex/__init__.py:961
+#: ../src/yumex/__init__.py:879
 msgid "No pending actions in queue"
 msgstr "队列中无等待动作"
 
-#: ../src/yumex/__init__.py:966
+#: ../src/yumex/__init__.py:884
 msgid "Preparing system for applying changes"
-msgstr "准备系统应用更改"
+msgstr "正在准备系统应用更改"
 
-#: ../src/yumex/__init__.py:1031
+#: ../src/yumex/__init__.py:950
 msgid "Downloading error(s)\n"
 msgstr "下载出现错误\n"
 
-#: ../src/yumex/dnf_backend.py:229
+#: ../src/yumex/dnf_backend.py:185
 msgid "Downloading packages"
-msgstr "下载软件包"
+msgstr "正在下载软件包"
 
-#: ../src/yumex/dnf_backend.py:235
+#: ../src/yumex/dnf_backend.py:191
 msgid "Checking packages signatures"
-msgstr "检查软件包签名"
+msgstr "正在检查软件包签名"
 
-#: ../src/yumex/dnf_backend.py:279
+#: ../src/yumex/dnf_backend.py:236
 #, python-format
 msgid "Downloading %d files (%sb)...."
 msgstr "正在下载 %d 个文件  (%sb)...."
 
-#: ../src/yumex/gui/views.py:256
+#: ../src/yumex/gui/views.py:248
 msgid "Click to install all/remove all"
 msgstr "点击安装/卸载所有"
 
-#: ../src/yumex/gui/views.py:261
+#: ../src/yumex/gui/views.py:253
 msgid "Click to select/deselect all (updates only)"
 msgstr "点击选择/撤销选择所有(仅升级)"
 
-#: ../src/yumex/gui/views.py:273
+#: ../src/yumex/gui/views.py:265
 msgid "Package"
 msgstr "软件包"
 
-#: ../src/yumex/gui/views.py:274
+#: ../src/yumex/gui/views.py:266
 msgid "Ver."
 msgstr "版本."
 
-#: ../src/yumex/gui/views.py:276
+#: ../src/yumex/gui/views.py:268
 msgid "Arch."
 msgstr "架构."
 
-#: ../src/yumex/gui/views.py:276
+#: ../src/yumex/gui/views.py:270
 msgid "click to filter archs"
 msgstr "点击过滤架构"
 
-#: ../src/yumex/gui/views.py:277 ../src/yumex/gui/views.py:689
+#: ../src/yumex/gui/views.py:271 ../src/yumex/gui/views.py:688
 #: ../src/yumex.ui.h:60
 msgid "Summary"
 msgstr "概要"
 
-#: ../src/yumex/gui/views.py:278
+#: ../src/yumex/gui/views.py:272
 msgid "Repo."
 msgstr "软件库."
 
-#: ../src/yumex/gui/views.py:279
+#: ../src/yumex/gui/views.py:273
 msgid "Size."
 msgstr "大小."
 
-#: ../src/yumex/gui/views.py:684 ../src/yumex.ui.h:29
+#: ../src/yumex/gui/views.py:683 ../src/yumex.ui.h:29
 msgid "Packages"
 msgstr "软件包"
 
-#: ../src/yumex/gui/views.py:812
+#: ../src/yumex/gui/views.py:811
 #, python-format
 msgid "<b>Downgrade to</b> %s "
 msgstr "<b>降级到</b> %s "
@@ -248,74 +248,106 @@ msgid "History Packages"
 msgstr "历史软件包"
 
 #. Setup reponame & repofile column's
-#: ../src/yumex/gui/views.py:1191 ../src/yumex/gui/views.py:1237
-#: ../src/yumex/gui/dialogs.py:199
+#: ../src/yumex/gui/views.py:1195 ../src/yumex/gui/views.py:1242
+#: ../src/yumex/gui/dialogs.py:206
 msgid "Repository"
 msgstr "软件库"
 
-#: ../src/yumex/gui/views.py:1191
+#: ../src/yumex/gui/views.py:1195
 msgid "Filename"
 msgstr "文件名"
 
-#: ../src/yumex/gui/views.py:1222
+#: ../src/yumex/gui/views.py:1226
 msgid ""
 "Click here to switch between\n"
 " none/all/default selected"
 msgstr "点击此处在无/所有/默认\n之间切换"
 
-#: ../src/yumex/gui/views.py:1238 ../src/yumex/gui/dialogs.py:196
+#: ../src/yumex/gui/views.py:1243 ../src/yumex/gui/dialogs.py:203
 #: ../src/yumex.ui.h:59
 msgid "Name"
 msgstr "名称"
 
-#: ../src/yumex/gui/dialogs.py:197
+#: ../src/yumex/gui/dialogs.py:204
 msgid "Arch"
 msgstr "架构"
 
-#: ../src/yumex/gui/dialogs.py:198
+#: ../src/yumex/gui/dialogs.py:205
 msgid "Ver"
 msgstr "版本"
 
-#: ../src/yumex/gui/dialogs.py:200
+#: ../src/yumex/gui/dialogs.py:207
 msgid "Size"
 msgstr "大小"
 
-#: ../src/yumex/gui/widgets.py:106
+#: ../src/yumex/gui/widgets.py:110
 msgid "Getting Package metadata"
 msgstr "正在获取软件包元数据"
 
-#: ../src/yumex/gui/widgets.py:279
+#: ../src/yumex/gui/widgets.py:287
 #, python-format
 msgid ""
 "Tags : %s\n"
 " "
 msgstr "标签: %s\n "
 
-#: ../src/yumex/gui/widgets.py:282
-msgid "Project URL : "
-msgstr "项目链接："
+#: ../src/yumex/gui/widgets.py:292
+msgid "Links : "
+msgstr ""
 
-#: ../src/yumex/gui/widgets.py:304
+#: ../src/yumex/gui/widgets.py:295
+msgid "Project Homepage "
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:298
+msgid "Fedora Packages"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:308
+msgid "No Update information is available"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:309
+msgid ""
+"\n"
+"Fedora Updates :"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:319
 msgid "Release"
 msgstr "发布"
 
-#: ../src/yumex/gui/widgets.py:305
+#: ../src/yumex/gui/widgets.py:320
 msgid "Type"
 msgstr "类型"
 
-#: ../src/yumex/gui/widgets.py:306
+#: ../src/yumex/gui/widgets.py:321
 msgid "Status"
 msgstr "状态"
 
-#: ../src/yumex/gui/widgets.py:307
+#: ../src/yumex/gui/widgets.py:322
 msgid "Issued"
 msgstr "发行"
 
-#: ../src/yumex/gui/widgets.py:346 ../src/yumex.ui.h:61
+#: ../src/yumex/gui/widgets.py:361 ../src/yumex.ui.h:61
 msgid "Description"
 msgstr "描述"
 
-#: ../src/yumex/gui/widgets.py:388
+#: ../src/yumex/gui/widgets.py:384
+msgid "No Changelog information is available"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:385
+msgid ""
+"\n"
+"Online Changelog :"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:400
+msgid "No Filelist information is available"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:410
 #, python-format
 msgid ""
 " Do you want to import this GPG Key\n"
@@ -326,31 +358,31 @@ msgid ""
 " From       : %s"
 msgstr "确认导入此 GPG 密钥\n需要验证 %s 个软件包\n\n密   钥: 0x%s:\n用户D: \"%s\"\n来   源: %s"
 
-#: ../dbus/dbus_status.py:174 ../src/yumex.ui.h:47
+#: ../dbus/dbus_status.py:180 ../src/yumex.ui.h:47
 msgid "Quit"
 msgstr "退出"
 
-#: ../dbus/dbus_status.py:175
+#: ../dbus/dbus_status.py:181
 msgid "Search for Updates"
 msgstr "搜索更新"
 
-#: ../dbus/dbus_status.py:176
+#: ../dbus/dbus_status.py:182
 msgid "Start Yum Extender"
 msgstr "启动 Yum Extender"
 
-#: ../dbus/dbus_status.py:214
+#: ../dbus/dbus_status.py:217
 msgid "Yum Extender"
 msgstr "Yum Extender"
 
-#: ../dbus/dbus_status.py:217
+#: ../dbus/dbus_status.py:220
 msgid "Yum Extender: Error"
 msgstr "Yum Extender：错误"
 
-#: ../dbus/dbus_status.py:220
+#: ../dbus/dbus_status.py:223
 msgid "Yum Extender: No Updates"
 msgstr "Yum Extender：无可用更新"
 
-#: ../dbus/dbus_status.py:223
+#: ../dbus/dbus_status.py:227
 #, python-format
 msgid "Yum Extender: %s Updates available"
 msgstr "Yum Extender:：%s 个可用更新"
@@ -384,45 +416,45 @@ msgid ""
 "Yum extender is a graphical package management application, it will allow "
 "you to search and browse for packages to install, remove and update on your "
 "computer."
-msgstr ""
+msgstr "Yum extender 是图形化的软件包管理程序，此程序允许您在本机中搜索、浏览、安装/移除/升级软件包。"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:3
 msgid ""
 "It is designed to give you full control over the packages on your computer "
 "and to be used by all users."
-msgstr ""
+msgstr "此程序的设计初衷是让每一个使用者都能够在自己的电脑让软件包在自己的掌控之中."
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:4
 msgid "Features:"
-msgstr ""
+msgstr "特性:"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:5
 msgid "Browse packages available for installation or update"
-msgstr ""
+msgstr "浏览可安装/更新的软件包"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:6
 msgid "Browse packages installed on your computer"
-msgstr ""
+msgstr "浏览本机中已安装的软件包"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:7
 msgid "Search packages by name, summary, description"
-msgstr ""
+msgstr "按名称、概要或描述搜索软件包"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:8
-msgid "Watch the history of package action on your sytem"
-msgstr ""
+msgid "Watch the history of package action on your system"
+msgstr "查看此计算机中软件包的操作历史"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:9
 msgid "Browse and install/remove package groups"
-msgstr ""
+msgstr "按照软件组浏览、安装/卸载"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:10
 msgid "Browse packages by Size, Repository"
-msgstr ""
+msgstr "按照软件包大小或软件源浏览"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:11
 msgid "Control what package repositories are enabled for the current session"
-msgstr ""
+msgstr "控制当前会话中启用的软件源"
 
 #: ../src/yumex.ui.h:1
 msgid "Preferences"
