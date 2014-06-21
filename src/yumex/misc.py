@@ -26,11 +26,16 @@ from gi.repository import Gdk
 import configparser
 import dnfdaemon.client
 import gettext
+import locale
 import logging
 import os.path
+import sys
 import yumex.config as config
 
-gettext.bindtextdomain('yumex-dnf')
+LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
+locale.setlocale(locale.LC_ALL, '')
+locale.bindtextdomain('yumex-dnf', LOCALE_DIR)
+gettext.bindtextdomain('yumex-dnf', LOCALE_DIR)
 gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
 P_ = gettext.ngettext
