@@ -159,7 +159,8 @@ RPM_ACTIONS = {
     'install': _("Installing : %s"),
     'cleanup': _("Cleanup : %s"),
     'erase': _("Removing : %s"),
-    'obsolete': _("Obsoleting :"),
+    'obsolete': _("Obsoleting : %s"),
+    'downgrade': _("Downgrading : %s"),
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
