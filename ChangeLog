@@ -1,3 +1,44 @@
+2014-09-02  Tim <tim@localhost.localdomain>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.6
+
+2014-07-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py: fix callback on downgrade message
+
+2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/misc.py: Fix the language setup, so
+	Gtk.builder get translated
+
+2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
+	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
+	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
+	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
+	po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: i18n: updated
+	translations
+
+2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py: Set translation domain
+	for GtkBuilder, use right translation domain for notification domain
+
+
+2014-06-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: i18n: use the yumex-dnf translation domain
+
+2014-06-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py: Adjust headerbar
+
+2014-06-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2014-06-06  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
