@@ -88,7 +88,7 @@ class SelectionView(Gtk.TreeView):
         if click_handler:
             column.set_clickable(True)
             #column.connect('clicked', click_handler)
-            label = Gtk.Label(hdr)
+            label = Gtk.Label(label=hdr)
             label.show()
             column.set_widget(label)
             widget = column.get_button()
@@ -120,7 +120,7 @@ class SelectionView(Gtk.TreeView):
         column1.set_clickable(True)
         if click_handler:
             column1.connect('clicked', click_handler)
-        label = Gtk.Label("")
+        label = Gtk.Label(label="")
         label.show()
         column1.set_widget(label)
         if popup_handler:
@@ -152,7 +152,7 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         selection.connect("toggled", self.on_toggled)
         if tooltip:
-            label = Gtk.Label("")
+            label = Gtk.Label(label="")
             label.show()
             column.set_widget(label)
             widget = column.get_widget()
