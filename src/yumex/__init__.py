@@ -173,11 +173,15 @@ class BaseWindow(Gtk.ApplicationWindow):
         """
         close = True
         msg = str(e)
-        logger.error('EXCEPTION : %s ' % msg)
+        logger.error('BASE EXCEPTION : %s ' % msg)
         err, errmsg = self._parse_error(msg)
-        logger.debug('err:  %s - msg: %s' % (err, errmsg))
+        logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
             errmsg = 'DNF is locked by another process \n'
+            '\nYum Extender will exit'
+            close = False
+        elif err == 'NoReply':
+            errmsg = 'DNF Dbus backend is not responding \n'
             '\nYum Extender will exit'
             close = False
         if errmsg == '':
@@ -558,7 +562,7 @@ class YumexWindow(BaseWindow):
         msg = str(e)
         logger.error('EXCEPTION : %s ' % msg)
         err, errmsg = self._parse_error(msg)
-        logger.debug('err:  %s - msg: %s' % (err, errmsg))
+        logger.debug('err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
             errmsg = 'dnf is locked by another process \n' \
                      '\nYum Extender will exit'
@@ -566,6 +570,13 @@ class YumexWindow(BaseWindow):
         elif err == 'AccessDeniedError':
             errmsg = "Root backend was not authorized and can't continue"
             close = True
+        elif err == 'FatalError':
+            errmsg = 'Fatal error in yumex backend'
+            close = False
+        elif err == 'NoReply':
+            errmsg = 'DNF Dbus backend is not responding \n'\
+            '\nYum Extender will exit'
+            close = False
         if errmsg == '':
             errmsg = msg
         dialogs.show_information(self, errmsg)
@@ -575,6 +586,9 @@ class YumexWindow(BaseWindow):
                 self.release_root_backend(quit=True)
             except:
                 pass
+        self.status.SetWorking(False)  # reset working state
+        self.status.SetYumexIsRunning(False)
+        Gtk.main_quit()
         sys.exit(1)
 
     def set_working(self, state, insensitive=False):

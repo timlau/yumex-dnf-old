@@ -74,6 +74,12 @@ class Package:
         '''
         raise NotImplementedError()
 
+    def exception_handler(self, e):
+        """
+        send exceptions to the frontend
+        """
+        self.backend.frontend.exception_handler(e)
+
 
 class Backend:
     '''

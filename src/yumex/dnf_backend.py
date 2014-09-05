@@ -71,6 +71,7 @@ class DnfPackage(yumex.backend.Package):
         else:
             return "%s-%s-%s.%s" % (self.name, self.ver, self.rel, self.arch)
 
+    @ExceptionHandler
     def get_attribute(self, attr):
         """Get a given attribute for a package."""
         return self.backend.GetAttribute(self.pkg_id, attr)
@@ -147,14 +148,17 @@ class DnfPackage(yumex.backend.Package):
         return rgba
 
     @property
+    @ExceptionHandler
     def downgrades(self):
         return self.backend.get_downgrades(self.pkg_id)
 
     @property
+    @ExceptionHandler
     def updateinfo(self):
         return self.get_attribute('updateinfo')
 
     @property
+    @ExceptionHandler
     def dependencies(self):
         return self.backend.get_dependencies(self.pkg_id)
 
