@@ -40,11 +40,10 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pref_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label">Ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -54,11 +53,10 @@
             </child>
             <child>
               <object class="GtkButton" id="pref_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -83,7 +81,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_right">10</property>
+                <property name="margin_end">10</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
                 <property name="row_spacing">5</property>
@@ -330,7 +328,7 @@ window when the close button is clicked</property>
               <object class="GtkGrid" id="grid_advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_right">10</property>
+                <property name="margin_end">10</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
@@ -663,7 +661,7 @@ window when the close button is clicked</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
-        <property name="margin_left">10</property>
+        <property name="margin_start">10</property>
         <property name="width_chars">60</property>
         <property name="primary_icon_name">edit-find-symbolic</property>
         <property name="primary_icon_activatable">False</property>
@@ -685,8 +683,8 @@ window when the close button is clicked</property>
       <object class="GtkFrame" id="info_frame">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
+        <property name="margin_start">5</property>
+        <property name="margin_end">5</property>
         <property name="margin_top">5</property>
         <property name="margin_bottom">5</property>
         <property name="label_xalign">0</property>
@@ -695,8 +693,8 @@ window when the close button is clicked</property>
           <object class="GtkAlignment" id="info_align">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <child>
               <object class="GtkGrid" id="info_grid">
                 <property name="visible">True</property>
@@ -706,7 +704,7 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">2.2351741291171123e-10</property>
                     <property name="ypad">5</property>
@@ -724,8 +722,8 @@ window when the close button is clicked</property>
                   <object class="GtkProgressBar" id="infobar_progress">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
                     <property name="show_text">True</property>
                   </object>
@@ -739,8 +737,8 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="infobar_sublabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">20</property>
+                    <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="ypad">5</property>
@@ -761,10 +759,10 @@ window when the close button is clicked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">5</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">5</property>
                     <property name="xalign">0</property>
-                    <property name="stock">gtk-cancel</property>
+                    <property name="icon_name">window-close</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -1241,11 +1239,10 @@ window when the close button is clicked</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="result_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1255,11 +1252,10 @@ window when the close button is clicked</property>
             </child>
             <child>
               <object class="GtkButton" id="result_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label">Ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>

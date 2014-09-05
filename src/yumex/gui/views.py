@@ -253,7 +253,7 @@ class PackageView(SelectionView):
                 tooltip=_("Click to select/deselect all (updates only)"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
-        cell2.set_property('stock-id', Gtk.STOCK_ADD)
+        cell2.set_property('icon-name', 'list-add-symbolic')
         column2 = Gtk.TreeViewColumn("", cell2)
         column2.set_cell_data_func(cell2, self.new_pixbuf)
         column2.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -1230,7 +1230,7 @@ class RepoView(SelectionView):
 
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()    # gpgcheck
-        cell2.set_property('stock-id', Gtk.STOCK_DIALOG_AUTHENTICATION)
+        cell2.set_property('icon-name', 'dialog-password-symbolic')
         column2 = Gtk.TreeViewColumn("", cell2)
         column2.set_cell_data_func(cell2, self.new_pixbuf)
         column2.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
