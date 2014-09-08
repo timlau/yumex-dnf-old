@@ -81,8 +81,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
                 <property name="margin_end">10</property>
-                <property name="margin_top">10</property>
+                <property name="margin_top">14</property>
                 <property name="margin_bottom">10</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
@@ -92,10 +94,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Autostart the yumex notification icon at user login</property>
+                    <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Start Yum Extender status icon at user logon</property>
                   </object>
                   <packing>
@@ -141,10 +142,9 @@
                 <child>
                   <object class="GtkLabel" id="label_show_newest">
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Default: Show newest only</property>
                   </object>
                   <packing>
@@ -156,10 +156,9 @@
                 <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Default: Erase Used Requirements</property>
                   </object>
                   <packing>
@@ -172,7 +171,8 @@
                   <object class="GtkSpinButton" id="pref_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="max_length">5</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
                     <property name="invisible_char">●</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adj_update_interval</property>
@@ -188,12 +188,13 @@
                   <object class="GtkSpinButton" id="pref_update_startup_delay">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="max_length">5</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
                     <property name="invisible_char">●</property>
-                    <property name="width_chars">6</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">ad_update_startup_delay</property>
                     <property name="climb_rate">5</property>
+                    <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
                   </object>
                   <packing>
@@ -205,8 +206,9 @@
                   <object class="GtkLabel" id="label_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">25</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">25</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
                   </object>
                   <packing>
@@ -217,10 +219,12 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_update_delay">
+                    <property name="name">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">25</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">25</property>
                     <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
                   </object>
                   <packing>
@@ -234,6 +238,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -242,11 +247,12 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_auto_check">
+                    <property name="name">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Enable scheduled check for updates</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="label" translatable="yes">Scheduled check for new updates</property>
                   </object>
                   <packing>
@@ -261,8 +267,8 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Change the close action for the main window, so it just hides the
 window when the close button is clicked</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="label" translatable="yes">Close will only minimize window</property>
                   </object>
                   <packing>
@@ -276,6 +282,7 @@ window when the close button is clicked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -287,7 +294,12 @@ window when the close button is clicked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="input_purpose">number</property>
                     <property name="adjustment">adj_refresh_interval</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -296,12 +308,12 @@ window when the close button is clicked</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_refresh_period">
+                    <property name="name">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <property name="xpad">10</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="label" translatable="yes">Cache expire interval (hours)</property>
                     <property name="ellipsize">end</property>
                   </object>
@@ -317,7 +329,6 @@ window when the close button is clicked</property>
               <object class="GtkLabel" id="settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0.44999998807907104</property>
                 <property name="label" translatable="yes">Settings</property>
               </object>
               <packing>
@@ -328,6 +339,8 @@ window when the close button is clicked</property>
               <object class="GtkGrid" id="grid_advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
@@ -339,8 +352,9 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="labe_adv_1l">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Color for installed packages</property>
                   </object>
                   <packing>
@@ -353,8 +367,9 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_adv_2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Color for available updates</property>
                   </object>
                   <packing>
@@ -367,8 +382,9 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_adv_3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Color for available packages</property>
                   </object>
                   <packing>
@@ -381,8 +397,9 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_adv_4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Color for obsoleted packages</property>
                   </object>
                   <packing>
@@ -395,8 +412,9 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_adv_5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0.019999999552965164</property>
                     <property name="label" translatable="yes">Color for available downgrades</property>
                   </object>
                   <packing>
@@ -411,6 +429,7 @@ window when the close button is clicked</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -423,6 +442,7 @@ window when the close button is clicked</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -435,6 +455,7 @@ window when the close button is clicked</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -447,6 +468,7 @@ window when the close button is clicked</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -459,6 +481,7 @@ window when the close button is clicked</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -474,7 +497,6 @@ window when the close button is clicked</property>
               <object class="GtkLabel" id="advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0.5899999737739563</property>
                 <property name="label" translatable="yes">Advanced</property>
               </object>
               <packing>
@@ -699,15 +721,17 @@ window when the close button is clicked</property>
               <object class="GtkGrid" id="info_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="hexpand">True</property>
                 <child>
                   <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">5</property>
                     <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">2.2351741291171123e-10</property>
-                    <property name="ypad">5</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
                       <attribute name="weight" value="ultrabold"/>
@@ -724,8 +748,9 @@ window when the close button is clicked</property>
                     <property name="can_focus">False</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
                     <property name="hexpand">True</property>
-                    <property name="show_text">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -737,11 +762,12 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="infobar_sublabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">5</property>
                     <property name="margin_start">20</property>
                     <property name="margin_end">10</property>
+                    <property name="margin_top">5</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="ypad">5</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
                       <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
@@ -1322,7 +1348,7 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="result_size">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
