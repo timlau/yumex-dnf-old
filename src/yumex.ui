@@ -76,18 +76,20 @@
           <object class="GtkNotebook" id="pref_notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
             <child>
               <object class="GtkGrid" id="grid_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">14</property>
                 <property name="margin_bottom">10</property>
-                <property name="row_spacing">5</property>
-                <property name="column_spacing">5</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="label_autostart">
@@ -339,15 +341,15 @@ window when the close button is clicked</property>
               <object class="GtkGrid" id="grid_advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
                 <property name="margin_end">10</property>
-                <property name="margin_top">10</property>
+                <property name="margin_top">7</property>
                 <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row_spacing">5</property>
-                <property name="column_spacing">5</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="labe_adv_1l">
                     <property name="visible">True</property>
@@ -509,6 +511,8 @@ window when the close button is clicked</property>
                 <property name="height_request">400</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_height">400</property>
@@ -553,25 +557,16 @@ window when the close button is clicked</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkAlignment" id="progress_box">
-        <property name="width_request">46</property>
-        <property name="height_request">36</property>
+      <object class="GtkImage" id="progress_spinner">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <child>
-          <object class="GtkImage" id="progress_spinner">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">system-run</property>
-          </object>
-        </child>
+        <property name="icon_name">system-run</property>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="pack_type">end</property>
         <property name="position">0</property>
       </packing>
     </child>
@@ -590,6 +585,7 @@ window when the close button is clicked</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Main options</property>
+        <property name="direction">up</property>
         <child>
           <object class="GtkImage" id="image_main">
             <property name="visible">True</property>
@@ -663,7 +659,6 @@ window when the close button is clicked</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Search options</property>
-        <property name="xalign">0</property>
         <child>
           <object class="GtkImage" id="image_seach">
             <property name="visible">True</property>
@@ -683,6 +678,7 @@ window when the close button is clicked</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
+        <property name="margin_left">6</property>
         <property name="margin_start">10</property>
         <property name="width_chars">60</property>
         <property name="primary_icon_name">edit-find-symbolic</property>
@@ -712,91 +708,86 @@ window when the close button is clicked</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">in</property>
         <child>
-          <object class="GtkAlignment" id="info_align">
+          <object class="GtkGrid" id="info_grid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_start">10</property>
-            <property name="margin_end">10</property>
+            <property name="margin_top">7</property>
+            <property name="margin_bottom">5</property>
+            <property name="hexpand">True</property>
             <child>
-              <object class="GtkGrid" id="info_grid">
+              <object class="GtkLabel" id="infobar_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">5</property>
-                <property name="margin_bottom">5</property>
+                <property name="halign">start</property>
+                <property name="margin_left">6</property>
+                <property name="margin_end">10</property>
                 <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkLabel" id="infobar_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin_left">5</property>
-                    <property name="margin_end">10</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">label</property>
-                    <attributes>
-                      <attribute name="weight" value="ultrabold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkProgressBar" id="infobar_progress">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_start">10</property>
-                    <property name="margin_end">10</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="infobar_sublabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin_left">5</property>
-                    <property name="margin_start">20</property>
-                    <property name="margin_end">10</property>
-                    <property name="margin_top">5</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">label</property>
-                    <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
-                      <attribute name="stretch" value="condensed"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="info_spinner">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin_start">10</property>
-                    <property name="margin_end">5</property>
-                    <property name="xalign">0</property>
-                    <property name="icon_name">window-close</property>
-                    <property name="icon_size">1</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
+                <property name="label" translatable="yes">label</property>
+                <attributes>
+                  <attribute name="weight" value="ultrabold"/>
+                </attributes>
               </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="infobar_progress">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+                <property name="margin_start">10</property>
+                <property name="margin_end">10</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="infobar_sublabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_left">18</property>
+                <property name="margin_start">20</property>
+                <property name="margin_end">10</property>
+                <property name="margin_top">6</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">label</property>
+                <attributes>
+                  <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
+                  <attribute name="stretch" value="condensed"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="info_spinner">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_left">6</property>
+                <property name="margin_start">10</property>
+                <property name="margin_end">5</property>
+                <property name="xalign">0</property>
+                <property name="icon_name">window-close</property>
+                <property name="icon_size">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
         </child>
