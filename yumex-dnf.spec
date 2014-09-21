@@ -1,7 +1,7 @@
 %global appname yumex
 
 Name:     %{appname}-dnf
-Version:  4.0.6
+Version:  4.0.7
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -66,6 +66,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/appdata/*.xml
 
 %changelog
+* Sun Sep 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.7
+- bumped release to 4.0.7
+
 * Tue Sep 02 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.6
 - bumped release to 4.0.6
 
