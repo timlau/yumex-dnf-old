@@ -1,3 +1,44 @@
+2014-09-21  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.7
+
+2014-09-21  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/gui/widgets.py: cleanup: gtk 3.12
+	deprecated ui
+
+2014-09-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: gui adjustments
+
+2014-09-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: cleanup: dont use deprecated GtkMisc pad & alignment
+
+
+2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/gui/views.py: cleanup: deprecated Gtk
+
+2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: fix: load and save with glade 3.18.3 (Gtk 3.12)
+
+2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/const.py,
+	src/yumex/dnf_backend.py: fix: better exception handling when Dbus
+	backend dies
+
+2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/dialogs.py, src/yumex/gui/views.py: fix: deprecated
+	Gtk stuff
+
+2014-09-02  Tim <tim@localhost.localdomain>
+
+	* ChangeLog: updated ChangeLog
+
 2014-09-02  Tim <tim@localhost.localdomain>
 
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.6
