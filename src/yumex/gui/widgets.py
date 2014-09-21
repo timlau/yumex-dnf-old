@@ -185,7 +185,7 @@ class PackageInfoWidget(Gtk.Box):
         if group:
             wid = Gtk.RadioButton.new_from_widget(group)
         else:
-            wid = Gtk.RadioButton()
+            wid = Gtk.RadioButton.new(None)
         icon = Gio.ThemedIcon(name=icon_name)
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
         wid.set_image(image)

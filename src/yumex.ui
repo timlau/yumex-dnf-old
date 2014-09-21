@@ -76,15 +76,15 @@
           <object class="GtkNotebook" id="pref_notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <child>
               <object class="GtkGrid" id="grid_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">6</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">14</property>
                 <property name="margin_bottom">10</property>
@@ -210,7 +210,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
                   </object>
                   <packing>
@@ -226,7 +226,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
                     <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
                   </object>
                   <packing>
@@ -341,8 +341,8 @@ window when the close button is clicked</property>
               <object class="GtkGrid" id="grid_advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">6</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">7</property>
                 <property name="margin_bottom">10</property>
@@ -511,8 +511,8 @@ window when the close button is clicked</property>
                 <property name="height_request">400</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">6</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_height">400</property>
@@ -590,7 +590,7 @@ window when the close button is clicked</property>
           <object class="GtkImage" id="image_main">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="icon_name">emblem-system-symbolic</property>
+            <property name="icon_name">go-down-symbolic</property>
           </object>
         </child>
         <accelerator key="m" signal="activate" modifiers="GDK_MOD1_MASK"/>
@@ -623,7 +623,7 @@ window when the close button is clicked</property>
           <object class="GtkImage" id="image_execute">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="icon_name">media-playback-start-symbolic</property>
+            <property name="icon_name">system-run-symbolic.symbolic</property>
           </object>
         </child>
       </object>
@@ -643,7 +643,7 @@ window when the close button is clicked</property>
           <object class="GtkImage" id="image_filters">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="icon_name">mail-send-receive-symbolic</property>
+            <property name="icon_name">open-menu-symbolic</property>
           </object>
         </child>
       </object>
@@ -678,7 +678,7 @@ window when the close button is clicked</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
-        <property name="margin_left">6</property>
+        <property name="margin_start">6</property>
         <property name="margin_start">10</property>
         <property name="width_chars">60</property>
         <property name="primary_icon_name">edit-find-symbolic</property>
@@ -719,7 +719,7 @@ window when the close button is clicked</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">6</property>
+                <property name="margin_start">6</property>
                 <property name="margin_end">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">label</property>
@@ -736,8 +736,8 @@ window when the close button is clicked</property>
               <object class="GtkProgressBar" id="infobar_progress">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">6</property>
                 <property name="margin_start">10</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">6</property>
@@ -755,7 +755,7 @@ window when the close button is clicked</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">18</property>
+                <property name="margin_start">18</property>
                 <property name="margin_start">20</property>
                 <property name="margin_end">10</property>
                 <property name="margin_top">6</property>
@@ -777,7 +777,7 @@ window when the close button is clicked</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">6</property>
+                <property name="margin_start">6</property>
                 <property name="margin_start">10</property>
                 <property name="margin_end">5</property>
                 <property name="xalign">0</property>
