@@ -292,10 +292,10 @@ class PackageInfo(PackageInfoWidget):
         self.view.write(_("Links : "), "changelog-header", newline=True)
         self.view.write('  ', newline=False)
         url_hp = self.current_package.URL
-        self.view.add_url(_('Project Homepage '), url_hp, newline=True)
+        self.view.add_url( url_hp, url_hp, newline=True)
         self.view.write('  ', newline=False)
         url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
-        self.view.add_url(_("Fedora Packages"), url_fp, newline=True)
+        self.view.add_url(url_fp, url_fp, newline=True)
         self.base.set_working(False)
 
     def _show_updateinfo(self):
