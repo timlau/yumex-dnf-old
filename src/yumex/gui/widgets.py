@@ -165,15 +165,22 @@ class PackageInfoWidget(Gtk.Box):
         vbox = Gtk.Box()
         vbox.set_orientation(Gtk.Orientation.VERTICAL)
         # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-        rb = self._get_radio_button('dialog-information-symbolic', "desc")
+        tip = _("Package Description")
+        rb = self._get_radio_button('dialog-information-symbolic', "desc",
+                                    tooltip=tip)
         vbox.add(rb)
+        tip = _("Package update information")
         vbox.add(self._get_radio_button(
-            'software-update-available-symbolic', "updinfo", rb))
+            'software-update-available-symbolic', "updinfo", rb, tip))
+        tip = _("Package Changelog")
         vbox.add(self._get_radio_button(
-            'bookmark-new-symbolic', "changelog", rb))
+            'bookmark-new-symbolic', "changelog", rb, tip))
+        tip = _("Package Filelist")
         vbox.add(self._get_radio_button(
-            'drive-multidisk-symbolic', "files", rb))
-        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb))
+            'drive-multidisk-symbolic', "files", rb, tip))
+        tip = _("Package Requirements")
+        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
+                                        tip))
         vbox.set_margin_right(5)
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
@@ -181,7 +188,7 @@ class PackageInfoWidget(Gtk.Box):
         sw.add(self.view)
         self.pack_start(sw, True, True, 0)
 
-    def _get_radio_button(self, icon_name, name, group=None):
+    def _get_radio_button(self, icon_name, name, group=None, tooltip=None):
         if group:
             wid = Gtk.RadioButton.new_from_widget(group)
         else:
@@ -189,6 +196,8 @@ class PackageInfoWidget(Gtk.Box):
         icon = Gio.ThemedIcon(name=icon_name)
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
         wid.set_image(image)
+        if tooltip:
+            wid.set_tooltip_text(tooltip)
         wid.connect('toggled', self._on_filter_changed, name)
         # we only want an image, not the black dot indicator
         wid.set_property("draw-indicator", False)
