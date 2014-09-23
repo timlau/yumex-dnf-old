@@ -276,9 +276,9 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                                  CONFIG.session.enabled_repos)
                     self.SetEnabledRepos(CONFIG.session.enabled_repos)
             return True, ''
-        except yumex.backend.AccessDeniedError:
+        except dnfdaemon.client.AccessDeniedError:
             return False, 'not-authorized'
-        except yumex.backend.LockedError:
+        except dnfdaemon.client.LockedError:
             return False, 'locked-by-other'
 
     @ExceptionHandler
