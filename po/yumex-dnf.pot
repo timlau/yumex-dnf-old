@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-21 09:20+0200\n"
+"POT-Creation-Date: 2014-09-23 12:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,13 @@ msgid "Removing : %s"
 msgstr ""
 
 #: ../src/yumex/const.py:162
-msgid "Obsoleting :"
+#, python-format
+msgid "Obsoleting : %s"
+msgstr ""
+
+#: ../src/yumex/const.py:163
+#, python-format
+msgid "Downgrading : %s"
 msgstr ""
 
 #: ../src/yumex/__init__.py:131
@@ -130,64 +136,64 @@ msgid ""
 "Yum Extender will exit"
 msgstr ""
 
-#: ../src/yumex/__init__.py:244
+#: ../src/yumex/__init__.py:248
 #, python-format
 msgid "Installing package : %s"
 msgstr ""
 
-#: ../src/yumex/__init__.py:249
+#: ../src/yumex/__init__.py:253
 #, python-format
 msgid "Removing package : %s"
 msgstr ""
 
-#: ../src/yumex/__init__.py:253 ../src/yumex/__init__.py:921
+#: ../src/yumex/__init__.py:257 ../src/yumex/__init__.py:935
 msgid "Searching for dependencies"
 msgstr ""
 
-#: ../src/yumex/__init__.py:255 ../src/yumex/__init__.py:923
+#: ../src/yumex/__init__.py:259 ../src/yumex/__init__.py:937
 msgid "Dependencies resolved"
 msgstr ""
 
 #. Ok pressed
-#: ../src/yumex/__init__.py:263 ../src/yumex/__init__.py:929
-#: ../src/yumex/dnf_backend.py:200
+#: ../src/yumex/__init__.py:267 ../src/yumex/__init__.py:943
+#: ../src/yumex/dnf_backend.py:204
 msgid "Applying changes to the system"
 msgstr ""
 
-#: ../src/yumex/__init__.py:270
+#: ../src/yumex/__init__.py:274
 msgid "Changes was successfully applied to the system"
 msgstr ""
 
-#: ../src/yumex/__init__.py:273 ../src/yumex/__init__.py:956
-#: ../src/yumex/__init__.py:960
+#: ../src/yumex/__init__.py:277 ../src/yumex/__init__.py:970
+#: ../src/yumex/__init__.py:974
 msgid "Error(s) in search for dependencies"
 msgstr ""
 
-#: ../src/yumex/__init__.py:687
+#: ../src/yumex/__init__.py:701
 msgid "Adding packages to view"
 msgstr ""
 
-#: ../src/yumex/__init__.py:879
+#: ../src/yumex/__init__.py:893
 msgid "No pending actions in queue"
 msgstr ""
 
-#: ../src/yumex/__init__.py:884
+#: ../src/yumex/__init__.py:898
 msgid "Preparing system for applying changes"
 msgstr ""
 
-#: ../src/yumex/__init__.py:950
+#: ../src/yumex/__init__.py:964
 msgid "Downloading error(s)\n"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:185
+#: ../src/yumex/dnf_backend.py:189
 msgid "Downloading packages"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:191
+#: ../src/yumex/dnf_backend.py:195
 msgid "Checking packages signatures"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:236
+#: ../src/yumex/dnf_backend.py:240
 #, python-format
 msgid "Downloading %d files (%sb)...."
 msgstr ""
@@ -283,70 +289,83 @@ msgstr ""
 msgid "Getting Package metadata"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:287
+#. PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
+#: ../src/yumex/gui/widgets.py:168
+msgid "Package Description"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:172
+msgid "Package update information"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:175
+msgid "Package Changelog"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:178
+msgid "Package Filelist"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:181
+msgid "Package Requirements"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:296
 #, python-format
 msgid ""
 "Tags : %s\n"
 " "
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:292
+#: ../src/yumex/gui/widgets.py:301
 msgid "Links : "
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:295
-msgid "Project Homepage "
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:298
-msgid "Fedora Packages"
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:308
+#: ../src/yumex/gui/widgets.py:317
 msgid "No Update information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:309
+#: ../src/yumex/gui/widgets.py:318
 msgid ""
 "\n"
 "Fedora Updates :"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:319
+#: ../src/yumex/gui/widgets.py:328
 msgid "Release"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:320
+#: ../src/yumex/gui/widgets.py:329
 msgid "Type"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:321
+#: ../src/yumex/gui/widgets.py:330
 msgid "Status"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:322
+#: ../src/yumex/gui/widgets.py:331
 msgid "Issued"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:361 ../src/yumex.ui.h:61
+#: ../src/yumex/gui/widgets.py:370 ../src/yumex.ui.h:61
 msgid "Description"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:384
+#: ../src/yumex/gui/widgets.py:393
 msgid "No Changelog information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:385
+#: ../src/yumex/gui/widgets.py:394
 msgid ""
 "\n"
 "Online Changelog :"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:400
+#: ../src/yumex/gui/widgets.py:409
 msgid "No Filelist information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:410
+#: ../src/yumex/gui/widgets.py:419
 #, python-format
 msgid ""
 " Do you want to import this GPG Key\n"
