@@ -894,6 +894,9 @@ class YumexWindow(BaseWindow):
             return
         self.set_working(True, True)
         # switch to queue view
+        # switch to package page
+        widget = self.ui.get_object('main_actions')
+        widget.set_active(True)
         self.set_content_page(const.PAGE_QUEUE)
         self.infobar.info(_('Preparing system for applying changes'))
         self.backend.ClearTransaction()
@@ -965,6 +968,9 @@ class YumexWindow(BaseWindow):
                                      '\n'.join(result))
                     self.reset()
                     return
+                else:  # user cancelled transaction
+                    self.reset_on_cancel()
+                    return
             else:  # error in depsolve
                 dialogs.show_information(
                     self, _('Error(s) in search for dependencies'),
@@ -975,12 +981,17 @@ class YumexWindow(BaseWindow):
                         '\n'.join(error_msgs))
         self.reset_on_error()
 
+    def reset_on_cancel(self):
+        """Reset gui on user cancel"""
+        self.set_working(True)
+        self.infobar.hide()
+        self.set_working(False)
+
     def reset_on_error(self):
         """Reset gui on transaction errors."""
         self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
-        self.set_content_page(const.PAGE_QUEUE)
         self.set_working(False)
 
     @ExceptionHandler
