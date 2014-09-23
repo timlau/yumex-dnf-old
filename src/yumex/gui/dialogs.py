@@ -257,6 +257,7 @@ def show_information(window, msg, add_msg=None):
         buttons=Gtk.ButtonsType.OK, text=msg)
     if add_msg:
         dialog.format_secondary_text(add_msg)
-    dialog.set_transient_for(window)
+    if window:
+        dialog.set_transient_for(window)
     dialog.run()
     dialog.destroy()
