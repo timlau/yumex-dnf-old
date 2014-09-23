@@ -374,6 +374,7 @@ class YumexWindow(BaseWindow):
         # Setup search entry
         self.search_entry = self.ui.get_object('search')
         self.search_entry.connect('activate', self.on_search_changed)
+        self.search_entry.connect('icon-press', self.on_search_icon)
 
         # setup the package/queue/history views
         self.setup_main_content()
@@ -719,6 +720,14 @@ class YumexWindow(BaseWindow):
         elif self.active_page == const.PAGE_PACKAGES and self.current_filter:
             widget, flt = self.current_filter
             self.on_pkg_filter(widget, flt)
+
+    def on_search_icon(self, widget, icon_pos, event):
+        """Search entry callback."""
+        #print(icon_pos)
+        # clear icon pressed
+        if icon_pos == Gtk.EntryIconPosition.SECONDARY:
+            widget.set_text('')
+            widget.emit('activate')
 
     def on_search_changed(self, widget):
         """Search entry callback."""
