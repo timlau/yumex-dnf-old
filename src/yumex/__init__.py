@@ -413,6 +413,8 @@ class YumexWindow(BaseWindow):
         wid.connect('activate', self.on_docs)
         wid = self.ui.get_object('header_execute')
         wid.connect('clicked', self.on_apply_changes)
+        wid = self.ui.get_object('main_quit')
+        wid.connect('activate', self.on_quit)
 
         self.show_now()
 
@@ -461,6 +463,9 @@ class YumexWindow(BaseWindow):
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
             dialogs.show_information('%s is not an url' % url)
+
+    def on_quit(self, widget):
+        pass
 
     def on_about(self, widget):
         """ Main Menu: Help -> About """
