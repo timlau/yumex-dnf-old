@@ -161,6 +161,7 @@ RPM_ACTIONS = {
     'erase': _("Removing : %s"),
     'obsolete': _("Obsoleting : %s"),
     'downgrade': _("Downgrading : %s"),
+    'verify': _("Verifying : %s"),
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",

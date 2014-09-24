@@ -203,6 +203,10 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             self.frontend.infobar.show_progress(True)
             self.frontend.infobar.info(_('Applying changes to the system'))
             self.frontend.infobar.hide_sublabel()
+        elif event == 'verify':
+            self.frontend.infobar.show_progress(True)
+            self.frontend.infobar.info(_('Verify changes on the system'))
+            #self.frontend.infobar.hide_sublabel()
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)
