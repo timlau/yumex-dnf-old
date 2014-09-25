@@ -381,7 +381,6 @@ class YumexWindow(BaseWindow):
 
         # spinner
         self.spinner = self.ui.get_object('progress_spinner')
-        self.spinner.set_from_file(const.PIX_DIR + '/spinner.gif')
         self.info_spinner = self.ui.get_object('info_spinner')
         self.info_spinner.set_from_file(const.PIX_DIR + '/spinner-small.gif')
         self.spinner.hide()
