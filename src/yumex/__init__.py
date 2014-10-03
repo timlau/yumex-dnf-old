@@ -286,7 +286,7 @@ class YumexHeaderBar(Gtk.HeaderBar):
     # TODO: move to gui.widget
     def __init__(self, ui):
         Gtk.HeaderBar.__init__(self)
-        self.props.show_close_button = False
+        self.props.show_close_button = True
         self.ui = ui
         self.pack_start(self.ui.get_object('header_start'))
         self.pack_end(self.ui.get_object('header_end'))
