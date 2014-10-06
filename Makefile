@@ -103,7 +103,7 @@ test-builds:
 
 test-inst:
 	@$(MAKE) test-release
-	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf update ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 	
 transifex-setup:
 	tx init
