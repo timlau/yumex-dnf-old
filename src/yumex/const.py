@@ -166,3 +166,5 @@ RPM_ACTIONS = {
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
                        "header_search_options", "header_execute", "search"]
+
+FEDORA_REPOS = ['fedora','updates','updates-testing','rawhide']

@@ -290,6 +290,12 @@ class PackageInfo(PackageInfoWidget):
     def _get_name_for_url(self):
         return urllib.parse.quote_plus(self.current_package.name)
 
+    def _is_fedora_pkg(self):
+        if self.current_package.repository in const.FEDORA_REPOS:
+            return True
+        else:
+            return False
+
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
@@ -301,11 +307,12 @@ class PackageInfo(PackageInfoWidget):
         self.view.write(_("Links : "), "changelog-header", newline=True)
         self.view.write('  ', newline=False)
         url_hp = self.current_package.URL
-        self.view.add_url( url_hp, url_hp, newline=True)
-        self.view.write('  ', newline=False)
-        url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
-        self.view.add_url(url_fp, url_fp, newline=True)
-        self.base.set_working(False)
+        self.view.add_url(url_hp, url_hp, newline=True)
+        if self._is_fedora_pkg():
+            self.view.write('  ', newline=False)
+            url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
+            self.view.add_url(url_fp, url_fp, newline=True)
+            self.base.set_working(False)
 
     def _show_updateinfo(self):
         self.base.set_working(True)
@@ -315,11 +322,12 @@ class PackageInfo(PackageInfoWidget):
                 self._write_update_info(info)
         else:
             self.view.write(_("No Update information is available"))
-            self.view.write(_("\nFedora Updates :"), "changelog-header",
-                            newline=True)
-            url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
-                                            + "/updates"
-            self.view.add_url(url, url, newline=True)
+            if self._is_fedora_pkg():
+                self.view.write(_("\nFedora Updates :"), "changelog-header",
+                                newline=True)
+                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
+                                                + "/updates"
+                self.view.add_url(url, url, newline=True)
 
         self.base.set_working(False)
 
@@ -391,11 +399,12 @@ class PackageInfo(PackageInfoWidget):
                     break
         else:
             self.view.write(_("No Changelog information is available"))
-            self.view.write(_("\nOnline Changelog :"), "changelog-header",
-                            newline=True)
-            url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
-                                            + "/changelog"
-            self.view.add_url(url, url, newline=True)
+            if self._is_fedora_pkg():
+                self.view.write(_("\nOnline Changelog :"), "changelog-header",
+                                newline=True)
+                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
+                                                + "/changelog"
+                self.view.add_url(url, url, newline=True)
 
         self.base.set_working(False)
 
