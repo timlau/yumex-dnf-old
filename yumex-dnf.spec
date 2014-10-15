@@ -16,7 +16,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel
 
-Requires: python3-dnfdaemon-client >= 0.2.2
+Requires: python3-dnfdaemon >= 0.2.2
 Requires: python3-gobject >= 3.10
 Requires: python3-pyxdg
 Requires: python3-dbus
