@@ -1,5 +1,13 @@
 2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
 
+	* yumex-dnf.spec: bumped version to 4.0.9
+
+2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
+2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
+
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.9
 
 2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
