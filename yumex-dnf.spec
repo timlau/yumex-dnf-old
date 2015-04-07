@@ -66,7 +66,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/appdata/*.xml
 
 %changelog
-* Tue Apl 7 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9
+* Tue Apr 7 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9
 - bumped release to 4.0.9
 
 * Tue Oct 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.8
