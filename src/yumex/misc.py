@@ -183,7 +183,10 @@ class YumexConf(config.BaseConfig):
     hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
     refresh_interval = config.IntOption(12)
-    max_dnl_errors = config.IntOption(10)
+    max_dnl_errors = config.IntOption(100)
+    # headerbar is default if running gnome
+    hb_default = os.environ['GDMSESSION'] in ['gnome-shell']
+    headerbar = config.BoolOption(hb_default)
 
 
 class SessionConf(config.BaseConfig):

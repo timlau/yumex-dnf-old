@@ -298,6 +298,26 @@ class YumexHeaderBar(Gtk.HeaderBar):
             self.ui.get_object('menu_filters'))
 
 
+class YumexToolBar(Gtk.Box):
+    """Header bar for main window."""
+    # TODO: move to gui.widget
+    def __init__(self, ui):
+        Gtk.Box.__init__(self)
+        self.props.orientation = Gtk.Orientation.HORIZONTAL
+        self.set_margin_start(5)
+        self.set_margin_end(5)
+        self.ui = ui
+        self.pack_start(self.ui.get_object('header_start'), True, True, 0)
+        self.pack_end(self.ui.get_object('header_end'), False, False, 0)
+        self.ui.get_object('header_menu').set_popup(
+            self.ui.get_object('main_menu'))
+        self.ui.get_object('header_search_options').set_popup(
+            self.ui.get_object('search_menu'))
+        self.ui.get_object('header_filters').set_popup(
+            self.ui.get_object('menu_filters'))
+
+
+
 class YumexWindow(BaseWindow):
     """Main application window class."""
     def __init__(self, app, status):
@@ -316,13 +336,19 @@ class YumexWindow(BaseWindow):
         self._grps = None   # Group and Category cache
         self.active_page = None  # Active content page
 
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         # setup the main gui
-        self.hb = YumexHeaderBar(self.ui)
-        self.set_titlebar(self.hb)
-        self.hb.show()
+        if CONFIG.conf.headerbar:
+            self.hb = YumexHeaderBar(self.ui)
+            self.set_titlebar(self.hb)
+            self.hb.show()
+        else:
+            toolbar = YumexToolBar(self.ui)
+            toolbar.show()
+            vbox.pack_start(toolbar, False, False, 0)
+
 
         # Setup the main window ui
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(vbox)
         # infobar revealer
         infobar = self.ui.get_object('infobar')

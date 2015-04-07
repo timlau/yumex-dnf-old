@@ -53,7 +53,8 @@ class Preferences:
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
         self._settings = ['autostart', 'clean_unused',
-                          'newest_only', 'autocheck_updates', 'hide_on_close']
+                          'newest_only', 'autocheck_updates', 'hide_on_close',
+                          'headerbar']
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
