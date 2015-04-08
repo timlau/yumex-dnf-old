@@ -101,7 +101,7 @@ class SelectionView(Gtk.TreeView):
         return column
 
     def create_selection_colunm(self, attr, click_handler=None,
-                                popup_handler=None, tooltip=None):
+                                popup_handler=None, tooltip=None, icon=None):
         '''Create an selection column, there get data via property function
         and a key attr
 
@@ -128,6 +128,9 @@ class SelectionView(Gtk.TreeView):
             while not isinstance(widget, Gtk.Button):
                 widget = widget.get_parent()
             widget.connect('button-release-event', popup_handler)
+            if icon:
+                image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
+                widget.set_image(image)
             if tooltip:
                 widget.set_tooltip_text(tooltip)
 
@@ -250,7 +253,8 @@ class PackageView(SelectionView):
             self.create_selection_colunm('selected',
                 click_handler=self.on_section_header_clicked,
                 popup_handler=self.on_section_header_button,
-                tooltip=_("Click to select/deselect all (updates only)"))
+                tooltip=_("Click to select/deselect all (updates only)"),
+                icon='list-add')
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('icon-name', 'list-add-symbolic')
