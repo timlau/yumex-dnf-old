@@ -607,7 +607,7 @@ window when the close button is clicked</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Main options</property>
+        <property name="tooltip_text" translatable="yes">Main menu</property>
         <property name="margin_right">6</property>
         <property name="direction">up</property>
         <child>
@@ -651,7 +651,7 @@ window when the close button is clicked</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Package filter</property>
+        <property name="tooltip_text" translatable="yes">Select the package types to show</property>
         <child>
           <object class="GtkImage" id="image_filters">
             <property name="visible">True</property>
