@@ -507,12 +507,14 @@ class YumexWindow(BaseWindow):
                 self.search_fields.remove(field)
         print(self.search_fields)
 
-    def on_status_icon_clicked(self):
+    def on_status_icon_clicked(self, force=False):
         """Left click on statusicon callback.
 
         hide/show the window, based on current state
         """
-        if self.get_property('visible'):
+        if force:
+            self.present()
+        elif self.get_property('visible'):
             self.hide()
         else:
             self.show()

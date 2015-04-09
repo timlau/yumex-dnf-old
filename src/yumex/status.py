@@ -118,6 +118,8 @@ class StatusIcon:
         logger.debug("Signal : %s " % signal)
         if signal == 'IconClickSignal':
             self.app.win.on_status_icon_clicked()
+        elif signal == 'ShowSignal':
+            self.app.win.on_status_icon_clicked(force=True)
         elif signal == 'QuitSignal':
             self.app.on_quit()
         elif signal == 'CheckUpdateSignal':

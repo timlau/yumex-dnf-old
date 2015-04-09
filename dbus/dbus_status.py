@@ -445,7 +445,7 @@ class YumexStatusDaemon(dbus.service.Object):
                          sender_keyword='sender')
     def ShowYumex(self, sender=None):
         if self.yumex_running:
-            self.IconClickSignal()
+            self.ShowSignal()
             return True
         else:  # Yumex is already running
             return False
@@ -473,6 +473,12 @@ class YumexStatusDaemon(dbus.service.Object):
 
     @dbus.service.signal(DAEMON_INTERFACE)
     def IconClickSignal(self):
+        """
+        """
+        pass
+
+    @dbus.service.signal(DAEMON_INTERFACE)
+    def ShowSignal(self):
         """
         """
         pass
