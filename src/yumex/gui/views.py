@@ -113,14 +113,13 @@ class SelectionView(Gtk.TreeView):
         column1 = Gtk.TreeViewColumn("", cell1)
         column1.set_cell_data_func(cell1, self.get_data_bool, attr)
         column1.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
-        #column1.set_fixed_width(25)
         column1.set_sort_column_id(-1)
         self.append_column(column1)
         cell1.connect("toggled", self.on_toggled)
         column1.set_clickable(True)
         if click_handler:
             column1.connect('clicked', click_handler)
-        label = Gtk.Label(label="")
+        label = Gtk.Label(label="+")
         label.show()
         column1.set_widget(label)
         if popup_handler:
@@ -131,7 +130,6 @@ class SelectionView(Gtk.TreeView):
             if icon:
                 image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
                 widget.set_image(image)
-                widget.set_focus_on_click(False)
             if tooltip:
                 widget.set_tooltip_text(tooltip)
 
@@ -254,8 +252,7 @@ class PackageView(SelectionView):
             self.create_selection_colunm('selected',
                 click_handler=self.on_section_header_clicked,
                 popup_handler=self.on_section_header_button,
-                tooltip=_("Click to select/deselect all"),
-                icon=Gtk.STOCK_ADD)
+                tooltip=_("Click to select/deselect all"))
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # new
         cell2.set_property('icon-name', 'list-add-symbolic')
