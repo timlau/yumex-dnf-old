@@ -317,7 +317,6 @@ class YumexToolBar(Gtk.Box):
             self.ui.get_object('menu_filters'))
 
 
-
 class YumexWindow(BaseWindow):
     """Main application window class."""
     def __init__(self, app, status):
@@ -346,7 +345,6 @@ class YumexWindow(BaseWindow):
             toolbar = YumexToolBar(self.ui)
             toolbar.show()
             vbox.pack_start(toolbar, False, False, 0)
-
 
         # Setup the main window ui
         self.add(vbox)
@@ -1166,15 +1164,18 @@ class YumexApplication(Gtk.Application):
         else:
             if dialogs.yes_no_dialog(None, 'Yum Extender is already running',
                                         'Do you want to kill it'):
-                self.kill_yumex()
+                if not self.status.GetYumexIsWorking():
+                    self.status.QuitYumex()
+                    subprocess.call(
+                    '/usr/bin/dbus-send --system --print-reply '
+                    '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
+                    shell=True)
+                else:  # not safe to kill yumex, when it is working
+                    self.status.ShowYumex()
+            else:
+                self.status.ShowYumex()
             sys.exit(1)
         return 0
-
-    def kill_yumex(self):
-        if not self.status.GetYumexIsRunning():
-            self.status.QuitYumex()
-        else:
-            self.status.ShowYumex()
 
     def do_shutdown(self):
         """Gtk.Application shutdown callback.

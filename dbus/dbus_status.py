@@ -453,14 +453,12 @@ class YumexStatusDaemon(dbus.service.Object):
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
                          in_signature='',
-                         out_signature='b',
+                         out_signature='',
                          sender_keyword='sender')
     def QuitYumex(self, sender=None):
         if self.yumex_running:
             self.QuitSignal()
-            return True
-        else:  # Yumex is already running
-            return False
+
 
 #=========================================================================
 # DBus signals
