@@ -419,7 +419,7 @@ class PackageInfo(PackageInfoWidget):
         self.base.set_working(False)
 
     def _show_requirements(self):
-        self.view.write("Requirements for " + str(self.current_package))
+        self.view.write(_("No requirement information is available"))
 
 
 def ask_for_gpg_import(window, values):
