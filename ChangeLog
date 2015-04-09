@@ -1,3 +1,36 @@
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.10
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py: Make yumex already
+	running better
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: fix detection of gnome
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
+	show yumex ui always if started again an working in the background
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py,
+	src/yumex/gui/dialogs.py, src/yumex/status.py: make better handling
+	of yumex is started twice
+
+2015-04-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: Add an icon to the selection column header
+
+
+2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* yumex-dnf.spec: bumped version to 4.0.9
