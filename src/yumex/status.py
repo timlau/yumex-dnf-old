@@ -214,3 +214,16 @@ class StatusIcon:
 
     def SetYumexIsRunning(self, state):
         return self.daemon.SetYumexIsRunning("(b)", state)
+
+    def GetYumexIsRunning(self):
+        return self.daemon.GetYumexIsRunning()
+
+    def GetYumexIsWorking(self):
+        return self.daemon.GetYumexIsWorking()
+
+    def ShowYumex(self):
+        return self.daemon.ShowYumex()
+
+    def QuitYumex(self):
+        return self.daemon.QuitYumex()
+

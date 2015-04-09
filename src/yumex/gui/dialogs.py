@@ -262,3 +262,17 @@ def show_information(window, msg, add_msg=None):
         dialog.set_transient_for(window)
     dialog.run()
     dialog.destroy()
+
+
+def yes_no_dialog(window, msg, add_msg=None):
+    dialog = Gtk.MessageDialog(
+        flags=0, message_type=Gtk.MessageType.INFO,
+        buttons=Gtk.ButtonsType.YES_NO, text=msg)
+    if add_msg:
+        dialog.format_secondary_text(add_msg)
+    if window:
+        dialog.set_transient_for(window)
+    rc = dialog.run()
+    dialog.destroy()
+    return(rc == Gtk.ResponseType.YES)
+

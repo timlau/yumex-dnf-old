@@ -1162,9 +1162,17 @@ class YumexApplication(Gtk.Application):
         if self.status.SetYumexIsRunning(True):
             self.do_activate()
         else:
-            dialogs.show_information(None, 'Yum Extender is already running')
+            if dialogs.yes_no_dialog(None, 'Yum Extender is already running',
+                                        'Do you want to kill it'):
+                self.kill_yumex()
             sys.exit(1)
         return 0
+
+    def kill_yumex(self):
+        if not self.status.GetYumexIsRunning():
+            self.status.QuitYumex()
+        else:
+            self.status.ShowYumex()
 
     def do_shutdown(self):
         """Gtk.Application shutdown callback.

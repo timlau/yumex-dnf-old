@@ -306,6 +306,7 @@ class YumexStatusDaemon(dbus.service.Object):
         self.started = False
         self.status_icon = None
         self.yumex_running = False
+        self.yumex_working = False
         # update checking
         self.update_timer_id = -1
         self.update_timestamp = UpdateTimestamp()
@@ -378,6 +379,7 @@ class YumexStatusDaemon(dbus.service.Object):
     def SetWorking(self, is_working, sender=None):
         if self.started:
             self.status_icon.set_is_working(is_working)
+            self.yumex_working = is_working
 
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
@@ -410,6 +412,52 @@ class YumexStatusDaemon(dbus.service.Object):
                     self.status_icon.run_yumex.hide()
                 else:
                     self.status_icon.run_yumex.show()
+            return True
+        else:  # Yumex is already running
+            return False
+
+    @Logger
+    @dbus.service.method(DAEMON_INTERFACE,
+                         in_signature='',
+                         out_signature='b',
+                         sender_keyword='sender')
+    def GetYumexIsRunning(self, sender=None):
+        if self.yumex_running:
+            return True
+        else:
+            return False
+
+    @Logger
+    @dbus.service.method(DAEMON_INTERFACE,
+                         in_signature='',
+                         out_signature='b',
+                         sender_keyword='sender')
+    def GetYumexIsWorking(self, sender=None):
+        if self.yumex_working:
+            return True
+        else:
+            return False
+
+    @Logger
+    @dbus.service.method(DAEMON_INTERFACE,
+                         in_signature='',
+                         out_signature='b',
+                         sender_keyword='sender')
+    def ShowYumex(self, sender=None):
+        if self.yumex_running:
+            self.IconClickSignal()
+            return True
+        else:  # Yumex is already running
+            return False
+
+    @Logger
+    @dbus.service.method(DAEMON_INTERFACE,
+                         in_signature='',
+                         out_signature='b',
+                         sender_keyword='sender')
+    def QuitYumex(self, sender=None):
+        if self.yumex_running:
+            self.QuitSignal()
             return True
         else:  # Yumex is already running
             return False
