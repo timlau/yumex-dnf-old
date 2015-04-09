@@ -323,6 +323,12 @@ class YumexWindow(BaseWindow):
         BaseWindow.__init__(self, app, status)
         self.set_default_size(1024, 700)
 
+        screen = Gdk.Screen.get_default()
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_path(const.DATA_DIR + '/gtk-style.css')
+        context = Gtk.StyleContext()
+        context.add_provider_for_screen(screen, css_provider,
+                                Gtk.STYLE_PROVIDER_PRIORITY_USER)
         # init vars
         self.last_search = None
         self.current_filter = None

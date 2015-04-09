@@ -31,7 +31,7 @@ setup(name="yumex-dnf",
       packages=['yumex','yumex.gui'],
       package_dir = {'': 'src'},
       scripts=['src/main.py'],
-      data_files=[('', ['src/yumex.ui'])],
+      data_files=[('', ['src/yumex.ui','src/gtk-style.css'])],
       cmdclass={
         'build_scripts': BuildScripts,
       })
