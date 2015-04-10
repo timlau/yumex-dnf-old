@@ -185,7 +185,10 @@ class YumexConf(config.BaseConfig):
     refresh_interval = config.IntOption(12)
     max_dnl_errors = config.IntOption(100)
     # headerbar is default if running gnome
-    hb_default = 'gnome' in os.environ['GDMSESSION']
+    if 'GDMSESSION' in os.environ:
+        hb_default = 'gnome' in os.environ['GDMSESSION']
+    else:
+        hb_default = False
     headerbar = config.BoolOption(hb_default)
 
 
