@@ -2,13 +2,13 @@
 
 Name:     %{appname}-dnf
 Version:  4.0.10
-Release:  2%{?dist}
+Release:  3%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
 License:  GPLv2+
 URL:      http://yumex.dk
-Source0:  https://github.com/timlau/yumex-dnf/archive/%{name}-%{version}.tar.gz
+Source0:  https://github.com/timlau/yumex-dnf/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 BuildRequires: desktop-file-utils
@@ -66,39 +66,42 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/appdata/*.xml
 
 %changelog
-* Thu Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10
+* Thu Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10-3
+- fixed changelog versioning
+
+* Thu Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10-1
 - bumped release to 4.0.10
 
-* Tue Apr 7 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9
+* Tue Apr 7 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9-1
 - bumped release to 4.0.9
 
-* Tue Oct 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.8
+* Tue Oct 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.8-1
 - bumped release to 4.0.8
 - require python3-dnfdaemon >= 0.3.3
 
-* Sun Sep 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.7
+* Sun Sep 21 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.7-1
 - bumped release to 4.0.7
 
-* Tue Sep 02 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.6
+* Tue Sep 02 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.6-1
 - bumped release to 4.0.6
 
-* Fri Jun 06 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.5
+* Fri Jun 06 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.5-1
 - bumped release to 4.0.5
 - Requires: python3-dnfdaemon-client >= 0.2.2
 
-* Fri May 09 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.4
+* Fri May 09 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.4-1
 - bumped release to 4.0.4
 - Requires: python3-dnfdaemon-client >= 0.2.0
 
-* Sat May 03 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.3
+* Sat May 03 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.3-1
 - bumped release to 4.0.3
 - Requires: python3-dnfdaemon >= 0.1.5
 
-* Tue Apr 01 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.2
+* Tue Apr 01 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.2-1
 - bumped release to 4.0.2
 - Requires: python3-dnfdaemon >= 0.1.4
 
-* Sat Mar 29 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.1
+* Sat Mar 29 2014 Tim Lauridsen <timlau@fedoraproject.org> 4.0.1-1
 - bumped release to 4.0.1
 
 * Sun Sep 15 2013 Tim Lauridsen <timlau@fedoraproject.org> 3.99.1-1
