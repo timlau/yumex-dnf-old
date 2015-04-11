@@ -21,8 +21,7 @@ from __future__ import absolute_import
 
 import time
 
-from gi.rFree Software
-#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.epository import Gtk
+from gi.repository import Gtk
 from gi.repository import Gdk
 
 import configparser
