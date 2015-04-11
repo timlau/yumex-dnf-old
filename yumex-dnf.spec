@@ -2,7 +2,7 @@
 
 Name:     %{appname}-dnf
 Version:  4.0.10
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -31,11 +31,11 @@ Graphical package tool for maintain packages on the system
 
 
 %build
-make
+make %{?_smp_mflags}
 
 
 %install
-make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT DATADIR=%{_datadir}
+make install PYTHON=%{__python3} DESTDIR=%{buildroot} DATADIR=%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}-local.desktop
 
@@ -66,7 +66,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/appdata/*.xml
 
 %changelog
-* Tue Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9
+* Thu Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10
 - bumped release to 4.0.10
 
 * Tue Apr 7 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.9
