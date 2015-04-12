@@ -69,7 +69,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 * Sun Apr 12 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.1.0-1
 - bumped release to 4.1.0
 
-* Sat Apr 1 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10-3
+* Sat Apr 11 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10-3
 - fixed changelog versioning
 
 * Thu Apr 9 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.0.10-1
