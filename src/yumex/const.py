@@ -28,7 +28,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "4.0.10"
+VERSION = "4.1.0"
 
 
 # find the data dir for resources
