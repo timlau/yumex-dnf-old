@@ -1,3 +1,58 @@
+2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.0
+
+2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* yumex-dnf.spec: fix more fedora review issues
+
+2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: fix cut & paste error
+
+2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* README.md, yumex-dnf.spec: fix review issues
+
+2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* COPYING, dbus/dbus_status.py, src/main.py, src/yumex/__init__.py,
+	src/yumex/backend.py, src/yumex/config.py, src/yumex/const.py,
+	src/yumex/dnf_backend.py, src/yumex/gui/__init__.py,
+	src/yumex/gui/dialogs.py, src/yumex/gui/views.py,
+	src/yumex/gui/widgets.py, src/yumex/misc.py, src/yumex/status.py: 
+	update fsf address
+
+2015-04-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: check is GDMSESSION exits (Fixes #12)
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: better requirement message
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: make some tool tips better
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/gtk-style.css: fix gtk css stylling
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: Use at text label, not an image in
+	selection column
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py, src/gtk-style.css, src/yumex/__init__.py,
+	src/yumex/gui/views.py: add custom gtk styling
+
+2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.10
