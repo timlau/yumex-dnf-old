@@ -7,8 +7,4 @@ source_file = po/yumex-dnf.pot
 source_lang = en
 type = PO
 
-[yumex.master]
-file_filter = translations/yumex.master/<lang>.po
-source_lang = en
-type = PO
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-21 09:20+0200\n"
-"PO-Revision-Date: 2014-06-21 07:20+0000\n"
+"POT-Creation-Date: 2015-04-13 09:00+0200\n"
+"PO-Revision-Date: 2015-04-13 07:00+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/yumex/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -17,336 +17,368 @@ msgstr ""
 "Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/yumex/const.py:122
+#: ../src/yumex/const.py:124
 msgid "Getting installed packages"
 msgstr ""
 
-#: ../src/yumex/const.py:123
+#: ../src/yumex/const.py:125
 msgid "Getting available packages"
 msgstr ""
 
-#: ../src/yumex/const.py:124
+#: ../src/yumex/const.py:126
 msgid "Getting available updates"
 msgstr ""
 
-#: ../src/yumex/const.py:125
+#: ../src/yumex/const.py:127
 msgid "Getting all packages"
 msgstr ""
 
-#: ../src/yumex/const.py:138
+#: ../src/yumex/const.py:140
 msgid "Updated packages"
 msgstr ""
 
-#: ../src/yumex/const.py:139
+#: ../src/yumex/const.py:141
 msgid "Downgraded packages"
 msgstr ""
 
-#: ../src/yumex/const.py:140
+#: ../src/yumex/const.py:142
 msgid "Obsoleting packages"
 msgstr ""
 
-#: ../src/yumex/const.py:141
+#: ../src/yumex/const.py:143
 msgid "Obsoleted packages"
 msgstr ""
 
-#: ../src/yumex/const.py:142
+#: ../src/yumex/const.py:144
 msgid "Erased packages"
 msgstr ""
 
-#: ../src/yumex/const.py:143 ../src/yumex/const.py:144
+#: ../src/yumex/const.py:145 ../src/yumex/const.py:146
 msgid "Installed packages"
 msgstr ""
 
-#: ../src/yumex/const.py:145
+#: ../src/yumex/const.py:147
 msgid "Installed for dependencies"
 msgstr ""
 
-#: ../src/yumex/const.py:146
+#: ../src/yumex/const.py:148
 msgid "Reinstalled packages"
 msgstr ""
 
-#: ../src/yumex/const.py:150
+#: ../src/yumex/const.py:152
 msgid "Installing"
 msgstr ""
 
-#: ../src/yumex/const.py:151
+#: ../src/yumex/const.py:153
 msgid "Updating"
 msgstr ""
 
-#: ../src/yumex/const.py:152
+#: ../src/yumex/const.py:154
 msgid "Removing"
 msgstr ""
 
-#: ../src/yumex/const.py:153
+#: ../src/yumex/const.py:155
 msgid "Downgrading"
 msgstr ""
 
-#: ../src/yumex/const.py:154
+#: ../src/yumex/const.py:156
 msgid "Replacing"
-msgstr ""
-
-#: ../src/yumex/const.py:158
-#, python-format
-msgid "Updating : %s"
-msgstr ""
-
-#: ../src/yumex/const.py:159
-#, python-format
-msgid "Installing : %s"
 msgstr ""
 
 #: ../src/yumex/const.py:160
 #, python-format
-msgid "Cleanup : %s"
+msgid "Updating : %s"
 msgstr ""
 
 #: ../src/yumex/const.py:161
 #, python-format
-msgid "Removing : %s"
+msgid "Installing : %s"
 msgstr ""
 
 #: ../src/yumex/const.py:162
-msgid "Obsoleting :"
+#, python-format
+msgid "Cleanup : %s"
 msgstr ""
 
-#: ../src/yumex/__init__.py:131
+#: ../src/yumex/const.py:163
+#, python-format
+msgid "Removing : %s"
+msgstr ""
+
+#: ../src/yumex/const.py:164
+#, python-format
+msgid "Obsoleting : %s"
+msgstr ""
+
+#: ../src/yumex/const.py:165
+#, python-format
+msgid "Downgrading : %s"
+msgstr ""
+
+#: ../src/yumex/const.py:166
+#, python-format
+msgid "Verifying : %s"
+msgstr ""
+
+#: ../src/yumex/__init__.py:132
 msgid "Refreshing Repository Metadata"
 msgstr ""
 
-#: ../src/yumex/__init__.py:138
+#: ../src/yumex/__init__.py:139
 msgid "Could not refresh the DNF cache (root)"
 msgstr ""
 
-#: ../src/yumex/__init__.py:143
+#: ../src/yumex/__init__.py:144
 msgid ""
 "Dnf root backend was not authorized\n"
 " Yum Extender will exit"
 msgstr ""
 
-#: ../src/yumex/__init__.py:148
+#: ../src/yumex/__init__.py:149
 msgid ""
 "Dnf  is locked by another process \n"
 "\n"
 "Yum Extender will exit"
 msgstr ""
 
-#: ../src/yumex/__init__.py:244
+#: ../src/yumex/__init__.py:249
 #, python-format
 msgid "Installing package : %s"
 msgstr ""
 
-#: ../src/yumex/__init__.py:249
+#: ../src/yumex/__init__.py:254
 #, python-format
 msgid "Removing package : %s"
 msgstr ""
 
-#: ../src/yumex/__init__.py:253 ../src/yumex/__init__.py:921
+#: ../src/yumex/__init__.py:258 ../src/yumex/__init__.py:979
 msgid "Searching for dependencies"
 msgstr ""
 
-#: ../src/yumex/__init__.py:255 ../src/yumex/__init__.py:923
+#: ../src/yumex/__init__.py:260 ../src/yumex/__init__.py:981
 msgid "Dependencies resolved"
 msgstr ""
 
 #. Ok pressed
-#: ../src/yumex/__init__.py:263 ../src/yumex/__init__.py:929
-#: ../src/yumex/dnf_backend.py:200
+#: ../src/yumex/__init__.py:268 ../src/yumex/__init__.py:987
+#: ../src/yumex/dnf_backend.py:206
 msgid "Applying changes to the system"
 msgstr ""
 
-#: ../src/yumex/__init__.py:270
+#: ../src/yumex/__init__.py:275
 msgid "Changes was successfully applied to the system"
 msgstr ""
 
-#: ../src/yumex/__init__.py:273 ../src/yumex/__init__.py:956
-#: ../src/yumex/__init__.py:960
+#: ../src/yumex/__init__.py:278 ../src/yumex/__init__.py:1017
+#: ../src/yumex/__init__.py:1021
 msgid "Error(s) in search for dependencies"
 msgstr ""
 
-#: ../src/yumex/__init__.py:687
+#: ../src/yumex/__init__.py:734
 msgid "Adding packages to view"
 msgstr ""
 
-#: ../src/yumex/__init__.py:879
+#: ../src/yumex/__init__.py:934
 msgid "No pending actions in queue"
 msgstr ""
 
-#: ../src/yumex/__init__.py:884
+#: ../src/yumex/__init__.py:942
 msgid "Preparing system for applying changes"
 msgstr ""
 
-#: ../src/yumex/__init__.py:950
+#: ../src/yumex/__init__.py:1008
 msgid "Downloading error(s)\n"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:185
+#: ../src/yumex/dnf_backend.py:191
 msgid "Downloading packages"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:191
+#: ../src/yumex/dnf_backend.py:197
 msgid "Checking packages signatures"
 msgstr ""
 
-#: ../src/yumex/dnf_backend.py:236
+#: ../src/yumex/dnf_backend.py:210
+msgid "Verify changes on the system"
+msgstr ""
+
+#: ../src/yumex/dnf_backend.py:246
 #, python-format
 msgid "Downloading %d files (%sb)...."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:248
+#: ../src/yumex/gui/views.py:252
 msgid "Click to install all/remove all"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:253
-msgid "Click to select/deselect all (updates only)"
+#: ../src/yumex/gui/views.py:257
+msgid "Click to select/deselect all"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:265
+#: ../src/yumex/gui/views.py:269
 msgid "Package"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:266
+#: ../src/yumex/gui/views.py:270
 msgid "Ver."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:268
+#: ../src/yumex/gui/views.py:272
 msgid "Arch."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:270
+#: ../src/yumex/gui/views.py:274
 msgid "click to filter archs"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:271 ../src/yumex/gui/views.py:688
-#: ../src/yumex.ui.h:60
+#: ../src/yumex/gui/views.py:275 ../src/yumex/gui/views.py:692
+#: ../src/yumex.ui.h:61
 msgid "Summary"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:272
+#: ../src/yumex/gui/views.py:276
 msgid "Repo."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:273
+#: ../src/yumex/gui/views.py:277
 msgid "Size."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:683 ../src/yumex.ui.h:29
+#: ../src/yumex/gui/views.py:687 ../src/yumex.ui.h:30
 msgid "Packages"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:811
+#: ../src/yumex/gui/views.py:815
 #, python-format
 msgid "<b>Downgrade to</b> %s "
 msgstr ""
 
-#: ../src/yumex/gui/views.py:835
+#: ../src/yumex/gui/views.py:839
 msgid "History (Date/Time)"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:903
+#: ../src/yumex/gui/views.py:907
 msgid "History Packages"
 msgstr ""
 
 #. Setup reponame & repofile column's
-#: ../src/yumex/gui/views.py:1195 ../src/yumex/gui/views.py:1242
-#: ../src/yumex/gui/dialogs.py:206
+#: ../src/yumex/gui/views.py:1199 ../src/yumex/gui/views.py:1246
+#: ../src/yumex/gui/dialogs.py:209
 msgid "Repository"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:1195
+#: ../src/yumex/gui/views.py:1199
 msgid "Filename"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:1226
+#: ../src/yumex/gui/views.py:1230
 msgid ""
 "Click here to switch between\n"
 " none/all/default selected"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:1243 ../src/yumex/gui/dialogs.py:203
-#: ../src/yumex.ui.h:59
+#: ../src/yumex/gui/views.py:1247 ../src/yumex/gui/dialogs.py:206
+#: ../src/yumex.ui.h:60
 msgid "Name"
 msgstr ""
 
-#: ../src/yumex/gui/dialogs.py:204
+#: ../src/yumex/gui/dialogs.py:207
 msgid "Arch"
 msgstr ""
 
-#: ../src/yumex/gui/dialogs.py:205
+#: ../src/yumex/gui/dialogs.py:208
 msgid "Ver"
 msgstr ""
 
-#: ../src/yumex/gui/dialogs.py:207
+#: ../src/yumex/gui/dialogs.py:210
 msgid "Size"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:110
+#: ../src/yumex/gui/widgets.py:112
 msgid "Getting Package metadata"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:287
+#. PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
+#: ../src/yumex/gui/widgets.py:170
+msgid "Package Description"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:174
+msgid "Package update information"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:177
+msgid "Package Changelog"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:180
+msgid "Package Filelist"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:183
+msgid "Package Requirements"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:304
 #, python-format
 msgid ""
 "Tags : %s\n"
 " "
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:292
+#: ../src/yumex/gui/widgets.py:309
 msgid "Links : "
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:295
-msgid "Project Homepage "
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:298
-msgid "Fedora Packages"
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:308
+#: ../src/yumex/gui/widgets.py:326
 msgid "No Update information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:309
+#: ../src/yumex/gui/widgets.py:328
 msgid ""
 "\n"
 "Fedora Updates :"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:319
+#: ../src/yumex/gui/widgets.py:338
 msgid "Release"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:320
+#: ../src/yumex/gui/widgets.py:339
 msgid "Type"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:321
+#: ../src/yumex/gui/widgets.py:340
 msgid "Status"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:322
+#: ../src/yumex/gui/widgets.py:341
 msgid "Issued"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:361 ../src/yumex.ui.h:61
+#: ../src/yumex/gui/widgets.py:380 ../src/yumex.ui.h:62
 msgid "Description"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:384
+#: ../src/yumex/gui/widgets.py:403
 msgid "No Changelog information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:385
+#: ../src/yumex/gui/widgets.py:405
 msgid ""
 "\n"
 "Online Changelog :"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:400
+#: ../src/yumex/gui/widgets.py:420
 msgid "No Filelist information is available"
 msgstr ""
 
-#: ../src/yumex/gui/widgets.py:410
+#: ../src/yumex/gui/widgets.py:424
+msgid "No requirement information is available"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:430
 #, python-format
 msgid ""
 " Do you want to import this GPG Key\n"
@@ -357,31 +389,31 @@ msgid ""
 " From       : %s"
 msgstr ""
 
-#: ../dbus/dbus_status.py:180 ../src/yumex.ui.h:47
+#: ../dbus/dbus_status.py:182 ../src/yumex.ui.h:48
 msgid "Quit"
 msgstr ""
 
-#: ../dbus/dbus_status.py:181
+#: ../dbus/dbus_status.py:183
 msgid "Search for Updates"
 msgstr ""
 
-#: ../dbus/dbus_status.py:182
+#: ../dbus/dbus_status.py:184
 msgid "Start Yum Extender"
 msgstr ""
 
-#: ../dbus/dbus_status.py:217
+#: ../dbus/dbus_status.py:219
 msgid "Yum Extender"
 msgstr ""
 
-#: ../dbus/dbus_status.py:220
+#: ../dbus/dbus_status.py:222
 msgid "Yum Extender: Error"
 msgstr ""
 
-#: ../dbus/dbus_status.py:223
+#: ../dbus/dbus_status.py:225
 msgid "Yum Extender: No Updates"
 msgstr ""
 
-#: ../dbus/dbus_status.py:227
+#: ../dbus/dbus_status.py:229
 #, python-format
 msgid "Yum Extender: %s Updates available"
 msgstr ""
@@ -510,177 +542,181 @@ msgid "Cache expire interval (hours)"
 msgstr ""
 
 #: ../src/yumex.ui.h:15
-msgid "Settings"
+msgid "Show toolbar in window headerbar"
 msgstr ""
 
 #: ../src/yumex.ui.h:16
-msgid "Color for installed packages"
+msgid "Settings"
 msgstr ""
 
 #: ../src/yumex.ui.h:17
-msgid "Color for available updates"
+msgid "Color for installed packages"
 msgstr ""
 
 #: ../src/yumex.ui.h:18
-msgid "Color for available packages"
+msgid "Color for available updates"
 msgstr ""
 
 #: ../src/yumex.ui.h:19
-msgid "Color for obsoleted packages"
+msgid "Color for available packages"
 msgstr ""
 
 #: ../src/yumex.ui.h:20
-msgid "Color for available downgrades"
+msgid "Color for obsoleted packages"
 msgstr ""
 
 #: ../src/yumex.ui.h:21
-msgid "Advanced"
+msgid "Color for available downgrades"
 msgstr ""
 
 #: ../src/yumex.ui.h:22
-msgid "Repositories"
+msgid "Advanced"
 msgstr ""
 
 #: ../src/yumex.ui.h:23
-msgid "Main options"
+msgid "Repositories"
 msgstr ""
 
 #: ../src/yumex.ui.h:24
-msgid "Apply pending changes"
+msgid "Main menu"
 msgstr ""
 
 #: ../src/yumex.ui.h:25
-msgid "Package filter"
+msgid "Apply pending changes"
 msgstr ""
 
 #: ../src/yumex.ui.h:26
-msgid "Search options"
+msgid "Select the package types to show"
 msgstr ""
 
 #: ../src/yumex.ui.h:27
-msgid "label"
+msgid "Search options"
 msgstr ""
 
 #: ../src/yumex.ui.h:28
+msgid "label"
+msgstr ""
+
+#: ../src/yumex.ui.h:29
 msgid "Show packages"
 msgstr ""
 
-#: ../src/yumex.ui.h:30
+#: ../src/yumex.ui.h:31
 msgid "Show group & categories"
 msgstr ""
 
-#: ../src/yumex.ui.h:31
+#: ../src/yumex.ui.h:32
 msgid "Groups"
 msgstr ""
 
-#: ../src/yumex.ui.h:32
+#: ../src/yumex.ui.h:33
 msgid "Show history of changes"
 msgstr ""
 
-#: ../src/yumex.ui.h:33
+#: ../src/yumex.ui.h:34
 msgid "History"
 msgstr ""
 
-#: ../src/yumex.ui.h:34
+#: ../src/yumex.ui.h:35
 msgid "Show pending changes"
 msgstr ""
 
-#: ../src/yumex.ui.h:35
+#: ../src/yumex.ui.h:36
 msgid "Pending Actions"
 msgstr ""
 
-#: ../src/yumex.ui.h:36
+#: ../src/yumex.ui.h:37
 msgid "Edit Preferences"
 msgstr ""
 
-#: ../src/yumex.ui.h:37
+#: ../src/yumex.ui.h:38
 msgid "Options"
 msgstr ""
 
-#: ../src/yumex.ui.h:38
+#: ../src/yumex.ui.h:39
 msgid "Show only newest version of packages"
 msgstr ""
 
-#: ../src/yumex.ui.h:39
+#: ../src/yumex.ui.h:40
 msgid "Newest Only"
 msgstr ""
 
-#: ../src/yumex.ui.h:40
+#: ../src/yumex.ui.h:41
 msgid "Uninstall unused requeriments, when removing a package"
 msgstr ""
 
-#: ../src/yumex.ui.h:41
+#: ../src/yumex.ui.h:42
 msgid "Erase Unused Requirements"
 msgstr ""
 
-#: ../src/yumex.ui.h:42
+#: ../src/yumex.ui.h:43
 msgid "Help"
 msgstr ""
 
-#: ../src/yumex.ui.h:43
+#: ../src/yumex.ui.h:44
 msgid "About Yum Extender"
 msgstr ""
 
-#: ../src/yumex.ui.h:44
+#: ../src/yumex.ui.h:45
 msgid "About"
 msgstr ""
 
-#: ../src/yumex.ui.h:45
+#: ../src/yumex.ui.h:46
 msgid "Documentation (online)"
 msgstr ""
 
-#: ../src/yumex.ui.h:46
+#: ../src/yumex.ui.h:47
 msgid "Quit Yum Extender"
 msgstr ""
 
-#: ../src/yumex.ui.h:48
+#: ../src/yumex.ui.h:49
 msgid "Updates"
 msgstr ""
 
-#: ../src/yumex.ui.h:49
+#: ../src/yumex.ui.h:50
 msgid "Installed"
 msgstr ""
 
-#: ../src/yumex.ui.h:50
+#: ../src/yumex.ui.h:51
 msgid "Available"
 msgstr ""
 
-#: ../src/yumex.ui.h:51
+#: ../src/yumex.ui.h:52
 msgid "All"
 msgstr ""
 
-#: ../src/yumex.ui.h:52
+#: ../src/yumex.ui.h:53
 msgid "Delete Selected"
 msgstr ""
 
-#: ../src/yumex.ui.h:53
+#: ../src/yumex.ui.h:54
 msgid "package name start with <keyword>"
 msgstr ""
 
-#: ../src/yumex.ui.h:54
+#: ../src/yumex.ui.h:55
 msgid "Prefix"
 msgstr ""
 
-#: ../src/yumex.ui.h:55
+#: ../src/yumex.ui.h:56
 msgid "keyword in package name"
 msgstr ""
 
-#: ../src/yumex.ui.h:56
+#: ../src/yumex.ui.h:57
 msgid "Keyword"
 msgstr ""
 
-#: ../src/yumex.ui.h:57
+#: ../src/yumex.ui.h:58
 msgid "keywords in selected package attributes"
 msgstr ""
 
-#: ../src/yumex.ui.h:58
+#: ../src/yumex.ui.h:59
 msgid "Fields"
 msgstr ""
 
-#: ../src/yumex.ui.h:62
+#: ../src/yumex.ui.h:63
 msgid "Package actions to perform"
 msgstr ""
 
-#: ../src/yumex.ui.h:63
+#: ../src/yumex.ui.h:64
 msgid "Size:"
 msgstr ""
