@@ -101,7 +101,7 @@ on the current installation state of the selected package.
 * An available package will be queued for installation.
 * An available update will be queued for update.
 
-The selection column header can be uses to perform actions on all shown packages in the view.
+The selection column header (**+**) can be uses to perform actions on all shown packages in the view.
 
 .. image::  img/updates-selection.png
 

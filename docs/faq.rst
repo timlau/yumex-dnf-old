@@ -14,6 +14,11 @@ What does the package colors mean
 
 This is the default colors, they can be configured in the preferences.
 
+How to select all updates
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Click on the **+** in the header column to select/deselect all updates
+
 
 Configuration
 =============
@@ -51,6 +56,9 @@ Yum Extender is already running
 Yum Extender crashed and when you start it again, you get a dialog with the **Yum Extender is already running** message
 
 .. image:: img/error-running.png
+
+If you press **No** then the already running Yum Extender window will be shown.
+If you press **Yes** then the already running Yum Extender window will closed, if possible.
 
 Yum Extender uses 2 background dbus services, a notification icon service (look for a shield icon in you notification area) and DnfSystem services that is doing
 all the dnf related actions. If the gui is crashing, it might not be able to do a clean shutdown of these services.
