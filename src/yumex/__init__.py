@@ -727,8 +727,8 @@ class YumexWindow(BaseWindow):
                     self.current_filter = (widget, data)
                     pkgs = self.backend.get_packages(data)
                     if data == 'updates':
-                        #obs_pkgs = self.backend.get_packages('obsoletes')
-                        #pkgs.extend(obs_pkgs)
+                        obs_pkgs = self.backend.get_packages('obsoletes')
+                        pkgs.extend(obs_pkgs)
                         self.status.SetUpdateCount(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.info(_('Adding packages to view'))
