@@ -247,8 +247,10 @@ class TransactionResult:
                            'update-deps', 'obsoletes']:
                     total_size += size
                 for r in replaces:
-                    fn = self._fullname(r)
-                    model.append(level2, [fn, "", "", "", ""])
+                    (n, e, v, r, a, repo_id) = str(r).split(',')
+                    model.append(level2, [_("<b>replaceing</b> {}").format(n),
+                                           a, "%s.%s" % (v, r), repo_id,
+                                          yumex.misc.format_number(size)])
         self.base.ui.get_object("result_size").set_text(
             yumex.misc.format_number(total_size))
         self.view.expand_all()
