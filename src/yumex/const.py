@@ -153,8 +153,7 @@ TRANSACTION_RESULT_TYPES = {
     'update': _('Updating'),
     'remove': _('Removing'),
     'downgrade': _('Downgrading'),
-    'reinstall': _('Replacing'),
-    'obsolete': _('Obsoleting')
+    'reinstall': _('Replacing')
 }
 
 RPM_ACTIONS = {
