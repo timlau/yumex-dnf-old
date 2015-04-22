@@ -387,17 +387,16 @@ class YumexWindow(BaseWindow):
         # setup search type option
         for key in ['prefix', 'key', 'fields']:
             wid = self.ui.get_object('search_%s' % key)
-            if key == self.search_type:
+            if key == CONFIG.conf.search_default:
                 wid.set_active(True)
             wid.connect('toggled', self.on_search_config, key)
 
-        self.search_fields = ['name', 'summary']
         self.set_fields_active(False)
 
         # setup search fields
         for field in ['name', 'summary', 'description']:
             wid = self.ui.get_object('field_%s' % field)
-            if field in self.search_fields:
+            if field in CONFIG.conf.search_fields:
                 wid.set_active(True)
             else:
                 wid.set_active(False)

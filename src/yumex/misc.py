@@ -191,6 +191,10 @@ class YumexConf(config.BaseConfig):
     else:
         hb_default = False
     headerbar = config.BoolOption(hb_default)
+    search_default = config.CaselessSelectionOption(
+                            default='prefix',
+                            allowed=('prefix', 'key', 'fields'))
+    search_fields = config.ListOption(['name', 'summary'])
 
 
 class SessionConf(config.BaseConfig):
