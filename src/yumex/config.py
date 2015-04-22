@@ -198,6 +198,35 @@ class ListOption(Option):
         return '\n '.join(value)
 
 
+class KeyListOption(Option):
+    """An option containing a list of strings."""
+
+    def __init__(self, default=None, parse_default=False):
+        if default is None:
+            default = []
+        super(KeyListOption, self).__init__(default, parse_default)
+
+    def parse(self, s):
+        """Convert a string from the config file to a workable list, parses
+        globdir: paths as foo.d-style dirs.
+
+        :param s: The string to be converted to a list. Commas and
+           whitespace are used as separators for the list
+        :return: *s* converted to a list
+        """
+        results = s.split(',')
+        return results
+
+    def tostring(self, value):
+        """Convert a list of to a string value.  This does the
+        opposite of the :func:`parse` method above.
+
+        :param value: a list of values
+        :return: string representation of input
+        """
+        return ','.join(value)
+
+
 class UrlOption(Option):
     """This option handles lists of URLs with validation of the URL
     scheme.
@@ -425,6 +454,15 @@ class SelectionOption(Option):
         if s not in self._allowed:
             raise ValueError('"%s" is not an allowed value' % s)
         return s
+
+    def tostring(self, value):
+        """Convert a list of to a string value.  This does the
+        opposite of the :func:`parse` method above.
+
+        :param value: a list of values
+        :return: string representation of input
+        """
+        return str(value)
 
 
 class CaselessSelectionOption(SelectionOption):

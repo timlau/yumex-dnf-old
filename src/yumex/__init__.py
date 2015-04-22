@@ -342,6 +342,7 @@ class YumexWindow(BaseWindow):
         self.active_archs = const.PLATFORM_ARCH
         self._grps = None   # Group and Category cache
         self.active_page = None  # Active content page
+        self.search_fields = CONFIG.conf.search_fields
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         # setup the main gui
@@ -391,7 +392,7 @@ class YumexWindow(BaseWindow):
                 wid.set_active(True)
             wid.connect('toggled', self.on_search_config, key)
 
-        self.set_fields_active(False)
+        self.set_fields_active(CONFIG.conf.search_default == 'fields')
 
         # setup search fields
         for field in ['name', 'summary', 'description']:
@@ -510,7 +511,7 @@ class YumexWindow(BaseWindow):
         else:
             if field in self.search_fields:
                 self.search_fields.remove(field)
-        print(self.search_fields)
+        CONFIG.conf.search_fields = self.search_fields
 
     def on_status_icon_clicked(self, force=False):
         """Left click on statusicon callback.
@@ -702,6 +703,7 @@ class YumexWindow(BaseWindow):
     def on_search_config(self, widget, data):
         """Search config callback."""
         self.search_type = data
+        CONFIG.conf.search_default = data
         if data == 'fields':
             self.set_fields_active(True)
         else:
@@ -1192,6 +1194,8 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_shutdown(self)
         if self.status:
             self.status.SetYumexIsRunning(False)
+            logger.info('Saving config on exit')
+            CONFIG.write()
             if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
                 self.status.Exit()
         # if windows object exist, unlock and exit backends

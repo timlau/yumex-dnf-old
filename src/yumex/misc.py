@@ -194,7 +194,7 @@ class YumexConf(config.BaseConfig):
     search_default = config.CaselessSelectionOption(
                             default='prefix',
                             allowed=('prefix', 'key', 'fields'))
-    search_fields = config.ListOption(['name', 'summary'])
+    search_fields = config.KeyListOption(['name', 'summary'])
 
 
 class SessionConf(config.BaseConfig):
