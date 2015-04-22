@@ -392,6 +392,7 @@ class YumexWindow(BaseWindow):
             if key == CONFIG.conf.search_default:
                 wid.set_active(True)
             wid.connect('toggled', self.on_search_config, key)
+        self.search_type = CONFIG.conf.search_default
 
         self.set_fields_active(CONFIG.conf.search_default == 'fields')
 
