@@ -307,6 +307,7 @@ class YumexToolBar(Gtk.Box):
         self.props.orientation = Gtk.Orientation.HORIZONTAL
         self.set_margin_start(5)
         self.set_margin_end(5)
+        self.set_margin_top(5)
         self.ui = ui
         self.pack_start(self.ui.get_object('header_start'), True, True, 0)
         self.pack_end(self.ui.get_object('header_end'), False, False, 0)
