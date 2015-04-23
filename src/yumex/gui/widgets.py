@@ -175,15 +175,15 @@ class PackageInfoWidget(Gtk.Box):
         tip = _("Package update information")
         vbox.add(self._get_radio_button(
             'software-update-available-symbolic', "updinfo", rb, tip))
-        tip = _("Package Changelog")
-        vbox.add(self._get_radio_button(
-            'bookmark-new-symbolic', "changelog", rb, tip))
-        tip = _("Package Filelist")
-        vbox.add(self._get_radio_button(
-            'drive-multidisk-symbolic', "files", rb, tip))
-        tip = _("Package Requirements")
-        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
-                                        tip))
+        #tip = _("Package Changelog")
+        #vbox.add(self._get_radio_button(
+            #'bookmark-new-symbolic', "changelog", rb, tip))
+        #tip = _("Package Filelist")
+        #vbox.add(self._get_radio_button(
+            #'drive-multidisk-symbolic', "files", rb, tip))
+        #tip = _("Package Requirements")
+        #vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
+                                        #tip))
         vbox.set_margin_right(5)
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
