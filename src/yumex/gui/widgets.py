@@ -178,9 +178,9 @@ class PackageInfoWidget(Gtk.Box):
         #tip = _("Package Changelog")
         #vbox.add(self._get_radio_button(
             #'bookmark-new-symbolic', "changelog", rb, tip))
-        #tip = _("Package Filelist")
-        #vbox.add(self._get_radio_button(
-            #'drive-multidisk-symbolic', "files", rb, tip))
+        tip = _("Package Filelist")
+        vbox.add(self._get_radio_button(
+            'drive-multidisk-symbolic', "files", rb, tip))
         #tip = _("Package Requirements")
         #vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
                                         #tip))
