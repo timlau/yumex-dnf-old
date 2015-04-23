@@ -324,7 +324,13 @@ class YumexWindow(BaseWindow):
     """Main application window class."""
     def __init__(self, app, status):
         BaseWindow.__init__(self, app, status)
-        self.set_default_size(1024, 700)
+        width = CONFIG.conf.win_width
+        height = CONFIG.conf.win_height
+        self.set_default_size(width, height)
+        if CONFIG.conf.win_maximized:
+            self.maximize()
+        self.connect('configure-event', self.on_window_changed)
+        self.connect('window-state-event', self.on_window_state)
 
         screen = Gdk.Screen.get_default()
         css_provider = Gtk.CssProvider()
@@ -333,6 +339,9 @@ class YumexWindow(BaseWindow):
         context.add_provider_for_screen(screen, css_provider,
                                 Gtk.STYLE_PROVIDER_PRIORITY_USER)
         # init vars
+        self.cur_height = 0         # current window height
+        self.cur_width = 0          # current windows width
+        self.cur_maximized = False
         self.last_search = None
         self.current_filter = None
         self._root_backend = None
@@ -467,6 +476,14 @@ class YumexWindow(BaseWindow):
         for field in ['name', 'summary', 'description']:
             wid = self.ui.get_object('field_%s' % field)
             wid.set_sensitive(state)
+
+    def on_window_state(self, widget, event):
+        # save window current maximized state
+        self.cur_maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
+
+    def on_window_changed(self, widget, data):
+        self.cur_height = data.height
+        self.cur_width = data.width
 
     def on_delete_event(self, *args):
         if CONFIG.conf.hide_on_close or self.is_working:
@@ -1079,6 +1096,8 @@ class YumexApplication(Gtk.Application):
             self, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
+        self.save_win_size = False  # save windows size flag
+        self.win = None             # main window
 
     def do_activate(self):
         """Gtk.Application activate callback."""
@@ -1094,6 +1113,7 @@ class YumexApplication(Gtk.Application):
             self.install.process_actions(
                 'remove', self.args.remove, self.args.yes)
         else:
+            self.save_win_size = True  # normal app mode
             self.win = YumexWindow(self, self.status)
             self.win.connect('delete_event', self.on_quit)
             self.win.show()
@@ -1196,13 +1216,21 @@ class YumexApplication(Gtk.Application):
         Gtk.Application.do_shutdown(self)
         if self.status:
             self.status.SetYumexIsRunning(False)
-            logger.info('Saving config on exit')
-            CONFIG.write()
             if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
                 self.status.Exit()
         # if windows object exist, unlock and exit backends
-        if hasattr(self, 'win'):
+        if self.win:
+            # don't save windows size in install mode
+            if self.save_win_size:
+                if self.win.cur_maximized:
+                    CONFIG.conf.win_maximized = True
+                else:
+                    CONFIG.conf.win_width = self.win.cur_width
+                    CONFIG.conf.win_height = self.win.cur_height
+                    CONFIG.conf.win_maximized = False
             self.win.release_root_backend(quit=True)
+        logger.info('Saving config on exit')
+        CONFIG.write()
 
     def doTextLoggerSetup(self, logroot='yumex',
                           logfmt='%(asctime)s: %(message)s',

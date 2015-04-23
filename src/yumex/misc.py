@@ -195,6 +195,9 @@ class YumexConf(config.BaseConfig):
                             default='prefix',
                             allowed=('prefix', 'key', 'fields'))
     search_fields = config.KeyListOption(['name', 'summary'])
+    win_height = config.IntOption(700)
+    win_width = config.IntOption(1024)
+    win_maximized = config.BoolOption(False)
 
 
 class SessionConf(config.BaseConfig):
