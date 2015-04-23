@@ -1063,7 +1063,8 @@ class TextViewBase(Gtk.TextView):
             self.url_tags.append(tag)
             self.url_list[text] = url
             self._styles[text] = tag
-        self.write(text, style=text, newline=newline)
+        self.write(text, style=text, newline=False)
+        self.write(' ', style=self.default_style, newline=newline)
 
     def add_style(self, tag, style):
         '''
