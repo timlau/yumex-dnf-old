@@ -43,7 +43,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.version = const.VERSION
         self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
         self.props.license_type = Gtk.License.GPL_2_0
-        self.props.copyright = '(C) 2014 Tim Lauridsen'
+        self.props.copyright = '(C) 2015 Tim Lauridsen'
         self.props.website = 'https://github.com/timlau/yumex-dnf'
         self.props.logo_icon_name = 'yumex-dnf'
 
@@ -56,7 +56,7 @@ class Preferences:
         self.dialog.set_transient_for(base)
         self._settings = ['autostart', 'clean_unused',
                           'newest_only', 'autocheck_updates', 'hide_on_close',
-                          'headerbar']
+                          'headerbar', 'auto_select_updates']
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)

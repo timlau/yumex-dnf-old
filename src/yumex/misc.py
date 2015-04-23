@@ -198,7 +198,7 @@ class YumexConf(config.BaseConfig):
     win_height = config.IntOption(700)
     win_width = config.IntOption(1024)
     win_maximized = config.BoolOption(False)
-
+    auto_select_updates = config.BoolOption(False)
 
 class SessionConf(config.BaseConfig):
     """ Yum Extender current session Setting"""

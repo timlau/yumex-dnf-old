@@ -432,6 +432,9 @@ class YumexWindow(BaseWindow):
         # setup default selections
         self.ui.get_object('filter_updates').set_active(True)
         # self.ui.get_object('search_keyword').set_active(True)
+        if CONFIG.conf.auto_select_updates:
+            self.package_view.on_section_header_clicked(None)
+
 
     def set_fields_active(self, state=True):
         """Set search fields active/inactive."""
