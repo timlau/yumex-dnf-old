@@ -27,6 +27,7 @@ import os.path
 import re
 import subprocess
 import sys
+import hawkey
 
 VERSION = "4.1.0"
 
@@ -170,3 +171,11 @@ WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
                        "header_search_options", "header_execute", "search"]
 
 FEDORA_REPOS = ['fedora','updates','updates-testing','rawhide']
+
+
+ADVISORY_TYPES = {
+hawkey.ADVISORY_BUGFIX: _('Bugfix'),
+hawkey.ADVISORY_UNKNOWN: _('Unknown'),
+hawkey.ADVISORY_SECURITY: _('Security'),
+hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
+}

@@ -28,6 +28,7 @@ from gi.repository import Gio
 from yumex.misc import _
 
 import datetime
+import hawkey
 import logging
 import re
 import subprocess
@@ -320,8 +321,14 @@ class PackageInfo(PackageInfoWidget):
         self.base.set_working(True)
         updinfo = self.current_package.updateinfo
         if updinfo:
+            updinfo.reverse()
+            cnt = 0
             for info in updinfo:
                 self._write_update_info(info)
+                cnt += 1
+                # only show max 3 advisories
+                if cnt == 3:
+                    break
         else:
             self.view.write(_("No Update information is available"))
             if self._is_fedora_pkg():
@@ -335,14 +342,15 @@ class PackageInfo(PackageInfoWidget):
 
     def _write_update_info(self, upd_info):
         head = ""
-        head += ("%14s " % _("Release")) + ": %(release)s\n"
-        head += ("%14s " % _("Type")) + ": %(type)s\n"
-        head += ("%14s " % _("Status")) + ": %(status)s\n"
-        head += ("%14s " % _("Issued")) + ": %(issued)s\n"
+        head += ("%14s " % _("Release")) + ": %(id)s\n"
+        head += ("%14s " % _("Type")) + ": "
+        head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
+        #head += ("%14s " % _("Status")) + ": %(status)s\n"
+        head += ("%14s " % _("Issued")) + ": %(updated)s\n"
         head = head % upd_info
 
-        if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
-            head += "    Updated : %s" % upd_info['updated']
+        #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
+        #    head += "    Updated : %s" % upd_info['updated']
 
         self.view.write(head)
         head = ""
@@ -350,36 +358,33 @@ class PackageInfo(PackageInfoWidget):
         # Add our bugzilla references
         if upd_info['references']:
             bzs = [r for r in upd_info['references']
-                   if r and r['type'] == 'bugzilla']
+                   if r and r[0] == hawkey.REFERENCE_BUGZILLA]
             if len(bzs):
+                self.view.write('\n')
                 header = "Bugzilla"
                 for bz in bzs:
-                    if 'title' in bz and bz['title']:
-                        bug_msg = ' - %s' % bz['title']
-                    else:
-                        bug_msg = ''
+                    (typ, bug, title, url) = bz
+                    bug_msg = '- %s' % title
                     self.view.write("%14s : " % header, newline=False)
-                    self.view.add_url(bz['id'], const.BUGZILLA_URL + bz['id'])
+                    self.view.add_url(bug, url)
                     self.view.write(bug_msg)
                     header = " "
 
-        # Add our CVE references
-        if upd_info['references']:
-            cves = [r for r in upd_info['references']
-                    if r and r['type'] == 'cve']
-            if len(cves):
-                cvelist = ""
-                header = "CVE"
-                for cve in cves:
-                    cvelist += "%14s : %s\n" % (header, cve['id'])
-                    header = " "
-                head += cvelist[:-1].rstrip() + '\n\n'
+        ## Add our CVE references
+        #if upd_info['references']:
+            #cves = [r for r in upd_info['references']
+                    #if r and r['type'] == 'cve']
+            #if len(cves):
+                #cvelist = ""
+                #header = "CVE"
+                #for cve in cves:
+                    #cvelist += "%14s : %s\n" % (header, cve['id'])
+                    #header = " "
+                #head += cvelist[:-1].rstrip() + '\n\n'
 
-        if upd_info['description'] is not None:
-            desc = upd_info['description']
-            head += "\n%14s : %s\n" % (_("Description"),
-                                       yumex.misc.format_block(desc, 17))
-
+        desc = upd_info['description']
+        head += "\n%14s : %s\n" % (_("Description"),
+                                   yumex.misc.format_block(desc, 17))
         head += "\n"
         self.view.write(head)
 
