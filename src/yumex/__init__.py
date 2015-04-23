@@ -734,7 +734,7 @@ class YumexWindow(BaseWindow):
         if self.last_search:
             data = self.last_search
             self.last_search = None
-            self.on_search_changed(self.search_entry, data)
+            self.on_search_changed(self.search_entry)
         elif self.active_page == const.PAGE_PACKAGES and self.current_filter:
             widget, flt = self.current_filter
             self.on_pkg_filter(widget, flt)
