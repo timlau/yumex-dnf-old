@@ -440,3 +440,41 @@ def ask_for_gpg_import(window, values):
     rc = dialog.run()
     dialog.destroy()
     return rc == Gtk.ResponseType.YES
+
+
+class YumexHeaderBar(Gtk.HeaderBar):
+    """Header bar for main window."""
+    # TODO: move to gui.widget
+    def __init__(self, ui):
+        Gtk.HeaderBar.__init__(self)
+        self.props.show_close_button = True
+        self.ui = ui
+        self.pack_start(self.ui.get_object('header_start'))
+        self.pack_end(self.ui.get_object('header_end'))
+        self.ui.get_object('header_menu').set_popup(
+            self.ui.get_object('main_menu'))
+        self.ui.get_object('header_search_options').set_popup(
+            self.ui.get_object('search_menu'))
+        self.ui.get_object('header_filters').set_popup(
+            self.ui.get_object('menu_filters'))
+
+
+class YumexToolBar(Gtk.Box):
+    """Header bar for main window."""
+    # TODO: move to gui.widget
+    def __init__(self, ui):
+        Gtk.Box.__init__(self)
+        self.props.orientation = Gtk.Orientation.HORIZONTAL
+        self.props.hexpand = True
+        self.set_margin_start(5)
+        self.set_margin_end(5)
+        self.set_margin_top(5)
+        self.ui = ui
+        self.pack_start(self.ui.get_object('header_start'), True, True, 0)
+        self.pack_end(self.ui.get_object('header_end'), False, False, 0)
+        self.ui.get_object('header_menu').set_popup(
+            self.ui.get_object('main_menu'))
+        self.ui.get_object('header_search_options').set_popup(
+            self.ui.get_object('search_menu'))
+        self.ui.get_object('header_filters').set_popup(
+            self.ui.get_object('menu_filters'))

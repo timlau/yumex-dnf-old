@@ -35,7 +35,7 @@ import yumex.status
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.views as views
-import yumex.gui.widgets
+import yumex.gui.widgets as widgets
 
 logger = logging.getLogger('yumex')
 
@@ -282,44 +282,6 @@ class YumexInstallWindow(BaseWindow):
         self.app.quit()
 
 
-class YumexHeaderBar(Gtk.HeaderBar):
-    """Header bar for main window."""
-    # TODO: move to gui.widget
-    def __init__(self, ui):
-        Gtk.HeaderBar.__init__(self)
-        self.props.show_close_button = True
-        self.ui = ui
-        self.pack_start(self.ui.get_object('header_start'))
-        self.pack_end(self.ui.get_object('header_end'))
-        self.ui.get_object('header_menu').set_popup(
-            self.ui.get_object('main_menu'))
-        self.ui.get_object('header_search_options').set_popup(
-            self.ui.get_object('search_menu'))
-        self.ui.get_object('header_filters').set_popup(
-            self.ui.get_object('menu_filters'))
-
-
-class YumexToolBar(Gtk.Box):
-    """Header bar for main window."""
-    # TODO: move to gui.widget
-    def __init__(self, ui):
-        Gtk.Box.__init__(self)
-        self.props.orientation = Gtk.Orientation.HORIZONTAL
-        self.props.hexpand = True
-        self.set_margin_start(5)
-        self.set_margin_end(5)
-        self.set_margin_top(5)
-        self.ui = ui
-        self.pack_start(self.ui.get_object('header_start'), True, True, 0)
-        self.pack_end(self.ui.get_object('header_end'), False, False, 0)
-        self.ui.get_object('header_menu').set_popup(
-            self.ui.get_object('main_menu'))
-        self.ui.get_object('header_search_options').set_popup(
-            self.ui.get_object('search_menu'))
-        self.ui.get_object('header_filters').set_popup(
-            self.ui.get_object('menu_filters'))
-
-
 class YumexWindow(BaseWindow):
     """Main application window class."""
     def __init__(self, app, status):
@@ -357,11 +319,11 @@ class YumexWindow(BaseWindow):
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         # setup the main gui
         if CONFIG.conf.headerbar:
-            self.hb = YumexHeaderBar(self.ui)
+            self.hb = widgets.YumexHeaderBar(self.ui)
             self.set_titlebar(self.hb)
             self.hb.show()
         else:
-            toolbar = YumexToolBar(self.ui)
+            toolbar = widgets.YumexToolBar(self.ui)
             toolbar.show()
             vbox.pack_start(toolbar, False, False, 0)
 
