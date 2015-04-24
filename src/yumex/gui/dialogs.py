@@ -56,7 +56,7 @@ class Preferences:
         self.dialog.set_transient_for(base)
         self._settings = ['autostart', 'clean_unused',
                           'newest_only', 'autocheck_updates', 'hide_on_close',
-                          'headerbar', 'auto_select_updates']
+                          'headerbar', 'auto_select_updates', 'repo_saved']
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
@@ -152,6 +152,9 @@ class Preferences:
             CONFIG.session.enabled_repos = repo_now     # set the new selection
             # we need to reset the gui
             need_reset = True
+            if CONFIG.conf.repo_saved:
+                CONFIG.conf.repo_enabled = repo_now
+                changed = True
         if changed:
             CONFIG.write()
         return need_reset
