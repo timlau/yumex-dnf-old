@@ -94,7 +94,7 @@
                   <object class="GtkLabel" id="label_autostart">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Autostart the yumex notification icon at user login</property>
+                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender status icon at user login</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
@@ -143,6 +143,10 @@
                 <child>
                   <object class="GtkLabel" id="label_show_newest">
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Show newest only is active when
+Yum Extender starts.
+Will show only lastest version of available
+packages</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
@@ -157,10 +161,12 @@
                 <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Erased unused requirment option is
+active when Yum Extender starts</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Default: Erase Used Requirements</property>
+                    <property name="label" translatable="yes">Default: Erase Unused Requirements</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -207,6 +213,7 @@
                   <object class="GtkLabel" id="label_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">how often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="margin_start">25</property>
@@ -223,6 +230,10 @@
                     <property name="name">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">delay from when Yum Extender is started
+to there is checked for updaates.
+Give the system time to settle down when
+Yum Extender is started when the user logins.</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="margin_start">25</property>
@@ -251,7 +262,7 @@
                     <property name="name">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Enable scheduled check for updates</property>
+                    <property name="tooltip_text" translatable="yes">Enable scheduled check for available updates</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">Scheduled check for new updates</property>
@@ -328,6 +339,8 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_headerbar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
+standard when using Gnome</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">Show toolbar in window headerbar</property>
@@ -354,8 +367,10 @@ window when the close button is clicked</property>
                   <object class="GtkLabel" id="label_auto_select_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="tooltip_text" translatable="yes">Select all available updates when 
+Yum Extender is started</property>
                     <property name="label" translatable="yes">Select Updates at startup</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -555,17 +570,83 @@ window when the close button is clicked</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="repo_sw">
-                <property name="height_request">400</property>
+              <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="margin_start">6</property>
-                <property name="margin_end">6</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <property name="min_content_height">400</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel" id="repo_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Repositories used in current session&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="repo_sw">
+                    <property name="height_request">400</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_height">400</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Save the current selected repositories
+so they will be used next time you
+start Yum Extender</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <child>
+                      <object class="GtkCheckButton" id="repo_save">
+                        <property name="label" translatable="yes">Save selected repositories</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>
