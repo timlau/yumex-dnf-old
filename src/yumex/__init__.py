@@ -422,7 +422,10 @@ class YumexWindow(BaseWindow):
 
         # setup the package manager backend
         # get the default enabled repos
-        CONFIG.session.enabled_repos = self.backend.get_repo_ids('enabled')
+        if CONFIG.conf.repo_saved:
+            CONFIG.session.enabled_repos = CONFIG.conf.repo_enabled
+        else:
+            CONFIG.session.enabled_repos = self.backend.get_repo_ids('enabled')
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
