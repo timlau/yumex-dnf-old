@@ -18,10 +18,16 @@ Requirements
 ============
 
 ```
-yum install python3 python3-gobject 
+dnf install python3 python3-gobject 
 ```
 
 [dnf-deamon](https://github.com/timlau/dnf-daemon) must also be installed.
+
+```
+dnf install dnfdaemon
+```
+
+Or build the latest version from git
 
 ```
 git clone https://github.com/timlau/dnf-daemon.git
@@ -30,17 +36,11 @@ make test-inst
 ```
 
 
-Test Fedora Repository
+Fedora Repository
 =======================
-
-There is a test repository the contains test builds for yumex-dnf & dnf-daemon 
-http://copr.fedoraproject.org/coprs/timlau/yumex-dnf/
-
-download the .repo file for your Fedora release and place it in /etc/yum.repos.d
-
+yumex-dnf is available in the Fedora repositories for f21, f22 & Rawhide
 
 Use this to install it.
 ```
 sudo dnf install yumex-dnf
-
 ```
