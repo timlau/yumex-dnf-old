@@ -20,7 +20,7 @@
 
 
 from configparser import SafeConfigParser
-from gi.repository import Gtk, GObject, GdkPixbuf
+from gi.repository import Gtk, GObject, GdkPixbuf, Notify
 from subprocess import Popen
 from xdg import BaseDirectory
 
@@ -91,6 +91,7 @@ if os.path.exists(CONF_FILE):
 TIMER_STARTUP_DELAY = CONFIG.getint('yumex', 'update_startup_delay')
 UPDATE_INTERVAL = CONFIG.getint('yumex', 'update_interval')
 AUTOCHECK_UPDATE = CONFIG.getboolean('yumex', 'autocheck_updates')
+NOTIFY = CONFIG.getboolean('yumex', 'update_notify')
 
 
 class UpdateTimestamp:
@@ -143,6 +144,32 @@ def Logger(func):
     newFunc.__doc__ = func.__doc__
     newFunc.__dict__.update(func.__dict__)
     return newFunc
+
+
+class Notification(GObject.GObject):
+    __gsignals__ = {
+        'notify-action': (GObject.SIGNAL_RUN_FIRST, None,
+                      (str,))
+    }
+
+    def __init__(self, summary, body):
+        GObject.GObject.__init__(self)
+        Notify.init('Yum Extender')
+        icon = "yumex-dnf"
+        self.notification = Notify.Notification.new(summary, body, icon)
+        self.notification.set_timeout(5000)  # timeout 5s
+        self.notification.add_action('open', 'Open Yum Extender', self.callback)
+        self.notification.add_action('apply', 'Apply Updates', self.callback)
+        self.notification.connect('closed', self.on_closed)
+
+    def show(self):
+        self.notification.show()
+
+    def callback(self, widget, action):
+        self.emit('notify-action', action)
+
+    def on_closed(self, widget):
+        self.emit('notify-action', 'closed')
 
 
 class YumReadOnlyBackend(dnfdaemon.client.ClientReadOnly):
@@ -509,11 +536,20 @@ class YumexStatusDaemon(dbus.service.Object):
         self.status_icon.set_update_count(rc)
         self.update_timestamp.store_current_time()
         self.start_update_timer()  # restart update timer if necessary
+        if rc > 0 and NOTIFY:
+            notify = Notification(_('New Updates'),
+                                  _('%s available updates ') % rc)
+            notify.connect('notify-action', self.on_notify_action)
+            notify.show()
         return rc
 
 #=========================================================================
 # GUI Callback
 #=========================================================================
+    def on_notify_action(self, action):
+        """Handle notification actions. """
+        if action == 'run':
+            self.on_run_yumex()
 
     def on_status_icon_clicked(self, event):
         """

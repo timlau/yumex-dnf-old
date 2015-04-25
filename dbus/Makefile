@@ -5,7 +5,7 @@ APPNAME = yumex-dnf
 all:
 	@echo notthing to do
 	
-cleam:
+clean:
 	@echo notthing to do
 
 install:

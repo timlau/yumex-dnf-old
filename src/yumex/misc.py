@@ -180,6 +180,7 @@ class YumexConf(config.BaseConfig):
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
     update_startup_delay = config.IntOption(30)
+    update_notify = config.BoolOption(True)
     autocheck_updates = config.BoolOption(False)
     hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
