@@ -6,7 +6,7 @@
  <name>Yum Extender (DNF)</name>
  <_summary>Graphical package manager</_summary>
  <description>
-  <_p>Yum extender is a graphical package management application, it will allow you to search and browse for packages to install,
+  <_p>Yum Extender is a graphical package management application. It allows you to search and browse for packages to install,
   remove and update on your computer.</_p>
   <_p>It is designed to give you full control over the packages on your computer and to be used by all users.</_p>
   <_p>Features:</_p>
@@ -16,7 +16,7 @@
    <_li>Search packages by name, summary, description</_li>
    <_li>Watch the history of package action on your system</_li>
    <_li>Browse and install/remove package groups</_li>
-   <_li>Browse packages by Size, Repository</_li>
+   <_li>Browse packages by size, repository</_li>
    <_li>Control what package repositories are enabled for the current session</_li>   
   </ul>
  </description>

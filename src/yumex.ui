@@ -33,7 +33,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pref_ok">
-                <property name="label">Ok</property>
+                <property name="label" translatable="yes">OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -46,7 +46,7 @@
             </child>
             <child>
               <object class="GtkButton" id="pref_cancel">
-                <property name="label">Cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -110,7 +110,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Show newest only is active when
 Yum Extender starts.
-Will show only lastest version of available
+Will show only latest version of available
 packages</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
@@ -126,7 +126,7 @@ packages</property>
                 <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Erased unused requirment option is
+                    <property name="tooltip_text" translatable="yes">Erase unused requirement option is
 active when Yum Extender starts</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
@@ -172,7 +172,7 @@ window when the close button is clicked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
-standard when using Gnome</property>
+standard when using GNOME</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">Show toolbar in window headerbar</property>
@@ -201,7 +201,7 @@ standard when using Gnome</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Select all available updates when 
 Yum Extender is started</property>
-                    <property name="label" translatable="yes">Select Updates at startup</property>
+                    <property name="label" translatable="yes">Select updates at startup</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -226,7 +226,7 @@ Yum Extender is started</property>
                     <property name="name">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">Cache expire interval (hours)</property>
@@ -242,7 +242,7 @@ Yum Extender is started</property>
                   <object class="GtkSpinButton" id="pref_refresh_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="input_purpose">number</property>
@@ -296,7 +296,7 @@ Yum Extender is started</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Start status icon at user logon</property>
+                    <property name="label" translatable="yes">Start status icon at user login</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -339,7 +339,7 @@ Yum Extender is started</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="invisible_char">●</property>
-                    <property name="text" translatable="yes">60</property>
+                    <property name="text">60</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adj_update_interval</property>
                     <property name="snap_to_ticks">True</property>
@@ -355,7 +355,7 @@ Yum Extender is started</property>
                   <object class="GtkLabel" id="label_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">how often the update checker will run</property>
+                    <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="margin_left">25</property>
@@ -375,7 +375,7 @@ Yum Extender is started</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="invisible_char">●</property>
-                    <property name="text" translatable="yes">30</property>
+                    <property name="text">30</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">ad_update_startup_delay</property>
                     <property name="climb_rate">5</property>
@@ -393,9 +393,9 @@ Yum Extender is started</property>
                     <property name="name">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">delay from when Yum Extender is started
-to there is checked for updaates.
-Give the system time to settle down when
+                    <property name="tooltip_text" translatable="yes">Delay from when Yum Extender is started
+to when it checks for updates.
+Gives the system time to settle down when
 Yum Extender is started when the user logins.</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
@@ -413,7 +413,7 @@ Yum Extender is started when the user logins.</property>
                   <object class="GtkLabel" id="label_update_notify">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show notification when updates is found</property>
+                    <property name="label" translatable="yes">Show notification when updates are found</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -426,7 +426,7 @@ Yum Extender is started when the user logins.</property>
                   <object class="GtkLabel" id="label_update_showicon">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show status icon when no updates found</property>
+                    <property name="label" translatable="yes">Show status icon when no updates are found</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -656,9 +656,11 @@ Yum Extender is started when the user logins.</property>
                     <property name="margin_right">10</property>
                     <property name="margin_top">5</property>
                     <property name="margin_bottom">5</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Repositories used in current session&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Repositories used in current session</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1086,7 +1088,7 @@ start Yum Extender</property>
               <object class="GtkCheckMenuItem" id="option_clean_unused">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Uninstall unused requeriments, when removing a package</property>
+                <property name="tooltip_text" translatable="yes">Uninstall unused requirements when removing a package</property>
                 <property name="label" translatable="yes">Erase Unused Requirements</property>
                 <property name="use_underline">True</property>
               </object>
@@ -1124,7 +1126,7 @@ start Yum Extender</property>
               <object class="GtkMenuItem" id="main_doc">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Documentation (online)</property>
+                <property name="label" translatable="yes">Documentation (Online)</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -1213,7 +1215,7 @@ start Yum Extender</property>
       <object class="GtkRadioMenuItem" id="search_prefix">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">package name start with &lt;keyword&gt;</property>
+        <property name="tooltip_text" translatable="yes">Package name starts with &lt;keyword&gt;</property>
         <property name="label" translatable="yes">Prefix</property>
         <property name="draw_as_radio">True</property>
       </object>
@@ -1222,7 +1224,7 @@ start Yum Extender</property>
       <object class="GtkRadioMenuItem" id="search_key">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">keyword in package name</property>
+        <property name="tooltip_text" translatable="yes">Keyword in package name</property>
         <property name="label" translatable="yes">Keyword</property>
         <property name="active">True</property>
         <property name="draw_as_radio">True</property>
@@ -1233,7 +1235,7 @@ start Yum Extender</property>
       <object class="GtkRadioMenuItem" id="search_fields">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">keywords in selected package attributes</property>
+        <property name="tooltip_text" translatable="yes">Keywords in selected package attributes</property>
         <property name="label" translatable="yes">Fields</property>
         <property name="draw_as_radio">True</property>
         <property name="group">search_prefix</property>
@@ -1452,7 +1454,7 @@ start Yum Extender</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="result_cancel">
-                <property name="label">Cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -1465,7 +1467,7 @@ start Yum Extender</property>
             </child>
             <child>
               <object class="GtkButton" id="result_ok">
-                <property name="label">Ok</property>
+                <property name="label" translatable="yes">OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

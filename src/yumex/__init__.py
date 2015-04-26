@@ -45,7 +45,7 @@ class BaseWindow(Gtk.ApplicationWindow):
 
     def __init__(self, app, status):
         Gtk.ApplicationWindow.__init__(
-            self, title='Yum Extender - Powered by dnf', application=app)
+            self, title='Yum Extender - Powered by DNF', application=app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.app = app
         self.status = status
@@ -125,7 +125,7 @@ class BaseWindow(Gtk.ApplicationWindow):
             locked, msg = self._root_backend.setup()
             if locked:
                 self._root_locked = True
-                logger.debug('Lock the Dnf root daemon')
+                logger.debug('Lock the DNF root daemon')
                 if self._check_cache_expired('system'):
                     logger.debug('Refresh system cache')
                     self.set_working(True, True)
@@ -141,12 +141,12 @@ class BaseWindow(Gtk.ApplicationWindow):
                 logger.critical("can't get root backend lock")
                 if msg == 'not-authorized':  # user canceled the polkit dialog
                     errmsg = _(
-                        'Dnf root backend was not authorized\n'
-                        ' Yum Extender will exit')
-                # Dnf is locked by another process
+                        'DNF root backend was not authorized.\n'
+                        'Yum Extender will exit')
+                # DNF is locked by another process
                 elif msg == 'locked-by-other':
                     errmsg = _(
-                        'Dnf  is locked by another process \n\n'
+                        'DNF is locked by another process.\n\n'
                         'Yum Extender will exit')
                 dialogs.show_information(self, errmsg)
                 # close down and exit yum extender
@@ -161,11 +161,11 @@ class BaseWindow(Gtk.ApplicationWindow):
         if self._root_backend is None:
             return
         if self._root_locked is True:
-            logger.debug('Unlock the Dnf root daemon')
+            logger.debug('Unlock the DNF root daemon')
             self._root_backend.Unlock()
             self._root_locked = False
         if quit:
-            logger.debug('Exit the Dnf root daemon')
+            logger.debug('Exit the DNF root daemon')
             self._root_backend.Exit()
 
     def exception_handler(self, e):
@@ -178,11 +178,11 @@ class BaseWindow(Gtk.ApplicationWindow):
         err, errmsg = self._parse_error(msg)
         logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
-            errmsg = 'DNF is locked by another process \n'
+            errmsg = 'DNF is locked by another process.\n'
             '\nYum Extender will exit'
             close = False
         elif err == 'NoReply':
-            errmsg = 'DNF Dbus backend is not responding \n'
+            errmsg = 'DNF D-Bus backend is not responding.\n'
             '\nYum Extender will exit'
             close = False
         if errmsg == '':
@@ -246,12 +246,12 @@ class YumexInstallWindow(BaseWindow):
         """
         self.status.SetWorking(True)
         if action == 'install':
-            self.infobar.info(_('Installing package : %s') % package)
+            self.infobar.info(_('Installing package: %s') % package)
             self.infobar.info_sub(package)
             txmbrs = self.backend.Install(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'remove':
-            self.infobar.info(_('Removing package : %s') % package)
+            self.infobar.info(_('Removing package: %s') % package)
             self.infobar.info_sub(package)
             txmbrs = self.backend.Remove(package)
             logger.debug('txmbrs: %s' % str(txmbrs))

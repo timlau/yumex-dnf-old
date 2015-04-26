@@ -158,13 +158,13 @@ TRANSACTION_RESULT_TYPES = {
 }
 
 RPM_ACTIONS = {
-    'update': _("Updating : %s"),
-    'install': _("Installing : %s"),
-    'cleanup': _("Cleanup : %s"),
-    'erase': _("Removing : %s"),
-    'obsolete': _("Obsoleting : %s"),
-    'downgrade': _("Downgrading : %s"),
-    'verify': _("Verifying : %s"),
+    'update': _("Updating: %s"),
+    'install': _("Installing: %s"),
+    'cleanup': _("Cleanup: %s"),
+    'erase': _("Removing: %s"),
+    'obsolete': _("Obsoleting: %s"),
+    'downgrade': _("Downgrading: %s"),
+    'verify': _("Verifying: %s"),
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
