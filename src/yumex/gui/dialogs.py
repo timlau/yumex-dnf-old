@@ -253,7 +253,7 @@ class TransactionResult:
                     total_size += size
                 for r in replaces:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
-                    model.append(level2, [_("<b>replaceing</b> {}").format(n),
+                    model.append(level2, [_("<b>replacing</b> {}").format(n),
                                            a, "%s.%s" % (v, r), repo_id,
                                           yumex.misc.format_number(size)])
         self.base.ui.get_object("result_size").set_text(

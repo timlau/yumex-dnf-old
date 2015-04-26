@@ -258,13 +258,13 @@ class StatusIcon:
                 self.statusicon.set_tooltip_text(_('Yum Extender: Error'))
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_error)
             elif update_count == 0:
-                self.statusicon.set_tooltip_text(_('Yum Extender: No Updates'))
+                self.statusicon.set_tooltip_text(_('Yum Extender: No updates'))
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_no_update)
                 if not SHOWICON:
                     self.statusicon.set_visible(False)
             else:
                 self.statusicon.set_tooltip_text(
-                    _('Yum Extender: %s Updates available') % update_count)
+                    _('Yum Extender: %s updates available') % update_count)
                 pixbuf = self.get_pixbuf_with_text(
                     self.image_updates, str(update_count), self.rel_font_size)
         self.statusicon.set_from_pixbuf(pixbuf)
@@ -548,7 +548,7 @@ class YumexStatusDaemon(dbus.service.Object):
         if rc > 0:
             logger.debug('notification')
             notify = Notification(_('New Updates'),
-                                  _('%s available updates ') % rc)
+                                  _('%s available updates') % rc)
             notify.connect('notify-action', self.on_notify_action)
             notify.show()
         self.update_timestamp.store_current_time()

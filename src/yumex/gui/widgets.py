@@ -110,7 +110,7 @@ class InfoProgressBar:
             # or filelist info is needed for at package
             # and it will trigger the yum daemon to download the need metadata.
             if not self.label.get_property('visible'):
-                self.info(_("Getting Package metadata"))
+                self.info(_("Getting Package Metadata"))
 
 
 class ArchMenu(GObject.GObject):
@@ -172,7 +172,7 @@ class PackageInfoWidget(Gtk.Box):
         rb = self._get_radio_button('dialog-information-symbolic', "desc",
                                     tooltip=tip)
         vbox.add(rb)
-        tip = _("Package update information")
+        tip = _("Package Update Information")
         vbox.add(self._get_radio_button(
             'software-update-available-symbolic', "updinfo", rb, tip))
         #tip = _("Package Changelog")
@@ -268,7 +268,7 @@ class PackageInfo(PackageInfoWidget):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                print("Package info not found : ", self.active_filter)
+                print("Package info not found: ", self.active_filter)
         self.view.goTop()
 
     def _is_url(self, url):
@@ -281,14 +281,14 @@ class PackageInfo(PackageInfoWidget):
             return False
 
     def _url_handler(self, url):
-        print('Url activated : ' + url)
+        print('URL activated: ' + url)
         if self._is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
-            self.frontend.warning("%s is not an url" % url)
+            self.frontend.warning("%s is not an URL" % url)
 
     def _get_name_for_url(self):
         return urllib.parse.quote_plus(self.current_package.name)
@@ -302,12 +302,12 @@ class PackageInfo(PackageInfoWidget):
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
-            self.view.write(_("Tags : %s\n ") %
+            self.view.write(_("Tags: %s\n") %
                             ", ".join(tags), "changelog-header")
         desc = self.current_package.description
         self.view.write(desc)
         self.view.write('\n')
-        self.view.write(_("Links : "), "changelog-header", newline=True)
+        self.view.write(_("Links: "), "changelog-header", newline=True)
         self.view.write('  ', newline=False)
         url_hp = self.current_package.URL
         self.view.add_url(url_hp, url_hp, newline=True)
@@ -330,9 +330,9 @@ class PackageInfo(PackageInfoWidget):
                 if cnt == 3:
                     break
         else:
-            self.view.write(_("No Update information is available"))
+            self.view.write(_("No update information is available"))
             if self._is_fedora_pkg():
-                self.view.write(_("\nFedora Updates :"), "changelog-header",
+                self.view.write(_("\nFedora Updates:"), "changelog-header",
                                 newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
@@ -405,9 +405,9 @@ class PackageInfo(PackageInfoWidget):
                 if i == 5:  # only show the last 5 entries
                     break
         else:
-            self.view.write(_("No Changelog information is available"))
+            self.view.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
-                self.view.write(_("\nOnline Changelog :"), "changelog-header",
+                self.view.write(_("\nOnline Changelog:"), "changelog-header",
                                 newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"
@@ -422,7 +422,7 @@ class PackageInfo(PackageInfoWidget):
             for fname in sorted(filelist):
                 self.view.write(fname)
         else:
-            self.view.write(_("No Filelist information is available"))
+            self.view.write(_("No filelist information is available"))
         self.base.set_working(False)
 
     def _show_requirements(self):
@@ -432,9 +432,9 @@ class PackageInfo(PackageInfoWidget):
 def ask_for_gpg_import(window, values):
     (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
     pkg_name = pkg_id.split(',')[0]
-    msg = (_(' Do you want to import this GPG Key\n'
-             ' Needed to verify the %s package\n\n'
-             ' key        : 0x%s:\n'
+    msg = (_(' Do you want to import this GPG key\n'
+             ' needed to verify the %s package?\n\n'
+             ' Key        : 0x%s:\n'
              ' Userid     : "%s"\n'
              ' From       : %s') %
           (pkg_name, hexkeyid, userid,
