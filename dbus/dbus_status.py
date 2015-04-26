@@ -259,6 +259,8 @@ class StatusIcon:
             elif update_count == 0:
                 self.statusicon.set_tooltip_text(_('Yum Extender: No Updates'))
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_no_update)
+                if not SHOWICON:
+                    self.statusicon.set_visible(False)
             else:
                 self.statusicon.set_tooltip_text(
                     _('Yum Extender: %s Updates available') % update_count)
@@ -560,7 +562,9 @@ class YumexStatusDaemon(dbus.service.Object):
         """Handle notification actions. """
         logger.debug('notify-action: %s', action)
         if action == 'open':
-            self.on_run_yumex()
+            self.run_yumex()
+        elif action == 'apply':
+            self.run_yumex(['--updateall'])
 
     def on_status_icon_clicked(self, event):
         """
@@ -592,10 +596,15 @@ class YumexStatusDaemon(dbus.service.Object):
             self.get_updates()
 
     def on_run_yumex(self, *args):
+        self.run_yumex()
+
+    def run_yumex(self, param=[]):
         logger.debug('run yumex')
         if not self.yumex_running:
-            logger.debug('Starting: %s' % YUMEX_BIN)
-            Popen([YUMEX_BIN]).pid
+            cmd = [YUMEX_BIN]
+            cmd.extend(param)
+            logger.debug('Starting: %s' % " ".join(cmd))
+            Popen(cmd).pid
 
     def startup_init_update_timer(self):
         """ start the update timer with a delayed startup

@@ -255,6 +255,9 @@ class YumexInstallWindow(BaseWindow):
             self.infobar.info_sub(package)
             txmbrs = self.backend.Remove(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
+        elif action == 'update':
+            self.infobar.info(_('Updating all available updates'))
+            txmbrs = self.backend.Update('*')
         self.infobar.info(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
         self.infobar.info(_('Dependencies resolved'))
@@ -1080,6 +1083,12 @@ class YumexApplication(Gtk.Application):
             self.install.show()
             self.install.process_actions(
                 'remove', self.args.remove, self.args.yes)
+        elif self.args.updateall:
+            self.install = YumexInstallWindow(self, self.status)
+            self.install.show()
+            self.install.process_actions(
+                'update', '*', self.args.yes)
+
         else:
             self.save_win_size = True  # normal app mode
             self.win = YumexWindow(self, self.status)
@@ -1131,6 +1140,9 @@ class YumexApplication(Gtk.Application):
         parser.add_argument(
             '-R', '--remove', type=str, metavar='PACKAGE',
             help='Remove Package')
+        parser.add_argument(
+            '--updateall', action='store_true',
+            help='apply all available updates')
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)
