@@ -1,3 +1,195 @@
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.1
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: pep8: fixes
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/yumex-dnf.pot: Transfix push, yumex-dnf.pot update
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: Added translation wrappers
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: increase the update notification timeout to
+	10s
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py: Added --updateall
+	there will apply all pending updates  * make apply from status icon
+	notification launch   yumex with --updateall * fix: hide status icon
+	when no updates is found (#23)
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile, src/yumex.ui, src/yumex/gui/dialogs.py,
+	src/yumex/misc.py: move all status icon setting to a separate page
+	in pref.  added notification on update to pref. added show only icon
+	when updates to pref added Makefile targets to test statusicon dbus
+	daemon  (#23)
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: Add notifcation to statusicon update checker
+	and setting to hide icon if no updates. (#23)
+
+2015-04-25  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/Makefile, dbus/dbus_status.py, src/yumex/misc.py: Add
+	configurable notification on update
+
+2015-04-25  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* README.md: doc: update readme
+
+2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/gui/dialogs.py: save selected
+	repositories, if "save selected repositories" is enabled  (RhBug:
+	1214062)
+
+2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: set enabled repos from config, if
+	repo_saved is set
+
+2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: Add options to save enabled repositories
+
+2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: added save checkbox to repo perferences  Added more
+	and better tooltip to options in preferences
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: enable package info file list view
+	supported in dnf-daemon by this commit
+
+	https://github.com/timlau/dnf-daemon/commit/f2ee3eda585e4aab3de7bf6197359f04848a2c67
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: Don't show package info tabs for
+	changelog, filelist & requirement  The dnfdaemon/dnf backend dont
+	support it yet
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, src/yumex/gui/widgets.py: Added support of
+	showing update information about fedora updates  (Fixes #5 & RhBug:
+	1121946)  requires dnfdaemon >= 0.3.7 for supplying update
+	information
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: fix: don't show hand cursor outside link
+	in package info  (Fixes RhBug #1214050)
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: arch_menu traceback  (fixes RhBug:
+	1214045)
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/dialogs.py,
+	src/yumex/misc.py: Added option to auto select all available updates
+	at startup  (Fixes #22 & RhBug: 1214052)
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/gui/widgets.py: refactor: move
+	HeaderBar and ToolBar to gui/widgets
+
+2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: save window size and
+	maximize state between sessions  (fixes #18 & RhBug: 1214047)
+
+2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: set right search type from config, not
+	just ui
+
+2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py: Strech searchbox to use
+	available space  (fixes #19 & RhBug: 1214059)
+
+2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/config.py, src/yumex/misc.py: 
+	save search option between session  (fixes #20 & RhBug: 1214057)
+
+2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: set search defaults from
+	config settings
+
+2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: add some padding below titlebar  (Fixes #20
+	&  RhBug: 1214057)
+
+2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* yumex-dnf.spec: require latest dnfdaemon
+
+2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/dialogs.py: make replaces look better in transaction
+	result dialog
+
+2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: Revert "dont show obsoletes as updates,
+	that gives strange results"  This reverts commit
+	11ab683ef9cd1a18c0dde1acedbe51871bbf615d.
+
+2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py: Revert "support for showing obsoletes as own
+	category in transaction dialog"  This reverts commit
+	008065311b07a55ab3124a955c4c6b7306217598.
+
+2015-04-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py: support for showing obsoletes as own category
+	in transaction dialog
+
+2015-04-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* docs/faq.rst, docs/img/error-running.png, docs/main.rst: doc:
+	update info about yumex is already running  Add faq entry about
+	selecting all updates
+
+2015-04-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* .tx/config, po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po,
+	po/da.po, po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po,
+	po/fr.po, po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po,
+	po/ko.po, po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ru.po, po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po,
+	po/uk.po, po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: update
+	translations
+
+2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: dont show obsoletes as updates, that gives
+	strange results
+
+2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* yumex-dnf.spec: bumped version to 4.1.0
