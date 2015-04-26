@@ -163,8 +163,8 @@ class Notification(GObject.GObject):
         icon = "yumex-dnf"
         self.notification = Notify.Notification.new(summary, body, icon)
         self.notification.set_timeout(10000)  # timeout 10s
-        self.notification.add_action('open', 'Open Yum Extender', self.callback)
-        self.notification.add_action('apply', 'Apply Updates', self.callback)
+        self.notification.add_action('open', _('Open Yum Extender'), self.callback)
+        self.notification.add_action('apply', _('Apply Updates'), self.callback)
         self.notification.connect('closed', self.on_closed)
 
     def show(self):
@@ -238,11 +238,11 @@ class StatusIcon:
     def update_tray_icon(self):
         self.statusicon.set_visible(True)
         if self.need_input:
-            self.statusicon.set_tooltip_text('Yum Extender: Need user input')
+            self.statusicon.set_tooltip_text(_('Yum Extender: Need user input'))
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_info)
             self.set_popup_menu_sensitivity(False)
         elif self.is_working > 0:
-            self.statusicon.set_tooltip_text('Yum Extender: Working')
+            self.statusicon.set_tooltip_text(_('Yum Extender: Working'))
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_checking)
             self.set_popup_menu_sensitivity(False)
         else:
