@@ -163,7 +163,8 @@ class Notification(GObject.GObject):
         icon = "yumex-dnf"
         self.notification = Notify.Notification.new(summary, body, icon)
         self.notification.set_timeout(10000)  # timeout 10s
-        self.notification.add_action('open', _('Open Yum Extender'), self.callback)
+        self.notification.add_action('open', _('Open Yum Extender'),
+                                     self.callback)
         self.notification.add_action('apply', _('Apply Updates'), self.callback)
         self.notification.connect('closed', self.on_closed)
 
@@ -497,7 +498,6 @@ class YumexStatusDaemon(dbus.service.Object):
     def QuitYumex(self, sender=None):
         if self.yumex_running:
             self.QuitSignal()
-
 
 #=========================================================================
 # DBus signals
