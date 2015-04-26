@@ -61,7 +61,7 @@ else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + '/../gfx'
     MISC_DIR = DATA_DIR + '/../misc'
-    YUMEX_BIN = './main.py'
+    YUMEX_BIN = '../src/main.py'
 
 ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
 ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
@@ -80,7 +80,10 @@ UPDATE_INTERVAL = 5
 CONF_DEFAULTS = {
     'update_interval': '60',
     'update_startup_delay': '30',
-    'autocheck_updates': '0'}
+    'autocheck_updates': '0',
+    'update_notify': True,
+    'update_showicon': True
+    }
 
 CONFIG = SafeConfigParser(CONF_DEFAULTS)
 if not CONFIG.has_section('yumex'):
@@ -88,10 +91,12 @@ if not CONFIG.has_section('yumex'):
 if os.path.exists(CONF_FILE):
     CONFIG.read(CONF_FILE)
 
+
 TIMER_STARTUP_DELAY = CONFIG.getint('yumex', 'update_startup_delay')
 UPDATE_INTERVAL = CONFIG.getint('yumex', 'update_interval')
 AUTOCHECK_UPDATE = CONFIG.getboolean('yumex', 'autocheck_updates')
 NOTIFY = CONFIG.getboolean('yumex', 'update_notify')
+SHOWICON = CONFIG.getboolean('yumex', 'update_showicon')
 
 
 class UpdateTimestamp:
@@ -231,6 +236,7 @@ class StatusIcon:
         return self.statusicon
 
     def update_tray_icon(self):
+        self.statusicon.set_visible(True)
         if self.need_input:
             self.statusicon.set_tooltip_text('Yum Extender: Need user input')
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_info)
@@ -245,6 +251,8 @@ class StatusIcon:
             if update_count == -2:
                 self.statusicon.set_tooltip_text(_('Yum Extender'))
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_no_update)
+                if not SHOWICON:
+                    self.statusicon.set_visible(False)
             elif update_count == -1:
                 self.statusicon.set_tooltip_text(_('Yum Extender: Error'))
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_error)
@@ -521,6 +529,7 @@ class YumexStatusDaemon(dbus.service.Object):
 #=========================================================================
 
     def get_updates(self, *args):
+        logger.debug('get_updates')
         self.status_icon.set_is_working(True)
         try:
             self.backend.Lock()
@@ -534,21 +543,23 @@ class YumexStatusDaemon(dbus.service.Object):
             rc = -1
         self.status_icon.set_is_working(False)
         self.status_icon.set_update_count(rc)
-        self.update_timestamp.store_current_time()
-        self.start_update_timer()  # restart update timer if necessary
-        if rc > 0 and NOTIFY:
+        if rc > 0:
+            logger.debug('notification')
             notify = Notification(_('New Updates'),
                                   _('%s available updates ') % rc)
             notify.connect('notify-action', self.on_notify_action)
             notify.show()
+        self.update_timestamp.store_current_time()
+        self.start_update_timer()  # restart update timer if necessary
         return rc
 
 #=========================================================================
 # GUI Callback
 #=========================================================================
-    def on_notify_action(self, action):
+    def on_notify_action(self, widget, action):
         """Handle notification actions. """
-        if action == 'run':
+        logger.debug('notify-action: %s', action)
+        if action == 'open':
             self.on_run_yumex()
 
     def on_status_icon_clicked(self, event):
