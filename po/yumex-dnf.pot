@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-26 13:21+0200\n"
+"POT-Creation-Date: 2015-04-26 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,37 +87,37 @@ msgstr ""
 
 #: ../src/yumex/const.py:161
 #, python-format
-msgid "Updating : %s"
+msgid "Updating: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:162
 #, python-format
-msgid "Installing : %s"
+msgid "Installing: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:163
 #, python-format
-msgid "Cleanup : %s"
+msgid "Cleanup: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:164
 #, python-format
-msgid "Removing : %s"
+msgid "Removing: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:165
 #, python-format
-msgid "Obsoleting : %s"
+msgid "Obsoleting: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:166
 #, python-format
-msgid "Downgrading : %s"
+msgid "Downgrading: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:167
 #, python-format
-msgid "Verifying : %s"
+msgid "Verifying: %s"
 msgstr ""
 
 #: ../src/yumex/const.py:177
@@ -146,25 +146,25 @@ msgstr ""
 
 #: ../src/yumex/__init__.py:144
 msgid ""
-"Dnf root backend was not authorized\n"
-" Yum Extender will exit"
+"DNF root backend was not authorized.\n"
+"Yum Extender will exit"
 msgstr ""
 
 #: ../src/yumex/__init__.py:149
 msgid ""
-"Dnf  is locked by another process \n"
+"DNF is locked by another process.\n"
 "\n"
 "Yum Extender will exit"
 msgstr ""
 
 #: ../src/yumex/__init__.py:249
 #, python-format
-msgid "Installing package : %s"
+msgid "Installing package: %s"
 msgstr ""
 
 #: ../src/yumex/__init__.py:254
 #, python-format
-msgid "Removing package : %s"
+msgid "Removing package: %s"
 msgstr ""
 
 #: ../src/yumex/__init__.py:259
@@ -224,7 +224,7 @@ msgstr ""
 
 #: ../src/yumex/dnf_backend.py:246
 #, python-format
-msgid "Downloading %d files (%sb)...."
+msgid "Downloading %d files (%sb)..."
 msgstr ""
 
 #: ../src/yumex/gui/views.py:252
@@ -315,11 +315,11 @@ msgid "Size"
 msgstr ""
 
 #: ../src/yumex/gui/dialogs.py:256
-msgid "<b>replaceing</b> {}"
+msgid "<b>replacing</b> {}"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:113
-msgid "Getting Package metadata"
+msgid "Getting Package Metadata"
 msgstr ""
 
 #. PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
@@ -328,7 +328,7 @@ msgid "Package Description"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:175
-msgid "Package update information"
+msgid "Package Update Information"
 msgstr ""
 
 #. tip = _("Package Changelog")
@@ -340,23 +340,21 @@ msgstr ""
 
 #: ../src/yumex/gui/widgets.py:305
 #, python-format
-msgid ""
-"Tags : %s\n"
-" "
+msgid "Tags: %s\n"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:310
-msgid "Links : "
+msgid "Links: "
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:333
-msgid "No Update information is available"
+msgid "No update information is available"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:335
 msgid ""
 "\n"
-"Fedora Updates :"
+"Fedora Updates:"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:345
@@ -377,17 +375,17 @@ msgid "Description"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:408
-msgid "No Changelog information is available"
+msgid "No changelog information is available"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:410
 msgid ""
 "\n"
-"Online Changelog :"
+"Online Changelog:"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:425
-msgid "No Filelist information is available"
+msgid "No filelist information is available"
 msgstr ""
 
 #: ../src/yumex/gui/widgets.py:429
@@ -397,10 +395,10 @@ msgstr ""
 #: ../src/yumex/gui/widgets.py:435
 #, python-format
 msgid ""
-" Do you want to import this GPG Key\n"
-" Needed to verify the %s package\n"
+" Do you want to import this GPG key\n"
+" needed to verify the %s package?\n"
 "\n"
-" key        : 0x%s:\n"
+" Key        : 0x%s:\n"
 " Userid     : \"%s\"\n"
 " From       : %s"
 msgstr ""
@@ -410,45 +408,45 @@ msgstr ""
 msgid "Open Yum Extender"
 msgstr ""
 
-#: ../dbus/dbus_status.py:167
+#: ../dbus/dbus_status.py:168
 msgid "Apply Updates"
 msgstr ""
 
-#: ../dbus/dbus_status.py:214 ../src/yumex.ui.h:74
+#: ../dbus/dbus_status.py:215 ../src/yumex.ui.h:74
 msgid "Quit"
 msgstr ""
 
-#: ../dbus/dbus_status.py:215
+#: ../dbus/dbus_status.py:216
 msgid "Search for Updates"
 msgstr ""
 
-#: ../dbus/dbus_status.py:216
+#: ../dbus/dbus_status.py:217
 msgid "Start Yum Extender"
 msgstr ""
 
-#: ../dbus/dbus_status.py:241
+#: ../dbus/dbus_status.py:242
 msgid "Yum Extender: Need user input"
 msgstr ""
 
-#: ../dbus/dbus_status.py:245
+#: ../dbus/dbus_status.py:246
 msgid "Yum Extender: Working"
 msgstr ""
 
-#: ../dbus/dbus_status.py:252
+#: ../dbus/dbus_status.py:253
 msgid "Yum Extender"
 msgstr ""
 
-#: ../dbus/dbus_status.py:257
+#: ../dbus/dbus_status.py:258
 msgid "Yum Extender: Error"
 msgstr ""
 
-#: ../dbus/dbus_status.py:260
-msgid "Yum Extender: No Updates"
+#: ../dbus/dbus_status.py:261
+msgid "Yum Extender: No updates"
 msgstr ""
 
-#: ../dbus/dbus_status.py:266
+#: ../dbus/dbus_status.py:267
 #, python-format
-msgid "Yum Extender: %s Updates available"
+msgid "Yum Extender: %s updates available"
 msgstr ""
 
 #: ../dbus/dbus_status.py:550
@@ -457,7 +455,7 @@ msgstr ""
 
 #: ../dbus/dbus_status.py:551
 #, python-format
-msgid "%s available updates "
+msgid "%s available updates"
 msgstr ""
 
 #: ../misc/yumex-dnf-local.desktop.in.h:1
@@ -469,7 +467,7 @@ msgid "Install local packages on system"
 msgstr ""
 
 #: ../misc/yumex-dnf.desktop.in.h:1
-msgid "Yum Extender (dnf)"
+msgid "Yum Extender (DNF)"
 msgstr ""
 
 #: ../misc/yumex-dnf.desktop.in.h:2
@@ -486,8 +484,8 @@ msgstr ""
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:2
 msgid ""
-"Yum extender is a graphical package management application, it will allow "
-"you to search and browse for packages to install, remove and update on your "
+"Yum Extender is a graphical package management application. It allows you to "
+"search and browse for packages to install, remove and update on your "
 "computer."
 msgstr ""
 
@@ -522,7 +520,7 @@ msgid "Browse and install/remove package groups"
 msgstr ""
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:10
-msgid "Browse packages by Size, Repository"
+msgid "Browse packages by size, repository"
 msgstr ""
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:11
@@ -534,106 +532,106 @@ msgid "Preferences"
 msgstr ""
 
 #: ../src/yumex.ui.h:2
+msgid "OK"
+msgstr ""
+
+#: ../src/yumex.ui.h:3
+msgid "Cancel"
+msgstr ""
+
+#: ../src/yumex.ui.h:4
 msgid ""
 "Show newest only is active when\n"
 "Yum Extender starts.\n"
-"Will show only lastest version of available\n"
+"Will show only latest version of available\n"
 "packages"
 msgstr ""
 
-#: ../src/yumex.ui.h:6
+#: ../src/yumex.ui.h:8
 msgid "Default: Show newest only"
 msgstr ""
 
-#: ../src/yumex.ui.h:7
+#: ../src/yumex.ui.h:9
 msgid ""
-"Erased unused requirment option is\n"
+"Erase unused requirement option is\n"
 "active when Yum Extender starts"
 msgstr ""
 
-#: ../src/yumex.ui.h:9
+#: ../src/yumex.ui.h:11
 msgid "Default: Erase Unused Requirements"
 msgstr ""
 
-#: ../src/yumex.ui.h:10
+#: ../src/yumex.ui.h:12
 msgid ""
 "Change the close action for the main window, so it just hides the\n"
 "window when the close button is clicked"
 msgstr ""
 
-#: ../src/yumex.ui.h:12
+#: ../src/yumex.ui.h:14
 msgid "Close will only minimize window"
 msgstr ""
 
-#: ../src/yumex.ui.h:13
+#: ../src/yumex.ui.h:15
 msgid ""
 "Use the toolbar in the header of the window\n"
-"standard when using Gnome"
+"standard when using GNOME"
 msgstr ""
 
-#: ../src/yumex.ui.h:15
+#: ../src/yumex.ui.h:17
 msgid "Show toolbar in window headerbar"
 msgstr ""
 
-#: ../src/yumex.ui.h:16
+#: ../src/yumex.ui.h:18
 msgid ""
 "Select all available updates when \n"
 "Yum Extender is started"
 msgstr ""
 
-#: ../src/yumex.ui.h:18
-msgid "Select Updates at startup"
-msgstr ""
-
-#: ../src/yumex.ui.h:19
-msgid "The interval in hour, where the dnf cache will be expired and updated"
-msgstr ""
-
 #: ../src/yumex.ui.h:20
-msgid "Cache expire interval (hours)"
+msgid "Select updates at startup"
 msgstr ""
 
 #: ../src/yumex.ui.h:21
-msgid "Settings"
+msgid "The interval in hour, when the DNF cache will be expired and updated"
 msgstr ""
 
 #: ../src/yumex.ui.h:22
-msgid "Autostart the Yum Extender status icon at user login"
+msgid "Cache expire interval (hours)"
 msgstr ""
 
 #: ../src/yumex.ui.h:23
-msgid "Start status icon at user logon"
+msgid "Settings"
 msgstr ""
 
 #: ../src/yumex.ui.h:24
-msgid "Enable scheduled check for available updates"
+msgid "Autostart the Yum Extender status icon at user login"
 msgstr ""
 
 #: ../src/yumex.ui.h:25
-msgid "Scheduled check for new updates"
+msgid "Start status icon at user login"
 msgstr ""
 
 #: ../src/yumex.ui.h:26
-msgid "60"
+msgid "Enable scheduled check for available updates"
 msgstr ""
 
 #: ../src/yumex.ui.h:27
-msgid "how often the update checker will run"
+msgid "Scheduled check for new updates"
 msgstr ""
 
 #: ../src/yumex.ui.h:28
-msgid "Update check interval (minutes)"
+msgid "How often the update checker will run"
 msgstr ""
 
 #: ../src/yumex.ui.h:29
-msgid "30"
+msgid "Update check interval (minutes)"
 msgstr ""
 
 #: ../src/yumex.ui.h:30
 msgid ""
-"delay from when Yum Extender is started\n"
-"to there is checked for updaates.\n"
-"Give the system time to settle down when\n"
+"Delay from when Yum Extender is started\n"
+"to when it checks for updates.\n"
+"Gives the system time to settle down when\n"
 "Yum Extender is started when the user logins."
 msgstr ""
 
@@ -642,11 +640,11 @@ msgid "Update checker startup delay (seconds)"
 msgstr ""
 
 #: ../src/yumex.ui.h:35
-msgid "Show notification when updates is found"
+msgid "Show notification when updates are found"
 msgstr ""
 
 #: ../src/yumex.ui.h:36
-msgid "Show status icon when no updates found"
+msgid "Show status icon when no updates are found"
 msgstr ""
 
 #: ../src/yumex.ui.h:37
@@ -678,7 +676,7 @@ msgid "Advanced"
 msgstr ""
 
 #: ../src/yumex.ui.h:44
-msgid "<b>Repositories used in current session</b>"
+msgid "Repositories used in current session"
 msgstr ""
 
 #: ../src/yumex.ui.h:45
@@ -761,7 +759,7 @@ msgid "Newest Only"
 msgstr ""
 
 #: ../src/yumex.ui.h:67
-msgid "Uninstall unused requeriments, when removing a package"
+msgid "Uninstall unused requirements when removing a package"
 msgstr ""
 
 #: ../src/yumex.ui.h:68
@@ -781,7 +779,7 @@ msgid "About"
 msgstr ""
 
 #: ../src/yumex.ui.h:72
-msgid "Documentation (online)"
+msgid "Documentation (Online)"
 msgstr ""
 
 #: ../src/yumex.ui.h:73
@@ -809,7 +807,7 @@ msgid "Delete Selected"
 msgstr ""
 
 #: ../src/yumex.ui.h:80
-msgid "package name start with <keyword>"
+msgid "Package name starts with <keyword>"
 msgstr ""
 
 #: ../src/yumex.ui.h:81
@@ -817,7 +815,7 @@ msgid "Prefix"
 msgstr ""
 
 #: ../src/yumex.ui.h:82
-msgid "keyword in package name"
+msgid "Keyword in package name"
 msgstr ""
 
 #: ../src/yumex.ui.h:83
@@ -825,7 +823,7 @@ msgid "Keyword"
 msgstr ""
 
 #: ../src/yumex.ui.h:84
-msgid "keywords in selected package attributes"
+msgid "Keywords in selected package attributes"
 msgstr ""
 
 #: ../src/yumex.ui.h:85
