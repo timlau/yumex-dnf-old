@@ -162,7 +162,7 @@ class Notification(GObject.GObject):
         Notify.init('Yum Extender')
         icon = "yumex-dnf"
         self.notification = Notify.Notification.new(summary, body, icon)
-        self.notification.set_timeout(5000)  # timeout 5s
+        self.notification.set_timeout(10000)  # timeout 10s
         self.notification.add_action('open', 'Open Yum Extender', self.callback)
         self.notification.add_action('apply', 'Apply Updates', self.callback)
         self.notification.connect('closed', self.on_closed)
