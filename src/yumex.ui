@@ -16,13 +16,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adj_update_interval">
-    <property name="lower">5</property>
-    <property name="upper">10080</property>
-    <property name="value">60</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkDialog" id="preferences">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -91,34 +84,6 @@
                 <property name="column_spacing">6</property>
                 <property name="row_homogeneous">True</property>
                 <child>
-                  <object class="GtkLabel" id="label_autostart">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender status icon at user login</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Start Yum Extender status icon at user logon</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_autostart">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkSwitch" id="pref_newest_only">
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
@@ -126,7 +91,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -137,7 +102,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -154,7 +119,7 @@ packages</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">2</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -170,78 +135,172 @@ active when Yum Extender starts</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">3</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="pref_update_interval">
+                  <object class="GtkLabel" id="label_hide_on_close">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Change the close action for the main window, so it just hides the
+window when the close button is clicked</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Close will only minimize window</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_hide_on_close">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="invisible_char">●</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_headerbar">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
+standard when using Gnome</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Show toolbar in window headerbar</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_headerbar">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_auto_select_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Select all available updates when 
+Yum Extender is started</property>
+                    <property name="label" translatable="yes">Select Updates at startup</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_auto_select_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_refresh_period">
+                    <property name="name">10</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Cache expire interval (hours)</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_refresh_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
                     <property name="input_purpose">number</property>
-                    <property name="adjustment">adj_update_interval</property>
+                    <property name="adjustment">adj_refresh_interval</property>
                     <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="settings">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Settings</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid_statusicon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="margin_top">14</property>
+                <property name="margin_bottom">10</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkSpinButton" id="pref_update_startup_delay">
+                  <object class="GtkSwitch" id="pref_autostart">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="invisible_char">●</property>
-                    <property name="input_purpose">number</property>
-                    <property name="adjustment">ad_update_startup_delay</property>
-                    <property name="climb_rate">5</property>
-                    <property name="snap_to_ticks">True</property>
-                    <property name="numeric">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_update_interval">
+                  <object class="GtkLabel" id="label_autostart">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">how often the update checker will run</property>
+                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender status icon at user login</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_start">25</property>
-                    <property name="label" translatable="yes">Update check interval (minutes)</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Start status icon at user logon</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_update_delay">
-                    <property name="name">25</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">delay from when Yum Extender is started
-to there is checked for updaates.
-Give the system time to settle down when
-Yum Extender is started when the user logins.</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="margin_start">25</property>
-                    <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">0</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -274,130 +333,145 @@ Yum Extender is started when the user logins.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_hide_on_close">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Change the close action for the main window, so it just hides the
-window when the close button is clicked</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="label" translatable="yes">Close will only minimize window</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_hide_on_close">
+                  <object class="GtkSpinButton" id="pref_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="pref_refresh_interval">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">60</property>
                     <property name="input_purpose">number</property>
-                    <property name="adjustment">adj_refresh_interval</property>
+                    <property name="adjustment">adj_update_interval</property>
                     <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
+                    <property name="value">60</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">4</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_refresh_period">
-                    <property name="name">10</property>
+                  <object class="GtkLabel" id="label_update_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, where the dnf cache will be expired and updated</property>
+                    <property name="tooltip_text" translatable="yes">how often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">Cache expire interval (hours)</property>
-                    <property name="ellipsize">end</property>
+                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
+                    <property name="label" translatable="yes">Update check interval (minutes)</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="top_attach">2</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_headerbar">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
-standard when using Gnome</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="label" translatable="yes">Show toolbar in window headerbar</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_headerbar">
+                  <object class="GtkSpinButton" id="pref_update_startup_delay">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">30</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">ad_update_startup_delay</property>
+                    <property name="climb_rate">5</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">30</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">8</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_auto_select_updates">
+                  <object class="GtkLabel" id="label_update_delay">
+                    <property name="name">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Select all available updates when 
-Yum Extender is started</property>
+                    <property name="tooltip_text" translatable="yes">delay from when Yum Extender is started
+to there is checked for updaates.
+Give the system time to settle down when
+Yum Extender is started when the user logins.</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
+                    <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_notify">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Show notification when updates is found</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Select Updates at startup</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">4</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="pref_auto_select_updates">
+                  <object class="GtkLabel" id="label_update_showicon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Show status icon when no updates found</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_update_notify">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="valign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="settings">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Settings</property>
+                <child>
+                  <object class="GtkSwitch" id="pref_update_showicon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
               </object>
               <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label_statusicon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Status Icon</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -555,7 +629,7 @@ Yum Extender is started</property>
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child type="tab">
@@ -565,7 +639,7 @@ Yum Extender is started</property>
                 <property name="label" translatable="yes">Advanced</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -582,9 +656,9 @@ Yum Extender is started</property>
                     <property name="margin_right">10</property>
                     <property name="margin_top">5</property>
                     <property name="margin_bottom">5</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Repositories used in current session&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -650,7 +724,7 @@ start Yum Extender</property>
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child type="tab">
@@ -660,7 +734,7 @@ start Yum Extender</property>
                 <property name="label" translatable="yes">Repositories</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -668,7 +742,7 @@ start Yum Extender</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -677,6 +751,13 @@ start Yum Extender</property>
       <action-widget response="1">pref_ok</action-widget>
       <action-widget response="0">pref_cancel</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adj_update_interval">
+    <property name="lower">5</property>
+    <property name="upper">10080</property>
+    <property name="value">60</property>
+    <property name="step_increment">5</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkMenu" id="arch_menu">
     <property name="visible">True</property>

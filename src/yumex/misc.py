@@ -173,14 +173,13 @@ class YumexConf(config.BaseConfig):
     color_obsolete = config.Option('#3465A4')
     color_downgrade = config.Option('#C17D11')
     history_days = config.IntOption(180)
-    bugzilla_url = config.Option(
-        'https://bugzilla.redhat.com/show_bug.cgi?id=')
     skip_broken = config.BoolOption(False)
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
     update_startup_delay = config.IntOption(30)
     update_notify = config.BoolOption(True)
+    update_showicon = config.BoolOption(True)
     autocheck_updates = config.BoolOption(False)
     hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
@@ -203,6 +202,7 @@ class YumexConf(config.BaseConfig):
     repo_saved = config.BoolOption(False)
     repo_enabled = config.KeyListOption([])
 
+
 class SessionConf(config.BaseConfig):
     """ Yum Extender current session Setting"""
     # skip broken for current session
@@ -220,7 +220,8 @@ class Config(object):
     Yum Extender Configuration class
     '''
     WRITE_ALWAYS = ['autostart', 'update_interval',
-                    'update_startup_delay', 'autocheck_updates']
+                    'update_startup_delay', 'autocheck_updates',
+                    'update_notify', 'update_showicon']
 
     def __init__(self):
         object.__init__(self)

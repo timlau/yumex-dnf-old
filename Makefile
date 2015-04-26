@@ -121,6 +121,16 @@ transifex-push:
 	@echo "You can now git commit -a -m 'Transfix push, ${APPNAME}.pot update'"
 	
 
+status-exit:
+	/usr/bin/dbus-send --session --print-reply --dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit
+	
+status-checkupdates:
+	/usr/bin/dbus-send --session --print-reply --dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Start
+	/usr/bin/dbus-send --session --print-reply --dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.CheckUpdates
+	
+status-run:
+	cd dbus && ./dbus_status.py -v -d
+
 .PHONY: all archive install clean build
 .PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog	
