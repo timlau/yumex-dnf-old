@@ -232,8 +232,11 @@ class PackageView(SelectionView):
         self.arch_menu = arch_menu
         self.store = self._setup_model()
         self.connect('cursor-changed', self.on_cursor_changed)
+        self.connect('button-press-event', self.on_mouse_button)
         self.state = 'normal'
         self._last_selected = []
+        self.popup = None
+        self.popup_store = []
         if self.group_mode:
             self._click_header_active = True
         else:
@@ -285,6 +288,75 @@ class PackageView(SelectionView):
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
+
+    def on_mouse_button(self, button, event):
+        """Handle mouse click in view."""
+        if event.button == 3:  # Right Click
+            x = int(event.x)
+            y = int(event.y)
+            pthinfo = self.get_path_at_pos(x, y)
+            if pthinfo is not None:
+                path, col, cellx, celly = pthinfo
+                self.grab_focus()
+                self.set_cursor(path, col, 0)
+                iterator = self.store.get_iter(path)
+                pkg = self.store.get_value(iterator, 0)
+                print("rc pkg:", str(pkg))
+                # Only open popup menu for installed packages
+                if not pkg.installed or pkg.queued:
+                    return
+                self.popup = self._get_package_popup(pkg, path)
+                self.popup.popup(None, None, None, None, event.button, event.time)
+                return True
+
+    def _get_package_popup(self, pkg, path):
+        """ Create a right click menu, for a given package."""
+        # get available downgrades
+        do_pkgs = pkg.downgrades
+        print('do pkgs: ', [str(do) for do in do_pkgs])
+        popup = Gtk.Menu()
+        self._add_menu_package(popup, _("Reinstall Package"), "ri", pkg)
+        # Show downgrade menu only if there is any avaliable downgrades
+        if do_pkgs:
+            dmenu = Gtk.Menu()
+            self.popup_store.append(dmenu)
+            for do_po in do_pkgs:
+                self._add_menu_downgrade(dmenu, str(do_po), pkg, do_po)
+            dmenu.show_all()
+            mi = Gtk.MenuItem(_("Downgrade Package"))
+            mi.set_submenu(dmenu)
+            popup.add(mi)
+            self.popup_store.append(mi)
+        popup.show_all()
+        return popup
+
+    def _add_menu_package(self, menu, label, action, pkg):
+        """Add menuitem to package"""
+        mi = Gtk.MenuItem(label)
+        mi.connect('activate', self.on_package_popup, action, pkg)
+        self.popup_store.append(mi)
+        menu.add(mi)
+
+    def _add_menu_downgrade(self, menu, label, pkg, do_pkg):
+        """Create menu item for a give pkg and downgrade."""
+        mi = Gtk.MenuItem(label)
+        mi.set_use_underline(False)
+        mi.connect('activate', self.on_package_downgrade, pkg, do_pkg)
+        self.popup_store.append(mi)
+        menu.add(mi)
+
+    def on_package_popup(self, widget, action, pkg):
+        """Handler for package right click menu"""
+        print('reinstall: %s ' % str(pkg))
+        pkg.queued = action
+        pkg.selected = True
+        self.queue.add(pkg)
+        self.queue_draw()
+
+    def on_package_downgrade(self, widget, pkg, do_pkg):
+        """Downgrade package right click menu handler"""
+        print('downgrade to : %s ' % str(do_pkg))
+        self._toggle_downgrade(do_pkg)
 
     def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
