@@ -487,14 +487,14 @@ class PackageView(SelectionView):
                 if pkg.action == 'do' or \
                     self.queue.has_pkg_with_name_arch(pkg):
                         return
-                pkg.action = 'do'
+                #pkg.action = 'do'
                 pkg.queued = 'do'
                 pkg.selected = True
                 pkg.downgrade_po = obj
                 obj.queued = 'do'
                 obj.selected = True
                 obj.downgrade_po = pkg
-                self.queue.add(pkg)
+                self.queue.add(obj)
         self.queue_draw()
 
     def install_all(self):
@@ -810,10 +810,11 @@ class QueueView(Gtk.TreeView):
         if len(pkg_list) > 0:
             parent = self.store.append(None, [label, ""])
             for pkg in pkg_list:
-                item = self.store.append(parent, [str(pkg), pkg.summary])
+                item = self.store.append(parent,
+                                         [str(pkg.downgrade_po), pkg.summary])
                 self.store.append(
                     item, [_("<b>Downgrade to</b> %s ") %
-                    str(pkg.downgrade_po), ""])
+                    str(pkg), ""])
 
 
 class HistoryView(Gtk.TreeView):

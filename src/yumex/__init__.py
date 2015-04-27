@@ -441,7 +441,6 @@ class YumexWindow(BaseWindow):
         if CONFIG.conf.auto_select_updates:
             self.package_view.on_section_header_clicked(None)
 
-
     def set_fields_active(self, state=True):
         """Set search fields active/inactive."""
         for field in ['name', 'summary', 'description']:
@@ -921,9 +920,9 @@ class YumexWindow(BaseWindow):
             for pkg in pkgs:
                 if action == 'do':
                     logger.debug('adding : %s %s' %
-                                 (action, pkg.downgrade_po.pkg_id))
+                                 (action, pkg.pkg_id))
                     rc, trans = self.backend.AddTransaction(
-                        pkg.downgrade_po.pkg_id,
+                        pkg.pkg_id,
                         const.QUEUE_PACKAGE_TYPES[action])
                     logger.debug('%s: %s' % (rc, trans))
                     if not rc:
