@@ -913,26 +913,7 @@ class YumexWindow(BaseWindow):
         if need_reset:
             self.reset()
 
-    @ExceptionHandler
-    def process_actions(self):
-        """Process the current actions in the queue.
-
-        - setup the Dnf transaction
-        - resolve dependencies
-        - ask user for confirmation on result of depsolve
-        - run the transaction
-        """
-        if self.queue_view.queue.total() == 0:
-            dialogs.show_information(self, _('No pending actions in queue'))
-            return
-        self.set_working(True, True)
-        # switch to queue view
-        # switch to package page
-        widget = self.ui.get_object('main_actions')
-        widget.set_active(True)
-        self.set_content_page(const.PAGE_QUEUE)
-        self.infobar.info(_('Preparing system for applying changes'))
-        self.backend.ClearTransaction()
+    def _populate_transaction(self):
         errors = 0
         error_msgs = set()
         for action in const.QUEUE_PACKAGE_TYPES:
@@ -965,7 +946,29 @@ class YumexWindow(BaseWindow):
             if not rc:
                 errors += 1
                 error_msgs |= set(trans)
+        return errors, error_msgs
 
+    @ExceptionHandler
+    def process_actions(self):
+        """Process the current actions in the queue.
+
+        - setup the Dnf transaction
+        - resolve dependencies
+        - ask user for confirmation on result of depsolve
+        - run the transaction
+        """
+        if self.queue_view.queue.total() == 0:
+            dialogs.show_information(self, _('No pending actions in queue'))
+            return
+        self.set_working(True, True)
+        # switch to queue view
+        # switch to package page
+        widget = self.ui.get_object('main_actions')
+        widget.set_active(True)
+        self.set_content_page(const.PAGE_QUEUE)
+        self.infobar.info(_('Preparing system for applying changes'))
+        self.backend.ClearTransaction()
+        errors, error_msgs = self._populate_transaction()
         if not errors:
             self.backend.GetTransaction()
             self.infobar.info(_('Searching for dependencies'))
@@ -991,6 +994,12 @@ class YumexWindow(BaseWindow):
                         if ok:
                             # tell the backend that the gpg key is confirmed
                             self.backend.ConfirmGPGImport(hexkeyid, True)
+                            # rerun the transaction
+                            # FIXME: It should not be needed to populate
+                            # the transaction again
+                            self.backend.ClearTransaction()
+                            errors, error_msgs = self._populate_transaction()
+                            rc, result = self.backend.BuildTransaction()
                             rc, result = self.backend.RunTransaction(
                                 max_err=CONFIG.conf.max_dnl_errors)
                         else:
