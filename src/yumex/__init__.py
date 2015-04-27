@@ -913,26 +913,30 @@ class YumexWindow(BaseWindow):
             self.reset()
 
     def _populate_transaction(self):
+        self.backend.ClearTransaction()
         errors = 0
         error_msgs = set()
         for action in const.QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    logger.debug('adding : %s %s' %
-                                 (action, pkg.pkg_id))
+                    logger.debug('adding: %s %s' %
+                                 (const.QUEUE_PACKAGE_TYPES[action],
+                                  pkg.pkg_id))
                     rc, trans = self.backend.AddTransaction(
                         pkg.pkg_id,
                         const.QUEUE_PACKAGE_TYPES[action])
-                    logger.debug('%s: %s' % (rc, trans))
+                    logger.debug('result : %s: %s' % (rc, trans))
                     if not rc:
                         errors += 1
                         error_msgs |= set(trans)
                 else:
-                    logger.debug('adding : %s %s' % (action, pkg.pkg_id))
+                    logger.debug('adding: %s %s' %
+                                 (const.QUEUE_PACKAGE_TYPES[action],
+                                  pkg.pkg_id))
                     rc, trans = self.backend.AddTransaction(
                         pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
-                    logger.debug('%s: %s' % (rc, trans))
+                    logger.debug('result: %s: %s' % (rc, trans))
                     if not rc:
                         errors += 1
                         error_msgs |= set(trans)
@@ -966,7 +970,6 @@ class YumexWindow(BaseWindow):
         widget.set_active(True)
         self.set_content_page(const.PAGE_QUEUE)
         self.infobar.info(_('Preparing system for applying changes'))
-        self.backend.ClearTransaction()
         errors, error_msgs = self._populate_transaction()
         if not errors:
             self.backend.GetTransaction()
@@ -996,7 +999,6 @@ class YumexWindow(BaseWindow):
                             # rerun the transaction
                             # FIXME: It should not be needed to populate
                             # the transaction again
-                            self.backend.ClearTransaction()
                             errors, error_msgs = self._populate_transaction()
                             rc, result = self.backend.BuildTransaction()
                             rc, result = self.backend.RunTransaction(
