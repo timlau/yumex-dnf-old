@@ -1074,7 +1074,8 @@ class YumexApplication(Gtk.Application):
 
     def __init__(self):
         Gtk.Application.__init__(
-            self, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+            self, application_id="apps.yumex-dnf",
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
         self.save_win_size = False  # save windows size flag
