@@ -237,7 +237,6 @@ class PackageView(SelectionView):
         self.state = 'normal'
         self._last_selected = []
         self.popup = None
-        self.popup_sub = None
         if self.group_mode:
             self._click_header_active = True
         else:
@@ -271,6 +270,7 @@ class PackageView(SelectionView):
         column2.set_clickable(True)
 
         self.create_text_column(_("Package"), 'name', size=200)
+
         self.create_text_column(_("Ver."), 'fullver', size=120)
         self.create_text_column(
             _("Arch."), 'arch', size=60,
@@ -310,6 +310,8 @@ class PackageView(SelectionView):
                 self.popup.popup(None, None, None, None,
                                  event.button, event.time)
                 return True
+        else:
+            return False
 
     def _get_package_popup(self, pkg, path):
         """ Create a right click menu, for a given package."""
@@ -321,31 +323,44 @@ class PackageView(SelectionView):
         # Show downgrade menu only if there is any avaliable downgrades
         do_pkgs = pkg.downgrades
         if do_pkgs:
-            self.popup_sub = Gtk.Menu()
+            print(do_pkgs)
+            popup_sub = Gtk.Menu()
             for do_pkg in do_pkgs:
                 mi = Gtk.MenuItem(str(do_pkg))
                 mi.set_use_underline(False)
-                mi.connect('activate', self.on_package_downgrade, pkg, do_pkg)
-                self.popup_sub.add(mi)
-            self.popup_sub.show_all()
+                mi.connect('button-press-event',
+                           self.on_package_downgrade, pkg, do_pkg)
+                popup_sub.add(mi)
+            popup_sub.show_all()
             mi = Gtk.MenuItem(_("Downgrade Package"))
-            mi.set_submenu(self.popup_sub)
+            mi.set_submenu(popup_sub)
             popup.add(mi)
         popup.show_all()
         return popup
 
     def on_package_reinstall(self, widget, pkg):
         """Handler for package right click menu"""
-        print('reinstall: %s ' % str(pkg))
+        logger.debug('reinstall: %s ' % str(pkg))
         pkg.queued = 'ri'
         pkg.selected = True
         self.queue.add(pkg, 'ri')
         self.queueView.refresh()
+        self.queue_draw()
 
-    def on_package_downgrade(self, widget, pkg, do_pkg):
+    def on_package_downgrade(self, widget, event, pkg, do_pkg):
         """Downgrade package right click menu handler"""
-        print('downgrade to : %s ' % str(do_pkg))
-        self._toggle_downgrade(do_pkg)
+        if event.button == 1:  # Left Click
+            logger.debug('downgrade to : %s ' % str(do_pkg))
+            #pkg.action = 'do'
+            pkg.queued = 'do'
+            pkg.selected = True
+            pkg.downgrade_po = do_pkg
+            do_pkg.queued = 'do'
+            do_pkg.selected = True
+            do_pkg.downgrade_po = pkg
+            self.queue.add(do_pkg, 'do')
+            self.queueView.refresh()
+            self.queue_draw()
 
     def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
@@ -529,11 +544,9 @@ class PackageView(SelectionView):
         if obj.queued == 'do':  # all-ready queued
             related_po = obj.downgrade_po
             if obj.installed:  # is obj the installed pkg ?
-                self.queue.remove(obj)
-                obj.action = "r"
+                self.queue.remove(related_po, 'do')
             else:
-                self.queue.remove(related_po)
-                related_po.action = "r"
+                self.queue.remove(obj, 'do')
             obj.queued = None
             obj.selected = False
             related_po.queued = None
@@ -548,7 +561,6 @@ class PackageView(SelectionView):
                 if pkg.action == 'do' or \
                     self.queue.has_pkg_with_name_arch(pkg):
                         return
-                #pkg.action = 'do'
                 pkg.queued = 'do'
                 pkg.selected = True
                 pkg.downgrade_po = obj
@@ -556,6 +568,7 @@ class PackageView(SelectionView):
                 obj.selected = True
                 obj.downgrade_po = pkg
                 self.queue.add(obj, 'do')
+        self.queueView.refresh()
         self.queue_draw()
 
     def install_all(self):
@@ -649,14 +662,13 @@ class PackageQueue:
                 na = "%s.%s" % (pkg.name, pkg.arch)
                 self._name_arch_index[na] = 1
 
-    def remove(self, pkg):
-        '''
-
-        @param pkg:
-        '''
+    def remove(self, pkg, action=None):
+        """Remove package from queue"""
+        if not action:
+            action = pkg.action
         na = "%s.%s" % (pkg.name, pkg.arch)
-        if pkg in self.packages[pkg.action]:
-            self.packages[pkg.action].remove(pkg)
+        if pkg in self.packages[action]:
+            self.packages[action].remove(pkg)
             del self._name_arch_index[na]
 
     def has_pkg_with_name_arch(self, pkg):
