@@ -289,6 +289,7 @@ class YumexWindow(BaseWindow):
     """Main application window class."""
     def __init__(self, app, status):
         BaseWindow.__init__(self, app, status)
+        self.set_name('YumexMainWindow')
         width = CONFIG.conf.win_width
         height = CONFIG.conf.win_height
         self.set_default_size(width, height)
