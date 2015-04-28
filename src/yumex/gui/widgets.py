@@ -226,6 +226,7 @@ class PackageInfo(PackageInfoWidget):
 
     def __init__(self, window, base):
         PackageInfoWidget.__init__(self, window, url_handler=self._url_handler)
+        self.set_name('YumexPackageInfo')
         self.window = window
         self.base = base
         self.current_package = None
@@ -469,6 +470,7 @@ class YumexToolBar(Gtk.Box):
     # TODO: move to gui.widget
     def __init__(self, ui):
         Gtk.Box.__init__(self)
+        self.set_name('YumexToolBar')
         self.props.orientation = Gtk.Orientation.HORIZONTAL
         self.props.hexpand = True
         self.set_margin_start(5)

@@ -225,6 +225,7 @@ class PackageView(SelectionView):
     def __init__(self, qview, arch_menu, group_mode=False):
         self.logger = logging.getLogger('yumex.PackageView')
         SelectionView.__init__(self)
+        self.set_name('YumexPackageView')
         self.group_mode = group_mode
         self._click_header_state = ""
         self.queue = qview.queue
