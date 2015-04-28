@@ -815,7 +815,7 @@ start Yum Extender</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="header_execute">
+      <object class="GtkMenuButton" id="header_execute">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
