@@ -29,6 +29,7 @@ import logging
 import datetime
 import subprocess
 import sys
+import os.path
 import re
 import yumex.const as const
 import yumex.status
@@ -298,12 +299,9 @@ class YumexWindow(BaseWindow):
         self.connect('configure-event', self.on_window_changed)
         self.connect('window-state-event', self.on_window_state)
 
-        screen = Gdk.Screen.get_default()
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_path(const.DATA_DIR + '/gtk-style.css')
-        context = Gtk.StyleContext()
-        context.add_provider_for_screen(screen, css_provider,
-                                Gtk.STYLE_PROVIDER_PRIORITY_USER)
+        # load custom styling from current theme
+        self.load_custom_styling()
+
         # init vars
         self.cur_height = 0         # current window height
         self.cur_width = 0          # current windows width
@@ -319,6 +317,7 @@ class YumexWindow(BaseWindow):
         self._grps = None   # Group and Category cache
         self.active_page = None  # Active content page
         self.search_fields = CONFIG.conf.search_fields
+        self.add_accel_group(self.ui.get_object('main_accelgroup'))
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         # setup the main gui
@@ -346,7 +345,6 @@ class YumexWindow(BaseWindow):
         vbox.pack_start(self.stack, True, True, 0)
         self.stack.show()
         vbox.show()
-        self.add_accel_group(self.ui.get_object('main_accelgroup'))
 
         # Setup package filters
         for name in ['updates', 'installed', 'available', 'all']:
@@ -422,7 +420,8 @@ class YumexWindow(BaseWindow):
         wid = self.ui.get_object('header_execute')
         wid.connect('clicked', self.on_apply_changes)
 
-        self.show_now()
+        if not self.app.args.minimized:
+            self.show_now()
 
         # setup the package manager backend
         # get the default enabled repos
@@ -441,6 +440,28 @@ class YumexWindow(BaseWindow):
         # self.ui.get_object('search_keyword').set_active(True)
         if CONFIG.conf.auto_select_updates:
             self.package_view.on_section_header_clicked(None)
+        if self.app.args.minimized:
+            self.iconify()
+
+    def load_custom_styling(self):
+        """Load custom .css styling from current theme."""
+        css_fn = None
+        theme = Gtk.Settings.get_default().props.gtk_theme_name
+        css_postfix = '%s/gtk-3.0/apps/yumex.css' % theme
+        for css_prefix in [os.path.expanduser('~/.themes'), '/usr/share/themes']:
+            fn = os.path.join(css_prefix, css_postfix)
+            logger.debug('looking for %s', fn)
+            if os.path.exists(fn):
+                css_fn = fn
+                break
+        if css_fn:
+            screen = Gdk.Screen.get_default()
+            css_provider = Gtk.CssProvider()
+            css_provider.load_from_path(css_fn)
+            context = Gtk.StyleContext()
+            context.add_provider_for_screen(screen, css_provider,
+                                    Gtk.STYLE_PROVIDER_PRIORITY_USER)
+            logger.debug('loading custom styling : %s', css_fn)
 
     def set_fields_active(self, state=True):
         """Set search fields active/inactive."""
@@ -508,12 +529,11 @@ class YumexWindow(BaseWindow):
 
         hide/show the window, based on current state
         """
-        if force:
-            self.present()
-        elif self.get_property('visible'):
-            self.hide()
-        else:
+        if force or not self.is_active():
             self.show()
+            self.present()
+        else:
+            self.iconify()
 
     def setup_main_content(self):
         """Setup the main content
@@ -1161,6 +1181,9 @@ class YumexApplication(Gtk.Application):
         parser.add_argument(
             '--updateall', action='store_true',
             help='apply all available updates')
+        parser.add_argument(
+            '--minimized', action='store_true',
+            help='start Yum Extender mimimized')
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.debug:
             self.doTextLoggerSetup(loglvl=logging.DEBUG)

@@ -8,6 +8,7 @@ from distutils import log
 import os
 from os.path import join, basename, split
 
+
 class BuildScripts(build_scripts):
     def run(self):
         build_scripts.run(self)
@@ -17,7 +18,7 @@ class BuildScripts(build_scripts):
             if os.path.exists(outfile) and outfile.endswith(".py"):
                 if basename(outfile) == "main.py":
                     dn, fn = split(outfile)
-                    newfile = join(dn,"yumex-dnf")
+                    newfile = join(dn, "yumex-dnf")
                     log.info("renaming %s -> %s", outfile, basename(newfile))
                     os.rename(outfile, newfile)
 
@@ -28,10 +29,10 @@ setup(name="yumex-dnf",
       author="Tim Lauridsen",
       author_email="timlau@fedoraproject.org",
       url='http://yumex.dk',
-      packages=['yumex','yumex.gui'],
-      package_dir = {'': 'src'},
+      packages=['yumex', 'yumex.gui'],
+      package_dir={'': 'src'},
       scripts=['src/main.py'],
-      data_files=[('', ['src/yumex.ui','src/gtk-style.css'])],
+      data_files=[('', ['src/yumex.ui'])],
       cmdclass={
         'build_scripts': BuildScripts,
       })
