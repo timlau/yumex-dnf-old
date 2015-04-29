@@ -178,13 +178,13 @@ class Notification(GObject.GObject):
         self.emit('notify-action', 'closed')
 
 
-class YumReadOnlyBackend(dnfdaemon.client.ClientReadOnly):
+class YumReadOnlyBackend(dnfdaemon.client.Client):
 
     """
     """
 
     def __init__(self):
-        dnfdaemon.client.ClientReadOnly.__init__(self)
+        dnfdaemon.client.Client.__init__(self)
 
 
 class StatusIcon:
