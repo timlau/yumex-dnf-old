@@ -447,7 +447,7 @@ class YumexWindow(BaseWindow):
         """Load custom .css styling from current theme."""
         css_fn = None
         theme = Gtk.Settings.get_default().props.gtk_theme_name
-        css_postfix = '%s/gtk-3.0/apps/yumex.css' % theme
+        css_postfix = '%s/apps/yumex.css' % theme
         for css_prefix in [os.path.expanduser('~/.themes'), '/usr/share/themes']:
             fn = os.path.join(css_prefix, css_postfix)
             logger.debug('looking for %s', fn)
