@@ -175,7 +175,7 @@ FEDORA_REPOS = ['fedora','updates','updates-testing','rawhide']
 
 ADVISORY_TYPES = {
 hawkey.ADVISORY_BUGFIX: _('Bugfix'),
-hawkey.ADVISORY_UNKNOWN: _('Unknown'),
+hawkey.ADVISORY_UNKNOWN: _('New Package'),
 hawkey.ADVISORY_SECURITY: _('Security'),
 hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
 }
