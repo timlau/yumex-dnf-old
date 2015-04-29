@@ -991,20 +991,26 @@ class YumexWindow(BaseWindow):
                     while rc == 1:
                         # get info about gpgkey to be comfirmed
                         values = self.backend._gpg_confirm
-                        (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
-                        logger.debug('GPGKey : %s' % repr(values))
-                        ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
-                        if ok:
-                            # tell the backend that the gpg key is confirmed
-                            self.backend.ConfirmGPGImport(hexkeyid, True)
-                            # rerun the transaction
-                            # FIXME: It should not be needed to populate
-                            # the transaction again
-                            errors, error_msgs = self._populate_transaction()
-                            rc, result = self.backend.BuildTransaction()
-                            rc, result = self.backend.RunTransaction(
-                                max_err=CONFIG.conf.max_dnl_errors)
-                        else:
+                        if values:  # There is a gpgkey to be verified
+                            (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+                            logger.debug('GPGKey : %s' % repr(values))
+                            ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
+                            if ok:
+                                # tell the backend that the gpg key is confirmed
+                                self.backend.ConfirmGPGImport(hexkeyid, True)
+                                # rerun the transaction
+                                # FIXME: It should not be needed to populate
+                                # the transaction again
+                                errors, error_msgs = self._populate_transaction()
+                                rc, result = self.backend.BuildTransaction()
+                                rc, result = self.backend.RunTransaction(
+                                    max_err=CONFIG.conf.max_dnl_errors)
+                            else:
+                                break
+                        else:  # error in signature verification
+                            dialogs.show_information(
+                                self, _('Error checking package signatures\n'),
+                                         '\n'.join(result))
                             break
                     if rc == 4:  # Download errors
                         dialogs.show_information(
