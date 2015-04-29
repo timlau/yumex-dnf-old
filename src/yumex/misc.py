@@ -173,7 +173,6 @@ class YumexConf(config.BaseConfig):
     color_obsolete = config.Option('#3465A4')
     color_downgrade = config.Option('#C17D11')
     history_days = config.IntOption(180)
-    skip_broken = config.BoolOption(False)
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
@@ -205,8 +204,6 @@ class YumexConf(config.BaseConfig):
 
 class SessionConf(config.BaseConfig):
     """ Yum Extender current session Setting"""
-    # skip broken for current session
-    skip_broken = config.BoolOption(False)
     # show newest package version only for current session
     newest_only = config.BoolOption(True)
     # Clean orphan dependencies for this session

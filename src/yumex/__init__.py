@@ -448,7 +448,8 @@ class YumexWindow(BaseWindow):
         css_fn = None
         theme = Gtk.Settings.get_default().props.gtk_theme_name
         css_postfix = '%s/apps/yumex.css' % theme
-        for css_prefix in [os.path.expanduser('~/.themes'), '/usr/share/themes']:
+        for css_prefix in [os.path.expanduser('~/.themes'),
+                           '/usr/share/themes']:
             fn = os.path.join(css_prefix, css_postfix)
             logger.debug('looking for %s', fn)
             if os.path.exists(fn):
@@ -471,7 +472,8 @@ class YumexWindow(BaseWindow):
 
     def on_window_state(self, widget, event):
         # save window current maximized state
-        self.cur_maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
+        self.cur_maximized = event.new_window_state & \
+                             Gdk.WindowState.MAXIMIZED != 0
 
     def on_window_changed(self, widget, data):
         self.cur_height = data.height
