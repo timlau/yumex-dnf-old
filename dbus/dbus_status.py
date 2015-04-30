@@ -246,6 +246,8 @@ class StatusIcon:
             self.statusicon.set_tooltip_text(_('Yum Extender: Working'))
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.image_checking)
             self.set_popup_menu_sensitivity(False)
+            if not SHOWICON:
+                self.statusicon.set_visible(False)
         else:
             self.set_popup_menu_sensitivity(True)
             update_count = self.update_count
