@@ -124,11 +124,11 @@ class ArchMenu(GObject.GObject):
     def __init__(self, arch_menu_widget, archs):
         GObject.GObject.__init__(self)
         self.all_archs = archs
-        self.current_archs = archs
         self.arch_menu_widget = arch_menu_widget
         if not CONFIG.conf.archs:
             CONFIG.conf.archs = list(archs)
             CONFIG.write()
+        self.current_archs = set(CONFIG.conf.archs)
         self.arch_menu = self._setup_archmenu()
 
     def _setup_archmenu(self):

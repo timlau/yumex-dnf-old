@@ -313,7 +313,10 @@ class YumexWindow(BaseWindow):
         self.search_type = 'prefix'
         self.last_search_pkgs = []
         self.current_filter_search = None
-        self.active_archs = const.PLATFORM_ARCH
+        if CONFIG.conf.archs:
+            self.active_archs = CONFIG.conf.archs
+        else:
+            self.active_archs = list(const.PLATFORM_ARCH)
         self._grps = None   # Group and Category cache
         self.active_page = None  # Active content page
         self.search_fields = CONFIG.conf.search_fields
@@ -547,7 +550,7 @@ class YumexWindow(BaseWindow):
         self.queue_view = views.QueueView(queue_menu)
         arch_menu_widget = self.ui.get_object('arch_menu')
         self.arch_menu = yumex.gui.widgets.ArchMenu(arch_menu_widget,
-                                                    self.active_archs)
+                                                    const.PLATFORM_ARCH)
         self.arch_menu.connect('arch-changed', self.on_arch_changed)
         self.package_view = views.PackageView(self.queue_view, self.arch_menu)
         self.package_view.connect(
@@ -759,6 +762,7 @@ class YumexWindow(BaseWindow):
         """Arch changed in arch menu callback."""
         self.active_archs = data.split(',')
         logger.debug('arch-changed : %s' % self.active_archs)
+        self.arch_filter.change(self.active_archs)
         if self.last_search:
             data = self.last_search
             self.last_search = None
