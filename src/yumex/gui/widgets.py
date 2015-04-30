@@ -25,7 +25,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gio
-from yumex.misc import _
+from yumex.misc import _, CONFIG
 
 import datetime
 import hawkey
@@ -126,6 +126,9 @@ class ArchMenu(GObject.GObject):
         self.all_archs = archs
         self.current_archs = archs
         self.arch_menu_widget = arch_menu_widget
+        if not CONFIG.conf.archs:
+            CONFIG.conf.archs = list(archs)
+            CONFIG.write()
         self.arch_menu = self._setup_archmenu()
 
     def _setup_archmenu(self):
@@ -133,10 +136,14 @@ class ArchMenu(GObject.GObject):
         for arch in self.all_archs:
             cb = Gtk.CheckMenuItem()
             cb.set_label(arch)
-            cb.set_active(True)
+            if arch in CONFIG.conf.archs:
+                cb.set_active(True)
+            else:
+                cb.set_active(False)
             cb.show()
             cb.connect('toggled', self.on_archmenu_clicked)
             arch_menu.add(cb)
+
         return arch_menu
 
     def on_arch_clicked(self, button, event=None):
@@ -150,10 +157,12 @@ class ArchMenu(GObject.GObject):
         state = widget.get_active()
         label = widget.get_label()
         if state:
-            self.current_archs.append(label)
+            self.current_archs.add(label)
         else:
             self.current_archs.remove(label)
-        archs = ",".join(self.current_archs)
+        archs = ",".join(list(self.current_archs))
+        CONFIG.conf.archs = list(self.current_archs)
+        CONFIG.write()
         self.emit("arch-changed", archs)
 
 

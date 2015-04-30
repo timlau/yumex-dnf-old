@@ -47,9 +47,9 @@ ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {
-    "x86_64": ['x86_64', 'i686', 'i386', 'noarch'],
-    "i386": ['i686', 'i386', 'noarch'],
-    "armhfp": ['armv7hl', 'noarch']
+    "x86_64": set(['86_64', 'i686', 'i386', 'noarch']),
+    "i386": set(['i686', 'i386', 'noarch']),
+    "armhfp": set(['armv7hl', 'noarch'])
 }
 
 # arch for this platform

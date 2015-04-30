@@ -200,6 +200,7 @@ class YumexConf(config.BaseConfig):
     auto_select_updates = config.BoolOption(False)
     repo_saved = config.BoolOption(False)
     repo_enabled = config.KeyListOption([])
+    archs = config.KeyListOption([])
 
 
 class SessionConf(config.BaseConfig):
