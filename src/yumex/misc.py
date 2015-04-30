@@ -234,16 +234,18 @@ class Config(object):
         self.read()
 
     def read(self):
+        first_read = False
         if not os.path.exists(self.conf_file):
             logger.info("creating default config file : %s" % self.conf_file)
-            fh = open(self.conf_file, "w")
-            print('[yumex]\n', file=fh)
-            fh.close()
-        self.parser.read_file(open(self.conf_file, "r"))
+            first_read = True
+        else:
+            self.parser.read_file(open(self.conf_file, "r"))
         if not self.parser.has_section('yumex'):
             self.parser.add_section('yumex')
         self.conf.populate(self.parser, 'yumex')
         self.session.populate(self.parser, 'yumex')
+        if first_read:
+            self.write()
 
     def write(self):
         fp = open(self.conf_file, "w")

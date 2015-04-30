@@ -1215,7 +1215,7 @@ class YumexApplication(Gtk.Application):
         self.status = yumex.status.StatusIcon(self)
         if not self.status.is_started:
             msg = _('Yum Extender will close' + '\n' + self.status.last_err)
-            dialogs.show_information(_('Error in starting notification icon'),
+            dialogs.show_information(None, _('Error in starting notification icon'),
                                      msg)
             sys.exit(0)
         self.status.Start()  # Show the icon
