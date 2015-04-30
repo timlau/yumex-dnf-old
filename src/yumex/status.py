@@ -85,10 +85,17 @@ class StatusIcon:
         self.bus = session
         self.dbus_org = ORG
         self.dbus_interface = INTERFACE
+        self.last_err = ""
         self.daemon = self._get_daemon(
             self.bus, self.dbus_org, self.dbus_interface)
-        logger.debug("%s daemon loaded - version :  %s" %
+        try:
+            logger.debug("%s daemon loaded - version :  %s" %
                      (self.dbus_interface, self.daemon.GetVersion()))
+            self.is_started = True
+        except Exception as err:
+            self.is_started = False
+            self.last_err = str(err)
+            logger.error(self.last_err)
 
     def _get_daemon(self, bus, org, interface):
         ''' Get the daemon dbus proxy object'''

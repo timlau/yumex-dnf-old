@@ -1209,6 +1209,11 @@ class YumexApplication(Gtk.Application):
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = yumex.status.StatusIcon(self)
+        if not self.status.is_started:
+            msg = _('Yum Extender will close' + '\n' + self.status.last_err)
+            dialogs.show_information(_('Error in starting notification icon'),
+                                     msg)
+            sys.exit(0)
         self.status.Start()  # Show the icon
         if self.args.icononly:  # Only start the icon and exit
             sys.exit(0)
