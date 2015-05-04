@@ -147,8 +147,8 @@ class ArchMenu(GObject.GObject):
         return arch_menu
 
     def on_arch_clicked(self, button, event=None):
-        #print('clicked : event : %s' % event.type)
-        if event:
+        #print('clicked : event : %s' % event.button)
+        if event.button == 1:  # Left click
             self.arch_menu.popup(
                 None, None, None, None, event.button, event.time)
             return True
