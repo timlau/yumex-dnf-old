@@ -1,6 +1,154 @@
+2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, setup.py, src/yumex/const.py, yumex-dnf.spec: 
+	bumped version to 4.1.2
+
+2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: protect against removing
+	yumex-dnf and req. (#29)
+
+2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: refresh search when newest_only is
+	changed.(#30)
+
+2015-05-04  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: Only active arch menu using left click
+	Right click makes strange problems (RhBug: 1217730)
+
+2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: dont show statusicon while working, if it is
+	disabed  (#27)
+
+2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: fix: yumex notification
+	icon launch fails if no yumex.conf  (RhBug: 1217165)
+
+2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/const.py,
+	src/yumex/gui/widgets.py: make the saved arch filter work on first
+	start (#28)
+
+2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/status.py: fix: better handling
+	of errors starting notification icon  (RhBug: 1217241)
+
+2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, src/yumex/gui/widgets.py, src/yumex/misc.py: 
+	remember arch menu selections between sessions (#28)
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: Remove skipbroken
+	option, not used by dnf
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py: map ADVISORY_UNKNOWN to 'New Package'  (RhBug:
+	1216192)
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: changes locations where looking for custom
+	styling  looking for ~/.themes/**name**/apps/yumex.css
+	/usr/share/themes/**name**/apps/yumex.css  (#26)
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: statusicon should use system dnddaemon, to no
+	reloading all metadata in users context.
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py, src/gtk-style.css, src/yumex/__init__.py: load custom
+	styling from current theme (#26)  Add '--minimized' cmd option to
+	start yumex (#27)
+
+2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: show error dialog on gpg check errors
+
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: Make downgrade/reinstall work as expected
+	(#16)
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py, src/yumex/gui/widgets.py: set styling name
+	to toolbar & packageview (#26)
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: set styling name to main window (#26)
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: ui adjustments
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: change toolbar execute to GtkMenuButton
+
+2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: add 'apps.yumex-dnf' as application id
+
+2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: better debug output move ClearTransaction
+
+2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: import downgrade/reinstall menu
+
+2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: add package view right click menu with
+	reinstall & downgrade  (#16)
+
+2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/gui/views.py: fix: make
+	downgrades work  (#16)
+
+2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: Added support for handling of gpgkey
+	import.  (#6, RhBug: 1215428)
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/yumex-dnf.pot: Transfix push, yumex-dnf.pot update
+
+2015-04-26  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #25 from piotrdrag/master  Improve some
+	strings
+
+2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.1
+
+2015-04-26  Piotr Drąg <piotrdrag@gmail.com>
+
+	* dbus/dbus_status.py, misc/yumex-dnf.appdata.xml.in,
+	misc/yumex-dnf.desktop.in, src/yumex.ui, src/yumex/__init__.py,
+	src/yumex/const.py, src/yumex/dnf_backend.py,
+	src/yumex/gui/dialogs.py, src/yumex/gui/widgets.py: Improve some
+	strings
 
 2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
 
