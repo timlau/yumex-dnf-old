@@ -763,8 +763,10 @@ class YumexWindow(BaseWindow):
         self.active_archs = data.split(',')
         logger.debug('arch-changed : %s' % self.active_archs)
         self.arch_filter.change(self.active_archs)
+        self.refeash_search()
+
+    def refresh_search(self):
         if self.last_search:
-            data = self.last_search
             self.last_search = None
             self.on_search_changed(self.search_entry)
         elif self.active_page == const.PAGE_PACKAGES and self.current_filter:
@@ -922,15 +924,17 @@ class YumexWindow(BaseWindow):
         """Apply Changes button callback."""
         self.process_actions()
 
-    def on_options(self, widget, parameter):
+    def on_options(self, widget, option):
         """Options menu callback.
 
         Set the CONFIG parameter values based on the menu checkbox states
         """
         state = widget.get_active()
-        setattr(CONFIG.session, parameter, state)
+        setattr(CONFIG.session, option, state)
         logger.debug('Option : %s = %s' %
-                     (parameter, getattr(CONFIG.session, parameter)))
+                     (option, getattr(CONFIG.session, option)))
+        if option in ['newest_only']:  # search again
+            self.refresh_search()
 
     def on_pref(self, widget):
         """Preferences selected callback."""
