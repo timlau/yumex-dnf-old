@@ -29,7 +29,7 @@ import subprocess
 import sys
 import hawkey
 
-VERSION = "4.1.1"
+VERSION = "4.1.2"
 
 
 # find the data dir for resources
