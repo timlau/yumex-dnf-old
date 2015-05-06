@@ -201,6 +201,7 @@ class YumexConf(config.BaseConfig):
     repo_saved = config.BoolOption(False)
     repo_enabled = config.KeyListOption([])
     archs = config.KeyListOption([])
+    protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
 
 
 class SessionConf(config.BaseConfig):

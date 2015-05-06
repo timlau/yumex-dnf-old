@@ -938,7 +938,6 @@ class YumexWindow(BaseWindow):
 
     def on_pref(self, widget):
         """Preferences selected callback."""
-
         need_reset = self.preferences.run()
         if need_reset:
             self.reset()
@@ -982,6 +981,17 @@ class YumexWindow(BaseWindow):
                 error_msgs |= set(trans)
         return errors, error_msgs
 
+    def _check_protected(self, trans):
+        """Check for deletion protected packages in transaction"""
+        protected = []
+        for action, pkgs in trans:
+            if action == 'remove':
+                for id, size, replaces in pkgs:
+                    (n, e, v, r, a, repo_id) = str(id).split(',')
+                    if n in CONFIG.conf.protected:
+                        protected.append(n)
+        return protected
+
     @ExceptionHandler
     def process_actions(self):
         """Process the current actions in the queue.
@@ -1009,6 +1019,13 @@ class YumexWindow(BaseWindow):
             self.infobar.info(_('Dependencies resolved'))
             self.set_working(False)
             if rc:
+                check = self._check_protected(result)
+                if check:
+                    dialogs.show_information(
+                    self, _("Can't remove protected package(s)"),
+                            '\n'.join(check))
+                    self.reset_on_cancel()
+                    return
                 self.transaction_result.populate(result, '')
                 ok = self.transaction_result.run()
                 if ok:  # Ok pressed
