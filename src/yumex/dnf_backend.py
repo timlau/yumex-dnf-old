@@ -40,7 +40,7 @@ class DnfPackage(yumex.backend.Package):
         (pkg_id, summary, size) = po_tuple
         self.pkg_id = pkg_id
         self.action = action
-        (n, e, v, r, a, repo_id) = self.to_pkg_tuple(self.pkg_id)
+        (n, e, v, r, a, repo_id) = yumex.misc.to_pkg_tuple(self.pkg_id)
         self.name = n
         self.epoch = e
         self.ver = v
@@ -56,22 +56,13 @@ class DnfPackage(yumex.backend.Package):
         # cache
         self._description = None
 
-    def to_pkg_tuple(self, pkg_id):
-        """Find the real package nevre & repoid from an package pkg_id"""
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        return (n, e, v, r, a, repo_id)
-
     def __str__(self):
         """String representation of the package object."""
         return self.fullname
 
     @property
     def fullname(self):
-        if self.epoch and self.epoch != '0':
-            return "%s-%s:%s-%s.%s" %\
-                   (self.name, self.epoch, self.ver, self.rel, self.arch)
-        else:
-            return "%s-%s-%s.%s" % (self.name, self.ver, self.rel, self.arch)
+        return yumex.misc.id2fullname(self.pkg_id)
 
     @ExceptionHandler
     def get_attribute(self, attr):

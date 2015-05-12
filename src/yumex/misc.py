@@ -43,13 +43,21 @@ P_ = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
-def id2fullname(pkg_id):
+
+def to_pkg_tuple(pkg_id):
+    """Find the real package nevre & repoid from an package pkg_id"""
     (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
+    return (n, e, v, r, a, repo_id)
+
+
+def id2fullname(pkg_id):
+    (n, e, v, r, a, repo_id) = to_pkg_tuple(pkg_id)
     if e and e != '0':
         return "%s-%s:%s-%s.%s" %\
                (n, e, v, r, a)
     else:
         return "%s-%s-%s.%s" % (n, v, r, a)
+
 
 def color_floats(spec):
     rgba = Gdk.RGBA()
