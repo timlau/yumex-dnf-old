@@ -956,29 +956,30 @@ class YumexWindow(BaseWindow):
                     rc, trans = self.backend.AddTransaction(
                         pkg.pkg_id,
                         const.QUEUE_PACKAGE_TYPES[action])
-                    logger.debug('result : %s: %s' % (rc, trans))
                     if not rc:
+                        logger.debug('result : %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs |= set(trans)
+                        error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
                 else:
                     logger.debug('adding: %s %s' %
                                  (const.QUEUE_PACKAGE_TYPES[action],
                                   pkg.pkg_id))
                     rc, trans = self.backend.AddTransaction(
                         pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
-                    logger.debug('result: %s: %s' % (rc, trans))
                     if not rc:
+                        logger.debug('result: %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs |= set(trans)
+                        error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, trans = self.backend.GroupInstall(grp_id)
             else:
                 rc, trans = self.backend.GroupRemove(grp_id)
-            logger.debug('%s: %s' % (rc, trans))
             if not rc:
+                logger.debug('%s: %s' % (rc, pkg))
                 errors += 1
-                error_msgs |= set(trans)
+                error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
+        logger.debug(errors)
         return errors, error_msgs
 
     def _check_protected(self, trans):
@@ -1074,7 +1075,7 @@ class YumexWindow(BaseWindow):
                             '\n'.join(result))
         else:  # error in population of the transaction
             dialogs.show_information(
-                self, _('Error(s) in search for dependencies'),
+                self, _('Error(s) in building transaction'),
                         '\n'.join(error_msgs))
         self.reset_on_error()
 
