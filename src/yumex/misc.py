@@ -43,6 +43,13 @@ P_ = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
+def id2fullname(pkg_id):
+    (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
+    if e and e != '0':
+        return "%s-%s:%s-%s.%s" %\
+               (n, e, v, r, a)
+    else:
+        return "%s-%s-%s.%s" % (n, v, r, a)
 
 def color_floats(spec):
     rgba = Gdk.RGBA()

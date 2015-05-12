@@ -190,9 +190,9 @@ class PackageInfoWidget(Gtk.Box):
         tip = _("Package Filelist")
         vbox.add(self._get_radio_button(
             'drive-multidisk-symbolic', "files", rb, tip))
-        #tip = _("Package Requirements")
-        #vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
-                                        #tip))
+        tip = _("Package Requirements")
+        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
+                                        tip))
         vbox.set_margin_right(5)
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
@@ -436,7 +436,14 @@ class PackageInfo(PackageInfoWidget):
         self.base.set_working(False)
 
     def _show_requirements(self):
-        self.view.write(_("No requirement information is available"))
+        self.base.set_working(True)
+        reqs = self.current_package.requirements
+        for key in reqs:
+            self.view.write(key)
+            for pkg_id in reqs[key]:
+                pkg = yumex.misc.id2fullname(pkg_id)
+                self.view.write(' --> {}'.format(pkg))
+        self.base.set_working(False)
 
 
 def ask_for_gpg_import(window, values):

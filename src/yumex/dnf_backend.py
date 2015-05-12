@@ -161,8 +161,8 @@ class DnfPackage(yumex.backend.Package):
 
     @property
     @ExceptionHandler
-    def dependencies(self):
-        return self.backend.get_dependencies(self.pkg_id)
+    def requirements(self):
+        return  self.get_attribute('requires')
 
     @property
     def is_update(self):
