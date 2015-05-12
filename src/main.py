@@ -20,6 +20,8 @@
 
 import sys
 import os.path
+import traceback
+import subprocess
 
 here = sys.path[0]
 if here != '/usr/bin':
@@ -29,7 +31,30 @@ if here != '/usr/bin':
 
 
 from yumex import YumexApplication
+try:
+    app = YumexApplication()
+    exit_status = app.run(sys.argv)
+    sys.exit(exit_status)
+except Exception as e:
+    print("Exception in user code:")
+    print('-' * 80)
+    traceback.print_exc(file=sys.stdout)
+    print('-' * 80)
 
-app = YumexApplication()
-exit_status = app.run(sys.argv)
-sys.exit(exit_status)
+    # Try to close backend dbus daemon
+    print('Closing backend D-Bus daemons')
+    try:
+        subprocess.call(
+            '/usr/bin/dbus-send --session --print-reply '
+            '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit',
+            shell=True)
+    except:
+        pass
+    try:
+        subprocess.call(
+            '/usr/bin/dbus-send --system --print-reply '
+            '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
+            shell=True)
+    except:
+        pass
+sys.exit(1)
