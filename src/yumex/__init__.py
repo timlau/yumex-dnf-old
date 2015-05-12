@@ -1060,12 +1060,19 @@ class YumexWindow(BaseWindow):
                                 self, _('Error checking package signatures\n'),
                                          '\n'.join(result))
                             break
+
                     if rc == 4:  # Download errors
                         dialogs.show_information(
                             self, _('Downloading error(s)\n'),
                                      '\n'.join(result))
+                    else:  # other transaction errors
+                        dialogs.show_information(
+                            self, _('Error in transaction\n'),
+                                     '\n'.join(result))
+
                     self.reset()
                     return
+
                 else:  # user cancelled transaction
                     self.reset_on_cancel()
                     return
