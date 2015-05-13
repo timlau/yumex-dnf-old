@@ -185,7 +185,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         elif event == 'signature-check':
             # self.frontend.infobar.show_progress(False)
             self.frontend.infobar.set_progress(0.0)
-            self.frontend.infobar.info(_('Checking packages signatures'))
+            self.frontend.infobar.info(_('Checking package signatures'))
             self.frontend.infobar.set_progress(1.0)
             self.frontend.infobar.info_sub('')
         elif event == 'run-test-transaction':
