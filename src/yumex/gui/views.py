@@ -278,7 +278,7 @@ class PackageView(SelectionView):
             tooltip=_('click to filter archs'))
         self.create_text_column(_("Summary"), 'summary', size=400)
         self.create_text_column(_("Repo."), 'repository', size=90)
-        self.create_text_column(_("Size."), 'sizeM', size=90)
+        self.create_text_column(_("Size"), 'sizeM', size=90)
         self.set_search_column(1)
         self.set_enable_search(True)
         # store.set_sort_column_id(1, Gtk.Gtk.SortType.ASCENDING)
