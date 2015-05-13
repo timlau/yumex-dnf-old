@@ -763,7 +763,7 @@ class YumexWindow(BaseWindow):
         self.active_archs = data.split(',')
         logger.debug('arch-changed : %s' % self.active_archs)
         self.arch_filter.change(self.active_archs)
-        self.refeash_search()
+        self.refresh_search()
 
     def refresh_search(self):
         if self.last_search:
