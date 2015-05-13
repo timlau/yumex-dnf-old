@@ -1065,7 +1065,7 @@ class YumexWindow(BaseWindow):
                         dialogs.show_information(
                             self, _('Downloading error(s)\n'),
                                      '\n'.join(result))
-                    else:  # other transaction errors
+                    elif rc != 0:  # other transaction errors
                         dialogs.show_information(
                             self, _('Error in transaction\n'),
                                      '\n'.join(result))
