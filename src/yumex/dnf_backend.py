@@ -268,10 +268,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         try:
             self.Lock()
             self.SetWatchdogState(False)
-            if CONFIG.session.enabled_repos:
-                    logger.debug('root: Setting repos : %s' %
-                                 CONFIG.session.enabled_repos)
-                    self.SetEnabledRepos(CONFIG.session.enabled_repos)
+            self._update_config_options()
             return True, ''
         except dnfdaemon.client.AccessDeniedError:
             return False, 'not-authorized'
@@ -291,15 +288,20 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
+        #self._update_config_options()
+        self.cache.reset()  # Reset the cache
+
+    def _update_config_options(self):
         if CONFIG.session.clean_instonly:
             self.SetConfig('installonly_limit', CONFIG.conf.installonly_limit)
+            logger.debug('installonly_limit = %d', CONFIG.conf.installonly_limit)
         else:
             self.SetConfig('installonly_limit', "<off>")
+            logger.debug('installonly_limit = %s', "<off>")
         if CONFIG.session.enabled_repos:
             logger.debug('root: Setting repos : %s' %
                          CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
-        self.cache.reset()  # Reset the cache
 
     def to_pkg_tuple(self, pkg_id):
         """Get package nevra & repoid from an package pkg_id"""

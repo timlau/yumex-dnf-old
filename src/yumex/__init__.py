@@ -123,10 +123,10 @@ class BaseWindow(Gtk.ApplicationWindow):
         if self._root_backend is None:
             self._root_backend = yumex.dnf_backend.DnfRootBackend(self)
         if self._root_locked is False:
+            logger.debug('Lock the DNF root daemon')
             locked, msg = self._root_backend.setup()
             if locked:
                 self._root_locked = True
-                logger.debug('Lock the DNF root daemon')
                 if self._check_cache_expired('system'):
                     logger.debug('Refresh system cache')
                     self.set_working(True, True)
@@ -354,6 +354,9 @@ class YumexWindow(BaseWindow):
             rb = self.ui.get_object('filter_' + name)
             rb.connect('toggled', self.on_pkg_filter, name)
 
+        # set default value for clean_instonly
+        CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
+
         # Connect menu radio buttons to handler
         for name in ['newest_only', 'clean_unused', 'clean_instonly']:
             rb = self.ui.get_object('option_' + name)
@@ -432,6 +435,7 @@ class YumexWindow(BaseWindow):
             CONFIG.session.enabled_repos = CONFIG.conf.repo_enabled
         else:
             CONFIG.session.enabled_repos = self.backend.get_repo_ids('enabled')
+
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -931,7 +935,7 @@ class YumexWindow(BaseWindow):
         """
         state = widget.get_active()
         setattr(CONFIG.session, option, state)
-        logger.debug('Option : %s = %s' %
+        logger.debug('session option : %s = %s' %
                      (option, getattr(CONFIG.session, option)))
         if option in ['newest_only']:  # search again
             self.refresh_search()
@@ -961,7 +965,8 @@ class YumexWindow(BaseWindow):
                     if not rc:
                         logger.debug('result : %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add('%s : %s' %
+                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
                 else:
                     logger.debug('adding: %s %s' %
                                  (const.QUEUE_PACKAGE_TYPES[action],
@@ -971,7 +976,8 @@ class YumexWindow(BaseWindow):
                     if not rc:
                         logger.debug('result: %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add('%s : %s' %
+                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, trans = self.backend.GroupInstall(grp_id)
@@ -980,8 +986,9 @@ class YumexWindow(BaseWindow):
             if not rc:
                 logger.debug('%s: %s' % (rc, pkg))
                 errors += 1
-                error_msgs.add('%s : %s' % (const.QUEUE_PACKAGE_TYPES[action], pkg))
-        logger.debug(errors)
+                error_msgs.add('%s : %s' %
+                               (const.QUEUE_PACKAGE_TYPES[action], pkg))
+        logger.debug(' add transaction errors : %d', errors)
         return errors, error_msgs
 
     def _check_protected(self, trans):
