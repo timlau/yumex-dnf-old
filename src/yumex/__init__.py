@@ -939,8 +939,8 @@ class YumexWindow(BaseWindow):
                      (option, getattr(CONFIG.session, option)))
         if option in ['newest_only']:  # search again
             self.refresh_search()
-        if option == 'clean_instonly':
-            self.reset()
+        if option in ['clean_instonly', 'clean_unused']:
+            self.reset_on_error()
 
     def on_pref(self, widget):
         """Preferences selected callback."""

@@ -294,10 +294,15 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     def _update_config_options(self):
         if CONFIG.session.clean_instonly:
             self.SetConfig('installonly_limit', CONFIG.conf.installonly_limit)
-            logger.debug('installonly_limit = %d', CONFIG.conf.installonly_limit)
+            logger.debug('installonly_limit = %d',
+                         CONFIG.conf.installonly_limit)
         else:
             self.SetConfig('installonly_limit', "<off>")
             logger.debug('installonly_limit = %s', "<off>")
+        self.SetConfig('clean_requirements_on_remove',
+                       CONFIG.session.clean_unused)
+        logger.debug('clean_requirements_on_remove = %s',
+                     CONFIG.session.clean_unused)
         if CONFIG.session.enabled_repos:
             logger.debug('root: Setting repos : %s' %
                          CONFIG.session.enabled_repos)

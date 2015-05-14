@@ -245,7 +245,7 @@ class Config(object):
         object.__init__(self)
         self.conf_dir = os.environ['HOME'] + "/.config/yumex-dnf"
         if not os.path.isdir(self.conf_dir):
-            print("creating config directory : %s" % self.conf_dir)
+            logger.info("creating config directory : %s" % self.conf_dir)
             os.makedirs(self.conf_dir, 0o700)
         self.conf_file = self.conf_dir + "/yumex.conf"
         self.parser = configparser.ConfigParser()
