@@ -83,6 +83,9 @@ class Preferences:
         # autocheck update on/off handler
         widget = self.base.ui.get_object('pref_autocheck_updates')
         widget.connect('notify::active', self.on_autocheck_updates)
+        # cleanup installonly handler
+        widget = self.base.ui.get_object('pref_clean_instonly')
+        widget.connect('notify::active', self.on_clean_instonly)
         # set current colors
         for name in ['color_install', 'color_update', 'color_normal',
                      'color_obsolete', 'color_downgrade']:
@@ -91,32 +94,37 @@ class Preferences:
             widget.set_rgba(rgba)
         # Set update checker values
         for name in ['update_startup_delay', 'update_interval',
-                     'refresh_interval']:
+                     'refresh_interval', 'installonly_limit']:
             widget = self.base.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_autocheck_updates()
+        self.on_clean_instonly()
         # get the repositories
         self.repos = self.base.backend.get_repositories()
         self.repo_view.populate(self.repos)
 
     def on_autocheck_updates(self, *args):
+        '''Handler for autocheck_updates switch'''
         widget = self.base.ui.get_object('pref_autocheck_updates')
         state = widget.get_active()
-        if state:
-            self.base.ui.get_object(
-                'pref_update_startup_delay').set_sensitive(True)
-            self.base.ui.get_object('pref_update_interval').set_sensitive(True)
-            self.base.ui.get_object('label_update_delay').set_sensitive(True)
-            self.base.ui.get_object(
-                'label_update_interval').set_sensitive(True)
-        else:
-            self.base.ui.get_object(
-                'pref_update_startup_delay').set_sensitive(False)
-            self.base.ui.get_object(
-                'pref_update_interval').set_sensitive(False)
-            self.base.ui.get_object('label_update_delay').set_sensitive(False)
-            self.base.ui.get_object(
-                'label_update_interval').set_sensitive(False)
+        for postfix in ['update_startup_delay',
+                        'update_interval']:
+            self._set_sensitive(postfix, state)
+
+    def on_clean_instonly(self, *args):
+        '''Handler for clean_instonly switch'''
+        widget = self.base.ui.get_object('pref_clean_instonly')
+        state = widget.get_active()
+        postfix = 'installonly_limit'
+        self._set_sensitive(postfix, state)
+
+    def _set_sensitive(self, postfix, state):
+        for prefix in ['pref_', 'label_']:
+            id_ = prefix + postfix
+            if state:
+                self.base.ui.get_object(id_).set_sensitive(True)
+            else:
+                self.base.ui.get_object(id_).set_sensitive(False)
 
     def set_settings(self):
         changed = False
@@ -140,7 +148,7 @@ class Preferences:
                 changed = True
         # handle update checker values
         for name in ['update_startup_delay', 'update_interval',
-                     'refresh_interval']:
+                     'refresh_interval', 'installonly_limit']:
             widget = self.base.ui.get_object('pref_' + name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name):  # changed ??

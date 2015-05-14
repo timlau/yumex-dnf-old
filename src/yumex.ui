@@ -9,6 +9,12 @@
     <property name="step_increment">10</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adj_installonly_limit">
+    <property name="lower">2</property>
+    <property name="upper">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+  </object>
   <object class="GtkAdjustment" id="adj_refresh_interval">
     <property name="lower">1</property>
     <property name="upper">240</property>
@@ -180,13 +186,12 @@ window when the close button is clicked</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
 standard when using GNOME</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="label" translatable="yes">Show toolbar in window headerbar</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
+                    <property name="top_attach">6</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -199,7 +204,7 @@ standard when using GNOME</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">5</property>
+                    <property name="top_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -213,7 +218,7 @@ Yum Extender is started</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">7</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -225,7 +230,7 @@ Yum Extender is started</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -286,12 +291,43 @@ Yum Extender is started</property>
                     <property name="top_attach">4</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="label_installonly_limit">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">25</property>
+                    <property name="label" translatable="yes">Number of installonly packages to keep</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_installonly_limit">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="max_width_chars">0</property>
+                    <property name="input_purpose">digits</property>
+                    <property name="adjustment">adj_installonly_limit</property>
+                    <property name="climb_rate">1</property>
+                    <property name="numeric">True</property>
+                    <property name="value">3</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">1</property>
                 <property name="label" translatable="yes">Settings</property>
               </object>
               <packing>
@@ -420,7 +456,7 @@ Yum Extender is started</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_update_delay">
+                  <object class="GtkLabel" id="label_update_startup_delay">
                     <property name="name">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
