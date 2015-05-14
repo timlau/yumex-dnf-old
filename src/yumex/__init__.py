@@ -355,7 +355,7 @@ class YumexWindow(BaseWindow):
             rb.connect('toggled', self.on_pkg_filter, name)
 
         # Connect menu radio buttons to handler
-        for name in ['newest_only', 'clean_unused']:
+        for name in ['newest_only', 'clean_unused', 'clean_instonly']:
             rb = self.ui.get_object('option_' + name)
             rb.set_active(getattr(CONFIG.session, name))
             rb.connect('toggled', self.on_options, name)
@@ -935,6 +935,8 @@ class YumexWindow(BaseWindow):
                      (option, getattr(CONFIG.session, option)))
         if option in ['newest_only']:  # search again
             self.refresh_search()
+        if option == 'clean_instonly':
+            self.reset()
 
     def on_pref(self, widget):
         """Preferences selected callback."""

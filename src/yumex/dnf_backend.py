@@ -291,6 +291,10 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
+        if CONFIG.session.clean_instonly:
+            self.SetConfig('installonly_limit', 3)
+        else:
+            self.SetConfig('installonly_limit', "<off>")
         if CONFIG.session.enabled_repos:
             logger.debug('root: Setting repos : %s' %
                          CONFIG.session.enabled_repos)

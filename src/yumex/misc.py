@@ -217,6 +217,7 @@ class YumexConf(config.BaseConfig):
     repo_enabled = config.KeyListOption([])
     archs = config.KeyListOption([])
     protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
+    clean_instonly = config.BoolOption(False)
 
 
 class SessionConf(config.BaseConfig):
@@ -227,6 +228,7 @@ class SessionConf(config.BaseConfig):
     clean_unused = config.BoolOption(False)
     # enabled repositories for this session
     enabled_repos = config.ListOption([])
+    clean_instonly = config.BoolOption(False)
 
 
 class Config(object):

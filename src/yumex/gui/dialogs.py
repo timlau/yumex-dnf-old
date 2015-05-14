@@ -57,7 +57,7 @@ class Preferences:
         self._settings = ['autostart', 'clean_unused',
                           'newest_only', 'autocheck_updates', 'hide_on_close',
                           'headerbar', 'auto_select_updates', 'repo_saved',
-                          'update_notify', 'update_showicon'
+                          'update_notify', 'update_showicon', 'clean_instonly'
                           ]
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
