@@ -570,13 +570,7 @@ class YumexWindow(BaseWindow):
         sw = self.ui.get_object('queue_sw')
         sw.add(self.queue_view)
         # History Page
-        sw = self.ui.get_object('history_sw')
-        hb = Gtk.Box()
-        hb.set_direction(Gtk.Orientation.HORIZONTAL)
-        self.history_view = views.HistoryView(self)
-        hb.pack_start(self.history_view, False, False, 0)
-        hb.pack_start(self.history_view.pkg_view, True, True, 0)
-        sw.add(hb)
+        self.setup_history_page()
         # Groups
         sw = self.ui.get_object('groups_sw')
         hb = Gtk.Box()
@@ -598,6 +592,19 @@ class YumexWindow(BaseWindow):
         info.add(self.group_info)
         self.info.show_all()
         self.stack.show_all()
+
+    def setup_history_page(self):
+        # History elements / packages views
+        hb = Gtk.Box()
+        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        self.history_view = views.HistoryView(self)
+        hb.pack_start(self.history_view, False, False, 0)
+        hb.pack_start(self.history_view.pkg_view, True, True, 0)
+        sw = self.ui.get_object('history_sw')
+        sw.add(hb)
+        # setup history buttons
+        undo = self.ui.get_object('history_undo')
+        undo.connect('clicked', self.on_history_undo)
 
     def set_content_page(self, page):
         """Set the visible content page.
@@ -699,6 +706,13 @@ class YumexWindow(BaseWindow):
 #
 # Callback handlers
 #
+    def on_history_undo(self, widget):
+        tid = self.history_view.get_selected()
+        print('History Undo : %s' % tid)
+        rc, messages = self.backend.HistoryUndo(tid)
+        print(rc, messages)
+        if rc == 2:
+            self.process_actions(from_queue=False)
 
     def on_pkg_view_selection_changed(self, widget, pkg):
         """Package selected in the view callback."""
@@ -1003,7 +1017,7 @@ class YumexWindow(BaseWindow):
         return protected
 
     @ExceptionHandler
-    def process_actions(self):
+    def process_actions(self, from_queue=True):
         """Process the current actions in the queue.
 
         - setup the Dnf transaction
@@ -1011,9 +1025,6 @@ class YumexWindow(BaseWindow):
         - ask user for confirmation on result of depsolve
         - run the transaction
         """
-        if self.queue_view.queue.total() == 0:
-            dialogs.show_information(self, _('No pending actions in queue'))
-            return
         self.set_working(True, True)
         # switch to queue view
         # switch to package page
@@ -1021,7 +1032,13 @@ class YumexWindow(BaseWindow):
         widget.set_active(True)
         self.set_content_page(const.PAGE_QUEUE)
         self.infobar.info(_('Preparing system for applying changes'))
-        errors, error_msgs = self._populate_transaction()
+        if from_queue:
+            if self.queue_view.queue.total() == 0:
+                dialogs.show_information(self, _('No pending actions in queue'))
+                return
+            errors, error_msgs = self._populate_transaction()
+        else:
+            errors = False
         if not errors:
             self.backend.GetTransaction()
             self.infobar.info(_('Searching for dependencies'))

@@ -959,6 +959,16 @@ class HistoryView(Gtk.TreeView):
                     pkgs = self.base.get_root_backend().GetHistoryPackages(tid)
                     self.pkg_view.populate(pkgs)
 
+    def get_selected(self):
+        """Return the currently selected history tid"""
+        if self.get_selection():
+            (model, iterator) = self.get_selection().get_selected()
+            if model is not None and iterator is not None:
+                tid = model.get_value(iterator, 1)
+                return tid
+        else:
+            return 0
+
 
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
