@@ -1025,6 +1025,7 @@ class YumexWindow(BaseWindow):
         return protected
 
     def _build_from_queue(self):
+        """Populate transaction from queue and resolve deps."""
         # switch to queue view
         if self.queue_view.queue.total() == 0:
             raise QueueEmptyError
@@ -1067,7 +1068,7 @@ class YumexWindow(BaseWindow):
                     # rerun the transaction
                     # FIXME: It should not be needed to populate
                     # the transaction again
-                    errors, error_msgs = self._populate_transaction()
+                    self._populate_transaction()
                     rc, result = self.backend.BuildTransaction()
                     rc, result = self.backend.RunTransaction(
                         max_err=CONFIG.conf.max_dnl_errors)
