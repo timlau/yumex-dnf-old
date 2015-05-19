@@ -295,7 +295,7 @@ Yum Extender is started</property>
                   <object class="GtkLabel" id="label_installonly_limit">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Number of installonly packages to keep</property>
                   </object>
@@ -425,7 +425,7 @@ Yum Extender is started</property>
                     <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
                     <property name="margin_start">25</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
                   </object>
@@ -466,7 +466,6 @@ Gives the system time to settle down when
 Yum Extender is started when the user logins.</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">25</property>
                     <property name="margin_start">25</property>
                     <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
                   </object>
@@ -719,8 +718,8 @@ Yum Extender is started when the user logins.</property>
                   <object class="GtkLabel" id="repo_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
                     <property name="margin_top">5</property>
                     <property name="margin_bottom">5</property>
                     <property name="xalign">0</property>
@@ -762,8 +761,8 @@ Yum Extender is started when the user logins.</property>
                     <property name="tooltip_text" translatable="yes">Save the current selected repositories
 so they will be used next time you
 start Yum Extender</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
                     <property name="margin_top">5</property>
                     <property name="margin_bottom">5</property>
                     <child>
@@ -836,8 +835,8 @@ start Yum Extender</property>
       <object class="GtkSpinner" id="progress_spinner">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">6</property>
+        <property name="margin_end">12</property>
         <property name="active">True</property>
       </object>
       <packing>
@@ -857,7 +856,7 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Main menu</property>
-        <property name="margin_right">6</property>
+        <property name="margin_end">6</property>
         <property name="direction">up</property>
         <child>
           <object class="GtkImage" id="image_main">
@@ -880,7 +879,7 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Apply pending changes</property>
-        <property name="margin_right">6</property>
+        <property name="margin_end">6</property>
         <property name="focus_on_click">False</property>
         <child>
           <object class="GtkImage" id="image_execute">
@@ -940,7 +939,6 @@ start Yum Extender</property>
       <object class="GtkSearchEntry" id="search">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="margin_left">6</property>
         <property name="margin_start">10</property>
         <property name="hexpand">True</property>
         <property name="width_chars">60</property>
@@ -1440,7 +1438,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="margin_right">6</property>
+        <property name="margin_end">6</property>
         <property name="margin_top">6</property>
         <property name="margin_bottom">6</property>
         <child>
