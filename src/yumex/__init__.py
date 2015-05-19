@@ -1025,7 +1025,7 @@ class YumexWindow(BaseWindow):
     def _build_from_queue(self):
         if self.queue_view.queue.total() == 0:
             dialogs.show_information(self, _('No pending actions in queue'))
-            return
+            return (False, [])
         # switch to queue view
         widget = self.ui.get_object('main_actions')
         widget.set_active(True)
