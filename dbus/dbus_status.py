@@ -32,6 +32,7 @@ import dbus.service
 import dbus.mainloop.glib
 import gettext
 import logging
+import os
 import os.path
 import random
 import sys
@@ -97,6 +98,16 @@ UPDATE_INTERVAL = CONFIG.getint('yumex', 'update_interval')
 AUTOCHECK_UPDATE = CONFIG.getboolean('yumex', 'autocheck_updates')
 NOTIFY = CONFIG.getboolean('yumex', 'update_notify')
 SHOWICON = CONFIG.getboolean('yumex', 'update_showicon')
+
+
+def check_pid(pid):
+    """ Check For the existence of a unix pid. """
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    else:
+        return True
 
 
 class UpdateTimestamp:
@@ -348,6 +359,7 @@ class YumexStatusDaemon(dbus.service.Object):
         self.started = False
         self.status_icon = None
         self.yumex_running = False
+        self.yumex_pid = 0
         self.yumex_working = False
         # update checking
         self.update_timer_id = -1
@@ -443,12 +455,19 @@ class YumexStatusDaemon(dbus.service.Object):
 
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
-                         in_signature='b',
+                         in_signature='ib',
                          out_signature='b',
                          sender_keyword='sender')
-    def SetYumexIsRunning(self, state, sender=None):
+    def SetYumexIsRunning(self, pid, state, sender=None):
+        # pid for caller must match
+        if not state and pid != self.yumex_pid:
+            return False
         if not self.yumex_running == state:
             self.yumex_running = state
+            if state:
+                self.yumex_pid = pid
+            else:
+                self.yumex_pid = 0
             if self.started:
                 if self.yumex_running:
                     self.status_icon.run_yumex.hide()
@@ -461,13 +480,13 @@ class YumexStatusDaemon(dbus.service.Object):
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
                          in_signature='',
-                         out_signature='b',
+                         out_signature='i',
                          sender_keyword='sender')
     def GetYumexIsRunning(self, sender=None):
         if self.yumex_running:
-            return True
+            return self.yumex_pid
         else:
-            return False
+            return 0
 
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
@@ -499,13 +518,13 @@ class YumexStatusDaemon(dbus.service.Object):
                          sender_keyword='sender')
     def QuitYumex(self, sender=None):
         if self.yumex_running:
-            self.QuitSignal()
+            self.QuitSignal(self.yumex_pid)
 
 #=========================================================================
 # DBus signals
 #=========================================================================
     @dbus.service.signal(DAEMON_INTERFACE)
-    def QuitSignal(self):
+    def QuitSignal(self, pid):
         """
         """
         pass
@@ -586,7 +605,7 @@ class YumexStatusDaemon(dbus.service.Object):
         """
         logger.debug('quit clicked')
         if self.yumex_running:
-            self.QuitSignal()
+            self.QuitSignal(self.yumex_pid)
         else:
             Gtk.main_quit()
 

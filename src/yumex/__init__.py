@@ -58,6 +58,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
+        self.pid = 0
 
         # setup GtkBuilder
         self.ui = Gtk.Builder()
@@ -153,7 +154,7 @@ class BaseWindow(Gtk.ApplicationWindow):
                 dialogs.show_information(self, errmsg)
                 # close down and exit yum extender
                 self.status.SetWorking(False)  # reset working state
-                self.status.SetYumexIsRunning(False)
+                self.status.SetYumexIsRunning(self.pid, False)
                 sys.exit(1)
         return self._root_backend
 
@@ -197,7 +198,7 @@ class BaseWindow(Gtk.ApplicationWindow):
             except:
                 pass
         self.status.SetWorking(False)  # reset working state
-        self.status.SetYumexIsRunning(False)
+        self.status.SetYumexIsRunning(self.pid, False)
         sys.exit(1)
 
     def _parse_error(self, value):
@@ -648,7 +649,7 @@ class YumexWindow(BaseWindow):
             except:
                 pass
         self.status.SetWorking(False)  # reset working state
-        self.status.SetYumexIsRunning(False)
+        self.status.SetYumexIsRunning(self.pid, False)
         Gtk.main_quit()
         sys.exit(1)
 
@@ -1195,6 +1196,7 @@ class YumexApplication(Gtk.Application):
         self.status = None
         self.save_win_size = False  # save windows size flag
         self.win = None             # main window
+        self.pid = 0
 
     def do_activate(self):
         """Gtk.Application activate callback."""
@@ -1304,22 +1306,36 @@ class YumexApplication(Gtk.Application):
         if self.args.icononly:  # Only start the icon and exit
             sys.exit(0)
         # Check if yumex is running already
-        if self.status.SetYumexIsRunning(True):
-            self.do_activate()
-        else:
+        self.pid = os.getpid()
+        run_pid = self.status.GetYumexIsRunning()
+        if run_pid > 0:  # yumex is allready running
             if dialogs.yes_no_dialog(None, 'Yum Extender is already running',
-                                        'Do you want to kill it'):
+                                        'process-id : %d' % run_pid +
+                                        '\nDo you want to kill it'):
                 if not self.status.GetYumexIsWorking():
-                    self.status.QuitYumex()
+                    subprocess.call(
+                        '/usr/bin/dbus-send --session --print-reply '
+                        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.QuitYumex',
+                        shell=True)
                     subprocess.call(
                     '/usr/bin/dbus-send --system --print-reply '
                     '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
                     shell=True)
-                else:  # not safe to kill yumex, when it is working
-                    self.status.ShowYumex()
+                    subprocess.call(
+                        '/usr/bin/dbus-send --session --print-reply '
+                        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit',
+                        shell=True)
+            sys.exit(0)
+        else:  # not running,
+            if self.status.SetYumexIsRunning(self.pid, True):
+                self.do_activate()
             else:
-                self.status.ShowYumex()
-            sys.exit(1)
+                msg = _('Yum Extender will close')
+                dialogs.show_information(None,
+                     _('Error in locking notification icon'),
+                     msg)
+                sys.exit(1)
+
         return 0
 
     def do_shutdown(self):
@@ -1329,9 +1345,10 @@ class YumexApplication(Gtk.Application):
         """
         Gtk.Application.do_shutdown(self)
         if self.status:
-            self.status.SetYumexIsRunning(False)
-            if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
-                self.status.Exit()
+            if self.status.GetYumexIsRunning() == self.pid:
+                self.status.SetYumexIsRunning(self.pid, False)
+                if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
+                    self.status.Exit()
         # if windows object exist, unlock and exit backends
         if self.win:
             # don't save windows size in install mode

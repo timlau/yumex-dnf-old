@@ -123,13 +123,15 @@ class StatusIcon:
         """
         Overload in child class
         """
-        logger.debug("Signal : %s " % signal)
+        logger.debug("Signal : %s  %s" ,signal, repr(args))
         if signal == 'IconClickSignal':
             self.app.win.on_status_icon_clicked()
         elif signal == 'ShowSignal':
             self.app.win.on_status_icon_clicked(force=True)
         elif signal == 'QuitSignal':
-            self.app.on_quit()
+            run_pid = args[0]
+            if self.app.pid == run_pid:
+                self.app.on_quit()
         elif signal == 'CheckUpdateSignal':
             self.app.win.check_for_updates()
 
@@ -222,8 +224,8 @@ class StatusIcon:
     def CheckUpdates(self):
         return self._run_dbus_async("CheckUpdate")
 
-    def SetYumexIsRunning(self, state):
-        return self.daemon.SetYumexIsRunning("(b)", state)
+    def SetYumexIsRunning(self, pid, state):
+        return self.daemon.SetYumexIsRunning("(ib)", pid, state)
 
     def GetYumexIsRunning(self):
         return self.daemon.GetYumexIsRunning()
