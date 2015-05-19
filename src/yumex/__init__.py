@@ -1023,9 +1023,6 @@ class YumexWindow(BaseWindow):
         return protected
 
     def _build_from_queue(self):
-        if self.queue_view.queue.total() == 0:
-            dialogs.show_information(self, _('No pending actions in queue'))
-            return (False, [])
         # switch to queue view
         widget = self.ui.get_object('main_actions')
         widget.set_active(True)
@@ -1054,6 +1051,10 @@ class YumexWindow(BaseWindow):
         self.set_working(True, True)
         self.infobar.info(_('Preparing system for applying changes'))
         if from_queue:
+            if self.queue_view.queue.total() == 0:
+                dialogs.show_information(self, _('No pending actions in queue'))
+                self.reset_on_cancel()
+                return
             rc, result = self._build_from_queue()
         else:
             rc, result = self.backend.GetTransaction()
