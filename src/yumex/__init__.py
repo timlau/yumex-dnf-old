@@ -22,7 +22,8 @@ from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
-from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler
+from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\
+                       QueueEmptyError, TransactionBuildError, TransactionSolveError
 
 import argparse
 import logging
@@ -1009,7 +1010,8 @@ class YumexWindow(BaseWindow):
                 error_msgs.add('%s : %s' %
                                (const.QUEUE_PACKAGE_TYPES[action], pkg))
         logger.debug(' add transaction errors : %d', errors)
-        return errors, error_msgs
+        if errors > 0:
+            raise TransactionBuildError(error_msgs)
 
     def _check_protected(self, trans):
         """Check for deletion protected packages in transaction"""
@@ -1024,20 +1026,69 @@ class YumexWindow(BaseWindow):
 
     def _build_from_queue(self):
         # switch to queue view
+        if self.queue_view.queue.total() == 0:
+            raise QueueEmptyError
         widget = self.ui.get_object('main_actions')
         widget.set_active(True)
         self.set_content_page(const.PAGE_QUEUE)
-        errors, error_msgs = self._populate_transaction()
-        if not errors:
-            self.infobar.info(_('Searching for dependencies'))
-            rc, result = self.backend.BuildTransaction()
-            self.infobar.info(_('Dependencies resolved'))
-            return (True, result)
-        else:  # error in population of the transaction
+        self._populate_transaction()
+        self.infobar.info(_('Searching for dependencies'))
+        rc, result = self.backend.BuildTransaction()
+        self.infobar.info(_('Dependencies resolved'))
+        if not rc:
+            raise TransactionSolveError(result)
+        return result
+
+    def _get_transaction(self):
+        """Get current transaction."""
+        rc, result = self.backend.GetTransaction()
+        if not rc:
+            raise TransactionSolveError(result)
+        return result
+
+    def _run_transaction(self):
+        """Run the current transaction."""
+        self.infobar.info(_('Applying changes to the system'))
+        self.set_working(True, True)
+        rc, result = self.backend.RunTransaction(
+            max_err=CONFIG.conf.max_dnl_errors)
+        # This can happen more than once (more gpg keys to be
+        # imported)
+        while rc == 1:
+            # get info about gpgkey to be comfirmed
+            values = self.backend._gpg_confirm
+            if values:  # There is a gpgkey to be verified
+                (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+                logger.debug('GPGKey : %s' % repr(values))
+                ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
+                if ok:
+                    # tell the backend that the gpg key is confirmed
+                    self.backend.ConfirmGPGImport(hexkeyid, True)
+                    # rerun the transaction
+                    # FIXME: It should not be needed to populate
+                    # the transaction again
+                    errors, error_msgs = self._populate_transaction()
+                    rc, result = self.backend.BuildTransaction()
+                    rc, result = self.backend.RunTransaction(
+                        max_err=CONFIG.conf.max_dnl_errors)
+                else:
+                    break
+            else:  # error in signature verification
+                dialogs.show_information(
+                    self, _('Error checking package signatures\n'),
+                             '\n'.join(result))
+                break
+
+        if rc == 4:  # Download errors
             dialogs.show_information(
-                self, _('Error(s) in building transaction'),
-                        '\n'.join(error_msgs))
-            return (False, [])
+                self, _('Downloading error(s)\n'),
+                         '\n'.join(result))
+        elif rc != 0:  # other transaction errors
+            dialogs.show_information(
+                self, _('Error in transaction\n'),
+                         '\n'.join(result))
+        self.reset()
+        return
 
     @ExceptionHandler
     def process_actions(self, from_queue=True):
@@ -1050,16 +1101,13 @@ class YumexWindow(BaseWindow):
         """
         self.set_working(True, True)
         self.infobar.info(_('Preparing system for applying changes'))
-        if from_queue:
-            if self.queue_view.queue.total() == 0:
-                dialogs.show_information(self, _('No pending actions in queue'))
-                self.reset_on_cancel()
-                return
-            rc, result = self._build_from_queue()
-        else:
-            rc, result = self.backend.GetTransaction()
-        self.set_working(False)
-        if rc:
+        try:
+            if from_queue:
+                result = self._build_from_queue()
+            else:
+                result = self._get_transaction()
+            self.set_working(False)
+            # check for protected packages
             check = self._check_protected(result)
             if check:
                 dialogs.show_information(
@@ -1067,60 +1115,28 @@ class YumexWindow(BaseWindow):
                         '\n'.join(check))
                 self.reset_on_cancel()
                 return
+            # transaction confirmation dialog
             self.transaction_result.populate(result, '')
             ok = self.transaction_result.run()
             if ok:  # Ok pressed
-                self.infobar.info(_('Applying changes to the system'))
-                self.set_working(True, True)
-                rc, result = self.backend.RunTransaction(
-                    max_err=CONFIG.conf.max_dnl_errors)
-                # This can happen more than once (more gpg keys to be
-                # imported)
-                while rc == 1:
-                    # get info about gpgkey to be comfirmed
-                    values = self.backend._gpg_confirm
-                    if values:  # There is a gpgkey to be verified
-                        (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
-                        logger.debug('GPGKey : %s' % repr(values))
-                        ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
-                        if ok:
-                            # tell the backend that the gpg key is confirmed
-                            self.backend.ConfirmGPGImport(hexkeyid, True)
-                            # rerun the transaction
-                            # FIXME: It should not be needed to populate
-                            # the transaction again
-                            errors, error_msgs = self._populate_transaction()
-                            rc, result = self.backend.BuildTransaction()
-                            rc, result = self.backend.RunTransaction(
-                                max_err=CONFIG.conf.max_dnl_errors)
-                        else:
-                            break
-                    else:  # error in signature verification
-                        dialogs.show_information(
-                            self, _('Error checking package signatures\n'),
-                                     '\n'.join(result))
-                        break
-
-                if rc == 4:  # Download errors
-                    dialogs.show_information(
-                        self, _('Downloading error(s)\n'),
-                                 '\n'.join(result))
-                elif rc != 0:  # other transaction errors
-                    dialogs.show_information(
-                        self, _('Error in transaction\n'),
-                                 '\n'.join(result))
-
-                self.reset()
-                return
-
+                self._run_transaction()
             else:  # user cancelled transaction
                 self.reset_on_cancel()
                 return
-        else:  # error in depsolve
+        except QueueEmptyError:  # Queue is empty
+            self.set_working(False)
+            dialogs.show_information(self, _('No pending actions in queue'))
+            self.reset_on_cancel()
+        except TransactionBuildError as e:  # Error in building transaction
             dialogs.show_information(
-                self, _('Error(s) in search for dependencies'),
-                        '\n'.join(result))
-        self.reset_on_error()
+                self, _('Error(s) in building transaction'),
+                        '\n'.join(e.msgs))
+            self.reset_on_cancel()
+        except TransactionSolveError as e:
+            dialogs.show_information(
+                    self, _('Error(s) in search for dependencies'),
+                            '\n'.join(e.msgs))
+            self.reset_on_error()
 
     def reset_on_cancel(self):
         """Reset gui on user cancel"""

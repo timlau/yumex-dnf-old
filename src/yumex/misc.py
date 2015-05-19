@@ -44,6 +44,26 @@ P_ = gettext.ngettext
 logger = logging.getLogger('yumex.misc')
 
 
+class QueueEmptyError(Exception):
+
+    def __init__(self):
+        super(QueueEmptyError, self).__init__()
+
+
+class TransactionBuildError(Exception):
+
+    def __init__(self, msgs):
+        super(TransactionBuildError, self).__init__()
+        self.msgs = msgs
+
+
+class TransactionSolveError(Exception):
+
+    def __init__(self, msgs):
+        super(TransactionSolveError, self).__init__()
+        self.msgs = msgs
+
+
 def to_pkg_tuple(pkg_id):
     """Find the real package nevre & repoid from an package pkg_id"""
     (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
