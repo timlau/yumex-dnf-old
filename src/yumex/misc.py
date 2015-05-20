@@ -44,6 +44,7 @@ P_ = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
+
 class QueueEmptyError(Exception):
 
     def __init__(self):
@@ -76,7 +77,6 @@ def dbus_dnfsystem(cmd):
         '/usr/bin/dbus-send --system --print-reply '
         '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' % cmd,
         shell=True)
-
 
 
 def to_pkg_tuple(pkg_id):

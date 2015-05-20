@@ -439,7 +439,6 @@ class YumexWindow(BaseWindow):
         else:
             CONFIG.session.enabled_repos = self.backend.get_repo_ids('enabled')
 
-
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
@@ -1063,7 +1062,7 @@ class YumexWindow(BaseWindow):
             if values:  # There is a gpgkey to be verified
                 (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
                 logger.debug('GPGKey : %s' % repr(values))
-                ok = yumex.gui.widgets.ask_for_gpg_import(self, values)
+                ok = dialogs.ask_for_gpg_import(self, values)
                 if ok:
                     # tell the backend that the gpg key is confirmed
                     self.backend.ConfirmGPGImport(hexkeyid, True)

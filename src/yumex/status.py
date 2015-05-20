@@ -123,7 +123,7 @@ class StatusIcon:
         """
         Overload in child class
         """
-        logger.debug("Signal : %s  %s" ,signal, repr(args))
+        logger.debug("Signal : %s  %s", signal, repr(args))
         if signal == 'IconClickSignal':
             self.app.win.on_status_icon_clicked()
         elif signal == 'ShowSignal':
@@ -238,4 +238,3 @@ class StatusIcon:
 
     def QuitYumex(self):
         return self.daemon.QuitYumex()
-
