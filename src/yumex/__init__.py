@@ -1308,9 +1308,11 @@ class YumexApplication(Gtk.Application):
                                         '\nprocess-id : %d' % run_pid +
                                         '\nDo you want to quit it'):
                 if not self.status.GetYumexIsWorking():
-                    dbus_statusicon('QuitYumex')
-            else:
-                dbus_statusicon('ShowYumex')
+                    dbus_statusicon('QuitYumex')  # no, quit the running yumex
+                else:
+                    dbus_statusicon('ShowYumex')  # yes, show the running yumex
+            else:  # user answered no to quit
+                dbus_statusicon('ShowYumex')  # show the running yumex
             sys.exit(0)
         else:  # not running,
             if self.status.SetYumexIsRunning(self.pid, True):
