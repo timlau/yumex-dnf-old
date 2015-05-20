@@ -101,9 +101,18 @@ test-builds:
 	@scp ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 	@scp ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 
-test-inst:
+test-upd:
 	@$(MAKE) test-release
 	sudo dnf update ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+
+test-inst:
+	@$(MAKE) test-release
+	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	
+test-reinst:
+	@$(MAKE) test-release
+	sudo dnf reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	
 	
 transifex-setup:
 	tx init
