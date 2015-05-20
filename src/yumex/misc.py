@@ -30,6 +30,7 @@ import gettext
 import locale
 import logging
 import os.path
+import subprocess
 import sys
 import yumex.config as config
 
@@ -42,7 +43,6 @@ _ = gettext.gettext
 P_ = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
-
 
 class QueueEmptyError(Exception):
 
@@ -62,6 +62,21 @@ class TransactionSolveError(Exception):
     def __init__(self, msgs):
         super(TransactionSolveError, self).__init__()
         self.msgs = msgs
+
+
+def dbus_statusicon(cmd):
+    subprocess.call(
+        '/usr/bin/dbus-send --session --print-reply '
+        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.%s' % cmd,
+        shell=True)
+
+
+def dbus_dnfsystem(cmd):
+    subprocess.call(
+        '/usr/bin/dbus-send --system --print-reply '
+        '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' % cmd,
+        shell=True)
+
 
 
 def to_pkg_tuple(pkg_id):

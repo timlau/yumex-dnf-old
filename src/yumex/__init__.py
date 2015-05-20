@@ -23,7 +23,8 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\
-                       QueueEmptyError, TransactionBuildError, TransactionSolveError
+                       QueueEmptyError, TransactionBuildError, \
+                       TransactionSolveError, dbus_statusicon, dbus_dnfsystem
 
 import argparse
 import logging
@@ -1190,7 +1191,7 @@ class YumexApplication(Gtk.Application):
 
     def __init__(self):
         Gtk.Application.__init__(
-            self, application_id="apps.yumex-dnf",
+            self,
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.args = None
         self.status = None
@@ -1286,14 +1287,8 @@ class YumexApplication(Gtk.Application):
             self.doTextLoggerSetup()
         logger.debug('cmdline : %s ' % repr(self.args))
         if self.args.exit:
-            subprocess.call(
-                '/usr/bin/dbus-send --session --print-reply '
-                '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit',
-                shell=True)
-            subprocess.call(
-                '/usr/bin/dbus-send --system --print-reply '
-                '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
-                shell=True)
+            dbus_statusicon('Exit')
+            dbus_dnfsystem('Exit')
             sys.exit(0)
         # Start the StatusIcon dbus client
         self.status = yumex.status.StatusIcon(self)
@@ -1310,21 +1305,12 @@ class YumexApplication(Gtk.Application):
         run_pid = self.status.GetYumexIsRunning()
         if run_pid > 0:  # yumex is allready running
             if dialogs.yes_no_dialog(None, 'Yum Extender is already running',
-                                        'process-id : %d' % run_pid +
-                                        '\nDo you want to kill it'):
+                                        '\nprocess-id : %d' % run_pid +
+                                        '\nDo you want to quit it'):
                 if not self.status.GetYumexIsWorking():
-                    subprocess.call(
-                        '/usr/bin/dbus-send --session --print-reply '
-                        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.QuitYumex',
-                        shell=True)
-                    subprocess.call(
-                    '/usr/bin/dbus-send --system --print-reply '
-                    '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
-                    shell=True)
-                    subprocess.call(
-                        '/usr/bin/dbus-send --session --print-reply '
-                        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit',
-                        shell=True)
+                    dbus_statusicon('QuitYumex')
+            else:
+                dbus_statusicon('ShowYumex')
             sys.exit(0)
         else:  # not running,
             if self.status.SetYumexIsRunning(self.pid, True):
