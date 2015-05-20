@@ -506,7 +506,7 @@ class YumexStatusDaemon(dbus.service.Object):
                          sender_keyword='sender')
     def ShowYumex(self, sender=None):
         if self.yumex_running:
-            self.ShowSignal()
+            self.ShowSignal(self.yumex_pid)
             return True
         else:  # Yumex is already running
             return False
@@ -530,19 +530,19 @@ class YumexStatusDaemon(dbus.service.Object):
         pass
 
     @dbus.service.signal(DAEMON_INTERFACE)
-    def IconClickSignal(self):
+    def IconClickSignal(self, pid):
         """
         """
         pass
 
     @dbus.service.signal(DAEMON_INTERFACE)
-    def ShowSignal(self):
+    def ShowSignal(self, pid):
         """
         """
         pass
 
     @dbus.service.signal(DAEMON_INTERFACE)
-    def CheckUpdateSignal(self):
+    def CheckUpdateSignal(self, pid):
         """
         """
         pass
@@ -594,7 +594,7 @@ class YumexStatusDaemon(dbus.service.Object):
         """
         logger.debug('status-icon clicked')
         if self.yumex_running:
-            self.IconClickSignal()
+            self.IconClickSignal(self.yumex_pid)
         elif self.status_icon.update_count > 0:
             self.on_run_yumex()
 
@@ -612,7 +612,7 @@ class YumexStatusDaemon(dbus.service.Object):
     def on_check_updates(self, * args):
         logger.debug('check updates clicked')
         if self.yumex_running:
-            self.CheckUpdateSignal()
+            self.CheckUpdateSignal(self.yumex_pid)
         else:
             self.get_updates()
 

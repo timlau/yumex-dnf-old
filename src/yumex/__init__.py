@@ -59,7 +59,7 @@ class BaseWindow(Gtk.ApplicationWindow):
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
-        self.pid = 0
+        self.pid = app.pid
 
         # setup GtkBuilder
         self.ui = Gtk.Builder()
