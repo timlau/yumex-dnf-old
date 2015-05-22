@@ -1052,8 +1052,7 @@ class YumexWindow(BaseWindow):
         """Run the current transaction."""
         self.infobar.info(_('Applying changes to the system'))
         self.set_working(True, True)
-        rc, result = self.backend.RunTransaction(
-            max_err=CONFIG.conf.max_dnl_errors)
+        rc, result = self.backend.RunTransaction()
         # This can happen more than once (more gpg keys to be
         # imported)
         while rc == 1:
@@ -1071,8 +1070,7 @@ class YumexWindow(BaseWindow):
                     # the transaction again
                     self._populate_transaction()
                     rc, result = self.backend.BuildTransaction()
-                    rc, result = self.backend.RunTransaction(
-                        max_err=CONFIG.conf.max_dnl_errors)
+                    rc, result = self.backend.RunTransaction()
                 else:
                     break
             else:  # error in signature verification
