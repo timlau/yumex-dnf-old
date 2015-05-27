@@ -1,3 +1,182 @@
+2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* yumex-dnf.spec: bumped version to 4.1.3
+
+2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
+2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
+	4.1.3
+
+2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* .tx/config, po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po,
+	po/da.po, po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po,
+	po/fr.po, po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po,
+	po/ko.po, po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ru.po, po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po,
+	po/uk.po, po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: i18n:
+	translation updates
+
+2015-05-22  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: fix: RunTransaction api
+	change, no more max_err parameter  Removed max_dnl_err yumex.conf
+	option, not used any more
+
+2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
+	all statusicon -> yumex signal has pid
+
+2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/const.py,
+	src/yumex/gui/dialogs.py, src/yumex/gui/widgets.py,
+	src/yumex/misc.py, src/yumex/status.py: refactor: move gpg
+	confirmation dialog to gui.dialogs  pep8: cleanup
+
+2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: doc: added some comments
+
+2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile: build: add some extra Makefile targets
+
+2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: fix: yumex already
+	running, is always stopping running version  refactor: dbus-send
+	shell commands
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
+	make the status-icon daemon store the pid of the caller  So we can
+	difference callers
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: cleanup: GtkButton:xalign is deprecated
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: cleanup: margin_left/right -> margin_begin/end
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: populate_transaction don't return
+	anything
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: refactor: process
+	actions and use exception instead of return codes
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: don't show 2 dialogs, when queue is
+	empty
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: traceback when group is empty
+
+2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: make history undo work  (#7)
+
+2015-05-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/views.py: Add
+	basics for history undo  (#7)
+
+2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/dnf_backend.py,
+	src/yumex/misc.py: make clean unused requirement work  pep8 cleanup
+	don't reset everything when changing session option
+
+2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/dnf_backend.py: fix: make
+	clean_instonly work when default on at launch
+
+2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/dnf_backend.py, src/yumex/gui/dialogs.py,
+	src/yumex/misc.py: Add option to set number of installonly packages
+	to keep, when clean_instonly is set.  (#24)
+
+2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/dnf_backend.py,
+	src/yumex/gui/dialogs.py, src/yumex/misc.py: Add support of removing
+	old version of install only pkgs  (#24)
+
+2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: only show error in transaction dialog
+	on errors
+
+2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/dnf_backend.py: fix: misc. grammar errors  (RhBug:
+	#1221155)
+
+2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: fix: misc. grammar errors  (RhBug:
+	#1221155)
+
+2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: fix: traceback in arch menu changes.
+	(RhBug #1220949)
+
+2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py: add better exception handling (#36)
+
+2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/dnf_backend.py, src/yumex/misc.py: refactor: move pkg_id
+	convertion fn into lib
+
+2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/dnf_backend.py, src/yumex/gui/widgets.py,
+	src/yumex/misc.py: add package requirement page to package info (#8)
+
+
+2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: separate gpg errors with other transaction
+	errors
+
+2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: show packages with problem when building
+	transaction
+
+2015-05-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
+	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
+	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
+	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
+	po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: Translation update
+	(transifex)
+
+2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* dbus/dbus_status.py, setup.py, src/yumex/const.py, yumex-dnf.spec: 
