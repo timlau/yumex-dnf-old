@@ -172,6 +172,10 @@ class Preferences:
     def handle_setting(self, option, state):
         if option == 'autostart':
             if state:  # create an autostart .desktop for current user
+                auto_dir = os.environ['HOME'] + "/.config/autostart"
+                if not os.path.isdir(auto_dir):
+                    logger.info("creating autostart directory : %s" % auto_dir)
+                    os.makedirs(auto_dir, 0o700)
                 shutil.copy(const.MISC_DIR + "/yumex-dnf-autostart.desktop",
                             os.environ['HOME'] +
                                        "/.config/autostart/yumex-dnf.desktop")
