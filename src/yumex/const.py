@@ -160,6 +160,7 @@ TRANSACTION_RESULT_TYPES = {
 RPM_ACTIONS = {
     'update': _("Updating: %s"),
     'install': _("Installing: %s"),
+    'reinstall': _("Reinstalling: %s"),
     'cleanup': _("Cleanup: %s"),
     'erase': _("Removing: %s"),
     'obsolete': _("Obsoleting: %s"),
