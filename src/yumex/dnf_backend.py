@@ -234,7 +234,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
         self.frontend.infobar.info_sub(
-            _('Downloading %d files (%sb)...') %
+            _('Downloading %d files (%sB)...') %
             (num_files, yumex.misc.format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
