@@ -18,11 +18,13 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from gi.repository import Gio, GObject
+from yumex.misc import _
 
 import logging
 import re
 import sys
 import weakref
+import yumex.const as const
 
 logger = logging.getLogger("yumex.status")
 
@@ -78,6 +80,7 @@ session = DBus(Gio.bus_get_sync(Gio.BusType.SESSION, None))
 # Main Client Class
 #
 
+API_ERROR = "wrong api version %d != %d"
 
 class StatusIcon:
     def __init__(self, app):
@@ -86,22 +89,26 @@ class StatusIcon:
         self.dbus_org = ORG
         self.dbus_interface = INTERFACE
         self.last_err = ""
+        self.running_version = 0
         self.daemon = self._get_daemon(
             self.bus, self.dbus_org, self.dbus_interface)
-        try:
-            logger.debug("%s daemon loaded - version :  %s" %
-                     (self.dbus_interface, self.daemon.GetVersion()))
+        if self.running_version == const.NEEDED_STATUS_API:
+            logger.debug('statusicon api version (%d)',
+                         self.running_version)
             self.is_started = True
-        except Exception as err:
+        else:
+            msg = API_ERROR % (const.NEEDED_STATUS_API, self.running_version)
             self.is_started = False
-            self.last_err = str(err)
-            logger.error(self.last_err)
+            self.last_err = msg
+            logger.error('statusicon wrong api version %d != %d',
+                         const.NEEDED_STATUS_API, self.running_version)
 
     def _get_daemon(self, bus, org, interface):
         ''' Get the daemon dbus proxy object'''
         try:
             proxy = bus.get(org, "/", interface)
-            proxy.GetVersion()  # Get daemon version, to check if it is alive
+            # Get daemon version, to check if it is alive
+            self.running_version = proxy.GetVersion()
             # Connect the Dbus signal handler
             proxy.connect('g-signal', WeakMethod(self, '_on_g_signal'))
             return proxy

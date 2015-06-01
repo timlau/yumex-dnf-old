@@ -31,8 +31,8 @@ import hawkey
 
 VERSION = "4.1.3"
 
-NEEDED_DAEMON_API = 1
-
+NEEDED_DAEMON_API = 1  # The needed dnfdaemon API version
+NEEDED_STATUS_API = 1  # The needed statusicon API version
 
 # find the data dir for resources
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
