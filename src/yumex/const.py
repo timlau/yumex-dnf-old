@@ -31,6 +31,8 @@ import hawkey
 
 VERSION = "4.1.3"
 
+NEEDED_DAEMON_API = 1
+
 
 # find the data dir for resources
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
