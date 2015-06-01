@@ -174,10 +174,13 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self.dnl_progress = None
         self._files_to_download = 0
         self._files_downloaded = 0
-        if not self.running_api_version != const.NEEDED_DAEMON_API:
+        if self.running_api_version == const.NEEDED_DAEMON_API:
+            logger.debug('dnfdaemon api version (%d)', self.running_api_version)
+        else:
             raise dnfdaemon.client.APIVersionError(
-                                   _('dnfdaemon api version (%d) is to low,'
-                                     'need api version : %d') %
+                                   _('dnfdaemon api version : %d'
+                                     "\ndon't match"
+                                     '\nneeded api version : %d') %
                                    (self.running_api_version,
                                    const.NEEDED_DAEMON_API))
 

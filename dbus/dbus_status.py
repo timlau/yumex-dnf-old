@@ -38,7 +38,7 @@ import random
 import sys
 import time
 
-version = 412  # must be integer
+api_version = 1  # must be integer
 
 DAEMON_ORG = 'dk.yumex.StatusIcon'
 DAEMON_INTERFACE = DAEMON_ORG
@@ -189,13 +189,12 @@ class Notification(GObject.GObject):
         self.emit('notify-action', 'closed')
 
 
-class YumReadOnlyBackend(dnfdaemon.client.Client):
-
-    """
-    """
-
-    def __init__(self):
-        dnfdaemon.client.Client.__init__(self)
+def error_notify(summary, body):
+    Notify.init('Yum Extender')
+    icon = "yumex-dnf"
+    notification = Notify.Notification.new(summary, body, icon)
+    notification.set_timeout(10000)  # timeout 10s
+    notification.show()
 
 
 class StatusIcon:
@@ -368,7 +367,12 @@ class YumexStatusDaemon(dbus.service.Object):
         self.last_timestamp = 0
 
         # yum daemon client setup
-        self.backend = YumReadOnlyBackend()
+        try:
+            self.backend = dnfdaemon.client.Client()
+        except dnfdaemon.client.DaemonError as e:
+            msg = str(e)
+            error_notify('Error starting dnfdaemon service', msg)
+            sys.exit(1)
 
     def setup_statusicon(self):
         self.status_icon = StatusIcon()
@@ -391,7 +395,7 @@ class YumexStatusDaemon(dbus.service.Object):
         """
         Get the daemon version
         """
-        return version
+        return api_version
 
     @Logger
     @dbus.service.method(DAEMON_INTERFACE,
