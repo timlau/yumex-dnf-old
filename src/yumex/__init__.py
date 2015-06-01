@@ -1291,7 +1291,8 @@ class YumexApplication(Gtk.Application):
         self.status = yumex.status.StatusIcon(self)
         if not self.status.is_started:
             msg = _('Yum Extender will close' + '\n' + self.status.last_err)
-            dialogs.show_information(None, _('Error in starting notification icon'),
+            dialogs.show_information(None,
+                                     _('Error in starting notification icon'),
                                      msg)
             sys.exit(0)
         self.status.Start()  # Show the icon
@@ -1332,7 +1333,8 @@ class YumexApplication(Gtk.Application):
         if self.status:
             if self.status.GetYumexIsRunning() == self.pid:
                 self.status.SetYumexIsRunning(self.pid, False)
-                if not CONFIG.conf.autostart and not CONFIG.conf.autocheck_updates:
+                if not CONFIG.conf.autostart and \
+                   not CONFIG.conf.autocheck_updates:
                     self.status.Exit()
         # if windows object exist, unlock and exit backends
         if self.win:
