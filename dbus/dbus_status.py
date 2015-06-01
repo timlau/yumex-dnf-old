@@ -193,7 +193,7 @@ def error_notify(summary, body):
     Notify.init('Yum Extender')
     icon = "yumex-dnf"
     notification = Notify.Notification.new(summary, body, icon)
-    notification.set_timeout(10000)  # timeout 10s
+    notification.set_timeout(5000)  # timeout 5s
     notification.show()
 
 
@@ -353,6 +353,8 @@ class YumexStatusDaemon(dbus.service.Object):
     def __init__(self):
         bus_name = dbus.service.BusName(DAEMON_ORG, bus=dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/')
+        logger.debug('starting %s api version : %d' %
+                     (DAEMON_ORG, api_version))
 
         # Vars
         self.started = False
@@ -371,7 +373,8 @@ class YumexStatusDaemon(dbus.service.Object):
             self.backend = dnfdaemon.client.Client()
         except dnfdaemon.client.DaemonError as e:
             msg = str(e)
-            error_notify('Error starting dnfdaemon service', msg)
+            logger.debug('Error starting dnfdaemon service: [%s]', msg)
+            error_notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
 
     def setup_statusicon(self):
