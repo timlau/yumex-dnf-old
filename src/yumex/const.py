@@ -31,7 +31,7 @@ import hawkey
 
 VERSION = "4.1.3"
 
-NEEDED_DAEMON_API = 1  # The needed dnfdaemon API version
+NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 NEEDED_STATUS_API = 1  # The needed statusicon API version
 
 # find the data dir for resources
@@ -87,7 +87,7 @@ ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
 
 FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
                   'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri',
-                  'localinstall': 'li'}
+                  'localinstall': 'li', 'updates_all': 'u'}
 
 
 PACKAGE_COLORS = {

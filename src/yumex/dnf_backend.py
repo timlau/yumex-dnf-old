@@ -380,6 +380,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     @TimeFunction
     def get_packages(self, flt):
         """Get packages for a given pkg filter."""
+        logger.debug('get-packages : %s ', flt)
         if flt == 'all':
             filters = ['installed', 'updates', 'available']
         else:
@@ -390,6 +391,8 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             if not self.cache.is_populated(pkg_flt):
                 fields = ['summary', 'size']  # fields to get
                 po_list = self.GetPackages(pkg_flt, fields)
+                if pkg_flt == 'updates_all':
+                    pkg_flt = 'updates'
                 pkgs = self._make_pkg_object(po_list, pkg_flt)
                 self.cache.populate(pkg_flt, pkgs)
             result.extend(yumex.backend.Backend.get_packages(self, pkg_flt))

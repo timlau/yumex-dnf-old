@@ -770,9 +770,15 @@ class YumexWindow(BaseWindow):
                     self.current_filter = (widget, data)
                     pkgs = self.backend.get_packages(data)
                     if data == 'updates':
+                        if CONFIG.session.newest_only:
+                            pkgs = self.backend.get_packages(data)
+                        else:
+                            pkgs = self.backend.get_packages('updates_all')
                         obs_pkgs = self.backend.get_packages('obsoletes')
                         pkgs.extend(obs_pkgs)
-                        self.status.SetUpdateCount(len(pkgs))
+                    else:
+                        pkgs = self.backend.get_packages(data)
+                    self.status.SetUpdateCount(len(pkgs))
                 self.info.set_package(None)
                 self.infobar.info(_('Adding packages to view'))
                 self.package_view.populate(pkgs)
