@@ -30,7 +30,7 @@ from gi.repository import GObject
 from gi.repository import Pango
 
 from yumex import const
-from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction
+from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction, check_dark_theme
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -1139,9 +1139,14 @@ class TextViewBase(Gtk.TextView):
         # Try to see if we already got the current url as a tag
         tag = self.get_style(text)
         if not tag:
-            tag = self.buffer.create_tag(text,
-                                         foreground="blue",
-                                         font_desc=const.SMALL_FONT)
+            if check_dark_theme():
+                tag = self.buffer.create_tag(text,
+                                             foreground="#4C4CFF",
+                                             font_desc=const.SMALL_FONT)
+            else:
+                tag = self.buffer.create_tag(text,
+                                             foreground="blue",
+                                             font_desc=const.SMALL_FONT)
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -1239,7 +1244,10 @@ class PackageInfoView(TextViewBase):
         # description style
         tag = "description"
         style = Gtk.TextTag()
-        style.set_property("foreground", "midnight blue")
+        if check_dark_theme():
+            style.set_property("foreground", "#6E6EDF")
+        else:
+            style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
         style.set_property("size_points", font_size)
         self.add_style(tag, style)
@@ -1256,7 +1264,10 @@ class PackageInfoView(TextViewBase):
         # changelog style
         tag = "changelog"
         style = Gtk.TextTag()
-        style.set_property("foreground", "midnight blue")
+        if check_dark_theme():
+            style.set_property("foreground", "#6E6EDF")
+        else:
+            style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
         style.set_property("size_points", font_size)
         self.add_style(tag, style)
@@ -1264,7 +1275,10 @@ class PackageInfoView(TextViewBase):
         # changelog style
         tag = "changelog-header"
         style = Gtk.TextTag()
-        style.set_property("foreground", "dark red")
+        if check_dark_theme():
+            style.set_property("foreground", "#A23232")
+        else:
+            style.set_property("foreground", "dark red")
         style.set_property("family", "Monospace")
         style.set_property("size_points", font_size)
         self.add_style(tag, style)
