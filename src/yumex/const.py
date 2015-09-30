@@ -29,7 +29,7 @@ import subprocess
 import sys
 import hawkey
 
-VERSION = "4.1.3"
+VERSION = "4.1.4"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 NEEDED_STATUS_API = 1  # The needed statusicon API version
