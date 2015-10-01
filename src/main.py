@@ -19,9 +19,9 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import sys
-import os.path
 import traceback
 import subprocess
+import signal
 
 here = sys.path[0]
 if here != '/usr/bin':
@@ -32,6 +32,7 @@ if here != '/usr/bin':
 
 from yumex import YumexApplication
 try:
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = YumexApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
