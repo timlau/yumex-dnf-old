@@ -238,10 +238,7 @@ class StatusIcon:
         self.run_yumex.set_sensitive(sensitive)
 
     def on_popup(self, icon, button, time):
-        def pos(menu, icon):
-            return (Gtk.StatusIcon.position_menu(menu, icon))
-
-        self.popup_menu.popup(None, None, pos, self.statusicon, button, time)
+        self.popup_menu.popup(None, None, self.statusicon.position_menu, self.statusicon, button, time)
 
     def get_status_icon(self):
         return self.statusicon
