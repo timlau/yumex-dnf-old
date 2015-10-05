@@ -47,7 +47,10 @@ class InfoProgressBar:
         self.infobar = ui.get_object("infobar")  # infobar revealer
         frame = ui.get_object("info_frame")
         new_bg = Gdk.RGBA()
-        new_bg.parse("rgb(255,255,255)")
+        if yumex.misc.check_dark_theme():
+            new_bg.parse("rgb(0,0,0)")
+        else:
+            new_bg.parse("rgb(255,255,255)")
         frame.override_background_color(Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
