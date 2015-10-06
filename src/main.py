@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -tt
+#!/usr/bin/python3
 # -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A GUI for yum
 #    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
