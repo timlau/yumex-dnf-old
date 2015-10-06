@@ -1309,11 +1309,11 @@ class RepoView(SelectionView):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
-            self.select_all()
+            self.select_all(state=False)
             self.state = 'deselected'
         elif self.state == 'deselected':  # select all
             self.state = 'selected'
-            self.select_all()
+            self.select_all(state=True)
         elif self.state == 'selected':  # select previous selected
             self.state = 'normal'
             self.select_by_keys(self._last_selected)
@@ -1405,6 +1405,12 @@ class RepoView(SelectionView):
                 self.store.set_value(iterator, 0, False)
             iterator = self.store.iter_next(iterator)
 
+    def select_all(self, state=True):
+        """Set repo selection for all repos."""
+        iterator = self.store.get_iter_first()
+        while iterator is not None:
+            self.store.set_value(iterator, 0, state)
+            iterator = self.store.iter_next(iterator)
 
 class Group:
     """ Object to represent a dnf group/category """
