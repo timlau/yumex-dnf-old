@@ -1012,10 +1012,8 @@ class YumexWindow(BaseWindow):
             else:
                 rc, trans = self.backend.GroupRemove(grp_id)
             if not rc:
-                logger.debug('%s: %s' % (rc, pkg))
                 errors += 1
-                error_msgs.add('%s : %s' %
-                               (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                error_msgs.add('group : %s : %s ' % (action, grp_id))
         logger.debug(' add transaction errors : %d', errors)
         if errors > 0:
             raise TransactionBuildError(error_msgs)
