@@ -216,7 +216,6 @@ def format_number(number, SI=0, space=' '):
 def check_dark_theme():
     """Returns True if Gtk using a dark theme"""
     gtk_settings = Gtk.Settings.get_default()
-
     return gtk_settings.get_property("gtk-application-prefer-dark-theme")
 
 class YumexConf(config.BaseConfig):
@@ -228,13 +227,13 @@ class YumexConf(config.BaseConfig):
     color_update = config.Option('#CC0000')
     color_downgrade = config.Option('#C17D11')
 
-    if check_dark_theme:
+    if check_dark_theme():
         color_normal = config.Option('#FFFFFF')
         color_obsolete = config.Option('#3481A4')
     else:
         color_normal = config.Option('#000000')
         color_obsolete = config.Option('#3465A4')
-        
+
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)
