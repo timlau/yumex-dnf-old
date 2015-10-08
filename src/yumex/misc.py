@@ -218,6 +218,7 @@ def check_dark_theme():
     gtk_settings = Gtk.Settings.get_default()
     return gtk_settings.get_property("gtk-application-prefer-dark-theme")
 
+
 class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
