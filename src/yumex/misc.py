@@ -234,12 +234,11 @@ class YumexConf(config.BaseConfig):
     color_install = config.Option('#4E9A06')
     color_update = config.Option('#CC0000')
     color_downgrade = config.Option('#C17D11')
+    color_normal = config.Option('#000000')
 
     if check_dark_theme():
-        color_normal = config.Option('#FFFFFF')
         color_obsolete = config.Option('#3481A4')
     else:
-        color_normal = config.Option('#000000')
         color_obsolete = config.Option('#3465A4')
 
     history_days = config.IntOption(180)

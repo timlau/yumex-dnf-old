@@ -5,7 +5,7 @@
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
+#    (at your option) any later version..Win
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,7 +24,8 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\
                        QueueEmptyError, TransactionBuildError, \
-                       TransactionSolveError, dbus_statusicon, dbus_dnfsystem
+                       TransactionSolveError, dbus_statusicon, dbus_dnfsystem,\
+                       get_style_color, color_to_hex
 
 import argparse
 import logging
@@ -394,6 +395,11 @@ class YumexWindow(BaseWindow):
 
         # setup the package/queue/history views
         self.setup_main_content()
+
+        # Get the theme default TreeView text color
+        color_normal = get_style_color(self.package_view)
+        CONFIG.conf.color_normal = color_to_hex(color_normal)
+        logger.debug('theme color : %s' % color_to_hex(color_normal))
 
         # spinner
         self.spinner = self.ui.get_object('progress_spinner')
