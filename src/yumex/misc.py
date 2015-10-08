@@ -128,6 +128,13 @@ def format_block(block, indent):
         return result
 
 
+def get_style_color(widget):
+    """Get the default color for a widget in current theme."""
+    context = widget.get_style_context()
+    color = context.get_color(Gtk.StateFlags.NORMAL)
+    return color
+
+
 def doGtkEvents():
     '''
 
