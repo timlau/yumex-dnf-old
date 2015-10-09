@@ -1077,6 +1077,7 @@ class TextViewBase(Gtk.TextView):
         :param textview: the Gtk.TextView widget to use
         '''
         Gtk.TextView.__init__(self)
+        self.props.wrap_mode = Gtk.WrapMode.WORD
         self.set_right_margin(10)
         self.set_left_margin(10)
         self.set_margin_top(5)
