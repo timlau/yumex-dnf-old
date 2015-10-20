@@ -1469,7 +1469,6 @@ start Yum Extender</property>
       <object class="GtkPaned" id="package_paned">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="border_width">5</property>
         <property name="orientation">vertical</property>
         <property name="position">400</property>
         <property name="position_set">True</property>
