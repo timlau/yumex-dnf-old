@@ -22,7 +22,6 @@ import sys
 import traceback
 import subprocess
 import signal
-import gi
 
 here = sys.path[0]
 if here != '/usr/bin':
@@ -34,7 +33,6 @@ if here != '/usr/bin':
 from yumex import YumexApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    gi.require_version('Gtk', '3.10')
     app = YumexApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
