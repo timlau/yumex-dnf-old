@@ -22,6 +22,8 @@ import sys
 import traceback
 import subprocess
 import signal
+import gi
+gi.require_version('Gtk', '3.0')
 
 here = sys.path[0]
 if here != '/usr/bin':
