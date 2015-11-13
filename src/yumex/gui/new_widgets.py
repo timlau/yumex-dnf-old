@@ -158,6 +158,14 @@ class Filters(GObject.GObject):
             self.current = flt
             self.emit('filter-changed', flt)
 
+    def set_active(self, flt):
+        wid = self.win.get_ui('flt_%s' % flt)
+        if not wid.get_active():
+            wid.set_active(True)
+        else:
+            self.current = flt
+            self.emit('filter-changed', flt)
+
 
 class Content(GObject.GObject):
     """Handling the content pages"""

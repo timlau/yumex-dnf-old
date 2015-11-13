@@ -329,7 +329,7 @@ class Window(BaseWindow):
         self.setup_gui()
         self.show_all()
         # setup default selections
-        self.pkg_filter.on_toggled(self.get_ui('flt_updates'), 'updates')
+        self.pkg_filter.set_active('updates')
 
     def setup_gui(self):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -374,8 +374,6 @@ class Window(BaseWindow):
         # preferences dialog
 
         self.preferences = dialogs.Preferences(self)
-
-
 
     def setup_main_content(self):
         """Setup the main content
@@ -553,14 +551,8 @@ class Window(BaseWindow):
         self.groups.populate(self._grps)
         self.group_package_view.populate([])
         self.set_working(False)
-        # switch to package page
-        widget = self.get_ui('main_packages')
-        widget.set_active(True)
-        self.set_content_page(const.PAGE_PACKAGES)
         # show updates
-        widget = self.get_ui('filter_updates')
-        widget.set_active(True)
-        self.on_pkg_filter(widget, 'updates')
+        self.pkg_filter.set_active('updates')
 
     def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window and
