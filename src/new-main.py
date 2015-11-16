@@ -317,7 +317,6 @@ class Window(BaseWindow):
         self._root_locked = False
         self.search_type = 'prefix'
         self.last_search_pkgs = []
-        self.current_filter_search = None
         if CONFIG.conf.archs:
             self.active_archs = CONFIG.conf.archs
         else:
@@ -335,12 +334,14 @@ class Window(BaseWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
-        if self.gnome:
+        if self.gnome:  # Gnome, headerbar in titlebar
             self.set_titlebar(self.get_ui('headerbar'))
             self._headerbar.set_show_close_button(True)
         else:
             box.pack_start(self.get_ui('headerbar'), False, True, 0)
             self._headerbar.set_show_close_button(False)
+            self._headerbar.set_title("")
+            self._headerbar.set_subtitle("")
         box.pack_start(self.get_ui('main_box'), False, True, 0)
         # Setup search
         self.search_bar = nwidgets.SearchBar(self)
@@ -438,16 +439,28 @@ class Window(BaseWindow):
 
     def on_search(self, widget, key, sch_type, fields):
         print(key, sch_type, fields)
+        if key == '':  # revert to the current selected filter
+            self.last_search = None
+            self.last_search_pkgs = []
+            self.pkg_filter.set_active(self.current_filter)
+        else:
+            if sch_type == 'keyword':
+                flt = '*%s*'
+                self._search_name(key, flt)
+            elif sch_type == 'prefix':
+                flt = '%s*'
+                self._search_name(key, flt)
+            elif sch_type == 'fields':
+                self._search_keys(fields, key)
 
     def on_filter_changed(self, widget, data):
         print("filter changed : ", data)
         self.infobar.info(const.PACKAGE_LOAD_MSG[data])
         self.set_working(True, True)
         if self.last_search:  # we are searching
-            self.current_filter_search = (widget, data)
             pkgs = self.filter_search_pkgs(data)
         else:  # normal package filter
-            self.current_filter = (widget, data)
+            self.current_filter = self.pkg_filter.current
             pkgs = self.backend.get_packages(data)
             if data == 'updates':
                 if CONFIG.session.newest_only:
@@ -468,6 +481,48 @@ class Window(BaseWindow):
             self.package_view.set_header_click(True)
         else:
             self.package_view.set_header_click(False)
+
+    def _search_name(self, data, search_flt):
+        """Search package name for keyword with wildcards."""
+        # only search for word larger than 3 chars
+        self.last_search = data
+        self.set_working(True)
+        newest_only = CONFIG.session.newest_only
+        self.last_search_pkgs = self.backend.get_packages_by_name(
+            search_flt % data, newest_only)
+        logger.debug('Packages found : %d' % len(self.last_search_pkgs))
+        self.info.set_package(None)
+        self.set_working(False)
+        self.pkg_filter.set_active('all')
+
+    def _search_keys(self, fields, data):
+        """Search given package attributes for given keywords."""
+        self.last_search = data
+        self.set_working(True, True)
+        newest_only = CONFIG.session.newest_only
+        self.last_search_pkgs = self.backend.search(
+            fields, data.split(' '), True, newest_only, True)
+        self.info.set_package(None)
+        self.set_working(False)
+        self.pkg_filter.set_active('all')
+
+    def filter_search_pkgs(self, flt):
+        """Get filtered search results.
+
+        :param flt: filter (updates, install or all)
+        """
+        if flt == 'updates':  # get update only
+            pkgs = [
+                po for po in self.last_search_pkgs if po.action in ('u', 'o')]
+            return pkgs
+        elif flt == 'installed':  # get installed only
+            pkgs = [po for po in self.last_search_pkgs if po.installed]
+            return pkgs
+        elif flt == 'available':
+            pkgs = [po for po in self.last_search_pkgs if po.action == 'i']
+            return pkgs
+        else:  # get all
+            return self.last_search_pkgs
 
     def on_option_changed(self, widget, option, state):
         print("option changed : ", option, state)
@@ -544,7 +599,6 @@ class Window(BaseWindow):
         self.queue_view.refresh()
         # clear search entry
         self.last_search = None
-        self.current_filter_search = None
         self.search_entry.set_text('')
         # reset groups
         self._grps = self.backend.get_groups()

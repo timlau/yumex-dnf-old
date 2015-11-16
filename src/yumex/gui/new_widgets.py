@@ -31,10 +31,11 @@ class SearchBar(GObject.GObject):
         # Search Entry
         self._entry = self.win.get_ui('search_entry')
         self._entry.connect('activate', self.on_entry_activate)
+        self._entry.connect('icon-press', self.on_entry_icon)
         # Search Options
         self._options = self.win.get_ui('search-options')
         self._options_button = self.win.get_ui('sch_options_button')
-        self._options_button.connect('toggled', self.on_options_button)
+        self._options_button.connect('clicked', self.on_options_button)
         # setup field checkboxes
         for key in SearchBar.FIELDS:
             wid = self.win.get_ui('sch_fld_%s' % key)
@@ -48,6 +49,11 @@ class SearchBar(GObject.GObject):
             if key == self.search_type:
                 wid.set_active(True)
             wid.connect('toggled', self.on_type_changed, key)
+        # setup search option popover
+        self.opt_popover = Gtk.Popover.new(self._options_button)
+        self.opt_popover.set_size_request(50, 100)
+        opt_grid = self.win.get_ui('sch_opt_grid')
+        self.opt_popover.add(opt_grid)
 
     def _set_fields_sensitive(self, state=True):
         """Set sensitivity of field checkboxes."""
@@ -72,18 +78,17 @@ class SearchBar(GObject.GObject):
 
     def on_options_button(self, widget):
         """Search Option button is toggled."""
-        self._options.set_reveal_child(widget.get_active())
-        if not widget.get_active():
+        if self.opt_popover.get_visible():
+            self.opt_popover.hide()
             self._set_focus()
+        else:
+            self.opt_popover.show_all()
 
     def on_toggle(self, widget):
         """Search Toggle button is toggled."""
         self._bar.set_search_mode(not self._bar.get_search_mode())
         if self._bar.get_search_mode():
             self._set_focus()
-        else:
-            # make sure search option is hidden
-            self._options_button.set_active(False)
 
     def on_type_changed(self, widget, key):
         """Search type is changed."""
@@ -101,8 +106,15 @@ class SearchBar(GObject.GObject):
     def on_entry_activate(self, widget):
         """Seach entry is activated"""
         # make sure search option is hidden
-        self._options_button.set_active(False)
         self.signal()
+
+    def on_entry_icon(self, widget, icon_pos, event):
+        """Search entry callback."""
+        #print(icon_pos)
+        # clear icon pressed
+        if icon_pos == Gtk.EntryIconPosition.SECONDARY:
+            self._entry.set_text('')
+            self._entry.emit('activate')
 
     def signal(self):
         """Emit a seach signal with key, search type & fields."""
@@ -159,12 +171,15 @@ class Filters(GObject.GObject):
             self.emit('filter-changed', flt)
 
     def set_active(self, flt):
-        wid = self.win.get_ui('flt_%s' % flt)
-        if not wid.get_active():
-            wid.set_active(True)
+        if flt in Filters.FILTERS:
+            wid = self.win.get_ui('flt_%s' % flt)
+            if not wid.get_active():
+                wid.set_active(True)
+            else:
+                self.current = flt
+                self.emit('filter-changed', flt)
         else:
-            self.current = flt
-            self.emit('filter-changed', flt)
+            print('unknown filter : ', flt)
 
 
 class Content(GObject.GObject):
