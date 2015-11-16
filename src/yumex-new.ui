@@ -1192,33 +1192,33 @@ start Yum Extender</property>
       <object class="GtkRevealer" id="infobar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="transition_type">slide-up</property>
         <child>
           <object class="GtkFrame" id="info_frame">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
             <property name="margin_start">5</property>
             <property name="margin_end">5</property>
-            <property name="margin_top">5</property>
-            <property name="margin_bottom">5</property>
+            <property name="margin_top">6</property>
+            <property name="margin_bottom">6</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkGrid" id="info_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">7</property>
-                <property name="margin_bottom">5</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
                 <property name="hexpand">True</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">6</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_right">6</property>
                     <property name="margin_start">6</property>
                     <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
@@ -1236,12 +1236,10 @@ start Yum Extender</property>
                   <object class="GtkProgressBar" id="infobar_progress">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -1259,7 +1257,6 @@ start Yum Extender</property>
                     <property name="margin_right">10</property>
                     <property name="margin_start">20</property>
                     <property name="margin_end">10</property>
-                    <property name="margin_top">6</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
@@ -1292,11 +1289,8 @@ start Yum Extender</property>
                 </child>
               </object>
             </child>
-            <child type="label">
-              <object class="GtkLabel" id="frame_label">
-                <property name="can_focus">False</property>
-                <property name="use_markup">True</property>
-              </object>
+            <child type="label_item">
+              <placeholder/>
             </child>
           </object>
         </child>
