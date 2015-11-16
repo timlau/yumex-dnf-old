@@ -282,12 +282,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """
         self.is_working = state
         if state:
-            self.spinner.show()
             #self.status.SetWorking(True)
             self._set_busy_cursor(insensitive)
             self._disable_buttons(False)
         else:
-            self.spinner.hide()
             self.infobar.hide()
             #self.status.SetWorking(False)
             self._set_normal_cursor()
@@ -370,12 +368,6 @@ class Window(BaseWindow):
         CONFIG.conf.color_normal = color_to_hex(color_normal)
         logger.debug('theme color : %s' % color_to_hex(color_normal))
 
-        # spinner
-        self.spinner = self.get_ui('progress_spinner')
-        self.info_spinner = self.get_ui('info_spinner')
-        self.info_spinner.set_from_file(const.PIX_DIR + '/spinner-small.gif')
-        self.spinner.hide()
-
         # infobar
         self.infobar = yumex.gui.widgets.InfoProgressBar(self.ui)
         self.infobar.hide()
@@ -447,6 +439,7 @@ class Window(BaseWindow):
 
     def on_search(self, widget, key, sch_type, fields):
         print(key, sch_type, fields)
+        self.search_bar.show_spinner(True)
         if key == '':  # revert to the current selected filter
             self.last_search = None
             self.last_search_pkgs = []
@@ -460,6 +453,7 @@ class Window(BaseWindow):
                 self._search_name(key, flt)
             elif sch_type == 'fields':
                 self._search_keys(fields, key)
+        self.search_bar.show_spinner(False)
 
     def on_filter_changed(self, widget, data):
         print("filter changed : ", data)

@@ -37,6 +37,9 @@ class SearchBar(GObject.GObject):
         self._options = self.win.get_ui('search-options')
         self._options_button = self.win.get_ui('sch_options_button')
         self._options_button.connect('clicked', self.on_options_button)
+        # Search Spinner
+        self._spinner = self.win.get_ui('search_spinner')
+        self._spinner.stop()
         # setup field checkboxes
         for key in SearchBar.FIELDS:
             wid = self.win.get_ui('sch_fld_%s' % key)
@@ -55,6 +58,12 @@ class SearchBar(GObject.GObject):
         self.opt_popover.set_size_request(50, 100)
         opt_grid = self.win.get_ui('sch_opt_grid')
         self.opt_popover.add(opt_grid)
+
+    def show_spinner(self, state=True):
+        if state:
+            self._spinner.start()
+        else:
+            self._spinner.stop()
 
     def _set_fields_sensitive(self, state=True):
         """Set sensitivity of field checkboxes."""
