@@ -201,8 +201,10 @@ class Content(GObject.GObject):
         GObject.GObject.__init__(self)
         self.win = win
         self.stack = self.win.get_ui('main_stack')
-        self.search_toggle = self.win.get_ui('flt_box')
-        self.filters = self.win.get_ui('sch_togglebutton')
+        self.switcher = self.win.get_ui('main_switcher')
+        self.stack.connect('notify::visible-child', self.on_switch)
+        self.filters = self.win.get_ui('flt_box')
+        self.search = self.win.get_ui('sch_togglebutton')
         for key in Content.MENUS:
             wid = self.win.get_ui('main_%s' % key)
             wid.connect('activate', self.on_menu_select, key)
@@ -211,10 +213,20 @@ class Content(GObject.GObject):
         self.stack.set_visible_child_name(page)
         if page == 'packages':
             self.search_toggle.set_sensitive(True)
-            self.filters.set_sensitive(True)
         else:
             self.search_toggle.set_sensitive(False)
-            self.filters.set_sensitive(False)
 
     def on_menu_select(self, widget, page):
         self.select_page(page)
+
+    def on_switch(self, widget, data):
+        child = self.stack.get_visible_child_name()
+        print(child)
+        if child == 'packages':
+            self.filters.show()
+            self.search.show()
+        else:
+            self.filters.hide()
+            self.search.hide()
+
+
