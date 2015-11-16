@@ -3,6 +3,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gtk, GObject
+from yumex.misc import CONFIG
 
 
 class SearchBar(GObject.GObject):
@@ -109,8 +110,7 @@ class SearchBar(GObject.GObject):
         self.signal()
 
     def on_entry_icon(self, widget, icon_pos, event):
-        """Search entry callback."""
-        #print(icon_pos)
+        """Search icon press callback."""
         # clear icon pressed
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:
             self._entry.set_text('')
@@ -141,6 +141,7 @@ class Options(GObject.GObject):
         self.win = win
         for key in Options.OPTIONS:
             wid = self.win.get_ui('option_%s' % key)
+            wid.set_active(getattr(CONFIG.session, key))
             wid.connect('toggled', self.on_toggled, key)
 
     def on_toggled(self, widget, flt):

@@ -1090,6 +1090,22 @@ start Yum Extender</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
+          <object class="GtkSpinner" id="progress_spinner">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">12</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">12</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkToggleButton" id="sch_togglebutton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -1106,7 +1122,7 @@ start Yum Extender</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -1125,7 +1141,7 @@ start Yum Extender</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -1143,22 +1159,6 @@ start Yum Extender</property>
                 <property name="icon_name">open-menu-symbolic</property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinner" id="progress_spinner">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="opacity">0.98000000044703484</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">12</property>
-            <property name="margin_start">6</property>
-            <property name="margin_end">12</property>
           </object>
           <packing>
             <property name="expand">False</property>

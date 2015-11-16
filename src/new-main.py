@@ -285,11 +285,19 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.spinner.show()
             #self.status.SetWorking(True)
             self._set_busy_cursor(insensitive)
+            self._disable_buttons(False)
         else:
             self.spinner.hide()
             self.infobar.hide()
             #self.status.SetWorking(False)
             self._set_normal_cursor()
+            self._disable_buttons(True)
+
+    def _disable_buttons(self, state):
+        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons']
+        for widget in WIDGETS_INSENSITIVE:
+                        self.ui.get_object(widget).set_sensitive(state)
+
 
 
 class Window(BaseWindow):
