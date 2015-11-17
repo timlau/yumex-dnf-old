@@ -19,7 +19,7 @@ import argparse
 import datetime
 import logging
 import os.path
-import re
+import subprocess
 import sys
 
 import yumex.const as const
@@ -27,7 +27,7 @@ import yumex.status
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.views as views
-import yumex.gui.widgets as widgets
+#import yumex.gui.widgets as widgets
 import yumex.gui.new_widgets as nwidgets
 
 
@@ -349,6 +349,10 @@ class Window(BaseWindow):
         # setup default selections
         self.pkg_filter.set_active('updates')
 
+###############################################################################
+# Gui Setup
+###############################################################################
+
     def _setup_gui(self):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
@@ -370,6 +374,9 @@ class Window(BaseWindow):
         self.pkg_filter.connect('filter-changed', self.on_filter_changed)
         # Setup Content
         self.content = nwidgets.Content(self)
+        self.content.connect('page-changed', self.on_page_changed)
+        self._filter_box = self.get_ui('flt_box')
+        self._search_toggle = self.get_ui('sch_togglebutton')
         # Setup Options
         self.options = nwidgets.Options(self)
         self.options.connect('option-changed', self.on_option_changed)
@@ -389,8 +396,13 @@ class Window(BaseWindow):
         self.infobar.hide()
 
         # preferences dialog
-
         self.preferences = dialogs.Preferences(self)
+
+        # main menu setup
+        wid = self.get_ui('main_about')
+        wid.connect('activate', self.on_about)
+        wid = self.get_ui('main_doc')
+        wid.connect('activate', self.on_docs)
 
     def _setup_action_page(self):
         """Setup Pending Action page."""
@@ -452,6 +464,20 @@ class Window(BaseWindow):
         # setup history buttons
         undo = self.get_ui('history_undo')
         undo.connect('clicked', self.on_history_undo)
+
+###############################################################################
+# Helpers
+###############################################################################
+
+    def _open_url(self, url):
+        """Open URL in default browser."""
+        if self._is_url(url):  # just to be sure and prevent shell injection
+            rc = subprocess.call('xdg-open %s' % url, shell=True)
+            # failover to gtk.show_uri, if xdg-open fails or is not installed
+            if rc != 0:
+                Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
+        else:
+            dialogs.show_information('%s is not an url' % url)
 
     def _search_name(self, data, search_flt):
         """Search package name for keyword with wildcards."""
@@ -526,9 +552,38 @@ class Window(BaseWindow):
         # show updates
         self.pkg_filter.set_active('updates')
 
+    def _load_groups(self):
+        """Load groups into group cache and populate group view."""
+        if not self._grps:
+            logger.debug('getting group and categories')
+            self._grps = self.backend.get_groups()
+            self.groups.populate(self._grps)
+
 ###############################################################################
 # Callback handlers
 ###############################################################################
+
+    def on_page_changed(self, widget, page):
+        """Handle content page is changed."""
+        if page == 'packages':
+            self._filter_box.show()
+            self._search_toggle.show()
+        else:
+            self._filter_box.hide()
+            self._search_toggle.hide()
+        if page == 'groups':
+            self._load_groups()
+
+    def on_about(self, widget):
+        """ Main Menu: Help -> About """
+        dialog = dialogs.AboutDialog()
+        dialog.run()
+        dialog.destroy()
+
+    def on_docs(self, widget):
+        """ Main Menu: Help -> Documentation"""
+        self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
+        pass
 
     def on_search(self, widget, key, sch_type, fields):
         """Handle search."""

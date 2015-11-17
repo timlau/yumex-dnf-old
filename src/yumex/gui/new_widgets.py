@@ -199,28 +199,27 @@ class Filters(GObject.GObject):
 class Content(GObject.GObject):
     """Handling the content pages"""
 
+    __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
+                                       None,
+                                       (GObject.TYPE_STRING,)
+                                       )}
+
     MENUS = ['packages', 'groups', 'history', 'actions']
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self.stack = self.win.get_ui('main_stack')
+        self._stack = self.win.get_ui('main_stack')
         self.switcher = self.win.get_ui('main_switcher')
         # catch changes in active page in stack
-        self.stack.connect('notify::visible-child', self.on_switch)
-        self.filters = self.win.get_ui('flt_box')
-        self.search = self.win.get_ui('sch_togglebutton')
+        self._stack.connect('notify::visible-child', self.on_switch)
         for key in Content.MENUS:
             wid = self.win.get_ui('main_%s' % key)
             wid.connect('activate', self.on_menu_select, key)
 
     def select_page(self, page):
         """Set the active page."""
-        self.stack.set_visible_child_name(page)
-        if page == 'packages':
-            self.search_toggle.set_sensitive(True)
-        else:
-            self.search_toggle.set_sensitive(False)
+        self._stack.set_visible_child_name(page)
 
     def on_menu_select(self, widget, page):
         """Main menu page entry is seleceted"""
@@ -228,13 +227,7 @@ class Content(GObject.GObject):
 
     def on_switch(self, widget, data):
         """The active page is changed."""
-        child = self.stack.get_visible_child_name()
-        print(child)
-        if child == 'packages':
-            self.filters.show()
-            self.search.show()
-        else:
-            self.filters.hide()
-            self.search.hide()
+        child = self._stack.get_visible_child_name()
+        self.emit('page-changed', child)
 
 
