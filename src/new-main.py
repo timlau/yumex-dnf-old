@@ -559,6 +559,13 @@ class Window(BaseWindow):
             self._grps = self.backend.get_groups()
             self.groups.populate(self._grps)
 
+    def _load_history(self):
+        """Load history and populate view."""
+        if not self.history_view.is_populated:
+            result = self.backend.GetHistoryByDays(
+                0, CONFIG.conf.history_days)
+            self.history_view.populate(result)
+
 ###############################################################################
 # Callback handlers
 ###############################################################################
@@ -573,6 +580,8 @@ class Window(BaseWindow):
             self._search_toggle.hide()
         if page == 'groups':
             self._load_groups()
+        elif page == 'history':
+            self._load_history()
 
     def on_about(self, widget):
         """ Main Menu: Help -> About """
