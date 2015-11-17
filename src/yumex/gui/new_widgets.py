@@ -232,5 +232,3 @@ class Content(GObject.GObject):
         """The active page is changed."""
         child = self._stack.get_visible_child_name()
         self.emit('page-changed', child)
-
-

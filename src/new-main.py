@@ -12,7 +12,7 @@ from gi.repository import Gio, Gtk, Gdk
 
 from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\
                        QueueEmptyError, TransactionBuildError, \
-                       TransactionSolveError, dbus_statusicon, dbus_dnfsystem,\
+                       TransactionSolveError, dbus_dnfsystem,\
                        get_style_color, color_to_hex
 
 import argparse
@@ -403,6 +403,8 @@ class Window(BaseWindow):
         wid.connect('activate', self.on_about)
         wid = self.get_ui('main_doc')
         wid.connect('activate', self.on_docs)
+        wid = self.ui.get_object('main_pref')
+        wid.connect('activate', self.on_pref)
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -541,7 +543,7 @@ class Window(BaseWindow):
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True)
-        self.infobar.hide()
+        self.infobar.info(_("Reloading package information..."))
         self.release_root_backend()
         self.backend.reload()
         # clear the package queue
@@ -580,6 +582,11 @@ class Window(BaseWindow):
 ###############################################################################
 # Callback handlers
 ###############################################################################
+    def on_pref(self, widget):
+        """Preferences selected callback."""
+        need_reset = self.preferences.run()
+        if need_reset:
+            self._reset()
 
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
