@@ -60,6 +60,7 @@ class SearchBar(GObject.GObject):
         self.opt_popover.add(opt_grid)
 
     def show_spinner(self, state=True):
+        """Set is spinner in searchbar is running."""
         if state:
             self._spinner.start()
         else:
@@ -154,6 +155,7 @@ class Options(GObject.GObject):
             wid.connect('toggled', self.on_toggled, key)
 
     def on_toggled(self, widget, flt):
+        """An option is changed."""
         self.emit('option-changed', flt, widget.get_active())
 
 
@@ -176,11 +178,13 @@ class Filters(GObject.GObject):
             wid.connect('toggled', self.on_toggled, flt)
 
     def on_toggled(self, widget, flt):
+        """Active filter is changed."""
         if widget.get_active():
             self.current = flt
             self.emit('filter-changed', flt)
 
     def set_active(self, flt):
+        """Set the active filter."""
         if flt in Filters.FILTERS:
             wid = self.win.get_ui('flt_%s' % flt)
             if not wid.get_active():
@@ -202,6 +206,7 @@ class Content(GObject.GObject):
         self.win = win
         self.stack = self.win.get_ui('main_stack')
         self.switcher = self.win.get_ui('main_switcher')
+        # catch changes in active page in stack
         self.stack.connect('notify::visible-child', self.on_switch)
         self.filters = self.win.get_ui('flt_box')
         self.search = self.win.get_ui('sch_togglebutton')
@@ -210,6 +215,7 @@ class Content(GObject.GObject):
             wid.connect('activate', self.on_menu_select, key)
 
     def select_page(self, page):
+        """Set the active page."""
         self.stack.set_visible_child_name(page)
         if page == 'packages':
             self.search_toggle.set_sensitive(True)
@@ -217,9 +223,11 @@ class Content(GObject.GObject):
             self.search_toggle.set_sensitive(False)
 
     def on_menu_select(self, widget, page):
+        """Main menu page entry is seleceted"""
         self.select_page(page)
 
     def on_switch(self, widget, data):
+        """The active page is changed."""
         child = self.stack.get_visible_child_name()
         print(child)
         if child == 'packages':
