@@ -498,6 +498,7 @@ class SearchBar(GObject.GObject):
         # setup search option popover
         self.opt_popover = Gtk.Popover.new(self._options_button)
         self.opt_popover.set_size_request(50, 100)
+        self.opt_popover.set_position(Gtk.PositionType.BOTTOM)
         opt_grid = self.win.get_ui('sch_opt_grid')
         self.opt_popover.add(opt_grid)
 
