@@ -296,6 +296,19 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
 
+    def _set_busy_cursor(self, insensitive=False):
+        """Set busy cursor in main window."""
+        win = self.get_window()
+        if win is not None:
+            win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+        doGtkEvents()
+
+    def _set_normal_cursor(self):
+        """Set Normal cursor in main window."""
+        win = self.get_window()
+        if win is not None:
+            win.set_cursor(None)
+        doGtkEvents()
 
 
 class Window(BaseWindow):
@@ -331,12 +344,12 @@ class Window(BaseWindow):
         self.active_page = None  # Active content page
         self.search_fields = CONFIG.conf.search_fields
 
-        self.setup_gui()
+        self._setup_gui()
         self.show_all()
         # setup default selections
         self.pkg_filter.set_active('updates')
 
-    def setup_gui(self):
+    def _setup_gui(self):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
@@ -361,7 +374,10 @@ class Window(BaseWindow):
         self.options = nwidgets.Options(self)
         self.options.connect('option-changed', self.on_option_changed)
         # setup the package/queue/history views
-        self.setup_main_content()
+        self._setup_action_page()
+        self._setup_package_page()
+        self._setup_group_page()
+        self._setup_history_page()
 
         # Get the theme default TreeView text color
         color_normal = get_style_color(self.package_view)
@@ -376,14 +392,16 @@ class Window(BaseWindow):
 
         self.preferences = dialogs.Preferences(self)
 
-    def setup_main_content(self):
-        """Setup the main content
-
-        Setup the package, history and queue views pages
-        """
-        # Package Page
+    def _setup_action_page(self):
+        """Setup Pending Action page."""
         queue_menu = self.get_ui('queue_menu')
         self.queue_view = views.QueueView(queue_menu)
+        # Queue Page
+        sw = self.get_ui('queue_sw')
+        sw.add(self.queue_view)
+
+    def _setup_package_page(self):
+        """Setup the package page."""
         arch_menu_widget = self.get_ui('arch_menu')
         self.arch_menu = yumex.gui.widgets.ArchMenu(arch_menu_widget,
                                                     const.PLATFORM_ARCH)
@@ -398,11 +416,9 @@ class Window(BaseWindow):
         self.info = yumex.gui.widgets.PackageInfo(self, self)
         info.pack_start(self.info, True, True, 0)
         self.info.show_all()
-        # Queue Page
-        sw = self.get_ui('queue_sw')
-        sw.add(self.queue_view)
-        # History Page
-        self.setup_history_page()
+
+    def _setup_group_page(self):
+        """Setup the group page."""
         # Groups
         sw = self.get_ui('groups_sw')
         hb = Gtk.Box()
@@ -424,8 +440,8 @@ class Window(BaseWindow):
         info.add(self.group_info)
         self.info.show_all()
 
-    def setup_history_page(self):
-        # History elements / packages views
+    def _setup_history_page(self):
+        """Setup the history page."""
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.history_view = views.HistoryView(self)
@@ -436,53 +452,6 @@ class Window(BaseWindow):
         # setup history buttons
         undo = self.get_ui('history_undo')
         undo.connect('clicked', self.on_history_undo)
-
-    def on_search(self, widget, key, sch_type, fields):
-        print(key, sch_type, fields)
-        self.search_bar.show_spinner(True)
-        if key == '':  # revert to the current selected filter
-            self.last_search = None
-            self.last_search_pkgs = []
-            self.pkg_filter.set_active(self.current_filter)
-        else:
-            if sch_type == 'keyword':
-                flt = '*%s*'
-                self._search_name(key, flt)
-            elif sch_type == 'prefix':
-                flt = '%s*'
-                self._search_name(key, flt)
-            elif sch_type == 'fields':
-                self._search_keys(fields, key)
-        self.search_bar.show_spinner(False)
-
-    def on_filter_changed(self, widget, data):
-        print("filter changed : ", data)
-        self.infobar.info(const.PACKAGE_LOAD_MSG[data])
-        self.set_working(True, True)
-        if self.last_search:  # we are searching
-            pkgs = self.filter_search_pkgs(data)
-        else:  # normal package filter
-            self.current_filter = self.pkg_filter.current
-            pkgs = self.backend.get_packages(data)
-            if data == 'updates':
-                if CONFIG.session.newest_only:
-                    pkgs = self.backend.get_packages(data)
-                else:
-                    pkgs = self.backend.get_packages('updates_all')
-                obs_pkgs = self.backend.get_packages('obsoletes')
-                pkgs.extend(obs_pkgs)
-            else:
-                pkgs = self.backend.get_packages(data)
-            #self.status.SetUpdateCount(len(pkgs))
-        self.info.set_package(None)
-        self.infobar.info(_('Adding packages to view'))
-        self.package_view.populate(pkgs)
-        self.set_working(False)
-        self.infobar.hide()
-        if data == 'updates':
-            self.package_view.set_header_click(True)
-        else:
-            self.package_view.set_header_click(False)
 
     def _search_name(self, data, search_flt):
         """Search package name for keyword with wildcards."""
@@ -508,11 +477,8 @@ class Window(BaseWindow):
         self.set_working(False)
         self.pkg_filter.set_active('all')
 
-    def filter_search_pkgs(self, flt):
-        """Get filtered search results.
-
-        :param flt: filter (updates, install or all)
-        """
+    def _filter_search_pkgs(self, flt):
+        """Get filtered search results."""
         if flt == 'updates':  # get update only
             pkgs = [
                 po for po in self.last_search_pkgs if po.action in ('u', 'o')]
@@ -526,60 +492,13 @@ class Window(BaseWindow):
         else:  # get all
             return self.last_search_pkgs
 
-    def on_option_changed(self, widget, option, state):
-        print("option changed : ", option, state)
-
-    def on_arch_changed(self, widget, data):
-        """Arch changed in arch menu callback."""
-        self.active_archs = data.split(',')
-        logger.debug('arch-changed : %s' % self.active_archs)
-        #self.arch_filter.change(self.active_archs)
-        #self.refresh_search()
-
-    def on_pkg_view_selection_changed(self, widget, pkg):
-        """Package selected in the view callback."""
-        self.info.set_package(pkg)
-
-    def on_group_pkg_view_selection_changed(self, widget, pkg):
-        """Package selected in the group view callback."""
-        self.group_info.set_package(pkg)
-
-    def on_group_changed(self, widget, grp_id):
-        """ Group changed callback
-
-        called when a new group is selected and the group package view
-        shall be updated with the packages in the group
-
-        :param widget:
-        :param grp_id: group id to show packages for.
-        """
-        logger.debug('on_group_changed : %s ' % grp_id)
-        self.set_working(True, True)
-        pkgs = self.backend.get_group_packages(grp_id, 'all')
-        self.group_package_view.populate(pkgs)
-        self.set_working(False)
-
-    def on_history_undo(self, widget):
-        tid = self.history_view.get_selected()
-        logger.debug('History Undo : %s', tid)
-        rc, messages = self.backend.HistoryUndo(tid)
-        if rc:
-            self.process_actions(from_queue=False)
-        else:
-            msg = "Can't undo history transaction :\n%s" % \
-                  ("\n".join(messages))
-            logger.debug(msg)
-            dialogs.show_information(
-                self, _('Error in undo history transaction'),
-                "\n".join(messages))
-
-    def reset_on_cancel(self):
+    def _reset_on_cancel(self):
         """Reset gui on user cancel"""
         self.set_working(True)
         self.infobar.hide()
         self.set_working(False)
 
-    def reset_on_error(self):
+    def _reset_on_error(self):
         """Reset gui on transaction errors."""
         self.set_working(True)
         self.infobar.hide()
@@ -587,11 +506,8 @@ class Window(BaseWindow):
         self.set_working(False)
 
     @ExceptionHandler
-    def reset(self):
-        """Reset the gui to inital state.
-
-        Used after a transaction is completted.
-        """
+    def _reset(self):
+        """Reset the gui on transaction completion."""
         self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
@@ -610,28 +526,99 @@ class Window(BaseWindow):
         # show updates
         self.pkg_filter.set_active('updates')
 
-    def _set_busy_cursor(self, insensitive=False):
-        """Set busy cursor in main window and
-        make it insensitive if selected.
-        """
-        win = self.get_window()
-        if win is not None:
-            win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-            #if insensitive:
-                #for widget in const.WIDGETS_INSENSITIVE:
-                        #self.get_ui(widget).set_sensitive(False)
-                #self.stack.set_sensitive(False)
-        doGtkEvents()
+###############################################################################
+# Callback handlers
+###############################################################################
 
-    def _set_normal_cursor(self):
-        """Set Normal cursor in main window and make it sensitive."""
-        win = self.get_window()
-        if win is not None:
-            win.set_cursor(None)
-            #for widget in const.WIDGETS_INSENSITIVE:
-                #self.get_ui(widget).set_sensitive(True)
-            #self.stack.set_sensitive(True)
-        doGtkEvents()
+    def on_search(self, widget, key, sch_type, fields):
+        """Handle search."""
+        print(key, sch_type, fields)
+        self.search_bar.show_spinner(True)
+        if key == '':  # revert to the current selected filter
+            self.last_search = None
+            self.last_search_pkgs = []
+            self.pkg_filter.set_active(self.current_filter)
+        else:
+            if sch_type == 'keyword':
+                flt = '*%s*'
+                self._search_name(key, flt)
+            elif sch_type == 'prefix':
+                flt = '%s*'
+                self._search_name(key, flt)
+            elif sch_type == 'fields':
+                self._search_keys(fields, key)
+        self.search_bar.show_spinner(False)
+
+    def on_filter_changed(self, widget, data):
+        """Handle changes in package filter."""
+        self.infobar.info(const.PACKAGE_LOAD_MSG[data])
+        self.set_working(True, True)
+        if self.last_search:  # we are searching
+            pkgs = self._filter_search_pkgs(data)
+        else:  # normal package filter
+            self.current_filter = self.pkg_filter.current
+            pkgs = self.backend.get_packages(data)
+            if data == 'updates':
+                if CONFIG.session.newest_only:
+                    pkgs = self.backend.get_packages(data)
+                else:
+                    pkgs = self.backend.get_packages('updates_all')
+                obs_pkgs = self.backend.get_packages('obsoletes')
+                pkgs.extend(obs_pkgs)
+            else:
+                pkgs = self.backend.get_packages(data)
+            #self.status.SetUpdateCount(len(pkgs))
+        self.info.set_package(None)
+        self.infobar.info(_('Adding packages to view'))
+        self.package_view.populate(pkgs)
+        self.set_working(False)
+        self.infobar.hide()
+        if data == 'updates':
+            self.package_view.set_header_click(True)
+        else:
+            self.package_view.set_header_click(False)
+
+    def on_option_changed(self, widget, option, state):
+        """Handle changes in options."""
+        print("option changed : ", option, state)
+
+    def on_arch_changed(self, widget, data):
+        """Arch changed in arch menu callback."""
+        self.active_archs = data.split(',')
+        logger.debug('arch-changed : %s' % self.active_archs)
+        #self.arch_filter.change(self.active_archs)
+        #self.refresh_search()
+
+    def on_pkg_view_selection_changed(self, widget, pkg):
+        """Handle package selection on package page."""
+        self.info.set_package(pkg)
+
+    def on_group_pkg_view_selection_changed(self, widget, pkg):
+        """Handle package selection on group page."""
+        self.group_info.set_package(pkg)
+
+    def on_group_changed(self, widget, grp_id):
+        """Handle group selection on group page."""
+        logger.debug('on_group_changed : %s ' % grp_id)
+        self.set_working(True, True)
+        pkgs = self.backend.get_group_packages(grp_id, 'all')
+        self.group_package_view.populate(pkgs)
+        self.set_working(False)
+
+    def on_history_undo(self, widget):
+        """Handle the undo button on history page."""
+        tid = self.history_view.get_selected()
+        logger.debug('History Undo : %s', tid)
+        rc, messages = self.backend.HistoryUndo(tid)
+        if rc:
+            self.process_actions(from_queue=False)
+        else:
+            msg = "Can't undo history transaction :\n%s" % \
+                  ("\n".join(messages))
+            logger.debug(msg)
+            dialogs.show_information(
+                self, _('Error in undo history transaction'),
+                "\n".join(messages))
 
 
 class YumexApplication(Gtk.Application):
