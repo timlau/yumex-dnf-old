@@ -27,7 +27,7 @@ import yumex.status
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.views as views
-#import yumex.gui.widgets as widgets
+import yumex.gui.widgets as widgets
 import yumex.gui.new_widgets as nwidgets
 
 
@@ -392,7 +392,7 @@ class Window(BaseWindow):
         logger.debug('theme color : %s' % color_to_hex(color_normal))
 
         # infobar
-        self.infobar = yumex.gui.widgets.InfoProgressBar(self.ui)
+        self.infobar = widgets.InfoProgressBar(self.ui)
         self.infobar.hide()
 
         # preferences dialog
@@ -403,6 +403,11 @@ class Window(BaseWindow):
         wid.connect('activate', self.on_about)
         wid = self.get_ui('main_doc')
         wid.connect('activate', self.on_docs)
+
+        # get the arch filter
+        self.arch_filter = self.backend.get_filter('arch')
+        self.arch_filter.set_active(True)
+        self.arch_filter.change(self.active_archs)
 
     def _setup_action_page(self):
         """Setup Pending Action page."""
@@ -415,8 +420,8 @@ class Window(BaseWindow):
     def _setup_package_page(self):
         """Setup the package page."""
         arch_menu_widget = self.get_ui('arch_menu')
-        self.arch_menu = yumex.gui.widgets.ArchMenu(arch_menu_widget,
-                                                    const.PLATFORM_ARCH)
+        self.arch_menu = widgets.ArchMenu(arch_menu_widget,
+                                          const.PLATFORM_ARCH)
         self.arch_menu.connect('arch-changed', self.on_arch_changed)
         self.package_view = views.PackageView(self.queue_view, self.arch_menu)
         self.package_view.connect(
@@ -425,7 +430,7 @@ class Window(BaseWindow):
         sw.add(self.package_view)
         # setup info view
         info = self.get_ui('info_box')
-        self.info = yumex.gui.widgets.PackageInfo(self, self)
+        self.info = widgets.PackageInfo(self, self)
         info.pack_start(self.info, True, True, 0)
         self.info.show_all()
 
@@ -448,7 +453,7 @@ class Window(BaseWindow):
             'pkg_changed', self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
         info = self.get_ui('group_pkg_info_sw')
-        self.group_info = yumex.gui.widgets.PackageInfo(self, self)
+        self.group_info = widgets.PackageInfo(self, self)
         info.add(self.group_info)
         self.info.show_all()
 
@@ -529,6 +534,7 @@ class Window(BaseWindow):
         self.set_working(True)
         self.infobar.hide()
         self.release_root_backend()
+        self.backend.reload()
         self.set_working(False)
 
     @ExceptionHandler
@@ -543,7 +549,7 @@ class Window(BaseWindow):
         self.queue_view.refresh()
         # clear search entry
         self.last_search = None
-        self.search_entry.set_text('')
+        self.search_bar.reset()
         # reset groups
         self._grps = self.backend.get_groups()
         self.groups.populate(self._grps)
@@ -662,8 +668,8 @@ class Window(BaseWindow):
         """Arch changed in arch menu callback."""
         self.active_archs = data.split(',')
         logger.debug('arch-changed : %s' % self.active_archs)
-        #self.arch_filter.change(self.active_archs)
-        #self.refresh_search()
+        self.arch_filter.change(self.active_archs)
+        self._refresh_search()
 
     def on_pkg_view_selection_changed(self, widget, pkg):
         """Handle package selection on package page."""
@@ -743,7 +749,14 @@ class YumexApplication(Gtk.Application):
                 else:
                     print("Application is busy")
         if self.args.debug:
-            print(self.args)
+            self._logger_setup(loglvl=logging.DEBUG)
+            # setup log handler for yumdaemon API
+            self._logger_setup(
+                logroot='yumdaemon',
+                logfmt='%(asctime)s: [%(name)s] - %(message)s',
+                loglvl=logging.DEBUG)
+        else:
+            self._logger_setup()
         self.activate()
         return 0
 
@@ -759,6 +772,18 @@ class YumexApplication(Gtk.Application):
         logger.info('Saving config on exit')
         CONFIG.write()
         return 0
+
+    def _logger_setup(self, logroot='yumex',
+                      logfmt='%(asctime)s: %(message)s',
+                      loglvl=logging.INFO):
+        """Setup Python logging."""
+        logger = logging.getLogger(logroot)
+        logger.setLevel(loglvl)
+        formatter = logging.Formatter(logfmt, '%H:%M:%S')
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        handler.propagate = False
+        logger.addHandler(handler)
 
 if __name__ == '__main__':
     app = YumexApplication()

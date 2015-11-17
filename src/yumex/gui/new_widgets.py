@@ -134,6 +134,9 @@ class SearchBar(GObject.GObject):
         else:
             self.emit('search', txt, self.search_type, [])
 
+    def reset(self):
+        self._entry.set_text('')
+
 
 class Options(GObject.GObject):
     """Handling the mainmenu options"""
