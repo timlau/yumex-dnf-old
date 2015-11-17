@@ -24,6 +24,7 @@ class SearchBar(GObject.GObject):
         self.win = win
         self.search_type = 'prefix'
         self.search_fields = ['name', 'summary']
+        self.active = False
         # widgets
         self._bar = self.win.get_ui('search_bar')
         # Searchbar togglebutton
@@ -66,6 +67,9 @@ class SearchBar(GObject.GObject):
         else:
             self._spinner.stop()
 
+    def toggle(self):
+        self._toggle.set_active(not self._toggle.get_active())
+
     def _set_fields_sensitive(self, state=True):
         """Set sensitivity of field checkboxes."""
         for key in SearchBar.FIELDS:
@@ -95,11 +99,12 @@ class SearchBar(GObject.GObject):
         else:
             self.opt_popover.show_all()
 
-    def on_toggle(self, widget):
+    def on_toggle(self, widget=None):
         """Search Toggle button is toggled."""
         self._bar.set_search_mode(not self._bar.get_search_mode())
         if self._bar.get_search_mode():
             self._set_focus()
+        self.active = self._bar.get_search_mode()
 
     def on_type_changed(self, widget, key):
         """Search type is changed."""
@@ -136,6 +141,15 @@ class SearchBar(GObject.GObject):
 
     def reset(self):
         self._entry.set_text('')
+
+    def hide(self):
+        if self.active:
+            self._bar.set_search_mode(False)
+
+    def show(self):
+        if self.active:
+            self._bar.set_search_mode(True)
+            self._set_focus()
 
 
 class Options(GObject.GObject):

@@ -323,6 +323,7 @@ class Window(BaseWindow):
             self.maximize()
         self.connect('configure-event', self.on_window_changed)
         self.connect('window-state-event', self.on_window_state)
+        self.connect('key_press_event', self.on_key_press)
         # load custom styling from current theme
         self.load_custom_styling()
 
@@ -579,9 +580,40 @@ class Window(BaseWindow):
             self.last_search = None
             self.search_bar.signal()
 
+    def _switch_to(self, page):
+        if not self.active_page == page:
+            self.content.select_page(page)
+
 ###############################################################################
 # Callback handlers
 ###############################################################################
+    def on_key_press(self, widget, event):
+        modifiers = Gtk.accelerator_get_default_mod_mask()
+        event_and_modifiers = (event.state & modifiers)
+
+        if event_and_modifiers != 0:
+            # Open search bar on Ctrl + S
+            if (event.keyval == Gdk.KEY_s and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.search_bar.toggle()
+            # Switch to packages page on Alt + 1
+            if (event.keyval == Gdk.KEY_1 and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._switch_to('packages')
+            # Switch to groups page on Alt + 2
+            if (event.keyval == Gdk.KEY_2 and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._switch_to('groups')
+            # Switch to groups page on Alt + 3
+            if (event.keyval == Gdk.KEY_3 and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._switch_to('history')
+            # Switch to groups page on Alt + 4
+            if (event.keyval == Gdk.KEY_4 and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._switch_to('actions')
+
     def on_pref(self, widget):
         """Preferences selected callback."""
         need_reset = self.preferences.run()
@@ -593,13 +625,16 @@ class Window(BaseWindow):
         if page == 'packages':
             self._filter_box.show()
             self._search_toggle.show()
+            self.search_bar.show()
         else:
             self._filter_box.hide()
             self._search_toggle.hide()
+            self.search_bar.hide()
         if page == 'groups':
             self._load_groups()
         elif page == 'history':
             self._load_history()
+        self.active_page = page
 
     def on_about(self, widget):
         """ Main Menu: Help -> About """
