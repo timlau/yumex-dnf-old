@@ -566,6 +566,11 @@ class Window(BaseWindow):
                 0, CONFIG.conf.history_days)
             self.history_view.populate(result)
 
+    def _refresh_search(self):
+        if self.last_search:
+            self.last_search = None
+            self.search_bar.signal()
+
 ###############################################################################
 # Callback handlers
 ###############################################################################
@@ -645,6 +650,13 @@ class Window(BaseWindow):
     def on_option_changed(self, widget, option, state):
         """Handle changes in options."""
         print("option changed : ", option, state)
+        setattr(CONFIG.session, option, state)
+        logger.debug('session option : %s = %s' %
+                     (option, getattr(CONFIG.session, option)))
+        if option in ['newest_only']:  # search again
+            self._refresh_search()
+        if option in ['clean_instonly', 'clean_unused']:
+            self._reset_on_error()
 
     def on_arch_changed(self, widget, data):
         """Arch changed in arch menu callback."""
