@@ -1,0 +1,1831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.19.0 -->
+<interface>
+  <requires lib="gtk+" version="3.16"/>
+  <object class="GtkAdjustment" id="ad_update_startup_delay">
+    <property name="lower">10</property>
+    <property name="upper">900</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_installonly_limit">
+    <property name="lower">2</property>
+    <property name="upper">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_refresh_interval">
+    <property name="lower">1</property>
+    <property name="upper">240</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_update_interval">
+    <property name="lower">5</property>
+    <property name="upper">10080</property>
+    <property name="step_increment">5</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkDialog" id="preferences">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Preferences</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox7">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area7">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="pref_ok">
+                <property name="label" translatable="yes">OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="pref_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="pref_notebook">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <child>
+              <object class="GtkGrid" id="grid_settings">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">10</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">10</property>
+                <property name="margin_top">14</property>
+                <property name="margin_bottom">10</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
+                <property name="row_homogeneous">True</property>
+                <child>
+                  <object class="GtkSwitch" id="pref_newest_only">
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_clean_unused">
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_show_newest">
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Show newest only is active when
+Yum Extender starts.
+Will show only latest version of available
+packages</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Default: Show newest only</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_settings2">
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Erase unused requirement option is
+active when Yum Extender starts</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Default: Erase Unused Requirements</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_hide_on_close">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Change the close action for the main window, so it just hides the
+window when the close button is clicked</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Close will only minimize window</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_hide_on_close">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_headerbar">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
+standard when using GNOME</property>
+                    <property name="label" translatable="yes">Show toolbar in window headerbar</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_headerbar">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_auto_select_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Select all available updates when 
+Yum Extender is started</property>
+                    <property name="label" translatable="yes">Select updates at startup</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_auto_select_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_refresh_period">
+                    <property name="name">10</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Cache expire interval (hours)</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_refresh_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="text" translatable="yes">12</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">adj_refresh_interval</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">12</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_clean_instonly">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Default: Cleanup Old Installonly packages</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_clean_instonly">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_installonly_limit">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
+                    <property name="label" translatable="yes">Number of installonly packages to keep</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_installonly_limit">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="max_width_chars">0</property>
+                    <property name="text" translatable="yes">3</property>
+                    <property name="input_purpose">digits</property>
+                    <property name="adjustment">adj_installonly_limit</property>
+                    <property name="climb_rate">1</property>
+                    <property name="numeric">True</property>
+                    <property name="value">3</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="settings">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">1</property>
+                <property name="label" translatable="yes">Settings</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid_statusicon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="margin_top">14</property>
+                <property name="margin_bottom">10</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkSwitch" id="pref_autostart">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_autostart">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender status icon at user login</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Start status icon at user login</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_autocheck_updates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_auto_check">
+                    <property name="name">10</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Enable scheduled check for available updates</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Scheduled check for new updates</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_update_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text">60</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">adj_update_interval</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">60</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_interval">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
+                    <property name="label" translatable="yes">Update check interval (minutes)</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref_update_startup_delay">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text">30</property>
+                    <property name="input_purpose">number</property>
+                    <property name="adjustment">ad_update_startup_delay</property>
+                    <property name="climb_rate">5</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">30</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_startup_delay">
+                    <property name="name">25</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Delay from when Yum Extender is started
+to when it checks for updates.
+Gives the system time to settle down when
+Yum Extender is started when the user logins.</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">25</property>
+                    <property name="margin_start">25</property>
+                    <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_notify">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Show notification when updates are found</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_update_showicon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Show status icon when no updates are found</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_update_notify">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="pref_update_showicon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label_statusicon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Status Icon</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid_advanced">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">10</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">10</property>
+                <property name="margin_top">7</property>
+                <property name="margin_bottom">10</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="labe_adv_1l">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Color for installed packages</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_adv_2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Color for available updates</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_adv_3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Color for available packages</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_adv_4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Color for obsoleted packages</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_adv_5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Color for available downgrades</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="color_install">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="color_update">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="color_normal">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="color_obsolete">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="color_downgrade">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="advanced">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Advanced</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="repo_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="label" translatable="yes">Repositories used in current session</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="repo_sw">
+                    <property name="height_request">400</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_height">400</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Save the current selected repositories
+so they will be used next time you
+start Yum Extender</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <child>
+                      <object class="GtkCheckButton" id="pref_repo_saved">
+                        <property name="label" translatable="yes">Save selected repositories</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="repositories">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Repositories</property>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="1">pref_ok</action-widget>
+      <action-widget response="0">pref_cancel</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkAccelGroup" id="main_accelgroup"/>
+  <object class="GtkMenu" id="arch_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
+  </object>
+  <object class="GtkMenu" id="main_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_packages">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show packages</property>
+        <property name="label" translatable="yes">Packages</property>
+        <property name="active">True</property>
+        <property name="draw_as_radio">True</property>
+        <accelerator key="1" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_groups">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show group &amp; categories</property>
+        <property name="label" translatable="yes">Groups</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="2" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_history">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show history of changes</property>
+        <property name="label" translatable="yes">History</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="3" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_actions">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show pending changes</property>
+        <property name="label" translatable="yes">Pending Changes</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="4" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_pref">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Edit Preferences</property>
+        <property name="label" translatable="yes">Preferences</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_options">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Options</property>
+        <property name="label" translatable="yes">Options</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="accel_group">main_accelgroup</property>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_newest_only">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Show only newest version of packages</property>
+                <property name="label" translatable="yes">Newest Only</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_clean_unused">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Uninstall unused requirements when removing a package</property>
+                <property name="label" translatable="yes">Erase Unused Requirements</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_clean_instonly">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Removing old version of installonly packages
+(ex. kernel)</property>
+                <property name="label" translatable="yes">Cleanup old Instonly packages </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_help">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Help</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="main_about">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">About Yum Extender</property>
+                <property name="label" translatable="yes">About</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="main_doc">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Documentation (Online)</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_quit">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Quit Yum Extender</property>
+        <property name="action_name">app.quit</property>
+        <property name="label" translatable="yes">Quit</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="queue_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">main_accelgroup</property>
+    <child>
+      <object class="GtkMenuItem" id="queue_remove_selected">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="main_box">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkRevealer" id="infobar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkFrame" id="info_frame">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_start">5</property>
+            <property name="margin_end">5</property>
+            <property name="margin_top">6</property>
+            <property name="margin_bottom">6</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkGrid" id="info_grid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="hexpand">True</property>
+                <property name="row_spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="infobar_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">10</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">label</property>
+                    <attributes>
+                      <attribute name="weight" value="ultrabold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkProgressBar" id="infobar_progress">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="infobar_sublabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">20</property>
+                    <property name="margin_right">10</property>
+                    <property name="margin_start">20</property>
+                    <property name="margin_end">10</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">label</property>
+                    <attributes>
+                      <attribute name="font-desc" value="&lt;Enter Value&gt; 8"/>
+                      <attribute name="stretch" value="condensed"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinner" id="info_spinner">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">6</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label_item">
+              <placeholder/>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSearchBar" id="search_bar">
+        <property name="visible">True</property>
+        <property name="app_paintable">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkBox" id="search_content">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="width_request">500</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="sch_options_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="focus_on_click">False</property>
+                <child>
+                  <object class="GtkImage" id="image4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">preferences-other-symbolic</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="search_spinner">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkStack" id="main_stack">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="transition_type">crossfade</property>
+        <child>
+          <object class="GtkBox" id="page_packages">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkPaned" id="package_paned">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="orientation">vertical</property>
+                <property name="position">400</property>
+                <property name="position_set">True</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="package_sw">
+                    <property name="height_request">200</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="info_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">packages</property>
+            <property name="title" translatable="yes">Packages</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="page_groups">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkPaned" id="group_paned">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="position">300</property>
+                <property name="position_set">True</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="groups_sw">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkPaned" id="group_pkg_paned">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="position">500</property>
+                    <property name="position_set">True</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="group_pkg_sw">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="resize">False</property>
+                        <property name="shrink">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="group_pkg_info_sw">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">groups</property>
+            <property name="title" translatable="yes">Groups</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="page_history">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow" id="history_sw">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="history_buttons">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin_right">6</property>
+                <property name="margin_end">6</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <child>
+                  <object class="GtkButton" id="history_undo">
+                    <property name="label" translatable="yes">Undo</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">history</property>
+            <property name="title" translatable="yes">History</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="page_actions">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow" id="queue_sw">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">actions</property>
+            <property name="title" translatable="yes">Actions</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkHeaderBar" id="headerbar">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="has_subtitle">False</property>
+    <property name="show_close_button">True</property>
+    <child>
+      <object class="GtkBox" id="left_buttons">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">24</property>
+        <child>
+          <object class="GtkStackSwitcher" id="main_switcher">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="stack">main_stack</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="flt_box">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="resize_mode">immediate</property>
+            <child>
+              <object class="GtkRadioButton" id="flt_updates">
+                <property name="label" translatable="yes">Updates</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0.5</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="flt_installed">
+                <property name="label" translatable="yes">Installed</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0.5</property>
+                <property name="draw_indicator">False</property>
+                <property name="group">flt_updates</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="flt_available">
+                <property name="label" translatable="yes">Available</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0.5</property>
+                <property name="draw_indicator">False</property>
+                <property name="group">flt_updates</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="flt_all">
+                <property name="label" translatable="yes">All</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0.5</property>
+                <property name="draw_indicator">False</property>
+                <property name="group">flt_updates</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <style>
+              <class name="linked"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="right_buttons">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="sch_togglebutton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">start</property>
+            <child>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">edit-find-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_run">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">system-run-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="mainmenu_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">start</property>
+            <property name="popup">main_menu</property>
+            <property name="direction">none</property>
+            <child>
+              <object class="GtkImage" id="image3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkGrid" id="sch_opt_grid">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkRadioButton" id="sch_opt_prefix">
+        <property name="label" translatable="yes">Prefix</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="active">True</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioButton" id="sch_opt_keyword">
+        <property name="label" translatable="yes">Keyword</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">sch_opt_prefix</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioButton" id="sch_opt_fields">
+        <property name="label" translatable="yes">Fields</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">sch_opt_prefix</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator" id="separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+        <property name="height">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="sch_fld_name">
+        <property name="label" translatable="yes">Name</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="sch_fld_summary">
+        <property name="label" translatable="yes">Summary</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="sch_fld_description">
+        <property name="label" translatable="yes">Description</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkDialog" id="transaction-results">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Package actions to perform</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="default_width">320</property>
+    <property name="default_height">260</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox5">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area5">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="result_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="result_ok">
+                <property name="label" translatable="yes">OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">5</property>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow2">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <property name="min_content_width">600</property>
+                <property name="min_content_height">400</property>
+                <child>
+                  <object class="GtkTreeView" id="result_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection3"/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">2</property>
+                <child>
+                  <object class="GtkLabel" id="result_size_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Size:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="result_size">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">result_cancel</action-widget>
+      <action-widget response="1">result_ok</action-widget>
+    </action-widgets>
+  </object>
+</interface>
