@@ -404,8 +404,11 @@ class Window(BaseWindow):
         wid.connect('activate', self.on_about)
         wid = self.get_ui('main_doc')
         wid.connect('activate', self.on_docs)
-        wid = self.ui.get_object('main_pref')
+        wid = self.get_ui('main_pref')
         wid.connect('activate', self.on_pref)
+        wid = self.get_ui('button_run')
+        wid.connect('clicked', self.on_apply_changes)
+
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -559,6 +562,7 @@ class Window(BaseWindow):
         self.group_package_view.populate([])
         self.set_working(False)
         # show updates
+        self.content.select_page('packages')
         self.pkg_filter.set_active('updates')
 
     def _load_groups(self):
@@ -583,6 +587,177 @@ class Window(BaseWindow):
     def _switch_to(self, page):
         if not self.active_page == page:
             self.content.select_page(page)
+
+###############################################################################
+# Transaction Processing
+###############################################################################
+
+    def _populate_transaction(self):
+        self.backend.ClearTransaction()
+        errors = 0
+        error_msgs = set()
+        for action in const.QUEUE_PACKAGE_TYPES:
+            pkgs = self.queue_view.queue.get(action)
+            for pkg in pkgs:
+                if action == 'do':
+                    logger.debug('adding: %s %s' %
+                                 (const.QUEUE_PACKAGE_TYPES[action],
+                                  pkg.pkg_id))
+                    rc, trans = self.backend.AddTransaction(
+                        pkg.pkg_id,
+                        const.QUEUE_PACKAGE_TYPES[action])
+                    if not rc:
+                        logger.debug('result : %s: %s' % (rc, pkg))
+                        errors += 1
+                        error_msgs.add('%s : %s' %
+                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                else:
+                    logger.debug('adding: %s %s' %
+                                 (const.QUEUE_PACKAGE_TYPES[action],
+                                  pkg.pkg_id))
+                    rc, trans = self.backend.AddTransaction(
+                        pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                    if not rc:
+                        logger.debug('result: %s: %s' % (rc, pkg))
+                        errors += 1
+                        error_msgs.add('%s : %s' %
+                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
+        for grp_id, action in self.queue_view.queue.get_groups():
+            if action == 'i':
+                rc, trans = self.backend.GroupInstall(grp_id)
+            else:
+                rc, trans = self.backend.GroupRemove(grp_id)
+            if not rc:
+                errors += 1
+                error_msgs.add('group : %s : %s ' % (action, grp_id))
+        logger.debug(' add transaction errors : %d', errors)
+        if errors > 0:
+            raise TransactionBuildError(error_msgs)
+
+    def _check_protected(self, trans):
+        """Check for deletion protected packages in transaction"""
+        protected = []
+        for action, pkgs in trans:
+            if action == 'remove':
+                for id, size, replaces in pkgs:
+                    (n, e, v, r, a, repo_id) = str(id).split(',')
+                    if n in CONFIG.conf.protected:
+                        protected.append(n)
+        return protected
+
+    def _build_from_queue(self):
+        """Populate transaction from queue and resolve deps."""
+        # switch to queue view
+        if self.queue_view.queue.total() == 0:
+            raise QueueEmptyError
+        self.content.select_page('actions')
+        self._populate_transaction()
+        self.infobar.info(_('Searching for dependencies'))
+        rc, result = self.backend.BuildTransaction()
+        self.infobar.info(_('Dependencies resolved'))
+        if not rc:
+            raise TransactionSolveError(result)
+        return result
+
+    def _get_transaction(self):
+        """Get current transaction."""
+        rc, result = self.backend.GetTransaction()
+        if not rc:
+            raise TransactionSolveError(result)
+        return result
+
+    def _run_transaction(self):
+        """Run the current transaction."""
+        self.infobar.info(_('Applying changes to the system'))
+        self.set_working(True, True)
+        rc, result = self.backend.RunTransaction()
+        # This can happen more than once (more gpg keys to be
+        # imported)
+        while rc == 1:
+            # get info about gpgkey to be comfirmed
+            values = self.backend._gpg_confirm
+            if values:  # There is a gpgkey to be verified
+                (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+                logger.debug('GPGKey : %s' % repr(values))
+                ok = dialogs.ask_for_gpg_import(self, values)
+                if ok:
+                    # tell the backend that the gpg key is confirmed
+                    self.backend.ConfirmGPGImport(hexkeyid, True)
+                    # rerun the transaction
+                    # FIXME: It should not be needed to populate
+                    # the transaction again
+                    self._populate_transaction()
+                    rc, result = self.backend.BuildTransaction()
+                    rc, result = self.backend.RunTransaction()
+                else:
+                    break
+            else:  # error in signature verification
+                dialogs.show_information(
+                    self, _('Error checking package signatures\n'),
+                             '\n'.join(result))
+                break
+
+        if rc == 4:  # Download errors
+            dialogs.show_information(
+                self, _('Downloading error(s)\n'),
+                         '\n'.join(result))
+            self._reset_on_cancel()
+            return
+        elif rc != 0:  # other transaction errors
+            dialogs.show_information(
+                self, _('Error in transaction\n'),
+                         '\n'.join(result))
+        self._reset()
+        return
+
+    @ExceptionHandler
+    def _process_actions(self, from_queue=True):
+        """Process the current actions in the queue.
+
+        - setup the Dnf transaction
+        - resolve dependencies
+        - ask user for confirmation on result of depsolve
+        - run the transaction
+        """
+        self.set_working(True, True)
+        self.infobar.info(_('Preparing system for applying changes'))
+        try:
+            if from_queue:
+                result = self._build_from_queue()
+            else:
+                result = self._get_transaction()
+            self.set_working(False)
+            # check for protected packages
+            check = self._check_protected(result)
+            if check:
+                dialogs.show_information(
+                self, _("Can't remove protected package(s)"),
+                        '\n'.join(check))
+                self._reset_on_cancel()
+                return
+            # transaction confirmation dialog
+            self.transaction_result.populate(result, '')
+            ok = self.transaction_result.run()
+            if ok:  # Ok pressed
+                self._run_transaction()
+            else:  # user cancelled transaction
+                self._reset_on_cancel()
+                return
+        except QueueEmptyError:  # Queue is empty
+            self.set_working(False)
+            dialogs.show_information(self, _('No pending actions in queue'))
+            self._reset_on_cancel()
+        except TransactionBuildError as e:  # Error in building transaction
+            dialogs.show_information(
+                self, _('Error(s) in building transaction'),
+                        '\n'.join(e.msgs))
+            self._reset_on_cancel()
+        except TransactionSolveError as e:
+            dialogs.show_information(
+                    self, _('Error(s) in search for dependencies'),
+                            '\n'.join(e.msgs))
+            self._reset_on_error()
+
 
 ###############################################################################
 # Callback handlers
@@ -613,6 +788,10 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_4 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('actions')
+
+    def on_apply_changes(self, widget):
+        """Apply Changes button callback."""
+        self._process_actions()
 
     def on_pref(self, widget):
         """Preferences selected callback."""
