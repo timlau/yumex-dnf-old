@@ -48,13 +48,6 @@ except Exception as e:
     print('Closing backend D-Bus daemons')
     try:
         subprocess.call(
-            '/usr/bin/dbus-send --session --print-reply '
-            '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit',
-            shell=True)
-    except:
-        pass
-    try:
-        subprocess.call(
             '/usr/bin/dbus-send --system --print-reply '
             '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
             shell=True)
