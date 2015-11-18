@@ -864,7 +864,7 @@ class YumexWindow(BaseWindow):
     def _search_name(self, data, search_flt):
         """Search package name for keyword with wildcards."""
         # only search for word larger than 3 chars
-        if len(data) >= 3 and data != self.last_search:
+        if data != self.last_search:
             self.last_search = data
             self.set_working(True)
             newest_only = CONFIG.session.newest_only
