@@ -21,6 +21,7 @@ Requires: python3-gobject >= 3.10
 Requires: python3-pyxdg
 Requires: python3-dbus
 Requires: python3-cairo
+Requires: libnotify
 
 %description
 Graphical package tool for maintain packages on the system
