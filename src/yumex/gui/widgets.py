@@ -305,10 +305,10 @@ class PackageInfo(PackageInfoWidget):
         return urllib.parse.quote_plus(self.current_package.name)
 
     def _is_fedora_pkg(self):
-        if self.current_package.repository in const.FEDORA_REPOS:
-            return True
-        else:
-            return False
+        if self.current_package:
+            if self.current_package.repository in const.FEDORA_REPOS:
+                return True
+        return False
 
     def _show_description(self):
         tags = self.current_package.pkgtags
