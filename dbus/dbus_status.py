@@ -18,6 +18,9 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Notify', '0.7')
 
 from configparser import SafeConfigParser
 from gi.repository import Gtk, GObject, GdkPixbuf, Notify
