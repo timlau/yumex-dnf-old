@@ -1,6 +1,165 @@
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.5
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: remove limit for minimum 3 chars in search
+	keyword  RhBug: 1280007
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* yumex-dnf.spec: add libnotify requirement  RhBug: 1279992
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/status.py: don't act on statusicon dbus signals, if
+	there is no window
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: fix gi warnings
+
+2015-11-04  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: adjust toolbar margins
+
+2015-11-04  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py: use gi.require_version('Gtk', '3.0')
+
+2015-11-04  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #73 from timlau/revert-72-patch-2  Revert
+	99091b39c5639df2f7ea331465cb3f8e6c30cf3f
+
+2015-11-04  Tim Lauridsen <tla@rasmil.dk>
+
+	* src/main.py: Revert 99091b39c5639df2f7ea331465cb3f8e6c30cf3f
+
+2015-11-04  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #72 from genodeftest/patch-2  Require Gtk
+	version 3.10
+
+2015-11-03  Christian Stadelmann <dev@genodeftest.de>
+
+	* src/main.py: Require Gtk version 3.10  This fixes some warnings
+	from gi. I chose Gtk 3.10 since yumex-dnf uses `GtkHeaderBar`s which
+	require 3.10.
+
+2015-10-20  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #66 from genodeftest/patch-1  Unify page
+	borders/margins
+
+2015-10-20  Christian Stadelmann <dev@genodeftest.de>
+
+	* src/yumex.ui: Unify page borders/margins
+
+2015-10-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: Wrap text in Package Info view (#62)
+
+2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/misc.py: Use text color from
+	theme (#63)
+
+2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: add helper to get default color for a widget
+
+2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: cleanup: more PEP8 fixes
+
+2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: cleanup: PEP8 fixes
+
+2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: check_dark theme is a function
+
+2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/views.py: Make repoview column header click work
+	fixes RhBug: #1233376
+
+2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py: remove -tt from python3 shebang
+
+2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: Fix traceback on errors in building group
+	transaction  (RhBug: 1262879)
+
+2015-10-05  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #49 from tamimym/master  Change font colors
+	if using dark theme
+
+2015-10-05  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #56 from
+	genodeftest/genodeftest-patch-trayicon  Fix a warning when
+	rightclick-opening a tray popup menu
+
+2015-10-02  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #58 from
+	genodeftest/genodeftest-patch-pythonargs  Remove deprecated python
+	option `-tt`
+
+2015-10-02  Christian Stadelmann <dev@genodeftest.de>
+
+	* dbus/dbus_status.py: Remove deprecated python option `-tt`  The
+	`-t` option was removed in python3. It has no effect any more and is
+	ignored. It can be safely removed. See
+	https://bugzilla.redhat.com/show_bug.cgi?id=1268262
+
+2015-10-02  Christian Stadelmann <dev@genodeftest.de>
+
+	* dbus/dbus_status.py: Fix a warning when rightclick-opening a tray
+	popup menu  Currently on F22 when opening a popup menu on yumex's
+	status icon I get this message on stderr: `TypeError: pos() takes 2
+	positional arguments but 4 were given` This is caused by an API
+	break in Gtk3's GObject/Python bindings, see
+	https://github.com/lazka/pgi-docgen/issues/92 for details.  This
+	change fixes the issue for me on F22/Gtk+ 3.16. Needs testing on
+	3.18 and 3.14, I can't do that right now.  If this change doesn't
+	work on all supported Gtk versions, another idea can be found in
+	https://github.com/exaile/exaile/pull/112
+
+2015-10-01  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/main.py: Handle SIGINT, So Ctrl-C will not leave yumex-dnf in
+	limbo (#55)
+
+2015-09-30  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-09-30  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.4
+
+2015-07-28  tamimym <tamimym@gmail.com>
+
+	* src/yumex/gui/widgets.py: Checks for dark GTK theme when setting
+	background color of InfoBar
+
+2015-07-28  tamimym <tamimym@gmail.com>
+
+	* src/yumex/gui/views.py: Checks for dark GTK theme and set colors
+	in PackageInfoView and of url
+
+2015-07-28  tamimym <tamimym@gmail.com>
+
+	* src/yumex/misc.py: Added check_dark_theme function and changed
+	default font colors if using dark GTK theme
 
 2015-06-09  Tim Lauridsen <timlau@fedoraproject.org>
 
