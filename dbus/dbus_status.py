@@ -167,7 +167,7 @@ def Logger(func):
 
 class Notification(GObject.GObject):
     __gsignals__ = {
-        'notify-action': (GObject.SIGNAL_RUN_FIRST, None,
+        'notify-action': (GObject.SignalFlags.RUN_FIRST, None,
                       (str,))
     }
 
