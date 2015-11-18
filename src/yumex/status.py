@@ -134,13 +134,16 @@ class StatusIcon:
         run_pid = args[0]
         if self.app.pid == run_pid:  # check signal is for this pid
             if signal == 'IconClickSignal':
-                self.app.win.on_status_icon_clicked()
+                if self.app.win:
+                    self.app.win.on_status_icon_clicked()
             elif signal == 'ShowSignal':
-                self.app.win.on_status_icon_clicked(force=True)
+                if self.app.win:
+                    self.app.win.on_status_icon_clicked(force=True)
             elif signal == 'QuitSignal':
                     self.app.on_quit()
             elif signal == 'CheckUpdateSignal':
-                self.app.win.check_for_updates()
+                if self.app.win:
+                    self.app.win.check_for_updates()
 
     def _handle_dbus_error(self, err):
         '''
