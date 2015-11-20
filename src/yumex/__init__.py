@@ -959,9 +959,8 @@ class YumexApplication(Gtk.Application):
         self.window = None
 
     def on_activate(self, app):
-        print("activate called")
         if not self.running:
-            self.window = Window(self, gnome=True)
+            self.window = Window(self, gnome=CONFIG.conf.headerbar)
             app.add_window(self.window)
             self.running = True
             self.window.show()
@@ -969,7 +968,6 @@ class YumexApplication(Gtk.Application):
             self.window.present()
 
     def on_command_line(self, app, args):
-        print("on_commandline called")
         parser = argparse.ArgumentParser(prog='app')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('--exit', action='store_true')
