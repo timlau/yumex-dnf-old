@@ -898,7 +898,6 @@ class HistoryView(Gtk.TreeView):
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
-        self.modify_font(const.SMALL_FONT)
         self.model = self.setup_view()
         self.base = base
         self.pkg_view = HistoryPackageView(self.base)
@@ -979,7 +978,6 @@ class HistoryPackageView(Gtk.TreeView):
         @param widget:
         '''
         Gtk.TreeView.__init__(self)
-        self.modify_font(const.SMALL_FONT)
         self.model = self.setup_view()
         self.base = base
 
@@ -1143,12 +1141,10 @@ class TextViewBase(Gtk.TextView):
         if not tag:
             if check_dark_theme():
                 tag = self.buffer.create_tag(text,
-                                             foreground="#4C4CFF",
-                                             font_desc=const.SMALL_FONT)
+                                             foreground="#4C4CFF")
             else:
                 tag = self.buffer.create_tag(text,
-                                             foreground="blue",
-                                             font_desc=const.SMALL_FONT)
+                                             foreground="blue")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -1234,12 +1230,11 @@ class PackageInfoView(TextViewBase):
     TextView handler for showing package information
     '''
 
-    def __init__(self, window=None, url_handler=None, font_size=9):
+    def __init__(self, window=None, url_handler=None):
         '''
         Setup the textview
 
         :param textview: the Gtk.TextView widget to use
-        :param font_size: default text size
         '''
         TextViewBase.__init__(self, window, url_handler)
 
@@ -1251,7 +1246,6 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
-        style.set_property("size_points", font_size)
         self.add_style(tag, style)
         self.default_style = tag
 
@@ -1260,7 +1254,6 @@ class PackageInfoView(TextViewBase):
         style = Gtk.TextTag()
         style.set_property("foreground", "DarkOrchid4")
         style.set_property("family", "Monospace")
-        style.set_property("size_points", font_size)
         self.add_style(tag, style)
 
         # changelog style
@@ -1271,7 +1264,6 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
-        style.set_property("size_points", font_size)
         self.add_style(tag, style)
 
         # changelog style
@@ -1282,7 +1274,6 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "dark red")
         style.set_property("family", "Monospace")
-        style.set_property("size_points", font_size)
         self.add_style(tag, style)
 
 
