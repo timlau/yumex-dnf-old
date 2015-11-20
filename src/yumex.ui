@@ -82,17 +82,18 @@
             <property name="margin_right">6</property>
             <property name="margin_start">6</property>
             <property name="margin_end">6</property>
+            <property name="margin_bottom">12</property>
             <child>
               <object class="GtkGrid" id="grid_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">10</property>
+                <property name="margin_left">12</property>
+                <property name="margin_right">12</property>
                 <property name="margin_start">6</property>
                 <property name="margin_end">10</property>
-                <property name="margin_top">14</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_top">18</property>
+                <property name="margin_bottom">18</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <property name="row_homogeneous">True</property>
@@ -343,8 +344,10 @@ Yum Extender is started</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_top">14</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">12</property>
+                <property name="margin_right">12</property>
+                <property name="margin_top">18</property>
+                <property name="margin_bottom">18</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
@@ -550,12 +553,12 @@ Yum Extender is started when the user logins.</property>
               <object class="GtkGrid" id="grid_advanced">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">10</property>
+                <property name="margin_left">12</property>
+                <property name="margin_right">12</property>
                 <property name="margin_start">6</property>
                 <property name="margin_end">10</property>
-                <property name="margin_top">7</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_top">18</property>
+                <property name="margin_bottom">18</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
@@ -725,12 +728,12 @@ Yum Extender is started when the user logins.</property>
                   <object class="GtkLabel" id="repo_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
                     <property name="label" translatable="yes">Repositories used in current session</property>
                     <property name="xalign">0</property>
                     <attributes>
@@ -748,8 +751,8 @@ Yum Extender is started when the user logins.</property>
                     <property name="height_request">400</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <property name="margin_start">6</property>
                     <property name="margin_end">6</property>
                     <property name="vexpand">True</property>
@@ -772,8 +775,8 @@ Yum Extender is started when the user logins.</property>
                     <property name="tooltip_text" translatable="yes">Save the current selected repositories
 so they will be used next time you
 start Yum Extender</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
                     <property name="margin_top">5</property>
