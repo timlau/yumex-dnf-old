@@ -312,7 +312,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons']
+        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons', 'flt_box']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
 
@@ -396,7 +396,7 @@ class Window(BaseWindow):
         # Setup Content
         self.content = widgets.Content(self)
         self.content.connect('page-changed', self.on_page_changed)
-        self._filter_box = self.get_ui('flt_box')
+        self._filter_bar = self.get_ui('flt_revealer')
         self._search_toggle = self.get_ui('sch_togglebutton')
         # Setup Options
         self.options = widgets.Options(self)
@@ -820,11 +820,11 @@ class Window(BaseWindow):
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
-            self._filter_box.show()
+            self._filter_bar.set_reveal_child(True)
             self._search_toggle.show()
             self.search_bar.show()
         else:
-            self._filter_box.hide()
+            self._filter_bar.set_reveal_child(False)
             self._search_toggle.hide()
             self.search_bar.hide()
         if page == 'groups':
