@@ -68,11 +68,6 @@ ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
 ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
 ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
 
-# Fonts
-XSMALL_FONT = Pango.FontDescription("sans 6")
-SMALL_FONT = Pango.FontDescription("sans 8")
-BIG_FONT = Pango.FontDescription("sans 12")
-
 # Constants
 
 # Main UI stack names
