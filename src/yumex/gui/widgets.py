@@ -518,8 +518,10 @@ class PackageDetails(GObject.GObject):
             self.widget.hide()
 
     def on_toggled(self, listbox, row):
-        key = PackageDetails.VALUES[row.get_index()]
-        self.emit('info-changed', key)
+        ndx = row.get_index()
+        if ndx:
+            key = PackageDetails.VALUES[ndx]
+            self.emit('info-changed', key)
 
     def get_style(self, tag_name):
         if tag_name in PackageDetails.DEFAULT_STYLES and \
