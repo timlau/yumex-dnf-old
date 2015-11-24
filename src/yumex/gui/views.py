@@ -1246,6 +1246,7 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
+        style.set_property("scale", 0.9)
         self.add_style(tag, style)
         self.default_style = tag
 
@@ -1254,6 +1255,7 @@ class PackageInfoView(TextViewBase):
         style = Gtk.TextTag()
         style.set_property("foreground", "DarkOrchid4")
         style.set_property("family", "Monospace")
+        style.set_property("scale", 0.9)
         self.add_style(tag, style)
 
         # changelog style
@@ -1264,6 +1266,7 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "midnight blue")
         style.set_property("family", "Monospace")
+        style.set_property("scale", 0.9)
         self.add_style(tag, style)
 
         # changelog style
@@ -1274,6 +1277,7 @@ class PackageInfoView(TextViewBase):
         else:
             style.set_property("foreground", "dark red")
         style.set_property("family", "Monospace")
+        style.set_property("scale", 0.9)
         self.add_style(tag, style)
 
 
