@@ -707,7 +707,6 @@ class Filters(GObject.GObject):
         for flt in Filters.FILTERS:
             self._sidebar.add_row(flt, Filters.LABELS[flt])
         self._sidebar.connect('sidebar-changed', self.on_toggled)
-        self._sidebar.set_active(self.current)
         self.is_visible = True
 
     def show(self, show=True):
