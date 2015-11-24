@@ -263,7 +263,7 @@ class YumexConf(config.BaseConfig):
                             allowed=('prefix', 'key', 'fields'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
-    win_width = config.IntOption(1024)
+    win_width = config.IntOption(1150)
     win_maximized = config.BoolOption(False)
     auto_select_updates = config.BoolOption(False)
     repo_saved = config.BoolOption(False)
