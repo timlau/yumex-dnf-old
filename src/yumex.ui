@@ -15,7 +15,6 @@
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adj_refresh_interval">
-    <property name="lower">1</property>
     <property name="upper">240</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -239,7 +238,7 @@ Yum Extender is started</property>
                     <property name="name">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated (0 = disabled)</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">Cache expire interval (hours)</property>
@@ -255,7 +254,7 @@ Yum Extender is started</property>
                   <object class="GtkSpinButton" id="pref_refresh_interval">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated</property>
+                    <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated (0 = disabled)</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="text" translatable="yes">12</property>
@@ -836,271 +835,9 @@ start Yum Extender</property>
       <action-widget response="0">pref_cancel</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAccelGroup" id="main_accelgroup"/>
   <object class="GtkMenu" id="arch_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="accel_group">main_accelgroup</property>
-  </object>
-  <object class="GtkMenu" id="main_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="accel_group">main_accelgroup</property>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_packages">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show packages</property>
-        <property name="label" translatable="yes">Packages</property>
-        <property name="active">True</property>
-        <property name="draw_as_radio">True</property>
-        <accelerator key="1" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_groups">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show group &amp; categories</property>
-        <property name="label" translatable="yes">Groups</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="2" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_history">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show history of changes</property>
-        <property name="label" translatable="yes">History</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="3" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_actions">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show pending changes</property>
-        <property name="label" translatable="yes">Pending Changes</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="4" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_pref">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Edit Preferences</property>
-        <property name="label" translatable="yes">Preferences</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_options">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Options</property>
-        <property name="label" translatable="yes">Options</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="accel_group">main_accelgroup</property>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_newest_only">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Show only newest version of packages</property>
-                <property name="label" translatable="yes">Newest Only</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_clean_unused">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Uninstall unused requirements when removing a package</property>
-                <property name="label" translatable="yes">Erase Unused Requirements</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_clean_instonly">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Removing old version of installonly packages
-(ex. kernel)</property>
-                <property name="label" translatable="yes">Cleanup old Instonly packages </property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_help">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Help</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="main_about">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">About Yum Extender</property>
-                <property name="label" translatable="yes">About</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="main_doc">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Documentation (Online)</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_quit">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Quit Yum Extender</property>
-        <property name="action_name">app.quit</property>
-        <property name="label" translatable="yes">Quit</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkHeaderBar" id="headerbar">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="has_subtitle">False</property>
-    <property name="show_close_button">True</property>
-    <child>
-      <object class="GtkBox" id="left_buttons">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">24</property>
-        <child>
-          <object class="GtkStackSwitcher" id="main_switcher">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="stack">main_stack</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox" id="right_buttons">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkToggleButton" id="sch_togglebutton">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">start</property>
-            <child>
-              <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">edit-find-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="button_run">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <child>
-              <object class="GtkImage" id="image2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">system-run-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="mainmenu_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">start</property>
-            <property name="popup">main_menu</property>
-            <property name="direction">none</property>
-            <child>
-              <object class="GtkImage" id="image3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">open-menu-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="pack_type">end</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-  </object>
-  <object class="GtkMenu" id="queue_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="accel_group">main_accelgroup</property>
-    <child>
-      <object class="GtkMenuItem" id="queue_remove_selected">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
   </object>
   <object class="GtkBox" id="main_box">
     <property name="visible">True</property>
@@ -1537,6 +1274,263 @@ start Yum Extender</property>
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkMenu" id="main_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_packages">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show packages</property>
+        <property name="label" translatable="yes">Packages</property>
+        <property name="active">True</property>
+        <property name="draw_as_radio">True</property>
+        <accelerator key="1" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_groups">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show group &amp; categories</property>
+        <property name="label" translatable="yes">Groups</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="2" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_history">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show history of changes</property>
+        <property name="label" translatable="yes">History</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="3" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="main_actions">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show pending changes</property>
+        <property name="label" translatable="yes">Pending Changes</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">main_packages</property>
+        <accelerator key="4" signal="activate" modifiers="GDK_MOD1_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_pref">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Edit Preferences</property>
+        <property name="label" translatable="yes">Preferences</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_options">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Options</property>
+        <property name="label" translatable="yes">Options</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_newest_only">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Show only newest version of packages</property>
+                <property name="label" translatable="yes">Newest Only</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_clean_unused">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Uninstall unused requirements when removing a package</property>
+                <property name="label" translatable="yes">Erase Unused Requirements</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckMenuItem" id="option_clean_instonly">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Removing old version of installonly packages
+(ex. kernel)</property>
+                <property name="label" translatable="yes">Cleanup old Instonly packages </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_help">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Help</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="main_about">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">About Yum Extender</property>
+                <property name="label" translatable="yes">About</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="main_doc">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Documentation (Online)</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="main_quit">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Quit Yum Extender</property>
+        <property name="action_name">app.quit</property>
+        <property name="label" translatable="yes">Quit</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkHeaderBar" id="headerbar">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="has_subtitle">False</property>
+    <property name="show_close_button">True</property>
+    <child>
+      <object class="GtkBox" id="left_buttons">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">24</property>
+        <child>
+          <object class="GtkStackSwitcher" id="main_switcher">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="stack">main_stack</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="right_buttons">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkToggleButton" id="sch_togglebutton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">start</property>
+            <child>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">edit-find-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_run">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">system-run-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="mainmenu_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">start</property>
+            <property name="popup">main_menu</property>
+            <property name="direction">none</property>
+            <child>
+              <object class="GtkImage" id="image3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkMenu" id="queue_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="queue_remove_selected">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
   <object class="GtkGrid" id="sch_opt_grid">

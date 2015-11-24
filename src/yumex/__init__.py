@@ -69,6 +69,9 @@ class BaseYumex:
         time_fmt = '%Y-%m-%d %H:%M'
         now = datetime.datetime.now()
         refresh_period = datetime.timedelta(hours=CONFIG.conf.refresh_interval)
+        # check if cache management is disabled
+        if refresh_period == 0:
+            return False
         if cache_type == 'session':
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.session_refresh, time_fmt)
