@@ -410,6 +410,10 @@ class Window(BaseWindow):
         self._setup_group_page()
         self._setup_history_page()
 
+        # Setup info
+        self.main_paned = self.get_ui('main_paned')
+        self.main_paned.set_position(CONFIG.conf.info_paned)
+
         # Get the theme default TreeView text color
         color_normal = get_style_color(self.package_view)
         CONFIG.conf.color_normal = color_to_hex(color_normal)
@@ -996,6 +1000,7 @@ class YumexApplication(Gtk.Application):
 
     def on_shutdown(self, app):
         if self.window:
+            CONFIG.conf.info_paned = self.window.main_paned.get_position()
             if self.window.cur_maximized:
                 CONFIG.conf.win_maximized = True
             else:

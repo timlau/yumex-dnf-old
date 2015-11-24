@@ -1098,7 +1098,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkPaned" id="package_paned">
+          <object class="GtkPaned" id="main_paned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
