@@ -220,6 +220,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             sys.exit()
         # transaction result dialog
         self.transaction_result = dialogs.TransactionResult(self)
+        self.pkg_filter = None
 
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)
@@ -312,9 +313,11 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons', 'flt_box']
+        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
+        if self.pkg_filter:
+            self.pkg_filter.show(state)
 
     def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window."""
@@ -394,9 +397,10 @@ class Window(BaseWindow):
         self.pkg_filter = widgets.Filters(self)
         self.pkg_filter.connect('filter-changed', self.on_filter_changed)
         # Setup Content
+        main_paned = self.get_ui('main_paned')
+        main_paned.add2(self.get_ui('content_box'))
         self.content = widgets.Content(self)
         self.content.connect('page-changed', self.on_page_changed)
-        self._filter_bar = self.get_ui('flt_revealer')
         self._search_toggle = self.get_ui('sch_togglebutton')
         # Setup Options
         self.options = widgets.Options(self)
@@ -820,11 +824,11 @@ class Window(BaseWindow):
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
-            self._filter_bar.set_reveal_child(True)
+            self.pkg_filter.show(True)
             self._search_toggle.show()
             self.search_bar.show()
         else:
-            self._filter_bar.set_reveal_child(False)
+            self.pkg_filter.show(False)
             self._search_toggle.hide()
             self.search_bar.hide()
         if page == 'groups':
