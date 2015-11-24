@@ -22,7 +22,7 @@ from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Gio
+from gi.repository import Gio, Pango
 from yumex.misc import _, CONFIG
 
 import datetime
@@ -165,289 +165,6 @@ class ArchMenu(GObject.GObject):
         CONFIG.conf.archs = list(self.current_archs)
         CONFIG.write()
         self.emit("arch-changed", archs)
-
-
-class PackageInfoWidget(Gtk.Box):
-    __gsignals__ = {'info-changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,))
-                    }
-
-    def __init__(self, window, url_handler):
-        Gtk.Box.__init__(self)
-        vbox = Gtk.Box()
-        vbox.set_orientation(Gtk.Orientation.VERTICAL)
-        # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-        tip = _("Package Description")
-        rb = self._get_radio_button('dialog-information-symbolic', "desc",
-                                    tooltip=tip)
-        vbox.add(rb)
-        tip = _("Package Update Information")
-        vbox.add(self._get_radio_button(
-            'software-update-available-symbolic', "updinfo", rb, tip))
-        #tip = _("Package Changelog")
-        #vbox.add(self._get_radio_button(
-            #'bookmark-new-symbolic', "changelog", rb, tip))
-        tip = _("Package Filelist")
-        vbox.add(self._get_radio_button(
-            'drive-multidisk-symbolic', "files", rb, tip))
-        tip = _("Package Requirements")
-        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
-                                        tip))
-        vbox.set_margin_right(6)
-        vbox.set_margin_left(6)
-        vbox.get_style_context().add_class('linked')
-
-        self.pack_start(vbox, False, False, 0)
-        sw = Gtk.ScrolledWindow()
-        self.view = yumex.gui.views.PackageInfoView(window, url_handler)
-        sw.add(self.view)
-        self.pack_start(sw, True, True, 0)
-
-    def _get_radio_button(self, icon_name, name, group=None, tooltip=None):
-        if group:
-            wid = Gtk.RadioButton.new_from_widget(group)
-        else:
-            wid = Gtk.RadioButton.new(None)
-        icon = Gio.ThemedIcon(name=icon_name)
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
-        wid.set_image(image)
-        if tooltip:
-            wid.set_tooltip_text(tooltip)
-        wid.connect('toggled', self._on_filter_changed, name)
-        # we only want an image, not the black dot indicator
-        wid.set_property("draw-indicator", False)
-        return wid
-
-    def _on_filter_changed(self, button, data):
-        '''
-        Radio Button changed handler
-        Change the info in the view to match the selection
-Gtk.Image()
-        :param button:
-        :param data:
-        '''
-        if button.get_active():
-            logger.debug("pkginfo: %s selected" % data)
-            self.emit("info-changed", data)
-
-
-class PackageInfo(PackageInfoWidget):
-    '''
-    class for handling the Package Information view
-    '''
-
-    def __init__(self, window, base):
-        PackageInfoWidget.__init__(self, window, url_handler=self._url_handler)
-        self.set_name('YumexPackageInfo')
-        self.window = window
-        self.base = base
-        self.current_package = None
-        self.active_filter = const.PKGINFO_FILTERS[0]
-        self.connect('info-changed', self.on_filter_changed)
-        self.update()
-
-    def on_filter_changed(self, widget, data):
-        self.active_filter = data
-        self.update()
-
-    def set_package(self, pkg):
-        '''
-        Set current active package to show information about in the
-        Package Info view.
-
-        :param pkg: package to set as active package
-        '''
-        self.current_package = pkg
-        self.update()
-
-    def update(self):
-        '''
-        update the information in the Package info view
-        '''
-        self.view.clear()
-        self.view.write("\n")
-        if self.current_package:
-            if self.active_filter == 'desc':
-                self._show_description()
-            elif self.active_filter == 'updinfo':
-                self._show_updateinfo()
-
-            elif self.active_filter == 'changelog':
-                self._show_changelog()
-
-            elif self.active_filter == 'files':
-                self._show_filelist()
-
-            elif self.active_filter == 'deps':
-                self._show_requirements()
-            else:
-                print("Package info not found: ", self.active_filter)
-        self.view.goTop()
-
-    def _is_url(self, url):
-        urls = re.findall(
-            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-            '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-        if urls:
-            return True
-        else:
-            return False
-
-    def _url_handler(self, url):
-        print('URL activated: ' + url)
-        if self._is_url(url):  # just to be sure and prevent shell injection
-            rc = subprocess.call("xdg-open '%s'" % url, shell=True)
-            # failover to gtk.show_uri, if xdg-open fails or is not installed
-            if rc != 0:
-                Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
-        else:
-            self.frontend.warning("%s is not an URL" % url)
-
-    def _get_name_for_url(self):
-        return urllib.parse.quote_plus(self.current_package.name)
-
-    def _is_fedora_pkg(self):
-        if self.current_package:
-            if self.current_package.repository in const.FEDORA_REPOS:
-                return True
-        return False
-
-    def _show_description(self):
-        tags = self.current_package.pkgtags
-        if tags:
-            self.view.write(_("Tags: %s\n") %
-                            ", ".join(tags), "changelog-header")
-        desc = self.current_package.description
-        self.view.write(desc)
-        self.view.write('\n')
-        self.view.write(_("Links: "), "changelog-header", newline=True)
-        self.view.write('  ', newline=False)
-        url_hp = self.current_package.URL
-        self.view.add_url(url_hp, url_hp, newline=True)
-        if self._is_fedora_pkg():
-            self.view.write('  ', newline=False)
-            url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
-            self.view.add_url(url_fp, url_fp, newline=True)
-            self.base.set_working(False)
-
-    def _show_updateinfo(self):
-        self.base.set_working(True)
-        updinfo = self.current_package.updateinfo
-        if updinfo:
-            updinfo.reverse()
-            cnt = 0
-            for info in updinfo:
-                self._write_update_info(info)
-                cnt += 1
-                # only show max 3 advisories
-                if cnt == 3:
-                    break
-        else:
-            self.view.write(_("No update information is available"))
-            if self._is_fedora_pkg():
-                self.view.write(_("\nFedora Updates:"), "changelog-header",
-                                newline=True)
-                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
-                                                + "/updates"
-                self.view.add_url(url, url, newline=True)
-
-        self.base.set_working(False)
-
-    def _write_update_info(self, upd_info):
-        head = ""
-        head += ("%14s " % _("Release")) + ": %(id)s\n"
-        head += ("%14s " % _("Type")) + ": "
-        head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
-        #head += ("%14s " % _("Status")) + ": %(status)s\n"
-        head += ("%14s " % _("Issued")) + ": %(updated)s\n"
-        head = head % upd_info
-
-        #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
-        #    head += "    Updated : %s" % upd_info['updated']
-
-        self.view.write(head)
-        head = ""
-
-        # Add our bugzilla references
-        if upd_info['references']:
-            bzs = [r for r in upd_info['references']
-                   if r and r[0] == hawkey.REFERENCE_BUGZILLA]
-            if len(bzs):
-                self.view.write('\n')
-                header = "Bugzilla"
-                for bz in bzs:
-                    (typ, bug, title, url) = bz
-                    bug_msg = '- %s' % title
-                    self.view.write("%14s : " % header, newline=False)
-                    self.view.add_url(bug, url)
-                    self.view.write(bug_msg)
-                    header = " "
-
-        ## Add our CVE references
-        #if upd_info['references']:
-            #cves = [r for r in upd_info['references']
-                    #if r and r['type'] == 'cve']
-            #if len(cves):
-                #cvelist = ""
-                #header = "CVE"
-                #for cve in cves:
-                    #cvelist += "%14s : %s\n" % (header, cve['id'])
-                    #header = " "
-                #head += cvelist[:-1].rstrip() + '\n\n'
-
-        desc = upd_info['description']
-        head += "\n%14s : %s\n" % (_("Description"),
-                                   yumex.misc.format_block(desc, 17))
-        head += "\n"
-        self.view.write(head)
-
-    def _show_changelog(self):
-        self.base.set_working(True)
-        changelog = self.current_package.changelog
-        if changelog:
-            i = 0
-            for (c_date, c_ver, msg) in changelog:
-                i += 1
-                self.view.write(
-                    "* %s %s" %
-                    (datetime.date.fromtimestamp(c_date).isoformat(), c_ver),
-                    "changelog-header")
-                for line in msg.split('\n'):
-                    self.view.write("%s" % line, "changelog")
-                self.view.write('\n')
-                if i == 5:  # only show the last 5 entries
-                    break
-        else:
-            self.view.write(_("No changelog information is available"))
-            if self._is_fedora_pkg():
-                self.view.write(_("\nOnline Changelog:"), "changelog-header",
-                                newline=True)
-                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
-                                                + "/changelog"
-                self.view.add_url(url, url, newline=True)
-
-        self.base.set_working(False)
-
-    def _show_filelist(self):
-        self.base.set_working(True)
-        filelist = self.current_package.filelist
-        if filelist:
-            for fname in sorted(filelist):
-                self.view.write(fname)
-        else:
-            self.view.write(_("No filelist information is available"))
-        self.base.set_working(False)
-
-    def _show_requirements(self):
-        self.base.set_working(True)
-        reqs = self.current_package.requirements
-        for key in reqs:
-            self.view.write(key)
-            for pkg_id in reqs[key]:
-                pkg = yumex.misc.id2fullname(pkg_id)
-                self.view.write(' --> {}'.format(pkg))
-        self.base.set_working(False)
 
 
 class SearchBar(GObject.GObject):
@@ -708,7 +425,7 @@ class Filters(GObject.GObject):
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self._sidebar = SidebarSelector(self.win.get_ui('sidebar'))
+        self._sidebar = SidebarSelector(self.win.get_ui('package_sidebar'))
         self.current = 'updates'
         for flt in Filters.FILTERS:
             self._sidebar.add_row(flt, Filters.LABELS[flt])
@@ -763,3 +480,344 @@ class Content(GObject.GObject):
         """The active page is changed."""
         child = self._stack.get_visible_child_name()
         self.emit('page-changed', child)
+
+
+class PackageDetails(GObject.GObject):
+    __gsignals__ = {'info-changed': (GObject.SignalFlags.RUN_FIRST,
+                                     None,
+                                     (GObject.TYPE_STRING,))
+                    }
+
+    VALUES = {0: 'desc', 1: 'updinfo', 2: 'files', 3: 'deps'}
+    DEFAULT_STYLES = ['description', 'filelist', 'changelog',
+                      'changelog-header']
+
+    def __init__(self, win, url_handler=None):
+        super(PackageDetails, self).__init__()
+        self.win = win
+        self.widget = self.win.get_ui('info_box')
+        self._listbox = self.win.get_ui('info_list')
+        self._listbox.connect('row-selected', self.on_toggled)
+
+        self._text = self.win.get_ui('info_text')
+        self._text.connect("motion_notify_event", self.on_mouse_motion)
+        self._buffer = self.win.get_ui('info_buffer')
+        self._tags = self.win.get_ui('info_tags')
+        self._default_style = self._tags.lookup('')
+        self._url_handler = url_handler
+        # List of active URLs in the tab
+        self.url_tags = []
+        self.underlined_url = False
+        self.url_list = {}
+
+    def show(self, show=True):
+        if show:
+            self.widget.show_all()
+            self.clear()
+        else:
+            self.widget.hide()
+
+    def on_toggled(self, listbox, row):
+        key = PackageDetails.VALUES[row.get_index()]
+        self.emit('info-changed', key)
+
+    def get_style(self, tag_name):
+        if tag_name in PackageDetails.DEFAULT_STYLES and \
+           yumex.misc.check_dark_theme():
+            tag_name += '_dark'
+        style = self._tags.lookup(tag_name)
+        return style
+
+    def write(self, txt, style_name=None, newline=True):
+        if not txt:
+            return
+        if newline and txt[-1] != '\n':
+            txt += '\n'
+        start, end = self._buffer.get_bounds()
+        if style_name:
+            style = self.get_style(style_name)
+        else:
+            style = self.get_style('description')
+        if style:
+            self._buffer.insert_with_tags(end, txt, style)
+        else:
+            self._buffer.insert(end, txt)
+        self._text.scroll_to_iter(self._buffer.get_end_iter(),
+                                  0.0, True, 0.0, 0.0)
+
+    def clear(self):
+        self._buffer.set_text('')
+
+    def goto_top(self):
+        self._text.scroll_to_iter(self._buffer.get_start_iter(),
+                                  0.0, False, 0.0, 0.0)
+
+    def on_url_event(self, tag, widget, event, iterator):
+        """ Catch when the user clicks the URL """
+        if event.type == Gdk.EventType.BUTTON_RELEASE:
+            url = self.url_list[tag.get_property("name")]
+            if self._url_handler:
+                self._url_handler(url)
+
+    def on_mouse_motion(self, widget, event, data=None):
+        '''
+        Mouse movement handler for TextView
+
+        :param widget:
+        :param event:
+        :param data:
+        '''
+        window = widget.get_window(Gtk.TextWindowType.WIDGET)
+        # Get x,y pos for widget
+        w, x, y, mask = window.get_pointer()
+        # convert coords to TextBuffer coords
+        x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
+        # Get the tags on current pointer location
+        tags = widget.get_iter_at_location(x, y).get_tags()
+        # Remove underline and hand mouse pointer
+        if self.underlined_url:
+            self.underlined_url.set_property("underline", Pango.Underline.NONE)
+            widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
+            self.underlined_url = None
+        for tag in tags:
+            if tag in self.url_tags:
+                # underline the tags and change mouse pointer to hand
+                tag.set_property("underline", Pango.Underline.SINGLE)
+                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+                    Gdk.Cursor(Gdk.CursorType.HAND2))
+                self.underlined_url = tag
+        return False
+
+    def add_url(self, text, url, newline=False):
+        """ Append URL to textbuffer and connect an event """
+        # Try to see if we already got the current url as a tag
+        tag = self._tags.lookup(text)
+        if not tag:
+            if yumex.misc.check_dark_theme():
+                tag = self._buffer.create_tag(text,
+                                             foreground="#4C4CFF")
+            else:
+                tag = self._buffer.create_tag(text,
+                                             foreground="blue")
+            tag.connect("event", self.on_url_event)
+            self.url_tags.append(tag)
+            self.url_list[text] = url
+        self.write(text, style_name=text, newline=False)
+        self.write(' ', style_name='describtion', newline=newline)
+
+
+class PackageInfo(PackageDetails):
+    '''
+    class for handling the Package Information view
+    '''
+
+    def __init__(self, window, base):
+        PackageDetails.__init__(self, window, self._url_handler)
+        self.window = window
+        self.base = base
+        self.current_package = None
+        self.active_filter = const.PKGINFO_FILTERS[0]
+        self.connect('info-changed', self.on_filter_changed)
+        self.update()
+
+    def on_filter_changed(self, widget, data):
+        self.active_filter = data
+        self.update()
+
+    def set_package(self, pkg):
+        '''
+        Set current active package to show information about in the
+        Package Info view.
+
+        :param pkg: package to set as active package
+        '''
+        self.current_package = pkg
+        self.update()
+
+    def update(self):
+        '''
+        update the information in the Package info view
+        '''
+        self.clear()
+        self.write("\n")
+        if self.current_package:
+            if self.active_filter == 'desc':
+                self._show_description()
+            elif self.active_filter == 'updinfo':
+                self._show_updateinfo()
+
+            elif self.active_filter == 'changelog':
+                self._show_changelog()
+
+            elif self.active_filter == 'files':
+                self._show_filelist()
+
+            elif self.active_filter == 'deps':
+                self._show_requirements()
+            else:
+                print("Package info not found: ", self.active_filter)
+        self.goto_top()
+
+    def _is_url(self, url):
+        urls = re.findall(
+            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
+            '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+        if urls:
+            return True
+        else:
+            return False
+
+    def _url_handler(self, url):
+        print('URL activated: ' + url)
+        if self._is_url(url):  # just to be sure and prevent shell injection
+            rc = subprocess.call("xdg-open '%s'" % url, shell=True)
+            # failover to gtk.show_uri, if xdg-open fails or is not installed
+            if rc != 0:
+                Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
+        else:
+            self.frontend.warning("%s is not an URL" % url)
+
+    def _get_name_for_url(self):
+        return urllib.parse.quote_plus(self.current_package.name)
+
+    def _is_fedora_pkg(self):
+        if self.current_package:
+            if self.current_package.repository in const.FEDORA_REPOS:
+                return True
+        return False
+
+    def _show_description(self):
+        tags = self.current_package.pkgtags
+        if tags:
+            self.write(_("Tags: %s\n") %
+                            ", ".join(tags), "changelog-header")
+        desc = self.current_package.description
+        self.write(desc)
+        self.write('\n')
+        self.write(_("Links: "), "changelog-header", newline=True)
+        self.write('  ', newline=False)
+        url_hp = self.current_package.URL
+        self.add_url(url_hp, url_hp, newline=True)
+        if self._is_fedora_pkg():
+            self.write('  ', newline=False)
+            url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
+            self.add_url(url_fp, url_fp, newline=True)
+            self.base.set_working(False)
+
+    def _show_updateinfo(self):
+        self.base.set_working(True)
+        updinfo = self.current_package.updateinfo
+        if updinfo:
+            updinfo.reverse()
+            cnt = 0
+            for info in updinfo:
+                self._write_update_info(info)
+                cnt += 1
+                # only show max 3 advisories
+                if cnt == 3:
+                    break
+        else:
+            self.write(_("No update information is available"))
+            if self._is_fedora_pkg():
+                self.write(_("\nFedora Updates:"), "changelog-header",
+                                newline=True)
+                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
+                                                + "/updates"
+                self.add_url(url, url, newline=True)
+
+        self.base.set_working(False)
+
+    def _write_update_info(self, upd_info):
+        head = ""
+        head += ("%14s " % _("Release")) + ": %(id)s\n"
+        head += ("%14s " % _("Type")) + ": "
+        head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
+        #head += ("%14s " % _("Status")) + ": %(status)s\n"
+        head += ("%14s " % _("Issued")) + ": %(updated)s\n"
+        head = head % upd_info
+
+        #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
+        #    head += "    Updated : %s" % upd_info['updated']
+
+        self.write(head)
+        head = ""
+
+        # Add our bugzilla references
+        if upd_info['references']:
+            bzs = [r for r in upd_info['references']
+                   if r and r[0] == hawkey.REFERENCE_BUGZILLA]
+            if len(bzs):
+                self.write('\n')
+                header = "Bugzilla"
+                for bz in bzs:
+                    (typ, bug, title, url) = bz
+                    bug_msg = '- %s' % title
+                    self.write("%14s : " % header, newline=False)
+                    self.add_url(bug, url)
+                    self.write(bug_msg)
+                    header = " "
+
+        ## Add our CVE references
+        #if upd_info['references']:
+            #cves = [r for r in upd_info['references']
+                    #if r and r['type'] == 'cve']
+            #if len(cves):
+                #cvelist = ""
+                #header = "CVE"
+                #for cve in cves:
+                    #cvelist += "%14s : %s\n" % (header, cve['id'])
+                    #header = " "
+                #head += cvelist[:-1].rstrip() + '\n\n'
+
+        desc = upd_info['description']
+        head += "\n%14s : %s\n" % (_("Description"),
+                                   yumex.misc.format_block(desc, 17))
+        head += "\n"
+        self.write(head)
+
+    def _show_changelog(self):
+        self.base.set_working(True)
+        changelog = self.current_package.changelog
+        if changelog:
+            i = 0
+            for (c_date, c_ver, msg) in changelog:
+                i += 1
+                self.write(
+                    "* %s %s" %
+                    (datetime.date.fromtimestamp(c_date).isoformat(), c_ver),
+                    "changelog-header")
+                for line in msg.split('\n'):
+                    self.write("%s" % line, "changelog")
+                self.write('\n')
+                if i == 5:  # only show the last 5 entries
+                    break
+        else:
+            self.write(_("No changelog information is available"))
+            if self._is_fedora_pkg():
+                self.write(_("\nOnline Changelog:"), "changelog-header",
+                                newline=True)
+                url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
+                                                + "/changelog"
+                self.add_url(url, url, newline=True)
+
+        self.base.set_working(False)
+
+    def _show_filelist(self):
+        self.base.set_working(True)
+        filelist = self.current_package.filelist
+        if filelist:
+            for fname in sorted(filelist):
+                self.write(fname)
+        else:
+            self.write(_("No filelist information is available"))
+        self.base.set_working(False)
+
+    def _show_requirements(self):
+        self.base.set_working(True)
+        reqs = self.current_package.requirements
+        for key in reqs:
+            self.write(key)
+            for pkg_id in reqs[key]:
+                pkg = yumex.misc.id2fullname(pkg_id)
+                self.write(' --> {}'.format(pkg))
+        self.base.set_working(False)

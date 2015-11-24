@@ -839,6 +839,83 @@ start Yum Extender</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
   </object>
+  <object class="GtkTextTagTable" id="info_tags">
+    <child type="tag">
+      <object class="GtkTextTag" id="description">
+        <property name="name">description</property>
+        <property name="foreground">midnight blue</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="changelog-header">
+        <property name="name">changelog-header</property>
+        <property name="foreground">dark red</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="changelog-header_dark">
+        <property name="name">changelog-header_dark</property>
+        <property name="foreground">#A23232</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="changelog_dark">
+        <property name="name">changelog_dark</property>
+        <property name="foreground">#6E6EDF</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="changelog">
+        <property name="name">changelog</property>
+        <property name="foreground">midnight blue</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="filelist_dark">
+        <property name="name">filelist_dark</property>
+        <property name="foreground">DarkOrchid4</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="filelist">
+        <property name="name">filelist</property>
+        <property name="foreground">DarkOrchid4</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="description_dark">
+        <property name="name">description_dark</property>
+        <property name="foreground">#6E6EDF</property>
+        <property name="font">Normal</property>
+        <property name="family">Monospace</property>
+        <property name="scale">0.90000000000000002</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="info_buffer">
+    <property name="tag_table">info_tags</property>
+  </object>
   <object class="GtkBox" id="main_box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1021,114 +1098,85 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="sidebar">
+          <object class="GtkPaned" id="package_paned">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
+            <property name="position">400</property>
+            <property name="position_set">True</property>
             <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkStack" id="main_stack">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="transition_type">crossfade</property>
-            <child>
-              <object class="GtkBox" id="page_packages">
+              <object class="GtkStack" id="main_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="transition_type">crossfade</property>
                 <child>
-                  <object class="GtkPaned" id="package_paned">
+                  <object class="GtkBox" id="page_packages">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="position">450</property>
-                    <property name="position_set">True</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="package_sw">
-                        <property name="height_request">200</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="info_box">
+                      <object class="GtkBox" id="package_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkBox" id="package_sidebar">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="package_sw">
+                            <property name="height_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">False</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="name">packages</property>
+                    <property name="title" translatable="yes">Packages</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="name">packages</property>
-                <property name="title" translatable="yes">Packages</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="page_groups">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkPaned" id="group_paned">
+                  <object class="GtkBox" id="page_groups">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="position">300</property>
-                    <property name="position_set">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="groups_sw">
+                      <object class="GtkPaned" id="group_paned">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="resize">False</property>
-                        <property name="shrink">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkPaned" id="group_pkg_paned">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="position">500</property>
+                        <property name="position">300</property>
                         <property name="position_set">True</property>
                         <child>
-                          <object class="GtkScrolledWindow" id="group_pkg_sw">
+                          <object class="GtkScrolledWindow" id="groups_sw">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1142,7 +1190,7 @@ start Yum Extender</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkScrolledWindow" id="group_pkg_info_sw">
+                          <object class="GtkScrolledWindow" id="group_pkg_sw">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1157,59 +1205,200 @@ start Yum Extender</property>
                         </child>
                       </object>
                       <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">True</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="name">groups</property>
+                    <property name="title" translatable="yes">Groups</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="page_history">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="history_sw">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="history_buttons">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="margin_right">6</property>
+                        <property name="margin_end">6</property>
+                        <property name="margin_top">6</property>
+                        <property name="margin_bottom">6</property>
+                        <child>
+                          <object class="GtkButton" id="history_undo">
+                            <property name="label" translatable="yes">Undo</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">history</property>
+                    <property name="title" translatable="yes">History</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="page_actions">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="queue_sw">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">actions</property>
+                    <property name="title" translatable="yes">Actions</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="name">groups</property>
-                <property name="title" translatable="yes">Groups</property>
-                <property name="position">1</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="page_history">
+              <object class="GtkBox" id="info_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="history_sw">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="history_buttons">
+                  <object class="GtkBox" id="info_selector">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin_right">6</property>
-                    <property name="margin_end">6</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkButton" id="history_undo">
-                        <property name="label" translatable="yes">Undo</property>
+                      <object class="GtkListBox" id="info_list">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">start</property>
+                        <child>
+                          <object class="GtkListBoxRow" id="list_desc">
+                            <property name="width_request">32</property>
+                            <property name="height_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage" id="image5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">dialog-information-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBoxRow" id="list_updinfo">
+                            <property name="width_request">32</property>
+                            <property name="height_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage" id="image6">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">software-update-available-symbolic</property>
+                                <property name="icon_size">2</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBoxRow" id="list_files">
+                            <property name="width_request">32</property>
+                            <property name="height_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage" id="image7">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">drive-multidisk-symbolic</property>
+                                <property name="icon_size">2</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBoxRow" id="list_deps">
+                            <property name="width_request">32</property>
+                            <property name="height_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage" id="image8">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">insert-object-symbolic</property>
+                                <property name="icon_size">2</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="sidebar"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1220,47 +1409,43 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="info_text">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="wrap_mode">word</property>
+                        <property name="left_margin">6</property>
+                        <property name="right_margin">6</property>
+                        <property name="top_margin">6</property>
+                        <property name="bottom_margin">6</property>
+                        <property name="buffer">info_buffer</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="name">history</property>
-                <property name="title" translatable="yes">History</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="page_actions">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="queue_sw">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="name">actions</property>
-                <property name="title" translatable="yes">Actions</property>
-                <property name="position">3</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>

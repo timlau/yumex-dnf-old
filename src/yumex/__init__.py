@@ -315,7 +315,8 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons', 'sidebar']
+        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
+                               'package_sidebar']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
 
@@ -456,10 +457,7 @@ class Window(BaseWindow):
         sw = self.get_ui('package_sw')
         sw.add(self.package_view)
         # setup info view
-        info = self.get_ui('info_box')
         self.info = widgets.PackageInfo(self, self)
-        info.pack_start(self.info, True, True, 0)
-        self.info.show_all()
 
     def _setup_group_page(self):
         """Setup the group page."""
@@ -479,10 +477,6 @@ class Window(BaseWindow):
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
-        info = self.get_ui('group_pkg_info_sw')
-        self.group_info = widgets.PackageInfo(self, self)
-        info.add(self.group_info)
-        self.info.show_all()
 
     def _setup_history_page(self):
         """Setup the history page."""
@@ -822,15 +816,16 @@ class Window(BaseWindow):
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
-            self.pkg_filter.show(True)
             self._search_toggle.show()
             self.search_bar.show()
+            self.info.show()
         else:
-            self.pkg_filter.show(False)
             self._search_toggle.hide()
             self.search_bar.hide()
+            self.info.show(False)
         if page == 'groups':
             self._load_groups()
+            self.info.show()
         elif page == 'history':
             self._load_history()
         self.active_page = page
@@ -918,7 +913,7 @@ class Window(BaseWindow):
 
     def on_group_pkg_view_selection_changed(self, widget, pkg):
         """Handle package selection on group page."""
-        self.group_info.set_package(pkg)
+        self.info.set_package(pkg)
 
     def on_group_changed(self, widget, grp_id):
         """Handle group selection on group page."""
