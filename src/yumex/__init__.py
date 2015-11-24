@@ -847,7 +847,6 @@ class Window(BaseWindow):
 
     def on_search(self, widget, key, sch_type, fields):
         """Handle search."""
-        print(key, sch_type, fields)
         self.search_bar.show_spinner(True)
         if key == '':  # revert to the current selected filter
             self.last_search = None
@@ -895,7 +894,6 @@ class Window(BaseWindow):
 
     def on_option_changed(self, widget, option, state):
         """Handle changes in options."""
-        print("option changed : ", option, state)
         setattr(CONFIG.session, option, state)
         logger.debug('session option : %s = %s' %
                      (option, getattr(CONFIG.session, option)))
@@ -980,12 +978,11 @@ class YumexApplication(Gtk.Application):
             # parse cmdline in a non quitting way
             self.current_args = \
                 parser.parse_known_args(args.get_arguments()[1:])[0]
-            print(self.current_args)
             if self.current_args.exit:
                 if self.window.can_close():
                     self.quit()
                 else:
-                    print("Application is busy")
+                    self.logger.info("Application is busy")
         if self.args.debug:
             self._logger_setup(loglvl=logging.DEBUG)
             # setup log handler for yumdaemon API

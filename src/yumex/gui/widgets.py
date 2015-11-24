@@ -22,7 +22,7 @@ from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Gio, Pango
+from gi.repository import Pango
 from yumex.misc import _, CONFIG
 
 import datetime
@@ -518,8 +518,8 @@ class PackageDetails(GObject.GObject):
             self.widget.hide()
 
     def on_toggled(self, listbox, row):
-        ndx = row.get_index()
-        if ndx:
+        if row:
+            ndx = row.get_index()
             key = PackageDetails.VALUES[ndx]
             self.emit('info-changed', key)
 
@@ -657,7 +657,7 @@ class PackageInfo(PackageDetails):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                print("Package info not found: ", self.active_filter)
+                logger.error("Package info not found: ", self.active_filter)
         self.goto_top()
 
     def _is_url(self, url):
@@ -670,7 +670,7 @@ class PackageInfo(PackageDetails):
             return False
 
     def _url_handler(self, url):
-        print('URL activated: ' + url)
+        logger.debug('URL activated: ' + url)
         if self._is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
