@@ -1050,7 +1050,7 @@ start Yum Extender</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="orientation">vertical</property>
-                    <property name="position">400</property>
+                    <property name="position">450</property>
                     <property name="position_set">True</property>
                     <child>
                       <object class="GtkScrolledWindow" id="package_sw">
@@ -1088,9 +1088,6 @@ start Yum Extender</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1642,7 +1639,7 @@ start Yum Extender</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Package actions to perform</property>
     <property name="window_position">center-on-parent</property>
-    <property name="default_width">320</property>
+    <property name="default_width">600</property>
     <property name="default_height">260</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>

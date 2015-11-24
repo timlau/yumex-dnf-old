@@ -194,7 +194,10 @@ class PackageInfoWidget(Gtk.Box):
         tip = _("Package Requirements")
         vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
                                         tip))
-        vbox.set_margin_right(5)
+        vbox.set_margin_right(6)
+        vbox.set_margin_left(6)
+        vbox.get_style_context().add_class('linked')
+
         self.pack_start(vbox, False, False, 0)
         sw = Gtk.ScrolledWindow()
         self.view = yumex.gui.views.PackageInfoView(window, url_handler)
@@ -675,8 +678,11 @@ class SidebarSelector(Gtk.Revealer):
 
     def set_active(self, key):
         """Set the active item based on key."""
-        row = self._rows[key]
-        self._lb.select_row(row)
+        if self._current == key:
+            self.emit('sidebar_changed', key)
+        else:
+            row = self._rows[key]
+            self._lb.select_row(row)
 
     def get_visible(self):
         """Check if sidebar is shown or hidden."""
