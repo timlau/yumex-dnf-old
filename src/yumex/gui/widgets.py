@@ -619,44 +619,35 @@ class Options(GObject.GObject):
 
 
 class SidebarSelector(Gtk.Revealer):
-    """Sidebar selector widget.
-
-       Need a Gtk.Paned widget as parent
-    """
+    """Sidebar selector widget. """
 
     __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
                                        None,
                                        (GObject.TYPE_STRING,)
                                        )}
 
-    def __init__(self, paned):
+    def __init__(self, parent):
         Gtk.Revealer.__init__(self)
         self._lb = Gtk.ListBox()
         self._lb.get_style_context().add_class('sidebar')
+        self._lb.props.width_request = 100
+        self._lb.set_vexpand(True)
         self.add(self._lb)
         self.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT)
         self.set_transition_duration(250)
-        self._paned = paned
+        self._parent = parent
         self._rows = {}
         self._keys = {}
         self.ndx = -1
         self._current = None
-        self._paned_pos = None
         self._lb.unselect_all()
         self._lb.connect('row-selected', self.on_toggled)
         self.show_all()
         self.set_reveal_child(True)
-        self._paned.add1(self)
+        self._parent.add(self)
 
     def show_bar(self, show=True):
         """Show or hide the sidebar."""
-        if show:
-            self.show_all()
-            if self._paned_pos:
-                self._paned.set_position(self._paned_pos)
-        else:
-            self._paned_pos = self._paned.get_position()
-            self._paned.set_position(0)
         self.set_reveal_child(show)
 
     def on_toggled(self, widget, row):
@@ -711,15 +702,18 @@ class Filters(GObject.GObject):
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self._sidebar = SidebarSelector(self.win.get_ui('main_paned'))
+        self._sidebar = SidebarSelector(self.win.get_ui('sidebar'))
         self.current = 'updates'
         for flt in Filters.FILTERS:
             self._sidebar.add_row(flt, Filters.LABELS[flt])
         self._sidebar.connect('sidebar-changed', self.on_toggled)
         self._sidebar.set_active(self.current)
+        self.is_visible = True
 
     def show(self, show=True):
-        self._sidebar.show_bar(show)
+        if show != self.is_visible:
+            self._sidebar.show_bar(show)
+            self.is_visible = show
 
     def on_toggled(self, widget, flt):
         """Active filter is changed."""
