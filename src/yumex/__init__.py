@@ -227,6 +227,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)
 
+    def can_close(self):
+        """ Check if yumex is idle and can be closed"""
+        if self.is_working:
+            return False
+        else:
+            return True
+
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
         css_fn = None
@@ -983,6 +990,10 @@ class YumexApplication(Gtk.Application):
                     self.quit()
                 else:
                     self.logger.info("Application is busy")
+        if self.args.exit:  # kill dnf daemon and quit
+            dbus_dnfsystem('Exit')
+            sys.exit(0)
+
         if self.args.debug:
             self._logger_setup(loglvl=logging.DEBUG)
             # setup log handler for yumdaemon API
