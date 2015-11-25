@@ -19,16 +19,6 @@
 
 from __future__ import absolute_import
 
-# -*- coding: utf-8 -*-
-
-# Sample code for use of Gtk.Application
-#
-# * Show how to hande cmdline in a python way
-# * Show how to handle multiple starts of the application
-
-import gi
-gi.require_version('Gtk', '3.0')
-
 from gi.repository import Gio, Gtk, Gdk
 
 from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\

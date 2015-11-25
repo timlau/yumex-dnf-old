@@ -226,6 +226,19 @@ def check_dark_theme():
     return gtk_settings.get_property("gtk-application-prefer-dark-theme")
 
 
+def logger_setup(logroot='yumex',
+                  logfmt='%(asctime)s: %(message)s',
+                  loglvl=logging.INFO):
+    """Setup Python logging."""
+    logger = logging.getLogger(logroot)
+    logger.setLevel(loglvl)
+    formatter = logging.Formatter(logfmt, '%H:%M:%S')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.propagate = False
+    logger.addHandler(handler)
+
+
 class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
