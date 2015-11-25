@@ -641,7 +641,6 @@ class PackageInfo(PackageDetails):
         update the information in the Package info view
         '''
         self.clear()
-        self.write("\n")
         if self.current_package:
             if self.active_filter == 'desc':
                 self._show_description()
