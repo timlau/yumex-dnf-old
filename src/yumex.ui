@@ -404,7 +404,6 @@ Yum Extender is started</property>
                     <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_start">25</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
                     <property name="xalign">0</property>
