@@ -21,10 +21,7 @@ from __future__ import absolute_import
 
 from gi.repository import Gio, Gtk, Gdk
 
-from yumex.misc import doGtkEvents, _, CONFIG, ExceptionHandler,\
-                       QueueEmptyError, TransactionBuildError, \
-                       TransactionSolveError, dbus_dnfsystem,\
-                       get_style_color, color_to_hex
+from yumex.misc import _, CONFIG
 
 import argparse
 import datetime
@@ -34,6 +31,7 @@ import subprocess
 import sys
 
 import yumex.const as const
+import yumex.misc as misc
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.views as views
@@ -93,7 +91,7 @@ class BaseYumex:
     def backend(self):
         return self.get_root_backend()
 
-    @ExceptionHandler
+    @misc.ExceptionHandler
     def get_root_backend(self):
         """Get the current root backend.
 
@@ -136,7 +134,7 @@ class BaseYumex:
                 sys.exit(1)
         return self._root_backend
 
-    @ExceptionHandler
+    @misc.ExceptionHandler
     def release_root_backend(self, quit=False):
         """Release the current root backend, if it is setup and locked."""
         if self._root_backend is None:
@@ -321,14 +319,14 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         win = self.get_window()
         if win is not None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        doGtkEvents()
+        misc.doGtkEvents()
 
     def _set_normal_cursor(self):
         """Set Normal cursor in main window."""
         win = self.get_window()
         if win is not None:
             win.set_cursor(None)
-        doGtkEvents()
+        misc.doGtkEvents()
 
 
 class Window(BaseWindow):
@@ -411,9 +409,9 @@ class Window(BaseWindow):
         self.main_paned.set_position(CONFIG.conf.info_paned)
 
         # Get the theme default TreeView text color
-        color_normal = get_style_color(self.package_view)
-        CONFIG.conf.color_normal = color_to_hex(color_normal)
-        logger.debug('theme color : %s' % color_to_hex(color_normal))
+        color_normal = misc.get_style_color(self.package_view)
+        CONFIG.conf.color_normal = misc.color_to_hex(color_normal)
+        logger.debug('theme color : %s' % misc.color_to_hex(color_normal))
 
         # infobar
         self.infobar = widgets.InfoProgressBar(self.ui)
@@ -558,7 +556,7 @@ class Window(BaseWindow):
         self.backend.reload()
         self.set_working(False)
 
-    @ExceptionHandler
+    @misc.ExceptionHandler
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True)
@@ -647,7 +645,7 @@ class Window(BaseWindow):
                 error_msgs.add('group : %s : %s ' % (action, grp_id))
         logger.debug(' add transaction errors : %d', errors)
         if errors > 0:
-            raise TransactionBuildError(error_msgs)
+            raise misc.TransactionBuildError(error_msgs)
 
     def _check_protected(self, trans):
         """Check for deletion protected packages in transaction"""
@@ -664,21 +662,21 @@ class Window(BaseWindow):
         """Populate transaction from queue and resolve deps."""
         # switch to queue view
         if self.queue_view.queue.total() == 0:
-            raise QueueEmptyError
+            raise misc.QueueEmptyError
         self.content.select_page('actions')
         self._populate_transaction()
         self.infobar.info(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
         self.infobar.info(_('Dependencies resolved'))
         if not rc:
-            raise TransactionSolveError(result)
+            raise misc.TransactionSolveError(result)
         return result
 
     def _get_transaction(self):
         """Get current transaction."""
         rc, result = self.backend.GetTransaction()
         if not rc:
-            raise TransactionSolveError(result)
+            raise misc.TransactionSolveError(result)
         return result
 
     def _run_transaction(self):
@@ -725,7 +723,7 @@ class Window(BaseWindow):
         self._reset()
         return
 
-    @ExceptionHandler
+    @misc.ExceptionHandler
     def _process_actions(self, from_queue=True):
         """Process the current actions in the queue.
 
@@ -758,16 +756,16 @@ class Window(BaseWindow):
             else:  # user cancelled transaction
                 self._reset_on_cancel()
                 return
-        except QueueEmptyError:  # Queue is empty
+        except misc.QueueEmptyError:  # Queue is empty
             self.set_working(False)
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
-        except TransactionBuildError as e:  # Error in building transaction
+        except misc.TransactionBuildError as e:  # Error in building transaction
             dialogs.show_information(
                 self, _('Error(s) in building transaction'),
                         '\n'.join(e.msgs))
             self._reset_on_cancel()
-        except TransactionSolveError as e:
+        except misc.TransactionSolveError as e:
             dialogs.show_information(
                     self, _('Error(s) in search for dependencies'),
                             '\n'.join(e.msgs))
@@ -965,7 +963,20 @@ class YumexApplication(Gtk.Application):
     def on_command_line(self, app, args):
         parser = argparse.ArgumentParser(prog='app')
         parser.add_argument('-d', '--debug', action='store_true')
-        parser.add_argument('--exit', action='store_true')
+        parser.add_argument(
+            '-y', '--yes', action='store_true',
+             help='Answer yes/ok to all questions')
+        parser.add_argument('--exit', action='store_true',
+            help='tell dnfdaemon dbus services used by yumex to exit')
+        parser.add_argument(
+            '-I', '--install', type=str, metavar='PACKAGE',
+            help='Install Package')
+        parser.add_argument(
+            '-R', '--remove', type=str, metavar='PACKAGE',
+            help='Remove Package')
+        parser.add_argument(
+            '--updateall', action='store_true',
+            help='apply all available updates')
         if not self.running:
             # First run
             self.args = parser.parse_args(args.get_arguments()[1:])
@@ -980,18 +991,13 @@ class YumexApplication(Gtk.Application):
                 else:
                     self.logger.info("Application is busy")
         if self.args.exit:  # kill dnf daemon and quit
-            dbus_dnfsystem('Exit')
+            misc.dbus_dnfsystem('Exit')
             sys.exit(0)
 
         if self.args.debug:
-            self._logger_setup(loglvl=logging.DEBUG)
-            # setup log handler for yumdaemon API
-            self._logger_setup(
-                logroot='yumdaemon',
-                logfmt='%(asctime)s: [%(name)s] - %(message)s',
-                loglvl=logging.DEBUG)
+            misc.logger_setup(loglvl=logging.DEBUG)
         else:
-            self._logger_setup()
+            misc.logger_setup()
         self.activate()
         return 0
 
@@ -1008,15 +1014,3 @@ class YumexApplication(Gtk.Application):
         logger.info('Saving config on exit')
         CONFIG.write()
         return 0
-
-    def _logger_setup(self, logroot='yumex',
-                      logfmt='%(asctime)s: %(message)s',
-                      loglvl=logging.INFO):
-        """Setup Python logging."""
-        logger = logging.getLogger(logroot)
-        logger.setLevel(loglvl)
-        formatter = logging.Formatter(logfmt, '%H:%M:%S')
-        handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
-        handler.propagate = False
-        logger.addHandler(handler)
