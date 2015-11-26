@@ -339,7 +339,7 @@ Yum Extender is started</property>
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="grid_statusicon">
+              <object class="GtkGrid" id="grid_updatechecker">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
@@ -365,43 +365,16 @@ Yum Extender is started</property>
                   <object class="GtkLabel" id="label_autostart">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender status icon at user login</property>
+                    <property name="tooltip_text" translatable="yes">Autostart the Yum Extender update checker at user login</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Start status icon at user login</property>
+                    <property name="label" translatable="yes">Start update checker at user login</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_autocheck_updates">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_auto_check">
-                    <property name="name">10</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Enable scheduled check for available updates</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="label" translatable="yes">Scheduled check for new updates</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -421,7 +394,7 @@ Yum Extender is started</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -431,105 +404,15 @@ Yum Extender is started</property>
                     <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">25</property>
                     <property name="margin_start">25</property>
+                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="pref_update_startup_delay">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                    <property name="invisible_char">●</property>
-                    <property name="text">30</property>
-                    <property name="input_purpose">number</property>
-                    <property name="adjustment">ad_update_startup_delay</property>
-                    <property name="climb_rate">5</property>
-                    <property name="snap_to_ticks">True</property>
-                    <property name="numeric">True</property>
-                    <property name="value">30</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_update_startup_delay">
-                    <property name="name">25</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Delay from when Yum Extender is started
-to when it checks for updates.
-Gives the system time to settle down when
-Yum Extender is started when the user logins.</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="margin_left">25</property>
-                    <property name="margin_start">25</property>
-                    <property name="label" translatable="yes">Update checker startup delay (seconds)</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_update_notify">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show notification when updates are found</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="top_attach">1</property>
                     <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_update_showicon">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show status icon when no updates are found</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_update_notify">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_update_showicon">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">5</property>
                   </packing>
                 </child>
               </object>
@@ -538,10 +421,10 @@ Yum Extender is started when the user logins.</property>
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label_statusicon">
+              <object class="GtkLabel" id="label_updatecheck">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Status Icon</property>
+                <property name="label" translatable="yes">Update Checker</property>
               </object>
               <packing>
                 <property name="position">1</property>

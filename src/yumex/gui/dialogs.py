@@ -50,15 +50,17 @@ class AboutDialog(Gtk.AboutDialog):
 
 class Preferences:
 
+    VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
+    COLORS = ['color_install', 'color_update', 'color_normal',
+                     'color_obsolete', 'color_downgrade']
+    FLAGS = ['autostart', 'clean_unused', 'newest_only', 'hide_on_close',
+             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
+            ]
+
     def __init__(self, base):
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self._settings = ['autostart', 'clean_unused',
-                          'newest_only', 'autocheck_updates', 'hide_on_close',
-                          'headerbar', 'auto_select_updates', 'repo_saved',
-                          'update_notify', 'update_showicon', 'clean_instonly'
-                          ]
         self.repo_view = yumex.gui.views.RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
@@ -75,41 +77,27 @@ class Preferences:
         return need_reset
 
     def get_settings(self):
-        # set settings states
-        for option in self._settings:
+        # set boolean states
+        for option in Preferences.FLAGS:
             logger.debug("%s : %s " % (option, getattr(CONFIG.conf, option)))
             widget = self.base.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
-        # autocheck update on/off handler
-        widget = self.base.ui.get_object('pref_autocheck_updates')
-        widget.connect('notify::active', self.on_autocheck_updates)
         # cleanup installonly handler
         widget = self.base.ui.get_object('pref_clean_instonly')
         widget.connect('notify::active', self.on_clean_instonly)
-        # set current colors
-        for name in ['color_install', 'color_update', 'color_normal',
-                     'color_obsolete', 'color_downgrade']:
+        # set colors states
+        for name in Preferences.COLORS:
             rgba = yumex.misc.get_color(getattr(CONFIG.conf, name))
             widget = self.base.ui.get_object(name)
             widget.set_rgba(rgba)
-        # Set update checker values
-        for name in ['update_startup_delay', 'update_interval',
-                     'refresh_interval', 'installonly_limit']:
+        # Set value states
+        for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
-        self.on_autocheck_updates()
         self.on_clean_instonly()
         # get the repositories
         self.repos = self.base.backend.get_repositories()
         self.repo_view.populate(self.repos)
-
-    def on_autocheck_updates(self, *args):
-        '''Handler for autocheck_updates switch'''
-        widget = self.base.ui.get_object('pref_autocheck_updates')
-        state = widget.get_active()
-        for postfix in ['update_startup_delay',
-                        'update_interval']:
-            self._set_sensitive(postfix, state)
 
     def on_clean_instonly(self, *args):
         '''Handler for clean_instonly switch'''
@@ -129,26 +117,24 @@ class Preferences:
     def set_settings(self):
         changed = False
         need_reset = False
-        # handle options
-        for option in self._settings:
+        # handle boolean options
+        for option in Preferences.FLAGS:
             widget = self.base.ui.get_object('pref_' + option)
             state = widget.get_active()
             if state != getattr(CONFIG.conf, option):  # changed ??
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
-        # handle colors
-        for name in ['color_install', 'color_update', 'color_normal',
-                     'color_obsolete', 'color_downgrade']:
+        # handle color options
+        for name in Preferences.COLORS:
             widget = self.base.ui.get_object(name)
             rgba = widget.get_rgba()
             color = yumex.misc.color_to_hex(rgba)
             if color != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, color)
                 changed = True
-        # handle update checker values
-        for name in ['update_startup_delay', 'update_interval',
-                     'refresh_interval', 'installonly_limit']:
+        # handle value options
+        for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name):  # changed ??

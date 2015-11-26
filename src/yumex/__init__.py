@@ -34,7 +34,6 @@ import subprocess
 import sys
 
 import yumex.const as const
-import yumex.status
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.views as views
