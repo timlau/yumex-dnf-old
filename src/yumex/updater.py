@@ -231,11 +231,11 @@ class Updater:
         return False
 
 
-class UpdateApplication(Gtk.Application):
+class UpdateApplication(Gio.Application):
     """Update application."""
 
     def __init__(self):
-        Gtk.Application.__init__(self,
+        Gio.Application.__init__(self,
                     application_id="dk.yumex.yumex-updater",
                     flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
