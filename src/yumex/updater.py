@@ -176,11 +176,10 @@ class Updater:
 
     def run_yumex(self, param=[]):
         logger.debug('run yumex')
-        if not self.yumex_running:
-            cmd = [YUMEX_BIN]
-            cmd.extend(param)
-            logger.debug('Starting: %s' % " ".join(cmd))
-            Popen(cmd).pid
+        cmd = [YUMEX_BIN]
+        cmd.extend(param)
+        logger.debug('Starting: %s' % " ".join(cmd))
+        Popen(cmd).pid
 
     def startup_init_update_timer(self):
         """ start the update timer with a delayed startup
@@ -260,14 +259,18 @@ class UpdateApplication(Gtk.Application):
         parser.add_argument('--exit', action='store_true')
         if not self.running:
             # First run
+            print('first run')
             self.args = parser.parse_args(args.get_arguments()[1:])
         else:
+            print('second run')
             # Second Run
             # parse cmdline in a non quitting way
             self.current_args = \
                 parser.parse_known_args(args.get_arguments()[1:])[0]
             if self.current_args.exit:
+                print('quitting')
                 self.quit()
+                sys.exit(0)
         if self.args.exit:  # kill dnf daemon and quit
             misc.dbus_dnfsystem('Exit')
             sys.exit(0)
