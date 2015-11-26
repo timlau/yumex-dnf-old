@@ -354,7 +354,7 @@ class Window(BaseWindow):
 
         if self.install_mode:
             self._setup_gui_installmode()
-            self._run_actions_installmode(self.app.args)
+            self._run_actions_installmode(self.app.args,quit_app=True)
         else:
             self._setup_gui()
             self.show_all()
@@ -365,6 +365,26 @@ class Window(BaseWindow):
 # Gui Setup
 ###############################################################################
 
+    def rerun_installmode(self, args):
+        '''call when yumex gui is already running and is idle
+        and second instance is excuted in installmode
+        '''
+        self.get_ui('content_box').hide()
+        WIDGETS_HIDE = ['left_buttons', 'right_buttons']
+        for widget in WIDGETS_HIDE:
+            self.ui.get_object(widget).hide()
+        self.resize(50, 50)
+        self._run_actions_installmode(args, quit_app=False)
+        self.infobar.hide()
+        self.get_ui('content_box').show()
+        WIDGETS_HIDE = ['left_buttons', 'right_buttons']
+        for widget in WIDGETS_HIDE:
+            self.ui.get_object(widget).show()
+        width = CONFIG.conf.win_width
+        height = CONFIG.conf.win_height
+        self.resize(width, height)
+        self._reset()
+
     def _setup_gui_installmode(self):
         self.set_default_size(50, 50)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -372,7 +392,6 @@ class Window(BaseWindow):
         box.pack_start(self.get_ui('main_box'), False, True, 0)
         self.infobar = widgets.InfoProgressBar(self.ui)
         self.show_all()
-        self.get_ui('content_box').hide()
 
     def _setup_gui(self):
         # Restore windows size
@@ -616,7 +635,8 @@ class Window(BaseWindow):
 # Transaction Processing
 ###############################################################################
 
-    def _run_actions_installmode(self, args):
+    def _run_actions_installmode(self, args, quit_app):
+        action = None
         if args.install:
             action = 'install'
             package = args.install
@@ -627,7 +647,7 @@ class Window(BaseWindow):
             action = 'update'
             package = '*'
         if action:
-            self._process_actions_installmode(action, package, args.yes)
+            self._process_actions_installmode(action, package, args.yes, quit_app)
 
     def _populate_transaction(self):
         self.backend.ClearTransaction()
@@ -748,7 +768,8 @@ class Window(BaseWindow):
         return
 
     @misc.ExceptionHandler
-    def _process_actions_installmode(self, action, package, always_yes):
+    def _process_actions_installmode(self, action, package, always_yes,
+                                     app_quit):
         """Process the pending actions from the command line.
 
         :param action: action to perform (install/remove)
@@ -790,8 +811,9 @@ class Window(BaseWindow):
             dialogs.show_information(
                 self, _('Error(s) in search for dependencies'),
                         '\n'.join(result))
-        self.release_root_backend(quit=True)
-        self.app.quit()
+        if app_quit:
+            self.release_root_backend(quit=True)
+            self.app.quit()
 
     @misc.ExceptionHandler
     def _process_actions(self, from_queue=True):
@@ -1031,6 +1053,8 @@ class YumexApplication(Gtk.Application):
             self.window.show()
         else:
             self.window.present()
+            if self.install_mode and self.window.can_close():
+                self.window.rerun_installmode(self.current_args)
 
     def on_command_line(self, app, args):
         parser = argparse.ArgumentParser(prog='app')
@@ -1052,6 +1076,16 @@ class YumexApplication(Gtk.Application):
         if not self.running:
             # First run
             self.args = parser.parse_args(args.get_arguments()[1:])
+            if self.args.exit:  # kill dnf daemon and quit
+                misc.dbus_dnfsystem('Exit')
+                sys.exit(0)
+
+            if self.args.debug:
+                misc.logger_setup(loglvl=logging.DEBUG)
+            else:
+                misc.logger_setup()
+            if self.args.install or self.args.remove or self.args.updateall:
+                self.install_mode = True
         else:
             # Second Run
             # parse cmdline in a non quitting way
@@ -1062,16 +1096,9 @@ class YumexApplication(Gtk.Application):
                     self.quit()
                 else:
                     self.logger.info("Application is busy")
-        if self.args.exit:  # kill dnf daemon and quit
-            misc.dbus_dnfsystem('Exit')
-            sys.exit(0)
-
-        if self.args.debug:
-            misc.logger_setup(loglvl=logging.DEBUG)
-        else:
-            misc.logger_setup()
-        if self.args.install or self.args.remove or self.args.updateall:
-            self.install_mode = True
+            if self.current_args.install or self.current_args.remove or \
+               self.current_args.updateall:
+                self.install_mode = True
         self.activate()
         return 0
 
