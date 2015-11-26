@@ -1,7 +1,7 @@
 %global appname yumex
 
 Name:     %{appname}-dnf
-Version:  4.1.4
+Version:  4.2.0
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
