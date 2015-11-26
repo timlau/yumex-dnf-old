@@ -50,6 +50,7 @@ else:
 
 CONF_DIR = BaseDirectory.save_config_path('yumex-dnf')
 TIMESTAMP_FILE = os.path.join(CONF_DIR, 'update_timestamp.conf')
+DELAYED_START = 5 * 60  # Seconds before first check
 
 
 class Notification(GObject.GObject):
@@ -64,9 +65,9 @@ class Notification(GObject.GObject):
         icon = "yumex-dnf"
         self.notification = Notify.Notification.new(summary, body, icon)
         self.notification.set_timeout(10000)  # timeout 10s
-        self.notification.add_action('open', _('Open Yum Extender'),
+        self.notification.add_action('later', _('Not Now'),
                                      self.callback)
-        self.notification.add_action('apply', _('Apply Updates'), self.callback)
+        self.notification.add_action('show', _('Show Updates'), self.callback)
         self.notification.connect('closed', self.on_closed)
 
     def show(self):
@@ -131,6 +132,9 @@ class Updater:
         self.update_timestamp = UpdateTimestamp()
         self.next_update = 0
         self.last_timestamp = 0
+        self.muted = False
+        self.mute_count = 0
+        self.last_num_updates = 0
 
         # dnfdaemon client setup
         try:
@@ -142,10 +146,9 @@ class Updater:
             sys.exit(1)
 
     def get_updates(self, *args):
-        logger.debug('get_updates')
+        logger.debug('Checking for updates')
         try:
             self.backend.Lock()
-            logger.debug('Check for updates')
             pkgs = self.backend.GetPackages('updates')
             rc = len(pkgs)
             logger.debug('# of updates : %d' % rc)
@@ -154,11 +157,22 @@ class Updater:
             logger.debug('Error getting the dnfdaemon lock')
             rc = -1
         if rc > 0:
-            logger.debug('notification')
-            notify = Notification(_('New Updates'),
-                                  _('%s available updates') % rc)
-            notify.connect('notify-action', self.on_notify_action)
-            notify.show()
+            if self.mute_count < 1:
+                # Only show the same notification once
+                # until the user closes the notification
+                if rc != self.last_num_updates:
+                    logger.debug('notification opened : # updates = %d', rc)
+                    notify = Notification(_('New Updates'),
+                                          _('%s available updates') % rc)
+                    notify.connect('notify-action', self.on_notify_action)
+                    notify.show()
+                    self.last_num_updates = rc
+                else:
+                    logger.debug('skipping notification (same # of updates)')
+            else:
+                self.mute_count -= 1
+                logger.debug('skipping notification : mute_count = %s',
+                             self.mute_count)
         self.update_timestamp.store_current_time()
         self.start_update_timer()  # restart update timer if necessary
         return rc
@@ -169,10 +183,15 @@ class Updater:
     def on_notify_action(self, widget, action):
         """Handle notification actions. """
         logger.debug('notify-action: %s', action)
-        if action == 'open':
+        if action == 'later':
+            logger.debug('setting mute_count = 10')
+            self.mute_count = 10
+        elif action == 'show':
             self.run_yumex()
-        elif action == 'apply':
-            self.run_yumex(['--updateall'])
+        elif action == 'closed':
+            # reset the last number of updates notified
+            # so we will get a new notification at next check
+            self.last_num_updates = 0
 
     def run_yumex(self, param=[]):
         logger.debug('run yumex')
@@ -185,8 +204,7 @@ class Updater:
         """ start the update timer with a delayed startup
         """
         logger.debug('Starting delayed update timer')
-        GObject.timeout_add_seconds(
-            CONFIG.conf.update_startup_delay, self.start_update_timer)
+        GObject.timeout_add_seconds(DELAYED_START, self.start_update_timer)
 
     def start_update_timer(self):
         """
@@ -249,32 +267,14 @@ class UpdateApplication(Gio.Application):
     def on_activate(self, app):
         self.running = True
         self.updater = Updater()
-        self.updater.startup_init_update_timer()
+        if not self.args.delay:
+            self.updater.startup_init_update_timer()
+        else:
+            self.updater.start_update_timer()
         Gtk.main()
         return 0
 
-    def on_command_line(self, app, args):
-        parser = argparse.ArgumentParser(prog='app')
-        parser.add_argument('-d', '--debug', action='store_true')
-        parser.add_argument('--exit', action='store_true')
-        if not self.running:
-            # First run
-            print('first run')
-            self.args = parser.parse_args(args.get_arguments()[1:])
-        else:
-            print('second run')
-            # Second Run
-            # parse cmdline in a non quitting way
-            self.current_args = \
-                parser.parse_known_args(args.get_arguments()[1:])[0]
-            if self.current_args.exit:
-                print('quitting')
-                self.quit()
-                sys.exit(0)
-        if self.args.exit:  # kill dnf daemon and quit
-            misc.dbus_dnfsystem('Exit')
-            sys.exit(0)
-
+    def _log_setup(self):
         if self.args.debug:
             misc.logger_setup(
                 logroot='yumex.updater',
@@ -282,6 +282,32 @@ class UpdateApplication(Gio.Application):
                 loglvl=logging.DEBUG)
         else:
             misc.logger_setup()
+
+    def on_command_line(self, app, args):
+        parser = argparse.ArgumentParser(prog='app')
+        parser.add_argument('-d', '--debug', action='store_true')
+        parser.add_argument('--exit', action='store_true')
+        parser.add_argument('--delay', type=int)
+        if not self.running:
+            # First run
+            self.args = parser.parse_args(args.get_arguments()[1:])
+            self._log_setup()
+            if self.args.delay:
+                CONFIG.conf.update_interval = self.args.delay
+            logger.debug('first run')
+        else:
+            logger.debug('second run')
+            # Second Run
+            # parse cmdline in a non quitting way
+            self.current_args = \
+                parser.parse_known_args(args.get_arguments()[1:])[0]
+            if self.current_args.exit:
+                logger.debug('quitting')
+                self.quit()
+                sys.exit(0)
+        if self.args.exit:  # kill dnf daemon and quit
+            misc.dbus_dnfsystem('Exit')
+            sys.exit(0)
         self.activate()
         return 0
 
