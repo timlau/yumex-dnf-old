@@ -59,7 +59,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %files -f  %{name}.lang
 %doc README.md COPYING
 %{_datadir}/%{name}
-%{_bindir}/%{name}
+%{_bindir}/%{name}*
 %{python3_sitelib}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
