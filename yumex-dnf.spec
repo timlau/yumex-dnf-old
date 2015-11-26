@@ -63,7 +63,6 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{python3_sitelib}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
-%{_datadir}/dbus-1/services/*
 %{_datadir}/appdata/*.xml
 
 %changelog
