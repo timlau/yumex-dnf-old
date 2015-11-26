@@ -626,7 +626,8 @@ class Window(BaseWindow):
         elif args.updateall:
             action = 'update'
             package = '*'
-        self._process_actions_installmode(action, package, args.yes)
+        if action:
+            self._process_actions_installmode(action, package, args.yes)
 
     def _populate_transaction(self):
         self.backend.ClearTransaction()
@@ -756,16 +757,19 @@ class Window(BaseWindow):
         """
         if action == 'install':
             self.infobar.info(_('Installing package: %s') % package)
+            exit_msg = _('%s was installed successfully') % package
             self.infobar.info_sub(package)
             txmbrs = self.backend.Install(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'remove':
             self.infobar.info(_('Removing package: %s') % package)
+            exit_msg = _('%s was removed successfully') % package
             self.infobar.info_sub(package)
             txmbrs = self.backend.Remove(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'update':
             self.infobar.info(_('Updating all available updates'))
+            exit_msg = _('Available updates was applied successfully')
             txmbrs = self.backend.Update('*')
         self.infobar.info(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
@@ -781,10 +785,7 @@ class Window(BaseWindow):
                 self.backend.RunTransaction()
                 self.release_root_backend()
                 self.hide()
-                if not always_yes:
-                    dialogs.show_information(
-                        self,
-                        _('Changes was successfully applied to the system'))
+                misc.notify('Yum Extender', exit_msg)
         else:
             dialogs.show_information(
                 self, _('Error(s) in search for dependencies'),

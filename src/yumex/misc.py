@@ -21,8 +21,7 @@ from __future__ import absolute_import
 
 import time
 
-from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gtk, Gdk, Notify
 
 import configparser
 import dnfdaemon.client
@@ -218,6 +217,14 @@ def format_number(number, SI=0, space=' '):
         fmt = '%.0f%s%s'
 
     return(fmt % (float(number or 0), space, symbols[depth]))
+
+
+def notify(summary, body):
+    Notify.init('Yum Extender')
+    icon = "yumex-dnf"
+    notification = Notify.Notification.new(summary, body, icon)
+    notification.set_timeout(5000)  # timeout 5s
+    notification.show()
 
 
 def check_dark_theme():
