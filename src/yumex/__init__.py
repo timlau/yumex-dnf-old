@@ -283,8 +283,6 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 self.release_root_backend(quit=True)
             except:
                 pass
-        #self.status.SetWorking(False)  # reset working state
-        #self.status.SetYumexIsRunning(self.pid, False)
         Gtk.main_quit()
         sys.exit(1)
 
@@ -299,12 +297,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """
         self.is_working = state
         if state:
-            #self.status.SetWorking(True)
             self._set_busy_cursor(insensitive)
             self._disable_buttons(False)
         else:
             self.infobar.hide()
-            #self.status.SetWorking(False)
             self._set_normal_cursor()
             self._disable_buttons(True)
 
@@ -331,17 +327,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
 class Window(BaseWindow):
 
-    def __init__(self, app, gnome=True):
+    def __init__(self, app, gnome=True, install_mode=False):
         super(Window, self).__init__(app)
         self.gnome = gnome
-        width = CONFIG.conf.win_width
-        height = CONFIG.conf.win_height
-        self.set_default_size(width, height)
-        if CONFIG.conf.win_maximized:
-            self.maximize()
-        self.connect('configure-event', self.on_window_changed)
-        self.connect('window-state-event', self.on_window_state)
-        self.connect('key_press_event', self.on_key_press)
+        self.install_mode = install_mode
         # load custom styling from current theme
         self.load_custom_styling()
 
@@ -363,16 +352,38 @@ class Window(BaseWindow):
         self.active_page = None  # Active content page
         self.search_fields = CONFIG.conf.search_fields
 
-        self._setup_gui()
-        self.show_all()
-        # setup default selections
-        self.pkg_filter.set_active('updates')
+        if self.install_mode:
+            self._setup_gui_installmode()
+            self._run_actions_installmode(self.app.args)
+        else:
+            self._setup_gui()
+            self.show_all()
+            # setup default selections
+            self.pkg_filter.set_active('updates')
 
 ###############################################################################
 # Gui Setup
 ###############################################################################
 
+    def _setup_gui_installmode(self):
+        self.set_default_size(50, 50)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.add(box)
+        box.pack_start(self.get_ui('main_box'), False, True, 0)
+        self.infobar = widgets.InfoProgressBar(self.ui)
+        self.show_all()
+        self.get_ui('content_box').hide()
+
     def _setup_gui(self):
+        # Restore windows size
+        width = CONFIG.conf.win_width
+        height = CONFIG.conf.win_height
+        self.set_default_size(width, height)
+        if CONFIG.conf.win_maximized:
+            self.maximize()
+        self.connect('configure-event', self.on_window_changed)
+        self.connect('window-state-event', self.on_window_state)
+        self.connect('key_press_event', self.on_key_press)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
@@ -605,6 +616,18 @@ class Window(BaseWindow):
 # Transaction Processing
 ###############################################################################
 
+    def _run_actions_installmode(self, args):
+        if args.install:
+            action = 'install'
+            package = args.install
+        elif args.remove:
+            action = 'remove'
+            package = args.remove
+        elif args.updateall:
+            action = 'update'
+            package = '*'
+        self._process_actions_installmode(action, package, args.yes)
+
     def _populate_transaction(self):
         self.backend.ClearTransaction()
         errors = 0
@@ -722,6 +745,52 @@ class Window(BaseWindow):
                          '\n'.join(result))
         self._reset()
         return
+
+    @misc.ExceptionHandler
+    def _process_actions_installmode(self, action, package, always_yes):
+        """Process the pending actions from the command line.
+
+        :param action: action to perform (install/remove)
+        :param package: package to work on
+        :param always_yes: ask the user or default to yes/ok to all questions
+        """
+        if action == 'install':
+            self.infobar.info(_('Installing package: %s') % package)
+            self.infobar.info_sub(package)
+            txmbrs = self.backend.Install(package)
+            logger.debug('txmbrs: %s' % str(txmbrs))
+        elif action == 'remove':
+            self.infobar.info(_('Removing package: %s') % package)
+            self.infobar.info_sub(package)
+            txmbrs = self.backend.Remove(package)
+            logger.debug('txmbrs: %s' % str(txmbrs))
+        elif action == 'update':
+            self.infobar.info(_('Updating all available updates'))
+            txmbrs = self.backend.Update('*')
+        self.infobar.info(_('Searching for dependencies'))
+        rc, result = self.backend.BuildTransaction()
+        self.infobar.info(_('Dependencies resolved'))
+        if rc:
+            self.transaction_result.populate(result, '')
+            if not always_yes:
+                ok = self.transaction_result.run()
+            else:
+                ok = True
+            if ok:  # Ok pressed
+                self.infobar.info(_('Applying changes to the system'))
+                self.backend.RunTransaction()
+                self.release_root_backend()
+                self.hide()
+                if not always_yes:
+                    dialogs.show_information(
+                        self,
+                        _('Changes was successfully applied to the system'))
+        else:
+            dialogs.show_information(
+                self, _('Error(s) in search for dependencies'),
+                        '\n'.join(result))
+        self.release_root_backend(quit=True)
+        self.app.quit()
 
     @misc.ExceptionHandler
     def _process_actions(self, from_queue=True):
@@ -950,10 +1019,12 @@ class YumexApplication(Gtk.Application):
         self.args = None
         self.dont_close = False
         self.window = None
+        self.install_mode = False
 
     def on_activate(self, app):
         if not self.running:
-            self.window = Window(self, gnome=CONFIG.conf.headerbar)
+            self.window = Window(self, gnome=CONFIG.conf.headerbar,
+                                 install_mode=self.install_mode)
             app.add_window(self.window)
             self.running = True
             self.window.show()
@@ -998,11 +1069,13 @@ class YumexApplication(Gtk.Application):
             misc.logger_setup(loglvl=logging.DEBUG)
         else:
             misc.logger_setup()
+        if self.args.install or self.args.remove or self.args.updateall:
+            self.install_mode = True
         self.activate()
         return 0
 
     def on_shutdown(self, app):
-        if self.window:
+        if self.window and not self.install_mode:
             CONFIG.conf.info_paned = self.window.main_paned.get_position()
             if self.window.cur_maximized:
                 CONFIG.conf.win_maximized = True
