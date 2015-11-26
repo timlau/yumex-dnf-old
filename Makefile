@@ -1,7 +1,7 @@
 APPNAME = yumex-dnf
 DATADIR = /usr/share
 PYTHON = python3 
-SUBDIRS = gfx misc dbus po
+SUBDIRS = gfx misc po
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
 VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)

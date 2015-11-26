@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=dk.yumex.StatusIcon
-Exec=/usr/share/yumex-dnf/dbus_status.py
