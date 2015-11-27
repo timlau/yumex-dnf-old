@@ -354,7 +354,7 @@ class Window(BaseWindow):
 
         if self.install_mode:
             self._setup_gui_installmode()
-            self._run_actions_installmode(self.app.args,quit_app=True)
+            self._run_actions_installmode(self.app.args, quit_app=True)
         else:
             self._setup_gui()
             self.show_all()
@@ -647,7 +647,8 @@ class Window(BaseWindow):
             action = 'update'
             package = '*'
         if action:
-            self._process_actions_installmode(action, package, args.yes, quit_app)
+            self._process_actions_installmode(action, package,
+                                              args.yes, quit_app)
 
     def _populate_transaction(self):
         self.backend.ClearTransaction()
