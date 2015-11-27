@@ -110,7 +110,7 @@ def rgb_to_hex(r, g, b):
         r *= 255
         g *= 255
         b *= 255
-    return "#{0:X}{1:X}{2:X}".format(int(r), int(g), int(b))
+    return "#{0:02X}{1:02X}{2:02X}".format(int(r), int(g), int(b))
 
 
 def color_to_hex(color):
