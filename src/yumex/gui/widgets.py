@@ -338,7 +338,7 @@ class Options(GObject.GObject):
         self.emit('option-changed', flt, widget.get_active())
 
 
-class SidebarSelector(Gtk.Revealer):
+class FilterSidebar(GObject.GObject):
     """Sidebar selector widget. """
 
     __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
@@ -346,64 +346,33 @@ class SidebarSelector(Gtk.Revealer):
                                        (GObject.TYPE_STRING,)
                                        )}
 
+    INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
+
     def __init__(self, parent):
-        Gtk.Revealer.__init__(self)
-        self._lb = Gtk.ListBox()
-        self._lb.get_style_context().add_class('sidebar')
-        self._lb.props.width_request = 100
-        self._lb.set_vexpand(True)
-        self.add(self._lb)
-        self.set_transition_type(Gtk.RevealerTransitionType.SLIDE_RIGHT)
-        self.set_transition_duration(250)
+        GObject.GObject.__init__(self)
+        self._lb = parent.get_ui('pkg_listbox')
         self._parent = parent
-        self._rows = {}
-        self._keys = {}
-        self.ndx = -1
         self._current = None
         self._lb.unselect_all()
         self._lb.connect('row-selected', self.on_toggled)
-        self.show_all()
-        self.set_reveal_child(True)
-        self._parent.add(self)
-
-    def show_bar(self, show=True):
-        """Show or hide the sidebar."""
-        self.set_reveal_child(show)
 
     def on_toggled(self, widget, row):
         """Active filter is changed."""
         if row:
             ndx = row.get_index()
-            key = self._keys[ndx]
+            key = FilterSidebar.INDEX[ndx]
             if key != self._current:
                 self.emit('sidebar_changed', key)
                 self._current = key
-
-    def add_row(self, key, txt):
-        """Add a row to the sidebar."""
-        self.ndx += 1
-        row = Gtk.ListBoxRow()
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        hbox.props.margin_left = 6
-        row.add(hbox)
-        label = Gtk.Label(txt, xalign=0)
-        hbox.pack_start(label, True, True, 0)
-        self._keys[self.ndx] = key
-        self._rows[key] = row
-        self._lb.add(row)
-        row.show()
 
     def set_active(self, key):
         """Set the active item based on key."""
         if self._current == key:
             self.emit('sidebar_changed', key)
         else:
-            row = self._rows[key]
+            row_name = 'pkg_flt_row_' + key
+            row = self._parent.get_ui(row_name)
             self._lb.select_row(row)
-
-    def get_visible(self):
-        """Check if sidebar is shown or hidden."""
-        return self.get_reveal_child()
 
 
 class Filters(GObject.GObject):
@@ -415,27 +384,13 @@ class Filters(GObject.GObject):
                                        )}
 
     FILTERS = ['updates', 'installed', 'available', 'all']
-    LABELS = {
-                'updates': _('Updates'),
-                'installed': _('Installed'),
-                'available': _('Available'),
-                'all': _('All'),
-    }
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self._sidebar = SidebarSelector(self.win.get_ui('package_sidebar'))
+        self._sidebar = FilterSidebar(self.win)
         self.current = 'updates'
-        for flt in Filters.FILTERS:
-            self._sidebar.add_row(flt, Filters.LABELS[flt])
         self._sidebar.connect('sidebar-changed', self.on_toggled)
-        self.is_visible = True
-
-    def show(self, show=True):
-        if show != self.is_visible:
-            self._sidebar.show_bar(show)
-            self.is_visible = show
 
     def on_toggled(self, widget, flt):
         """Active filter is changed."""
