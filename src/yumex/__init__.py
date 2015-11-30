@@ -426,6 +426,9 @@ class Window(BaseWindow):
         self.content.connect('page-changed', self.on_page_changed)
         self._search_toggle = self.get_ui('sch_togglebutton')
         # Setup Options
+        CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
+        CONFIG.session.newest_only = CONFIG.conf.newest_only
+        CONFIG.session.clean_unused = CONFIG.conf.clean_unused
         self.options = widgets.Options(self)
         self.options.connect('option-changed', self.on_option_changed)
         # setup the package/queue/history views
