@@ -1213,6 +1213,7 @@ start Yum Extender</property>
                             <property name="height_request">32</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Package Description</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
@@ -1230,6 +1231,7 @@ start Yum Extender</property>
                             <property name="height_request">32</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Package Update Information</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
@@ -1248,6 +1250,7 @@ start Yum Extender</property>
                             <property name="height_request">32</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Package Filelist</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
@@ -1266,6 +1269,7 @@ start Yum Extender</property>
                             <property name="height_request">32</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Package Requirements</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
