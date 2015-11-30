@@ -1615,6 +1615,7 @@ start Yum Extender</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Search (show/hide)</property>
             <property name="halign">start</property>
             <child>
               <object class="GtkImage" id="image1">
@@ -1635,6 +1636,7 @@ start Yum Extender</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Apply pending actions</property>
             <child>
               <object class="GtkImage" id="image2">
                 <property name="visible">True</property>
@@ -1654,6 +1656,7 @@ start Yum Extender</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Main menu</property>
             <property name="halign">start</property>
             <property name="popup">main_menu</property>
             <property name="direction">none</property>
@@ -1698,6 +1701,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Package names starting with search key</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
@@ -1713,6 +1717,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Package names containing search key</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">sch_opt_prefix</property>
@@ -1728,6 +1733,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Specified package fields containing search keys.</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">sch_opt_prefix</property>
@@ -1755,6 +1761,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Package name</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -1769,6 +1776,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Package summary</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -1783,6 +1791,7 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Package description</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
