@@ -65,15 +65,6 @@ class Preferences:
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
         self.repos = []
-        self.legacy_cleanup()
-
-    def legacy_cleanup(self):
-        """ Cleanup yumex-dnf 4.1.X leftovers"""
-        # autostart file was renamed from yumex-dnf.desktop to
-        # yumex-dnf-updater.desktop in 4.2.x
-        # so we need to remove the old one.
-        if os.path.exists(const.LEGACY_DESKTOP_FILE):
-            os.unlink(const.LEGACY_DESKTOP_FILE)
 
     def run(self):
         self.get_settings()

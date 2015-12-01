@@ -227,7 +227,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.iconify()
             return True
         else:
-            self.app.on_quit()
+            self.app.quit()
 
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
@@ -342,6 +342,9 @@ class Window(BaseWindow):
         # load custom styling from current theme
         self.load_custom_styling()
 
+        # legacy cleanup from 4.1.x
+        self.legacy_cleanup()
+
         # init vars
         self.cur_height = 0         # current window height
         self.cur_width = 0          # current windows width
@@ -368,6 +371,16 @@ class Window(BaseWindow):
             self.show_all()
             # setup default selections
             self.pkg_filter.set_active('updates')
+
+    def legacy_cleanup(self):
+        """ Cleanup yumex-dnf 4.1.X leftovers"""
+        # autostart file was renamed from yumex-dnf.desktop to
+        # yumex-dnf-updater.desktop in 4.2.x
+        # so we need to remove the old one.
+        if os.path.exists(const.LEGACY_DESKTOP_FILE):
+            logger.debug('removing legacy autostart: %s',
+                         const.LEGACY_DESKTOP_FILE)
+            os.unlink(const.LEGACY_DESKTOP_FILE)
 
 ###############################################################################
 # Gui Setup
