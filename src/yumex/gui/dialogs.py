@@ -72,7 +72,7 @@ class Preferences:
         # autostart file was renamed from yumex-dnf.desktop to
         # yumex-dnf-updater.desktop in 4.2.x
         # so we need to remove the old one.
-        if os.path.exits(const.LEGACY_DESKTOP_FILE):
+        if os.path.exists(const.LEGACY_DESKTOP_FILE):
             os.unlink(const.LEGACY_DESKTOP_FILE)
 
     def run(self):
