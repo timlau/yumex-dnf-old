@@ -27,6 +27,7 @@ import argparse
 import datetime
 import logging
 import os.path
+import shutil
 import subprocess
 import sys
 
@@ -377,10 +378,16 @@ class Window(BaseWindow):
         # autostart file was renamed from yumex-dnf.desktop to
         # yumex-dnf-updater.desktop in 4.2.x
         # so we need to remove the old one.
+        # and create a new one
         if os.path.exists(const.LEGACY_DESKTOP_FILE):
             logger.debug('removing legacy autostart: %s',
                          const.LEGACY_DESKTOP_FILE)
             os.unlink(const.LEGACY_DESKTOP_FILE)
+        if CONFIG.conf.autostart:
+            if not os.path.exists(const.USER_DESKTOP_FILE):
+                logger.debug('create autostart: %s',
+                             const.USER_DESKTOP_FILE)
+                shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
 
 ###############################################################################
 # Gui Setup

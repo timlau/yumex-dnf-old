@@ -47,10 +47,10 @@ else:
     MISC_DIR = DATA_DIR + "/../misc"
 
 HOME_DIR = os.environ['HOME']
-AUTOSTART_DIR = HOME_DIR + '/.config/autostart/'
-USER_DESKTOP_FILE = AUTOSTART_DIR + 'yumex-dnf-updater.desktop'
-SYS_DESKTOP_FILE = MISC_DIR + "yumex-dnf-updater.desktop"
-LEGACY_DESKTOP_FILE = AUTOSTART_DIR + "yumex-dnf.desktop"
+AUTOSTART_DIR = HOME_DIR + '/.config/autostart'
+USER_DESKTOP_FILE = AUTOSTART_DIR + '/yumex-dnf-updater.desktop'
+SYS_DESKTOP_FILE = MISC_DIR + "/yumex-dnf-updater.desktop"
+LEGACY_DESKTOP_FILE = AUTOSTART_DIR + "/yumex-dnf.desktop"
 
 
 ARCH = subprocess.check_output(
