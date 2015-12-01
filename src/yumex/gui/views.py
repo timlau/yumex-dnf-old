@@ -738,6 +738,10 @@ class PackageQueue:
 
 
 class QueueView(Gtk.TreeView):
+    __gsignals__ = {'queue-refresh': (GObject.SignalFlags.RUN_FIRST,
+                                    None,
+                                    (GObject.TYPE_INT,))
+                    }
 
     def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
@@ -853,6 +857,7 @@ class QueueView(Gtk.TreeView):
             self.populate_group_list(label, grps)
         self.populate_list_downgrade()
         self.expand_all()
+        self.emit('queue-refresh', self.queue.total())
 
     def populate_list(self, label, pkg_list):
         '''

@@ -491,8 +491,9 @@ class Window(BaseWindow):
         wid.connect('activate', self.on_docs)
         wid = self.get_ui('main_pref')
         wid.connect('activate', self.on_pref)
-        wid = self.get_ui('button_run')
-        wid.connect('clicked', self.on_apply_changes)
+        self.apply_button = self.get_ui('button_run')
+        self.apply_button.connect('clicked', self.on_apply_changes)
+        self.apply_button.set_sensitive(False)
         wid = self.get_ui('main_quit')
         wid.connect('activate', self.on_quit)
 
@@ -505,6 +506,7 @@ class Window(BaseWindow):
         """Setup Pending Action page."""
         queue_menu = self.get_ui('queue_menu')
         self.queue_view = views.QueueView(queue_menu)
+        self.queue_view.connect('queue-refresh', self.on_queue_refresh)
         # Queue Page
         sw = self.get_ui('queue_sw')
         sw.add(self.queue_view)
@@ -1032,6 +1034,13 @@ class Window(BaseWindow):
             self._refresh()
         if option in ['clean_instonly', 'clean_unused']:
             self._reset_on_error()
+
+    def on_queue_refresh(self, widget, total):
+        '''Handle content of the queue is changed.'''
+        if total > 0:
+            self.apply_button.set_sensitive(True)
+        else:
+            self.apply_button.set_sensitive(False)
 
     def on_arch_changed(self, widget, data):
         """Arch changed in arch menu callback."""
