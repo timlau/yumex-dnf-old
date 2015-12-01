@@ -196,6 +196,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                                        application=app)
         BaseYumex.__init__(self)
         self.app = app
+        self.connect('delete_event', self.on_delete_event)
         icon = Gtk.IconTheme.get_default().load_icon('yumex-dnf', 128, 0)
         self.set_icon(icon)
         self.ui = Gtk.Builder()
@@ -220,6 +221,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             return False
         else:
             return True
+
+    def on_delete_event(self, *args):
+        if CONFIG.conf.hide_on_close or self.is_working:
+            self.iconify()
+            return True
+        else:
+            self.app.on_quit()
 
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
@@ -386,6 +394,7 @@ class Window(BaseWindow):
         self._reset()
 
     def _setup_gui_installmode(self):
+        """setup minimal gui for doing actions from the cmd line."""
         self.set_default_size(50, 50)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
@@ -462,6 +471,8 @@ class Window(BaseWindow):
         wid.connect('activate', self.on_pref)
         wid = self.get_ui('button_run')
         wid.connect('clicked', self.on_apply_changes)
+        wid = self.get_ui('main_quit')
+        wid.connect('activate', self.on_quit)
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -625,10 +636,13 @@ class Window(BaseWindow):
                 0, CONFIG.conf.history_days)
             self.history_view.populate(result)
 
-    def _refresh_search(self):
+    def _refresh(self):
+        """Refresh package view, when arch filter is changed"""
         if self.last_search:
             self.last_search = None
             self.search_bar.signal()
+        else:
+            self.pkg_filter.set_active(self.pkg_filter.current)
 
     def _switch_to(self, page):
         if not self.active_page == page:
@@ -907,6 +921,11 @@ class Window(BaseWindow):
         if need_reset:
             self._reset()
 
+    def on_quit(self, widget):
+        """Quit Callback."""
+        if self.can_close():
+            self.app.quit()
+
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
@@ -988,7 +1007,7 @@ class Window(BaseWindow):
         logger.debug('session option : %s = %s' %
                      (option, getattr(CONFIG.session, option)))
         if option in ['newest_only']:  # search again
-            self._refresh_search()
+            self._refresh()
         if option in ['clean_instonly', 'clean_unused']:
             self._reset_on_error()
 
@@ -997,7 +1016,7 @@ class Window(BaseWindow):
         self.active_archs = data.split(',')
         logger.debug('arch-changed : %s' % self.active_archs)
         self.arch_filter.change(self.active_archs)
-        self._refresh_search()
+        self._refresh()
 
     def on_pkg_view_selection_changed(self, widget, pkg):
         """Handle package selection on package page."""
