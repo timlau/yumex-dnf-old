@@ -64,13 +64,6 @@ class TransactionSolveError(Exception):
         self.msgs = msgs
 
 
-def dbus_statusicon(cmd):
-    subprocess.call(
-        '/usr/bin/dbus-send --session --print-reply '
-        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.%s' % cmd,
-        shell=True)
-
-
 def dbus_dnfsystem(cmd):
     subprocess.call(
         '/usr/bin/dbus-send --system --print-reply '
