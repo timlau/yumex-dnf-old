@@ -65,6 +65,15 @@ class Preferences:
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
         self.repos = []
+        self.legacy_cleanup()
+
+    def legacy_cleanup(self):
+        """ Cleanup yumex-dnf 4.1.X leftovers"""
+        # autostart file was renamed from yumex-dnf.desktop to
+        # yumex-dnf-updater.desktop in 4.2.x
+        # so we need to remove the old one.
+        if os.path.exits(const.LEGACY_DESKTOP_FILE):
+            os.unlink(const.LEGACY_DESKTOP_FILE)
 
     def run(self):
         self.get_settings()
@@ -158,17 +167,14 @@ class Preferences:
     def handle_setting(self, option, state):
         if option == 'autostart':
             if state:  # create an autostart .desktop for current user
-                auto_dir = os.environ['HOME'] + "/.config/autostart"
-                if not os.path.isdir(auto_dir):
-                    logger.info("creating autostart directory : %s" % auto_dir)
-                    os.makedirs(auto_dir, 0o700)
-                shutil.copy(const.MISC_DIR + "/yumex-dnf-autostart.desktop",
-                            os.environ['HOME'] +
-                                       "/.config/autostart/yumex-dnf.desktop")
+                if not os.path.isdir(const.AUTOSTART_DIR):
+                    logger.info("creating autostart directory : %s",
+                                const.AUTOSTART_DIR)
+                    os.makedirs(const.AUTOSTART_DIR, 0o700)
+                shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
             else:  # remove the autostart file
-                os.unlink(
-                    os.environ['HOME'] +
-                    "/.config/autostart/yumex-dnf.desktop")
+                if os.path.exists(const.USER_DESKTOP_FILE):
+                    os.unlink(const.USER_DESKTOP_FILE)
 
 
 class TransactionResult:

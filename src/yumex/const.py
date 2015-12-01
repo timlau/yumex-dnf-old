@@ -23,6 +23,7 @@ from __future__ import absolute_import
 from gi.repository import Pango
 from yumex.misc import _
 
+import os
 import os.path
 import re
 import subprocess
@@ -44,6 +45,13 @@ else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
+
+HOME_DIR = os.environ['HOME']
+AUTOSTART_DIR = os.path.join(HOME_DIR, '/.config/autostart/')
+USER_DESKTOP_FILE = os.path.join(AUTOSTART_DIR, 'yumex-dnf-updater.desktop')
+SYS_DESKTOP_FILE = os.path.join(MISC_DIR, "yumex-dnf-updater.desktop")
+LEGACY_DESKTOP_FILE = os.path.join(AUTOSTART_DIR, "yumex-dnf.desktop")
+
 
 ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]

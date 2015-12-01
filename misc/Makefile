@@ -20,7 +20,7 @@ install: build
 	install -d $(DESTDIR)$(DATADIR)/appdata
 	install -m644 $(APPNAME).desktop $(DESTDIR)$(DATADIR)/applications/.
 	install -m644 $(APPNAME)-local.desktop $(DESTDIR)$(DATADIR)/applications/.
-	install -m644 $(APPNAME)-autostart.desktop $(DESTDIR)$(DATADIR)/$(APPNAME)/.
+	install -m644 $(APPNAME)-updater.desktop $(DESTDIR)$(DATADIR)/$(APPNAME)/.
 	install -m644 $(APPNAME).appdata.xml $(DESTDIR)$(DATADIR)/appdata/.
 
 .PHONY: all install clean build
