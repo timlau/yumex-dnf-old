@@ -295,7 +295,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         Gtk.main_quit()
         sys.exit(1)
 
-    def set_working(self, state, insensitive=False):
+    def set_working(self, state, insensitive=True):
         """Set the working state.
 
         - show/hide the progress spinner
@@ -307,11 +307,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.is_working = state
         if state:
             self._set_busy_cursor(insensitive)
-            self._disable_buttons(False)
+            if insensitive:
+                self._disable_buttons(False)
         else:
             self.infobar.hide()
             self._set_normal_cursor()
-            self._disable_buttons(True)
+            if insensitive:
+                self._disable_buttons(True)
 
     def _disable_buttons(self, state):
         WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',

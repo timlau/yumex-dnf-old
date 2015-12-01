@@ -656,7 +656,7 @@ class PackageInfo(PackageDetails):
             self.base.set_working(False)
 
     def _show_updateinfo(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         updinfo = self.current_package.updateinfo
         if updinfo:
             updinfo.reverse()
@@ -676,7 +676,7 @@ class PackageInfo(PackageDetails):
                                                 + "/updates"
                 self.add_url(url, url, newline=True)
 
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _write_update_info(self, upd_info):
         head = ""
@@ -727,7 +727,7 @@ class PackageInfo(PackageDetails):
         self.write(head)
 
     def _show_changelog(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         changelog = self.current_package.changelog
         if changelog:
             i = 0
@@ -751,24 +751,24 @@ class PackageInfo(PackageDetails):
                                                 + "/changelog"
                 self.add_url(url, url, newline=True)
 
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _show_filelist(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         filelist = self.current_package.filelist
         if filelist:
             for fname in sorted(filelist):
                 self.write(fname)
         else:
             self.write(_("No filelist information is available"))
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _show_requirements(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         reqs = self.current_package.requirements
         for key in reqs:
             self.write(key)
             for pkg_id in reqs[key]:
                 pkg = yumex.misc.id2fullname(pkg_id)
                 self.write(' --> {}'.format(pkg))
-        self.base.set_working(False)
+        self.base.set_working(False, False)
