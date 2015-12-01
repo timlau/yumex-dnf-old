@@ -1259,7 +1259,7 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="name">actions</property>
-                    <property name="title" translatable="yes">Actions</property>
+                    <property name="title" translatable="yes">Pending Actions</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -1432,56 +1432,6 @@ start Yum Extender</property>
   <object class="GtkMenu" id="main_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_packages">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show packages</property>
-        <property name="label" translatable="yes">Packages</property>
-        <property name="active">True</property>
-        <property name="draw_as_radio">True</property>
-        <accelerator key="1" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_groups">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show group &amp; categories</property>
-        <property name="label" translatable="yes">Groups</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="2" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_history">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show history of changes</property>
-        <property name="label" translatable="yes">History</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="3" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="main_actions">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show pending changes</property>
-        <property name="label" translatable="yes">Pending Changes</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">main_packages</property>
-        <accelerator key="4" signal="activate" modifiers="GDK_MOD1_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
     <child>
       <object class="GtkMenuItem" id="main_pref">
         <property name="visible">True</property>

@@ -410,8 +410,6 @@ class Content(GObject.GObject):
                                        (GObject.TYPE_STRING,)
                                        )}
 
-    MENUS = ['packages', 'groups', 'history', 'actions']
-
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
@@ -419,9 +417,6 @@ class Content(GObject.GObject):
         self.switcher = self.win.get_ui('main_switcher')
         # catch changes in active page in stack
         self._stack.connect('notify::visible-child', self.on_switch)
-        for key in Content.MENUS:
-            wid = self.win.get_ui('main_%s' % key)
-            wid.connect('activate', self.on_menu_select, key)
 
     def select_page(self, page):
         """Set the active page."""
