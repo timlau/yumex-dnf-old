@@ -58,7 +58,7 @@ class BaseYumex:
         now = datetime.datetime.now()
         refresh_period = datetime.timedelta(hours=CONFIG.conf.refresh_interval)
         # check if cache management is disabled
-        if refresh_period == 0:
+        if CONFIG.conf.refresh_interval == 0:
             return False
         if cache_type == 'session':
             last_refresh = datetime.datetime.strptime(
