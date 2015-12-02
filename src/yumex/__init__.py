@@ -363,7 +363,7 @@ class Window(BaseWindow):
         else:
             self.active_archs = list(const.PLATFORM_ARCH)
         self._grps = None   # Group and Category cache
-        self.active_page = None  # Active content page
+        self.active_page = 'packages'  # Active content page
         self.search_fields = CONFIG.conf.search_fields
 
         if self.install_mode:
