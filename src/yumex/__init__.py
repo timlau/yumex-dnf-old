@@ -541,13 +541,11 @@ class Window(BaseWindow):
 
     def _setup_history_page(self):
         """Setup the history page."""
-        hb = Gtk.Box()
-        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        right_sw = self.get_ui('history_right_sw')
+        left_sw = self.get_ui('history_left_sw')
         self.history_view = views.HistoryView(self)
-        hb.pack_start(self.history_view, False, False, 0)
-        hb.pack_start(self.history_view.pkg_view, True, True, 0)
-        sw = self.get_ui('history_sw')
-        sw.add(hb)
+        left_sw.add(self.history_view)
+        right_sw.add(self.history_view.pkg_view)
         # setup history buttons
         undo = self.get_ui('history_undo')
         undo.connect('clicked', self.on_history_undo)
