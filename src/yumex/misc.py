@@ -29,6 +29,7 @@ import gettext
 import locale
 import logging
 import os.path
+import re
 import subprocess
 import sys
 import yumex.config as config
@@ -108,6 +109,16 @@ def rgb_to_hex(r, g, b):
 
 def color_to_hex(color):
     return rgb_to_hex(color.red, color.green, color.blue)
+
+
+def is_url(url):
+    urls = re.findall(
+        '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
+        '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+    if urls:
+        return True
+    else:
+        return False
 
 
 def format_block(block, indent):

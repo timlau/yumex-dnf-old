@@ -1429,105 +1429,6 @@ start Yum Extender</property>
       </packing>
     </child>
   </object>
-  <object class="GtkMenu" id="main_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="main_pref">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Edit Preferences</property>
-        <property name="label" translatable="yes">Preferences</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_options">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Options</property>
-        <property name="label" translatable="yes">Options</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_newest_only">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Show only newest version of packages</property>
-                <property name="label" translatable="yes">Newest Only</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_clean_unused">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Uninstall unused requirements when removing a package</property>
-                <property name="label" translatable="yes">Erase Unused Requirements</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckMenuItem" id="option_clean_instonly">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Removing old version of installonly packages
-(ex. kernel)</property>
-                <property name="label" translatable="yes">Cleanup old Instonly packages </property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_help">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Help</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="main_about">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">About Yum Extender</property>
-                <property name="label" translatable="yes">About</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="main_doc">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Documentation (Online)</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="main_quit">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Quit Yum Extender</property>
-        <property name="label" translatable="yes">Quit</property>
-      </object>
-    </child>
-  </object>
   <object class="GtkHeaderBar" id="headerbar">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1601,14 +1502,10 @@ start Yum Extender</property>
           </packing>
         </child>
         <child>
-          <object class="GtkMenuButton" id="mainmenu_button">
+          <object class="GtkButton" id="mainmenu_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Main menu</property>
-            <property name="halign">start</property>
-            <property name="popup">main_menu</property>
-            <property name="direction">none</property>
             <child>
               <object class="GtkImage" id="image3">
                 <property name="visible">True</property>
@@ -1620,7 +1517,7 @@ start Yum Extender</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

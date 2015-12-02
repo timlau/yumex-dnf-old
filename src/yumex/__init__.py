@@ -460,8 +460,6 @@ class Window(BaseWindow):
         CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
         CONFIG.session.newest_only = CONFIG.conf.newest_only
         CONFIG.session.clean_unused = CONFIG.conf.clean_unused
-        self.options = widgets.Options(self)
-        self.options.connect('option-changed', self.on_option_changed)
         # setup the package/queue/history views
         self._setup_action_page()
         self._setup_package_page()
@@ -485,17 +483,11 @@ class Window(BaseWindow):
         self.preferences = dialogs.Preferences(self)
 
         # main menu setup
-        wid = self.get_ui('main_about')
-        wid.connect('activate', self.on_about)
-        wid = self.get_ui('main_doc')
-        wid.connect('activate', self.on_docs)
-        wid = self.get_ui('main_pref')
-        wid.connect('activate', self.on_pref)
+        self.main_menu = widgets.MainMenu(self)
+        self.main_menu.connect('menu-changed', self.on_mainmenu)
         self.apply_button = self.get_ui('button_run')
         self.apply_button.connect('clicked', self.on_apply_changes)
         self.apply_button.set_sensitive(False)
-        wid = self.get_ui('main_quit')
-        wid.connect('activate', self.on_quit)
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
@@ -563,7 +555,7 @@ class Window(BaseWindow):
 
     def _open_url(self, url):
         """Open URL in default browser."""
-        if self._is_url(url):  # just to be sure and prevent shell injection
+        if misc.is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call('xdg-open %s' % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
@@ -935,20 +927,33 @@ class Window(BaseWindow):
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('actions')
 
+    def on_mainmenu(self, widget, action, data):
+        """Handle mainmenu actions"""
+        if action == 'pref':
+            need_reset = self.preferences.run()
+            if need_reset:
+                self._reset()
+        elif action == 'quit':
+            if self.can_close():
+                self.app.quit()
+        elif action == 'about':
+            dialog = dialogs.AboutDialog()
+            dialog.run()
+            dialog.destroy()
+        elif action == 'docs':
+            self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
+        elif action in ['newest_only', 'clean_instonly', 'clean_unused']:
+            setattr(CONFIG.session, action, data)
+            logger.debug('session option : %s = %s' %
+                     (action, getattr(CONFIG.session, action)))
+            if action in ['newest_only']:  # search again
+                self._refresh()
+            if action in ['clean_instonly', 'clean_unused']:
+                self._reset_on_error()
+
     def on_apply_changes(self, widget):
         """Apply Changes button callback."""
         self._process_actions()
-
-    def on_pref(self, widget):
-        """Preferences selected callback."""
-        need_reset = self.preferences.run()
-        if need_reset:
-            self._reset()
-
-    def on_quit(self, widget):
-        """Quit Callback."""
-        if self.can_close():
-            self.app.quit()
 
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
@@ -966,17 +971,6 @@ class Window(BaseWindow):
         elif page == 'history':
             self._load_history()
         self.active_page = page
-
-    def on_about(self, widget):
-        """ Main Menu: Help -> About """
-        dialog = dialogs.AboutDialog()
-        dialog.run()
-        dialog.destroy()
-
-    def on_docs(self, widget):
-        """ Main Menu: Help -> Documentation"""
-        self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
-        pass
 
     def on_search(self, widget, key, sch_type, fields):
         """Handle search."""
@@ -1024,16 +1018,6 @@ class Window(BaseWindow):
             self.package_view.set_header_click(True)
         else:
             self.package_view.set_header_click(False)
-
-    def on_option_changed(self, widget, option, state):
-        """Handle changes in options."""
-        setattr(CONFIG.session, option, state)
-        logger.debug('session option : %s = %s' %
-                     (option, getattr(CONFIG.session, option)))
-        if option in ['newest_only']:  # search again
-            self._refresh()
-        if option in ['clean_instonly', 'clean_unused']:
-            self._reset_on_error()
 
     def on_queue_refresh(self, widget, total):
         '''Handle content of the queue is changed.'''
