@@ -906,7 +906,7 @@ class Window(BaseWindow):
 
         if event_and_modifiers != 0:
             # Open search bar on Ctrl + S
-            if (event.keyval == Gdk.KEY_s and
+            if (event.keyval == Gdk.KEY_f and
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
                 if self.active_page == 'packages':
                     self.search_bar.toggle()
