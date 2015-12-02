@@ -242,6 +242,11 @@ def logger_setup(logroot='yumex',
     logger.addHandler(handler)
 
 
+def is_gnome():
+    """Return True if desktop is Gnome."""
+    return os.environ.get("XDG_CURRENT_DESKTOP") == "GNOME"
+
+
 class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
@@ -266,10 +271,7 @@ class YumexConf(config.BaseConfig):
     system_refresh = config.Option('2000-01-01 00:01')
     refresh_interval = config.IntOption(12)
     # headerbar is default if running gnome
-    if 'GDMSESSION' in os.environ:
-        hb_default = 'gnome' in os.environ['GDMSESSION']
-    else:
-        hb_default = False
+    hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
     search_default = config.CaselessSelectionOption(
                             default='prefix',
