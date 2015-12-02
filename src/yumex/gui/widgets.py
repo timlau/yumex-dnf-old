@@ -768,19 +768,19 @@ class MainMenu(Gio.Menu):
                                                    self)
 
         option_menu = Gio.Menu()
-        self._add_menu_checkbox(option_menu, "Newest only", 'newest_only')
-        self._add_menu_checkbox(option_menu, "Erase unused requirements",
+        self._add_menu_checkbox(option_menu, _("Newest only"), 'newest_only')
+        self._add_menu_checkbox(option_menu, _("Erase unused requirements"),
                                'clean_unused')
-        self._add_menu_checkbox(option_menu, "Cleanup old instonly packages ",
+        self._add_menu_checkbox(option_menu, _("Cleanup old instonly packages "),
                                 'clean_instonly')
-        self.append_section("Options", option_menu)
+        self.append_section(_("Options"), option_menu)
         help_menu = Gio.Menu()
-        self._add_menu(help_menu, "About", 'about')
-        self._add_menu(help_menu, "Documentation", 'docs')
-        self.append_section("Help", help_menu)
+        self._add_menu(help_menu, _("About"), 'about')
+        self._add_menu(help_menu, _("Documentation"), 'docs')
+        self.append_section(_("Help"), help_menu)
         gen_menu = Gio.Menu()
-        self._add_menu(gen_menu, "Preferences", 'pref')
-        self._add_menu(gen_menu, "Quit", 'quit')
+        self._add_menu(gen_menu, _("Preferences"), 'pref')
+        self._add_menu(gen_menu, _("Quit"), 'quit')
         self.append_section(None, gen_menu)
 
     def _add_menu(self, menu, label, name):
