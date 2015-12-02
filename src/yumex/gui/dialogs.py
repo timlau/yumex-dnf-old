@@ -53,7 +53,7 @@ class Preferences:
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
     COLORS = ['color_install', 'color_update', 'color_normal',
                      'color_obsolete', 'color_downgrade']
-    FLAGS = ['autostart', 'clean_unused', 'newest_only', 'hide_on_close',
+    FLAGS = ['autostart', 'clean_unused', 'newest_only',
              'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
             ]
 

@@ -153,34 +153,6 @@ active when Yum Extender starts</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_hide_on_close">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Change the close action for the main window, so it just hides the
-window when the close button is clicked</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="label" translatable="yes">Close will only minimize window</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="pref_hide_on_close">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label_headerbar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -191,7 +163,7 @@ standard when using GNOME</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">1</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -204,7 +176,7 @@ standard when using GNOME</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -218,7 +190,7 @@ Yum Extender is started</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">6</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -230,7 +202,7 @@ Yum Extender is started</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">6</property>
                   </packing>
                 </child>
                 <child>

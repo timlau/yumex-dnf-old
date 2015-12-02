@@ -224,7 +224,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             return True
 
     def on_delete_event(self, *args):
-        if CONFIG.conf.hide_on_close or self.is_working:
+        if self.is_working:
             self.iconify()
             return True
         else:

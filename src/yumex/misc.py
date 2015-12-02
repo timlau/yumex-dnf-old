@@ -278,7 +278,6 @@ class YumexConf(config.BaseConfig):
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
     autocheck_updates = config.BoolOption(False)
-    hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
     refresh_interval = config.IntOption(12)
     # headerbar is default if running gnome
