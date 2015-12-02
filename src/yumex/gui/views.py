@@ -950,6 +950,10 @@ class HistoryView(Gtk.TreeView):
             dcat = ddict[d]
             self.model.append(dcat, [t, tid])
         self.collapse_all()
+        path = Gtk.TreePath.new_from_string("0:0:0:0")
+        self.expand_to_path(path)
+        self.get_selection().select_path(path)
+        self.on_cursor_changed(self)
         self.is_populated = True
 
     def on_cursor_changed(self, widget):
@@ -1060,6 +1064,7 @@ class HistoryPackageView(Gtk.TreeView):
                         pkg_id, st, is_inst = pkg_list[1]
                         name = self._fullname(pkg_id)
                         self.model.append(pkg_cat, [name])
+        self.expand_all()
 
     def _fullname(self, pkg_id):
         ''' Package fullname  '''
