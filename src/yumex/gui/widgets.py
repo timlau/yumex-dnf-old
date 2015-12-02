@@ -185,8 +185,8 @@ class SearchBar(GObject.GObject):
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self.search_type = 'prefix'
-        self.search_fields = ['name', 'summary']
+        self.search_type = CONFIG.conf.search_default
+        self.search_fields = CONFIG.conf.search_fields
         self.active = False
         # widgets
         self._bar = self.win.get_ui('search_bar')
@@ -274,6 +274,7 @@ class SearchBar(GObject.GObject):
         """Search type is changed."""
         if widget.get_active():
             self.search_type = key
+            CONFIG.conf.search_default = key
             if self.search_type == 'fields':
                 self._set_fields_sensitive(True)
             else:
@@ -282,6 +283,7 @@ class SearchBar(GObject.GObject):
     def on_fields_changed(self, widget, key):
         """Search fields is changed."""
         self.search_fields = self._get_active_field()
+        CONFIG.conf.search_fields = self.search_fields
 
     def on_entry_activate(self, widget):
         """Seach entry is activated"""

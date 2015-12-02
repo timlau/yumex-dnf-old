@@ -390,6 +390,9 @@ class Window(BaseWindow):
                 logger.debug('create autostart: %s',
                              const.USER_DESKTOP_FILE)
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
+        # key is renamed to keyword
+        if CONFIG.conf.search_default == 'key':
+            CONFIG.conf.search_default = 'keyword'
 
 ###############################################################################
 # Gui Setup

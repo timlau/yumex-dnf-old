@@ -285,7 +285,7 @@ class YumexConf(config.BaseConfig):
     headerbar = config.BoolOption(hb_default)
     search_default = config.CaselessSelectionOption(
                             default='prefix',
-                            allowed=('prefix', 'key', 'fields'))
+                            allowed=('prefix', 'keyword', 'fields', 'key'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)
