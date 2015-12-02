@@ -1045,8 +1045,9 @@ class HistoryPackageView(Gtk.TreeView):
         # apply packages to model in right order
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
-                cat = self.model.append(
-                    None, ["<b>%s</b>" % const.HISTORY_STATE_LABLES[state]])
+                num = len(states[state])
+                cat = self.model.append(None, ["<b>%s (%i)</b>" %
+                          (const.HISTORY_STATE_LABLES[state], num)])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
