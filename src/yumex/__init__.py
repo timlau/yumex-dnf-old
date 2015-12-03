@@ -500,6 +500,10 @@ class Window(BaseWindow):
         # shortcuts
         self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
         self.app.set_accels_for_action('win.docs', ['F1'])
+        self.app.set_accels_for_action('win.newest_only(true)', ['<Alt>N'])
+        self.app.set_accels_for_action('win.clean_unused(true)', ['<Alt>E'])
+        self.app.set_accels_for_action('win.clean_instonly(true)', ['<Alt>C'])
+        self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
 
     def _setup_action_page(self):
         """Setup Pending Action page."""
