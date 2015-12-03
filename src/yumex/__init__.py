@@ -497,6 +497,10 @@ class Window(BaseWindow):
         self.arch_filter.set_active(True)
         self.arch_filter.change(self.active_archs)
 
+        # shortcuts
+        self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
+        self.app.set_accels_for_action('win.docs', ['F1'])
+
     def _setup_action_page(self):
         """Setup Pending Action page."""
         queue_menu = self.get_ui('queue_menu')
@@ -919,14 +923,34 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_2 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('groups')
-            # Switch to groups page on Alt + 3
+            # Switch to history page on Alt + 3
             if (event.keyval == Gdk.KEY_3 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('history')
-            # Switch to groups page on Alt + 4
+            # Switch to queue page on Alt + 4
             if (event.keyval == Gdk.KEY_4 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('actions')
+            # Filter = 'updates' on Ctrl + 1
+            if (event.keyval == Gdk.KEY_1 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('updates')
+            # Filter = 'installed' on Ctrl + 2
+            if (event.keyval == Gdk.KEY_2 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('installed')
+            # Filter = 'available' on Ctrl + 3
+            if (event.keyval == Gdk.KEY_3 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('available')
+            # Filter = 'all' on Ctrl + 4
+            if (event.keyval == Gdk.KEY_4 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('all')
 
     def on_mainmenu(self, widget, action, data):
         """Handle mainmenu actions"""

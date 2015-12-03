@@ -773,7 +773,8 @@ class MainMenu(Gio.Menu):
         self._add_menu_checkbox(option_menu, _("Newest only"), 'newest_only')
         self._add_menu_checkbox(option_menu, _("Erase unused requirements"),
                                'clean_unused')
-        self._add_menu_checkbox(option_menu, _("Cleanup old instonly packages "),
+        self._add_menu_checkbox(option_menu,
+                                _("Cleanup old instonly packages "),
                                 'clean_instonly')
         self.append_section(_("Options"), option_menu)
         help_menu = Gio.Menu()
