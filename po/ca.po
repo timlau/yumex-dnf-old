@@ -1,0 +1,858 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Robert Antoni Buj i Gelonch <rbuj@fedoraproject.org>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Yum Extender\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-02 18:49+0100\n"
+"PO-Revision-Date: 2015-12-05 09:14+0000\n"
+"Last-Translator: Robert Antoni Buj i Gelonch <rbuj@fedoraproject.org>\n"
+"Language-Team: Catalan (http://www.transifex.com/timlau/yumex/language/ca/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/yumex/__init__.py:112 ../src/yumex/old_init.py:137
+msgid "Refreshing Repository Metadata"
+msgstr "Refrescament de les metadades del dipòsit"
+
+#: ../src/yumex/__init__.py:119 ../src/yumex/old_init.py:144
+msgid "Could not refresh the DNF cache (root)"
+msgstr "No s'ha pogut refrescar la memòria cau de DNF (root)"
+
+#: ../src/yumex/__init__.py:124 ../src/yumex/old_init.py:149
+msgid ""
+"DNF root backend was not authorized.\n"
+"Yum Extender will exit"
+msgstr "El programari específic de root per a DNF, no va ser autoritzat.\n«Yum Extender» es tancarà"
+
+#: ../src/yumex/__init__.py:129 ../src/yumex/old_init.py:154
+msgid ""
+"DNF is locked by another process.\n"
+"\n"
+"Yum Extender will exit"
+msgstr "DNF està bloquejat per un altre procés\n\n«Yum Extender» es tancarà"
+
+#: ../src/yumex/__init__.py:623
+msgid "Reloading package information..."
+msgstr "Recàrrega de la informació del paquet..."
+
+#: ../src/yumex/__init__.py:746 ../src/yumex/__init__.py:829
+#: ../src/yumex/old_init.py:266 ../src/yumex/old_init.py:1047
+msgid "Searching for dependencies"
+msgstr "Cerca per si hi ha dependències"
+
+#: ../src/yumex/__init__.py:748 ../src/yumex/__init__.py:831
+#: ../src/yumex/old_init.py:268 ../src/yumex/old_init.py:1049
+msgid "Dependencies resolved"
+msgstr "S'han resolt les dependències"
+
+#. Ok pressed
+#: ../src/yumex/__init__.py:762 ../src/yumex/__init__.py:839
+#: ../src/yumex/dnf_backend.py:206 ../src/yumex/old_init.py:276
+#: ../src/yumex/old_init.py:1063
+msgid "Applying changes to the system"
+msgstr "Aplicació dels canvis al sistema"
+
+#: ../src/yumex/__init__.py:787 ../src/yumex/old_init.py:1088
+msgid "Error checking package signatures\n"
+msgstr "Error en la comprovació de les signatures dels paquets\n"
+
+#: ../src/yumex/__init__.py:793 ../src/yumex/old_init.py:1094
+msgid "Downloading error(s)\n"
+msgstr "Errors en la baixada\n"
+
+#: ../src/yumex/__init__.py:799 ../src/yumex/old_init.py:1100
+msgid "Error in transaction\n"
+msgstr "Error en la transacció\n"
+
+#: ../src/yumex/__init__.py:814 ../src/yumex/old_init.py:254
+#, python-format
+msgid "Installing package: %s"
+msgstr "S'instal·la el paquet: %s"
+
+#: ../src/yumex/__init__.py:815
+#, python-format
+msgid "%s was installed successfully"
+msgstr "%s es va instal·lar correctament"
+
+#: ../src/yumex/__init__.py:820 ../src/yumex/old_init.py:259
+#, python-format
+msgid "Removing package: %s"
+msgstr "Se suprimeix el paquet: %s"
+
+#: ../src/yumex/__init__.py:821
+#, python-format
+msgid "%s was removed successfully"
+msgstr "%s es va suprimir correctament"
+
+#: ../src/yumex/__init__.py:826 ../src/yumex/old_init.py:264
+msgid "Updating all available updates"
+msgstr "Actualització de totes les actualitzacions disponibles"
+
+#: ../src/yumex/__init__.py:827
+msgid "Available updates was applied successfully"
+msgstr "Les actualitzacions disponibles es van instal·lar correctament"
+
+#: ../src/yumex/__init__.py:846 ../src/yumex/__init__.py:896
+#: ../src/yumex/old_init.py:286 ../src/yumex/old_init.py:1149
+msgid "Error(s) in search for dependencies"
+msgstr "Errors en la cerca de dependències"
+
+#: ../src/yumex/__init__.py:862 ../src/yumex/old_init.py:1115
+msgid "Preparing system for applying changes"
+msgstr "Preparació del sistema per a l'aplicació dels canvis"
+
+#: ../src/yumex/__init__.py:873 ../src/yumex/old_init.py:1126
+msgid "Can't remove protected package(s)"
+msgstr "No es poden suprimir els paquets protegits"
+
+#: ../src/yumex/__init__.py:887 ../src/yumex/old_init.py:1140
+msgid "No pending actions in queue"
+msgstr "No hi ha accions pendents a la cua"
+
+#: ../src/yumex/__init__.py:891 ../src/yumex/old_init.py:1144
+msgid "Error(s) in building transaction"
+msgstr "Errors en la construcció de la transacció"
+
+#: ../src/yumex/__init__.py:1013 ../src/yumex/old_init.py:789
+msgid "Adding packages to view"
+msgstr "Afegiment dels paquets a la vista"
+
+#: ../src/yumex/__init__.py:1064 ../src/yumex/old_init.py:728
+msgid "Error in undo history transaction"
+msgstr "Error en desfer la transacció de l'històric"
+
+#: ../src/yumex/dnf_backend.py:181
+#, python-format
+msgid ""
+"dnfdaemon api version : %d\n"
+"don't match\n"
+"needed api version : %d"
+msgstr "versió de l'API de dnfdaemon: %d\nno coincideix amb la\nversió necessària de l'API: %d"
+
+#: ../src/yumex/dnf_backend.py:191
+msgid "Downloading packages"
+msgstr "Baixada dels paquets"
+
+#: ../src/yumex/dnf_backend.py:197
+msgid "Checking package signatures"
+msgstr "Comprovació de les signatures dels paquets"
+
+#: ../src/yumex/dnf_backend.py:210
+msgid "Verify changes on the system"
+msgstr "Verifica els canvis al sistema"
+
+#: ../src/yumex/dnf_backend.py:246
+#, python-format
+msgid "Downloading %d files (%sB)..."
+msgstr "S'estan baixant %d fitxers (%sB)..."
+
+#: ../src/yumex/const.py:129
+msgid "Getting installed packages"
+msgstr "Obtenció dels paquets instal·lats"
+
+#: ../src/yumex/const.py:130
+msgid "Getting available packages"
+msgstr "Obtenció dels paquets disponibles"
+
+#: ../src/yumex/const.py:131
+msgid "Getting available updates"
+msgstr "Obtenció de les actualitzacions disponibles"
+
+#: ../src/yumex/const.py:132
+msgid "Getting all packages"
+msgstr "Obtenció de tots els paquets"
+
+#: ../src/yumex/const.py:145
+msgid "Updated packages"
+msgstr "Paquets actualitzats"
+
+#: ../src/yumex/const.py:146
+msgid "Downgraded packages"
+msgstr "Paquets revertits"
+
+#: ../src/yumex/const.py:147
+msgid "Obsoleting packages"
+msgstr "Devaluació dels paquets"
+
+#: ../src/yumex/const.py:148
+msgid "Obsoleted packages"
+msgstr "Paquets devaluats"
+
+#: ../src/yumex/const.py:149
+msgid "Erased packages"
+msgstr "Paquets esborrats"
+
+#: ../src/yumex/const.py:150 ../src/yumex/const.py:151
+msgid "Installed packages"
+msgstr "Paquets instal·lats"
+
+#: ../src/yumex/const.py:152
+msgid "Installed for dependencies"
+msgstr "S'ha instal·lat per les dependències"
+
+#: ../src/yumex/const.py:153
+msgid "Reinstalled packages"
+msgstr "Paquets reinstal·lats"
+
+#: ../src/yumex/const.py:157
+msgid "Installing"
+msgstr "Instal·lació"
+
+#: ../src/yumex/const.py:158
+msgid "Updating"
+msgstr "Actualització"
+
+#: ../src/yumex/const.py:159
+msgid "Removing"
+msgstr "Supressió"
+
+#: ../src/yumex/const.py:160
+msgid "Downgrading"
+msgstr "Reversió"
+
+#: ../src/yumex/const.py:161
+msgid "Replacing"
+msgstr "Substitució"
+
+#: ../src/yumex/const.py:165
+#, python-format
+msgid "Updating: %s"
+msgstr "S'actualitza: %s"
+
+#: ../src/yumex/const.py:166
+#, python-format
+msgid "Installing: %s"
+msgstr "S'instal·la: %s"
+
+#: ../src/yumex/const.py:167
+#, python-format
+msgid "Reinstalling: %s"
+msgstr "Es reinstal·la: %s"
+
+#: ../src/yumex/const.py:168
+#, python-format
+msgid "Cleanup: %s"
+msgstr "Es neteja: %s"
+
+#: ../src/yumex/const.py:169
+#, python-format
+msgid "Removing: %s"
+msgstr "Se suprimeix: %s"
+
+#: ../src/yumex/const.py:170
+#, python-format
+msgid "Obsoleting: %s"
+msgstr "Es devalua: %s"
+
+#: ../src/yumex/const.py:171
+#, python-format
+msgid "Downgrading: %s"
+msgstr "Es reverteix: %s"
+
+#: ../src/yumex/const.py:172
+#, python-format
+msgid "Verifying: %s"
+msgstr "Es verifica: %s"
+
+#: ../src/yumex/const.py:182
+msgid "Bugfix"
+msgstr "Correcció d'errors"
+
+#: ../src/yumex/const.py:183
+msgid "New Package"
+msgstr "Nou paquet"
+
+#: ../src/yumex/const.py:184
+msgid "Security"
+msgstr "Seguretat"
+
+#: ../src/yumex/const.py:185
+msgid "Enhancement"
+msgstr "Millora"
+
+#: ../src/yumex/old_init.py:283
+msgid "Changes was successfully applied to the system"
+msgstr "Els canvis s'han aplicat amb èxit al sistema"
+
+#: ../src/yumex/old_init.py:1305
+msgid ""
+"\n"
+"\n"
+"Yum Extender will close"
+msgstr "\n\n«Yum Extender» es tancarà"
+
+#: ../src/yumex/old_init.py:1307
+msgid "Error in starting notification icon"
+msgstr "Error en iniciar la icona de notificació"
+
+#: ../src/yumex/old_init.py:1331
+msgid "Yum Extender will close"
+msgstr "«Yum Extender» es tancarà"
+
+#: ../src/yumex/old_init.py:1333
+msgid "Error in locking notification icon"
+msgstr "Error en bloquejar la icona de notificació"
+
+#. timeout 10s
+#: ../src/yumex/updater.py:68
+msgid "Not Now"
+msgstr "Ara no"
+
+#: ../src/yumex/updater.py:70
+msgid "Show Updates"
+msgstr "Mostra les actualitzacions"
+
+#: ../src/yumex/updater.py:165
+msgid "New Updates"
+msgstr "Noves actualitzacions"
+
+#: ../src/yumex/updater.py:166
+#, python-format
+msgid "%s available updates"
+msgstr "%s actualitzacions disponibles"
+
+#: ../src/yumex/gui/views.py:256
+msgid "Click to install all/remove all"
+msgstr "Feu clic per instal·lar-ho o suprimir-ho tot"
+
+#: ../src/yumex/gui/views.py:261
+msgid "Click to select/deselect all"
+msgstr "Feu clic per seleccionar-ho o deseleccionar-ho tot"
+
+#: ../src/yumex/gui/views.py:273
+msgid "Package"
+msgstr "Paquet"
+
+#: ../src/yumex/gui/views.py:275
+msgid "Ver."
+msgstr "Ver."
+
+#: ../src/yumex/gui/views.py:277
+msgid "Arch."
+msgstr "Arq."
+
+#: ../src/yumex/gui/views.py:279
+msgid "click to filter archs"
+msgstr "feu clic per filtrar les arquitectures"
+
+#: ../src/yumex/gui/views.py:280 ../src/yumex/gui/views.py:769
+#: ../src/yumex.ui.h:73
+msgid "Summary"
+msgstr "Resum"
+
+#: ../src/yumex/gui/views.py:281
+msgid "Repo."
+msgstr "Dip."
+
+#: ../src/yumex/gui/views.py:282 ../src/yumex/gui/dialogs.py:210
+msgid "Size"
+msgstr "Mida"
+
+#: ../src/yumex/gui/views.py:321
+msgid "Reinstall Package"
+msgstr "Reinstal·la el paquet"
+
+#: ../src/yumex/gui/views.py:336
+msgid "Downgrade Package"
+msgstr "Reverteix el paquet"
+
+#: ../src/yumex/gui/views.py:764 ../src/yumex.ui.h:54
+msgid "Packages"
+msgstr "Paquets"
+
+#: ../src/yumex/gui/views.py:894
+#, python-format
+msgid "<b>Downgrade to</b> %s "
+msgstr "<b>Reverteix a</b> %s "
+
+#: ../src/yumex/gui/views.py:917
+msgid "History (Date/Time)"
+msgstr "Històric (data/hora)"
+
+#: ../src/yumex/gui/views.py:994
+msgid "History Packages"
+msgstr "Paquets de l'històric"
+
+#. Setup reponame & repofile column's
+#: ../src/yumex/gui/views.py:1082 ../src/yumex/gui/views.py:1129
+#: ../src/yumex/gui/dialogs.py:209
+msgid "Repository"
+msgstr "Dipòsit"
+
+#: ../src/yumex/gui/views.py:1082
+msgid "Filename"
+msgstr "Nom de fitxer"
+
+#: ../src/yumex/gui/views.py:1113
+msgid ""
+"Click here to switch between\n"
+" none/all/default selected"
+msgstr "Feu clic aquí per seleccionar entre\n cap/tot/predeterminat"
+
+#: ../src/yumex/gui/views.py:1130 ../src/yumex/gui/dialogs.py:206
+#: ../src/yumex.ui.h:71
+msgid "Name"
+msgstr "Nom"
+
+#: ../src/yumex/gui/dialogs.py:207
+msgid "Arch"
+msgstr "Arquitectura"
+
+#: ../src/yumex/gui/dialogs.py:208
+msgid "Ver"
+msgstr "Ver."
+
+#: ../src/yumex/gui/dialogs.py:251
+msgid "<b>replacing</b> {}"
+msgstr "<b>se substitueix</b> {}"
+
+#: ../src/yumex/gui/dialogs.py:287
+#, python-format
+msgid ""
+" Do you want to import this GPG key\n"
+" needed to verify the %s package?\n"
+"\n"
+" Key        : 0x%s:\n"
+" Userid     : \"%s\"\n"
+" From       : %s"
+msgstr " Voleu importar aquesta clau GPG necessària\n per verificar el paquet %s?\n\n Clau       : 0x%s:\n IdUsuari   : \"%s\"\n De         : %s"
+
+#: ../src/yumex/gui/widgets.py:116
+msgid "Getting Package Metadata"
+msgstr "Obtenció de les metadades del paquet"
+
+#: ../src/yumex/gui/widgets.py:621
+#, python-format
+msgid "Tags: %s\n"
+msgstr "Etiquetes: %s\n"
+
+#: ../src/yumex/gui/widgets.py:626
+msgid "Links: "
+msgstr "Enllaços:"
+
+#: ../src/yumex/gui/widgets.py:649
+msgid "No update information is available"
+msgstr "No hi ha disponible cap informació de l'actualització"
+
+#: ../src/yumex/gui/widgets.py:651
+msgid ""
+"\n"
+"Fedora Updates:"
+msgstr "\nActualitzacions de Fedora:"
+
+#: ../src/yumex/gui/widgets.py:661
+msgid "Release"
+msgstr "Llançament"
+
+#: ../src/yumex/gui/widgets.py:662
+msgid "Type"
+msgstr "Tipus"
+
+#. head += ("%14s " % _("Status")) + ": %(status)s\n"
+#: ../src/yumex/gui/widgets.py:665
+msgid "Issued"
+msgstr "emès"
+
+#: ../src/yumex/gui/widgets.py:702 ../src/yumex.ui.h:75
+msgid "Description"
+msgstr "Descripció"
+
+#: ../src/yumex/gui/widgets.py:724
+msgid "No changelog information is available"
+msgstr "No hi ha disponible cap informació del registre de canvis"
+
+#: ../src/yumex/gui/widgets.py:726
+msgid ""
+"\n"
+"Online Changelog:"
+msgstr "\nRegistre de canvis en línia:"
+
+#: ../src/yumex/gui/widgets.py:741
+msgid "No filelist information is available"
+msgstr "No hi ha disponible cap informació del llistat dels fitxers"
+
+#: ../src/yumex/gui/widgets.py:771
+msgid "Newest only"
+msgstr "Únicament les versions més noves"
+
+#: ../src/yumex/gui/widgets.py:772
+msgid "Erase unused requirements"
+msgstr "Esborra els requeriments no utilitzats"
+
+#: ../src/yumex/gui/widgets.py:774
+msgid "Cleanup old instonly packages "
+msgstr "Neteja els paquets antics «instonly»"
+
+#: ../src/yumex/gui/widgets.py:776
+msgid "Options"
+msgstr "Opcions"
+
+#: ../src/yumex/gui/widgets.py:778
+msgid "About"
+msgstr "Quant a"
+
+#: ../src/yumex/gui/widgets.py:779
+msgid "Documentation"
+msgstr "Documentació"
+
+#: ../src/yumex/gui/widgets.py:780
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../src/yumex/gui/widgets.py:782 ../src/yumex.ui.h:1
+msgid "Preferences"
+msgstr "Preferències"
+
+#: ../src/yumex/gui/widgets.py:783
+msgid "Quit"
+msgstr "Surt"
+
+#: ../misc/yumex-dnf-local.desktop.in.h:1
+msgid "Yumex Package Installer"
+msgstr "Instal·lador de paquets Yumex"
+
+#: ../misc/yumex-dnf-local.desktop.in.h:2
+msgid "Install local packages on system"
+msgstr "Instal·la els paquets locals al sistema"
+
+#: ../misc/yumex-dnf.desktop.in.h:1
+msgid "Yum Extender (DNF)"
+msgstr "Yum Extender (DNF)"
+
+#: ../misc/yumex-dnf.desktop.in.h:2
+msgid "Install, update and remove applications"
+msgstr "Instal·leu, actualitzeu i suprimiu les aplicacions"
+
+#: ../misc/yumex-dnf.desktop.in.h:3
+msgid "Software Installer"
+msgstr "Instal·lador de programari"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:1
+msgid "Graphical package manager"
+msgstr "Gestor gràfic de paquets"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:2
+msgid ""
+"Yum Extender is a graphical package management application. It allows you to"
+" search and browse for packages to install, remove and update on your "
+"computer."
+msgstr "«Yum Extender» és una aplicació gràfica de gestió de paquets. Us permet buscar i navegar pels paquets per instal·lar-los, suprimir-los i actualitzar-los al vostre ordinador."
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:3
+msgid ""
+"It is designed to give you full control over the packages on your computer "
+"and to be used by all users."
+msgstr "Està dissenyat per donar-vos el control total sobre els paquets a l'ordinador i per ser utilitzat per tots els usuaris."
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:4
+msgid "Features:"
+msgstr "Característiques:"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:5
+msgid "Browse packages available for installation or update"
+msgstr "Navega pels paquets disponibles per instal·lar o actualitzar"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:6
+msgid "Browse packages installed on your computer"
+msgstr "Navega pels paquets instal·lats al vostre ordinador"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:7
+msgid "Search packages by name, summary, description"
+msgstr "Cerca paquets per nom, resum i descripció"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:8
+msgid "Watch the history of package action on your system"
+msgstr "Observa l'històric d'accions de paquet al vostre sistema"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:9
+msgid "Browse and install/remove package groups"
+msgstr "Navega i instal·la/suprimeix els grups de paquets"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:10
+msgid "Browse packages by size, repository"
+msgstr "Navega pels paquets segons la mida, dipòsit"
+
+#: ../misc/yumex-dnf.appdata.xml.in.h:11
+msgid "Control what package repositories are enabled for the current session"
+msgstr "Controla quins dipòsits de paquets estan habilitats per a la sessió en curs"
+
+#: ../src/yumex.ui.h:2
+msgid "OK"
+msgstr "D'acord"
+
+#: ../src/yumex.ui.h:3
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: ../src/yumex.ui.h:4
+msgid ""
+"Show newest only is active when\n"
+"Yum Extender starts.\n"
+"Will show only latest version of available\n"
+"packages"
+msgstr "Mostra únicament les versions més noves,\nestà habilitat quan s'inicia «Yum Extender».\nMostrarà únicament les versions més noves\ndels paquets disponibles"
+
+#: ../src/yumex.ui.h:8
+msgid "Default: Show newest only"
+msgstr "Per defecte: Mostra únicament les versions més noves"
+
+#: ../src/yumex.ui.h:9
+msgid ""
+"Erase unused requirement option is\n"
+"active when Yum Extender starts"
+msgstr "L'opció per esborrar els paquets no utilitzats\nestà habilitada quan s'inicia «Yum Extender»"
+
+#: ../src/yumex.ui.h:11
+msgid "Default: Erase Unused Requirements"
+msgstr "Per defecte: Esborra els requeriments no utilitzats"
+
+#: ../src/yumex.ui.h:12
+msgid ""
+"Change the close action for the main window, so it just hides the\n"
+"window when the close button is clicked"
+msgstr "Canvieu l'acció de tancament de la finestra principal, de manera\nque només amagui la finestra quan es faci clic al botó «Tanca»"
+
+#: ../src/yumex.ui.h:14
+msgid "Close will only minimize window"
+msgstr "«Tanca» únicament minimitza la finestra"
+
+#: ../src/yumex.ui.h:15
+msgid ""
+"Use the toolbar in the header of the window\n"
+"standard when using GNOME"
+msgstr "Utilitza la barra d'eines en la capçalera de la\nfinestra estàndard quan s'utilitzi GNOME"
+
+#: ../src/yumex.ui.h:17
+msgid "Show toolbar in window headerbar"
+msgstr "Mostra la barra d'eines a la barra de capçalera de la finestra"
+
+#: ../src/yumex.ui.h:18
+msgid ""
+"Select all available updates when \n"
+"Yum Extender is started"
+msgstr "Selecciona totes les actualitzacions disponibles\nquan s'inicia «Yum Extender»"
+
+#: ../src/yumex.ui.h:20
+msgid "Select updates at startup"
+msgstr "Selecciona les actualitzacions al començament"
+
+#: ../src/yumex.ui.h:21
+msgid ""
+"The interval in hour, when the DNF cache will be expired and updated (0 = "
+"disabled)"
+msgstr "L'interval en hores, en què expirarà i s'actualitzarà la memòria cau de DN (0 = inhabilitat)"
+
+#: ../src/yumex.ui.h:22
+msgid "Cache expire interval (hours)"
+msgstr "Interval d'expiració de la memòria cau (hores)"
+
+#: ../src/yumex.ui.h:23
+msgid "12"
+msgstr "12"
+
+#: ../src/yumex.ui.h:24
+msgid "Default: Cleanup Old Installonly packages"
+msgstr "Per defecte: Neteja els paquets antics «installonly»"
+
+#: ../src/yumex.ui.h:25
+msgid "Number of installonly packages to keep"
+msgstr "Nombre de paquets «installonly» a mantenir"
+
+#: ../src/yumex.ui.h:26
+msgid "3"
+msgstr "3"
+
+#: ../src/yumex.ui.h:27
+msgid "Settings"
+msgstr "Ajusts"
+
+#: ../src/yumex.ui.h:28
+msgid "Autostart the Yum Extender update checker at user login"
+msgstr "Inicia automàticament el comprovador de «Yum Extender» a l'inici de sessió de l'usuari"
+
+#: ../src/yumex.ui.h:29
+msgid "Start update checker at user login"
+msgstr "Inicia el comprovador d'actualitzacions a l'inici de sessió de l'usuari"
+
+#: ../src/yumex.ui.h:30
+msgid "How often the update checker will run"
+msgstr "Amb quina freqüència s'ha d'executar el comprovador"
+
+#: ../src/yumex.ui.h:31
+msgid "Update check interval (minutes)"
+msgstr "Interval de comprovació d'actualitzacions (minuts)"
+
+#: ../src/yumex.ui.h:32
+msgid "Update Checker"
+msgstr "Comprovador d'actualitzacions"
+
+#: ../src/yumex.ui.h:33
+msgid "Color for installed packages"
+msgstr "Color per als paquets instal·lats"
+
+#: ../src/yumex.ui.h:34
+msgid "Color for available updates"
+msgstr "Color per a les actualitzacions disponibles"
+
+#: ../src/yumex.ui.h:35
+msgid "Color for available packages"
+msgstr "Color per als paquets disponibles"
+
+#: ../src/yumex.ui.h:36
+msgid "Color for obsoleted packages"
+msgstr "Color per als paquets devaluats"
+
+#: ../src/yumex.ui.h:37
+msgid "Color for available downgrades"
+msgstr "Color per a les reversions disponibles"
+
+#: ../src/yumex.ui.h:38
+msgid "Advanced"
+msgstr "Avançat"
+
+#: ../src/yumex.ui.h:39
+msgid "Repositories used in current session"
+msgstr "Dipòsits utilitzats en la sessió actual"
+
+#: ../src/yumex.ui.h:40
+msgid ""
+"Save the current selected repositories\n"
+"so they will be used next time you\n"
+"start Yum Extender"
+msgstr "Deseu els dipòsits seleccionats actualment\ni es podran utilitzar un altre cop que\ninicieu «Yum Extender»"
+
+#: ../src/yumex.ui.h:43
+msgid "Save selected repositories"
+msgstr "Desa els dipòsits seleccionats"
+
+#: ../src/yumex.ui.h:44
+msgid "Repositories"
+msgstr "Dipòsits"
+
+#: ../src/yumex.ui.h:45
+msgid "label"
+msgstr "etiqueta"
+
+#: ../src/yumex.ui.h:46
+msgid "Show available updates"
+msgstr "Mostra les actualitzacions disponibles"
+
+#: ../src/yumex.ui.h:47
+msgid "Updates"
+msgstr "Actualitzacions"
+
+#: ../src/yumex.ui.h:48
+msgid "Show installed packages"
+msgstr "Mostra els paquets instal·lats"
+
+#: ../src/yumex.ui.h:49
+msgid "Installed"
+msgstr "Instal·lat"
+
+#: ../src/yumex.ui.h:50
+msgid "Show available packages"
+msgstr "Mostra els paquets disponibles"
+
+#: ../src/yumex.ui.h:51
+msgid "Available"
+msgstr "Disponible"
+
+#: ../src/yumex.ui.h:52
+msgid "Show all packages"
+msgstr "Mostra tots els paquets"
+
+#: ../src/yumex.ui.h:53
+msgid "All"
+msgstr "Tot"
+
+#: ../src/yumex.ui.h:55
+msgid "Groups"
+msgstr "Grups"
+
+#: ../src/yumex.ui.h:56
+msgid "Undo"
+msgstr "Desfés"
+
+#: ../src/yumex.ui.h:57
+msgid "History"
+msgstr "Històric"
+
+#: ../src/yumex.ui.h:58
+msgid "Pending Actions"
+msgstr "Accions pendents"
+
+#: ../src/yumex.ui.h:59
+msgid "Package Description"
+msgstr "Descripció del paquet"
+
+#: ../src/yumex.ui.h:60
+msgid "Package Update Information"
+msgstr "Informació de l'actualització del paquet"
+
+#: ../src/yumex.ui.h:61
+msgid "Package Filelist"
+msgstr "Llista dels fitxers del paquet"
+
+#: ../src/yumex.ui.h:62
+msgid "Package Requirements"
+msgstr "Requeriments del paquet"
+
+#: ../src/yumex.ui.h:63
+msgid "Search (show/hide)"
+msgstr "Cerca (mostra/oculta)"
+
+#: ../src/yumex.ui.h:64
+msgid "Apply pending actions"
+msgstr "Aplica les accions pendents"
+
+#: ../src/yumex.ui.h:65
+msgid "Prefix"
+msgstr "Prefix"
+
+#: ../src/yumex.ui.h:66
+msgid "Package names starting with search key"
+msgstr "El nom dels paquets que comencen amb la clau de cerca"
+
+#: ../src/yumex.ui.h:67
+msgid "Keyword"
+msgstr "Teclat"
+
+#: ../src/yumex.ui.h:68
+msgid "Package names containing search key"
+msgstr "El nom dels paquets que contenen la clau de cerca"
+
+#: ../src/yumex.ui.h:69
+msgid "Fields"
+msgstr "Camps"
+
+#: ../src/yumex.ui.h:70
+msgid "Specified package fields containing search keys."
+msgstr "Els caps especificats del paquet que contenen les claus de la cerca."
+
+#: ../src/yumex.ui.h:72
+msgid "Package name"
+msgstr "Nom del paquet"
+
+#: ../src/yumex.ui.h:74
+msgid "Package summary"
+msgstr "Resum del paquet"
+
+#: ../src/yumex.ui.h:76
+msgid "Package description"
+msgstr "Descripció del paquet"
+
+#: ../src/yumex.ui.h:77
+msgid "Package actions to perform"
+msgstr "Accions de paquets a realitzar"
+
+#: ../src/yumex.ui.h:78
+msgid "Size:"
+msgstr "Mida:"
