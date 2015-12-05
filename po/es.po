@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-02 18:36+0100\n"
-"PO-Revision-Date: 2015-12-02 17:41+0000\n"
+"POT-Creation-Date: 2015-12-02 18:49+0100\n"
+"PO-Revision-Date: 2015-12-02 17:49+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
 "Language-Team: Spanish (http://www.transifex.com/timlau/yumex/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -478,6 +478,42 @@ msgstr ""
 msgid "No filelist information is available"
 msgstr ""
 
+#: ../src/yumex/gui/widgets.py:771
+msgid "Newest only"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:772
+msgid "Erase unused requirements"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:774
+msgid "Cleanup old instonly packages "
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:776
+msgid "Options"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:778
+msgid "About"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:779
+msgid "Documentation"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:780
+msgid "Help"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:782 ../src/yumex.ui.h:1
+msgid "Preferences"
+msgstr ""
+
+#: ../src/yumex/gui/widgets.py:783
+msgid "Quit"
+msgstr ""
+
 #: ../misc/yumex-dnf-local.desktop.in.h:1
 msgid "Yumex Package Installer"
 msgstr ""
@@ -545,10 +581,6 @@ msgstr ""
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:11
 msgid "Control what package repositories are enabled for the current session"
-msgstr ""
-
-#: ../src/yumex.ui.h:1
-msgid "Preferences"
 msgstr ""
 
 #: ../src/yumex.ui.h:2
