@@ -935,6 +935,10 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_4 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('actions')
+            # Apply pending actiond on Alt + A
+            if (event.keyval == Gdk.KEY_a and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._process_actions()
             # Filter = 'updates' on Ctrl + 1
             if (event.keyval == Gdk.KEY_1 and
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
