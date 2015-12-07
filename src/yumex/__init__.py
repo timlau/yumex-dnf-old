@@ -955,6 +955,11 @@ class Window(BaseWindow):
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
                 if self.active_page == 'packages':
                     self.pkg_filter.set_active('all')
+            # Select All on Ctrl + A
+            if (event.keyval == Gdk.KEY_a and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.package_view.on_section_header_clicked(None)
 
     def on_mainmenu(self, widget, action, data):
         """Handle mainmenu actions"""
