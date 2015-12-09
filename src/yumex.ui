@@ -783,7 +783,6 @@ start Yum Extender</property>
           <object class="GtkBox" id="search_content">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
             <child>
               <object class="GtkSearchEntry" id="search_entry">
                 <property name="width_request">500</property>
@@ -804,6 +803,7 @@ start Yum Extender</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="resize_mode">immediate</property>
                 <property name="focus_on_click">False</property>
                 <child>
                   <object class="GtkImage" id="image4">
@@ -1096,7 +1096,7 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="name">packages</property>
-                    <property name="title" translatable="yes">Packages</property>
+                    <property name="title" translatable="yes" comments="The packages button in headerbar">Packages</property>
                   </packing>
                 </child>
                 <child>
@@ -1148,7 +1148,7 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="name">groups</property>
-                    <property name="title" translatable="yes">Groups</property>
+                    <property name="title" translatable="yes" comments="The groups button in headerbar">Groups</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1229,7 +1229,7 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="name">history</property>
-                    <property name="title" translatable="yes">History</property>
+                    <property name="title" translatable="yes" comments="The history button in headerbar">History</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -1256,7 +1256,7 @@ start Yum Extender</property>
                   </object>
                   <packing>
                     <property name="name">actions</property>
-                    <property name="title" translatable="yes">Pending Actions</property>
+                    <property name="title" translatable="yes" comments="The pending action queue button in headerbar">Queue</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
