@@ -996,11 +996,11 @@ class Window(BaseWindow):
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
-            self._search_toggle.show()
+            self._search_toggle.set_sensitive(True)
             self.search_bar.show()
             self.info.show()
         else:
-            self._search_toggle.hide()
+            self._search_toggle.set_sensitive(False)
             self.search_bar.hide()
             self.info.show(False)
         if page == 'groups':
