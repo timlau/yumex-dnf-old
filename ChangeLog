@@ -1,3 +1,39 @@
+2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.6
+
+2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: always return 0 as 00 (hex) in color code
+
+2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: workaround for changes in Gtk 3.19.x
+	https://blogs.gnome.org/mclasen/2015/11/20/a-gtk-update/
+
+2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: fix problem with color to hex convertion (#81)
+
+
+2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/misc.py: Cleanup old instonly packages is enabled by
+	default
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: fix possible traceback  RhBug: 1253630
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* dbus/dbus_status.py: don't use deprecated GObject.SIGNAL_RUN_FIRST
+
+
+2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.5
