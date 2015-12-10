@@ -42,11 +42,7 @@ logger = logging.getLogger(LOG_ROOT)
 
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
 
-if const.BIN_PATH in ['/usr/share/yumex-dnf']:
-    YUMEX_BIN = '/usr/bin/yumex-dnf'
-else:
-    YUMEX_BIN = '../src/main.py'
-
+YUMEX_BIN = '/usr/bin/yumex-dnf'
 
 CONF_DIR = BaseDirectory.save_config_path('yumex-dnf')
 TIMESTAMP_FILE = os.path.join(CONF_DIR, 'update_timestamp.conf')

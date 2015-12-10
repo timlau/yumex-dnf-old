@@ -19,7 +19,7 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio, GLib
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
@@ -38,6 +38,8 @@ import yumex.gui.views
 import yumex.misc
 
 logger = logging.getLogger('yumex.gui.widget')
+G_TRUE = GLib.Variant.new_boolean(True)
+G_FALSE = GLib.Variant.new_boolean(False)
 
 
 class InfoProgressBar:
@@ -183,8 +185,8 @@ class SearchBar(GObject.GObject):
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self.search_type = 'prefix'
-        self.search_fields = ['name', 'summary']
+        self.search_type = CONFIG.conf.search_default
+        self.search_fields = CONFIG.conf.search_fields
         self.active = False
         # widgets
         self._bar = self.win.get_ui('search_bar')
@@ -272,6 +274,7 @@ class SearchBar(GObject.GObject):
         """Search type is changed."""
         if widget.get_active():
             self.search_type = key
+            CONFIG.conf.search_default = key
             if self.search_type == 'fields':
                 self._set_fields_sensitive(True)
             else:
@@ -280,6 +283,7 @@ class SearchBar(GObject.GObject):
     def on_fields_changed(self, widget, key):
         """Search fields is changed."""
         self.search_fields = self._get_active_field()
+        CONFIG.conf.search_fields = self.search_fields
 
     def on_entry_activate(self, widget):
         """Seach entry is activated"""
@@ -312,30 +316,6 @@ class SearchBar(GObject.GObject):
         if self.active:
             self._bar.set_search_mode(True)
             self._set_focus()
-
-
-class Options(GObject.GObject):
-    """Handling the mainmenu options"""
-
-    __gsignals__ = {'option-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,
-                                        GObject.TYPE_BOOLEAN,)
-                                       )}
-
-    OPTIONS = ['newest_only', 'clean_unused', 'clean_instonly']
-
-    def __init__(self, win):
-        GObject.GObject.__init__(self)
-        self.win = win
-        for key in Options.OPTIONS:
-            wid = self.win.get_ui('option_%s' % key)
-            wid.set_active(getattr(CONFIG.session, key))
-            wid.connect('toggled', self.on_toggled, key)
-
-    def on_toggled(self, widget, flt):
-        """An option is changed."""
-        self.emit('option-changed', flt, widget.get_active())
 
 
 class FilterSidebar(GObject.GObject):
@@ -656,7 +636,7 @@ class PackageInfo(PackageDetails):
             self.base.set_working(False)
 
     def _show_updateinfo(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         updinfo = self.current_package.updateinfo
         if updinfo:
             updinfo.reverse()
@@ -676,7 +656,7 @@ class PackageInfo(PackageDetails):
                                                 + "/updates"
                 self.add_url(url, url, newline=True)
 
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _write_update_info(self, upd_info):
         head = ""
@@ -727,7 +707,7 @@ class PackageInfo(PackageDetails):
         self.write(head)
 
     def _show_changelog(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         changelog = self.current_package.changelog
         if changelog:
             i = 0
@@ -751,24 +731,97 @@ class PackageInfo(PackageDetails):
                                                 + "/changelog"
                 self.add_url(url, url, newline=True)
 
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _show_filelist(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         filelist = self.current_package.filelist
         if filelist:
             for fname in sorted(filelist):
                 self.write(fname)
         else:
             self.write(_("No filelist information is available"))
-        self.base.set_working(False)
+        self.base.set_working(False, False)
 
     def _show_requirements(self):
-        self.base.set_working(True)
+        self.base.set_working(True, False)
         reqs = self.current_package.requirements
         for key in reqs:
             self.write(key)
             for pkg_id in reqs[key]:
                 pkg = yumex.misc.id2fullname(pkg_id)
                 self.write(' --> {}'.format(pkg))
-        self.base.set_working(False)
+        self.base.set_working(False, False)
+
+
+class MainMenu(Gio.Menu):
+    __gsignals__ = {'menu-changed': (GObject.SignalFlags.RUN_FIRST,
+                                     None,
+                                     (GObject.TYPE_STRING,
+                                      GObject.TYPE_PYOBJECT,))
+                    }
+
+    def __init__(self, win):
+        super(MainMenu, self).__init__()
+        self.win = win
+        self._button = self.win.get_ui('mainmenu_button')
+        self._button.connect('clicked', self._on_button)
+        self._popover = Gtk.Popover.new_from_model(self._button,
+                                                   self)
+
+        option_menu = Gio.Menu()
+        self._add_menu_checkbox(option_menu, _("Newest only"), 'newest_only')
+        self._add_menu_checkbox(option_menu, _("Erase unused requirements"),
+                               'clean_unused')
+        self._add_menu_checkbox(option_menu,
+                                _("Cleanup old instonly packages "),
+                                'clean_instonly')
+        self.append_section(_("Options"), option_menu)
+        help_menu = Gio.Menu()
+        self._add_menu(help_menu, _("About"), 'about')
+        self._add_menu(help_menu, _("Documentation"), 'docs')
+        self.append_section(_("Help"), help_menu)
+        gen_menu = Gio.Menu()
+        self._add_menu(gen_menu, _("Preferences"), 'pref')
+        self._add_menu(gen_menu, _("Quit"), 'quit')
+        self.append_section(None, gen_menu)
+
+    def _add_menu(self, menu, label, name):
+        # menu
+        menu.append(label, 'win.{}'.format(name))
+        # action
+        action = Gio.SimpleAction.new(name, None)
+        self.win.add_action(action)
+        action.connect('activate', self._on_menu, name)
+        return action
+
+    def _add_menu_checkbox(self, menu, label, name):
+        # menu item
+        item = Gio.MenuItem.new(label, 'win.{}'.format(name))
+        item.set_action_and_target_value('win.{}'.format(name), G_TRUE)
+        menu.append_item(item)
+        # action
+        action = Gio.SimpleAction.new_stateful(name, G_FALSE.get_type(),
+                                               G_FALSE)
+        state = getattr(CONFIG.session, name)
+        if state:
+            action.set_state(G_TRUE)
+        else:
+            action.set_state(G_FALSE)
+        self.win.add_action(action)
+        action.connect('activate', self._on_menu, name)
+        return action
+
+    def _on_menu(self, action, state, action_name):
+        state = action.get_state()
+        data = None
+        if state == G_TRUE:
+            action.change_state(G_FALSE)
+            data = False
+        elif state == G_FALSE:
+            action.change_state(G_TRUE)
+            data = True
+        self.emit('menu-changed', action_name, data)
+
+    def _on_button(self, button):
+        self._popover.show_all()

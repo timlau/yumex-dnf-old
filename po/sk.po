@@ -3,362 +3,418 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Dušan Kazik <prescott66@gmail.com>, 2014
+# Dušan Kazik <prescott66@gmail.com>, 2012,2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 14:42+0200\n"
-"PO-Revision-Date: 2015-05-27 12:43+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
-"Language-Team: Slovak (http://www.transifex.com/projects/p/yumex/language/sk/)\n"
+"POT-Creation-Date: 2015-12-02 18:49+0100\n"
+"PO-Revision-Date: 2015-12-02 22:53+0000\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
+"Language-Team: Slovak (http://www.transifex.com/timlau/yumex/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sk\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../src/yumex/const.py:125
-msgid "Getting installed packages"
-msgstr "Získavajú sa nainštalované balíky"
-
-#: ../src/yumex/const.py:126
-msgid "Getting available packages"
-msgstr "Získavajú sa dostupné balíky"
-
-#: ../src/yumex/const.py:127
-msgid "Getting available updates"
-msgstr "Získavajú sa dostupné aktualizácie"
-
-#: ../src/yumex/const.py:128
-msgid "Getting all packages"
-msgstr "Získavajú sa všetky balíky"
-
-#: ../src/yumex/const.py:141
-msgid "Updated packages"
-msgstr "Aktualizované balíky"
-
-#: ../src/yumex/const.py:142
-msgid "Downgraded packages"
-msgstr "Balíky s nižšími verziami"
-
-#: ../src/yumex/const.py:143
-msgid "Obsoleting packages"
-msgstr "Označujú sa balíky ako zastarané"
-
-#: ../src/yumex/const.py:144
-msgid "Obsoleted packages"
-msgstr "Zastarané balíky"
-
-#: ../src/yumex/const.py:145
-msgid "Erased packages"
-msgstr "Vymazané balíky"
-
-#: ../src/yumex/const.py:146 ../src/yumex/const.py:147
-msgid "Installed packages"
-msgstr "Nainštalované balíky"
-
-#: ../src/yumex/const.py:148
-msgid "Installed for dependencies"
-msgstr "Nainštalované závislosti"
-
-#: ../src/yumex/const.py:149
-msgid "Reinstalled packages"
-msgstr "Preinštalované balíky"
-
-#: ../src/yumex/const.py:153
-msgid "Installing"
-msgstr "Inštaluje sa"
-
-#: ../src/yumex/const.py:154
-msgid "Updating"
-msgstr "Aktualizuje sa"
-
-#: ../src/yumex/const.py:155
-msgid "Removing"
-msgstr "Odstraňuje sa"
-
-#: ../src/yumex/const.py:156
-msgid "Downgrading"
-msgstr "Prechádza sa na nižšiu verziu"
-
-#: ../src/yumex/const.py:157
-msgid "Replacing"
-msgstr "Nahrádza sa"
-
-#: ../src/yumex/const.py:161
-#, python-format
-msgid "Updating: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:162
-#, python-format
-msgid "Installing: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:163
-#, python-format
-msgid "Cleanup: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:164
-#, python-format
-msgid "Removing: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:165
-#, python-format
-msgid "Obsoleting: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:166
-#, python-format
-msgid "Downgrading: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:167
-#, python-format
-msgid "Verifying: %s"
-msgstr ""
-
-#: ../src/yumex/const.py:177
-msgid "Bugfix"
-msgstr ""
-
-#: ../src/yumex/const.py:178
-msgid "New Package"
-msgstr ""
-
-#: ../src/yumex/const.py:179
-msgid "Security"
-msgstr ""
-
-#: ../src/yumex/const.py:180
-msgid "Enhancement"
-msgstr ""
-
-#: ../src/yumex/__init__.py:136
+#: ../src/yumex/__init__.py:112 ../src/yumex/old_init.py:137
 msgid "Refreshing Repository Metadata"
 msgstr "Obnovujú sa metaúdaje repozitára"
 
-#: ../src/yumex/__init__.py:143
+#: ../src/yumex/__init__.py:119 ../src/yumex/old_init.py:144
 msgid "Could not refresh the DNF cache (root)"
-msgstr ""
+msgstr "Nepodarilo sa obnoviť vyrovnávaciu pamäť nástroja DNF (ako správca)"
 
-#: ../src/yumex/__init__.py:148
+#: ../src/yumex/__init__.py:124 ../src/yumex/old_init.py:149
 msgid ""
 "DNF root backend was not authorized.\n"
 "Yum Extender will exit"
-msgstr ""
+msgstr "Podporný nástroj DNF nebol autorizovaný v režime správcu.\nProgram Yum Extender skončí"
 
-#: ../src/yumex/__init__.py:153
+#: ../src/yumex/__init__.py:129 ../src/yumex/old_init.py:154
 msgid ""
 "DNF is locked by another process.\n"
 "\n"
 "Yum Extender will exit"
-msgstr ""
+msgstr "Nástroj DNF je uzamknutý iným procesom.\n\nProrgam Yum Extender skončí"
 
-#: ../src/yumex/__init__.py:253
-#, python-format
-msgid "Installing package: %s"
-msgstr ""
+#: ../src/yumex/__init__.py:623
+msgid "Reloading package information..."
+msgstr "Znovu sa načítavajú informácie o balíku..."
 
-#: ../src/yumex/__init__.py:258
-#, python-format
-msgid "Removing package: %s"
-msgstr ""
-
-#: ../src/yumex/__init__.py:263
-msgid "Updating all available updates"
-msgstr ""
-
-#: ../src/yumex/__init__.py:265 ../src/yumex/__init__.py:1037
+#: ../src/yumex/__init__.py:746 ../src/yumex/__init__.py:829
+#: ../src/yumex/old_init.py:266 ../src/yumex/old_init.py:1047
 msgid "Searching for dependencies"
 msgstr "Vyhľadávajú sa závislosti"
 
-#: ../src/yumex/__init__.py:267 ../src/yumex/__init__.py:1039
+#: ../src/yumex/__init__.py:748 ../src/yumex/__init__.py:831
+#: ../src/yumex/old_init.py:268 ../src/yumex/old_init.py:1049
 msgid "Dependencies resolved"
 msgstr "Závislosti boli vyriešené"
 
 #. Ok pressed
-#: ../src/yumex/__init__.py:275 ../src/yumex/__init__.py:1053
-#: ../src/yumex/dnf_backend.py:197
+#: ../src/yumex/__init__.py:762 ../src/yumex/__init__.py:839
+#: ../src/yumex/dnf_backend.py:206 ../src/yumex/old_init.py:276
+#: ../src/yumex/old_init.py:1063
 msgid "Applying changes to the system"
 msgstr "Aplikujú sa zmeny v systéme"
 
-#: ../src/yumex/__init__.py:282
-msgid "Changes was successfully applied to the system"
-msgstr "Zmeny boli úspešne aplikované v systéme"
-
-#: ../src/yumex/__init__.py:285 ../src/yumex/__init__.py:1137
-msgid "Error(s) in search for dependencies"
-msgstr "Chyba(y) pri vyhľadávaní závislostí"
-
-#: ../src/yumex/__init__.py:722
-msgid "Error in undo history transaction"
-msgstr ""
-
-#: ../src/yumex/__init__.py:777
-msgid "Adding packages to view"
-msgstr "Pridávajú sa balíky do zobrazenia"
-
-#: ../src/yumex/__init__.py:1078
+#: ../src/yumex/__init__.py:787 ../src/yumex/old_init.py:1088
 msgid "Error checking package signatures\n"
-msgstr ""
+msgstr "Chyba pri kontrolovaní podpisov balíkov\n"
 
-#: ../src/yumex/__init__.py:1084
+#: ../src/yumex/__init__.py:793 ../src/yumex/old_init.py:1094
 msgid "Downloading error(s)\n"
 msgstr "Chyba(y) pri preberaní\n"
 
-#: ../src/yumex/__init__.py:1088
+#: ../src/yumex/__init__.py:799 ../src/yumex/old_init.py:1100
 msgid "Error in transaction\n"
-msgstr ""
+msgstr "Chyba v transakcii\n"
 
-#: ../src/yumex/__init__.py:1103
+#: ../src/yumex/__init__.py:814 ../src/yumex/old_init.py:254
+#, python-format
+msgid "Installing package: %s"
+msgstr "Inštaluje sa balík: %s"
+
+#: ../src/yumex/__init__.py:815
+#, python-format
+msgid "%s was installed successfully"
+msgstr "Balík %s bol úspešne nainštalovaný"
+
+#: ../src/yumex/__init__.py:820 ../src/yumex/old_init.py:259
+#, python-format
+msgid "Removing package: %s"
+msgstr "Odstraňuje sa balík: %s"
+
+#: ../src/yumex/__init__.py:821
+#, python-format
+msgid "%s was removed successfully"
+msgstr "Balík %s bol úspešne odstránený"
+
+#: ../src/yumex/__init__.py:826 ../src/yumex/old_init.py:264
+msgid "Updating all available updates"
+msgstr "Aktualizujú sa všetky dostupné aktualizácie"
+
+#: ../src/yumex/__init__.py:827
+msgid "Available updates was applied successfully"
+msgstr "Dostupné aplikácie boli úspešne použité"
+
+#: ../src/yumex/__init__.py:846 ../src/yumex/__init__.py:896
+#: ../src/yumex/old_init.py:286 ../src/yumex/old_init.py:1149
+msgid "Error(s) in search for dependencies"
+msgstr "Chyba(y) pri vyhľadávaní závislostí"
+
+#: ../src/yumex/__init__.py:862 ../src/yumex/old_init.py:1115
 msgid "Preparing system for applying changes"
 msgstr "Pripravuje sa systém na aplikovanie zmien"
 
-#: ../src/yumex/__init__.py:1114
+#: ../src/yumex/__init__.py:873 ../src/yumex/old_init.py:1126
 msgid "Can't remove protected package(s)"
-msgstr ""
+msgstr "Nedajú sa odstrániť chránené balíky"
 
-#: ../src/yumex/__init__.py:1128
+#: ../src/yumex/__init__.py:887 ../src/yumex/old_init.py:1140
 msgid "No pending actions in queue"
 msgstr "Žiadne čakajúce akcie vo fronte"
 
-#: ../src/yumex/__init__.py:1132
+#: ../src/yumex/__init__.py:891 ../src/yumex/old_init.py:1144
 msgid "Error(s) in building transaction"
-msgstr ""
+msgstr "Chyba/-y pri zostavovaní transakcie"
 
-#: ../src/yumex/__init__.py:1293
-msgid "Yum Extender will close\n"
-msgstr ""
+#: ../src/yumex/__init__.py:1013 ../src/yumex/old_init.py:789
+msgid "Adding packages to view"
+msgstr "Pridávajú sa balíky do zobrazenia"
 
-#: ../src/yumex/__init__.py:1294
-msgid "Error in starting notification icon"
-msgstr ""
+#: ../src/yumex/__init__.py:1064 ../src/yumex/old_init.py:728
+msgid "Error in undo history transaction"
+msgstr "Chyba pri vrátení späť transakcie z histórie"
 
-#: ../src/yumex/__init__.py:1318
-msgid "Yum Extender will close"
-msgstr ""
+#: ../src/yumex/dnf_backend.py:181
+#, python-format
+msgid ""
+"dnfdaemon api version : %d\n"
+"don't match\n"
+"needed api version : %d"
+msgstr "verzia api démona dnfdaemon: %d\nnezhoduje sa\npotrebná verzia api: %d"
 
-#: ../src/yumex/__init__.py:1320
-msgid "Error in locking notification icon"
-msgstr ""
-
-#: ../src/yumex/dnf_backend.py:182
+#: ../src/yumex/dnf_backend.py:191
 msgid "Downloading packages"
 msgstr "Preberajú sa balíky"
 
-#: ../src/yumex/dnf_backend.py:188
+#: ../src/yumex/dnf_backend.py:197
 msgid "Checking package signatures"
-msgstr ""
+msgstr "Kontrolujú sa podpisy balíkov"
 
-#: ../src/yumex/dnf_backend.py:201
+#: ../src/yumex/dnf_backend.py:210
 msgid "Verify changes on the system"
-msgstr ""
+msgstr "Overenie zmien v systéme"
 
-#: ../src/yumex/dnf_backend.py:237
+#: ../src/yumex/dnf_backend.py:246
 #, python-format
-msgid "Downloading %d files (%sb)..."
+msgid "Downloading %d files (%sB)..."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:255
+#: ../src/yumex/const.py:129
+msgid "Getting installed packages"
+msgstr "Získavajú sa nainštalované balíky"
+
+#: ../src/yumex/const.py:130
+msgid "Getting available packages"
+msgstr "Získavajú sa dostupné balíky"
+
+#: ../src/yumex/const.py:131
+msgid "Getting available updates"
+msgstr "Získavajú sa dostupné aktualizácie"
+
+#: ../src/yumex/const.py:132
+msgid "Getting all packages"
+msgstr "Získavajú sa všetky balíky"
+
+#: ../src/yumex/const.py:145
+msgid "Updated packages"
+msgstr "Aktualizované balíky"
+
+#: ../src/yumex/const.py:146
+msgid "Downgraded packages"
+msgstr "Balíky s nižšími verziami"
+
+#: ../src/yumex/const.py:147
+msgid "Obsoleting packages"
+msgstr "Označujú sa balíky ako zastarané"
+
+#: ../src/yumex/const.py:148
+msgid "Obsoleted packages"
+msgstr "Zastarané balíky"
+
+#: ../src/yumex/const.py:149
+msgid "Erased packages"
+msgstr "Vymazané balíky"
+
+#: ../src/yumex/const.py:150 ../src/yumex/const.py:151
+msgid "Installed packages"
+msgstr "Nainštalované balíky"
+
+#: ../src/yumex/const.py:152
+msgid "Installed for dependencies"
+msgstr "Nainštalované závislosti"
+
+#: ../src/yumex/const.py:153
+msgid "Reinstalled packages"
+msgstr "Preinštalované balíky"
+
+#: ../src/yumex/const.py:157
+msgid "Installing"
+msgstr "Inštaluje sa"
+
+#: ../src/yumex/const.py:158
+msgid "Updating"
+msgstr "Aktualizuje sa"
+
+#: ../src/yumex/const.py:159
+msgid "Removing"
+msgstr "Odstraňuje sa"
+
+#: ../src/yumex/const.py:160
+msgid "Downgrading"
+msgstr "Prechádza sa na nižšiu verziu"
+
+#: ../src/yumex/const.py:161
+msgid "Replacing"
+msgstr "Nahrádza sa"
+
+#: ../src/yumex/const.py:165
+#, python-format
+msgid "Updating: %s"
+msgstr "Aktualizuje sa: %s"
+
+#: ../src/yumex/const.py:166
+#, python-format
+msgid "Installing: %s"
+msgstr "Inštaluje sa: %s"
+
+#: ../src/yumex/const.py:167
+#, python-format
+msgid "Reinstalling: %s"
+msgstr "Preinštaluje sa: %s"
+
+#: ../src/yumex/const.py:168
+#, python-format
+msgid "Cleanup: %s"
+msgstr "Čistí sa: %s"
+
+#: ../src/yumex/const.py:169
+#, python-format
+msgid "Removing: %s"
+msgstr "Odstraňuje sa: %s"
+
+#: ../src/yumex/const.py:170
+#, python-format
+msgid "Obsoleting: %s"
+msgstr "Označuje sa ako zastarené: %s"
+
+#: ../src/yumex/const.py:171
+#, python-format
+msgid "Downgrading: %s"
+msgstr "Prechádza sa na nižšiu verziu: %s"
+
+#: ../src/yumex/const.py:172
+#, python-format
+msgid "Verifying: %s"
+msgstr "Overuje sa: %s"
+
+#: ../src/yumex/const.py:182
+msgid "Bugfix"
+msgstr "Oprava chýb"
+
+#: ../src/yumex/const.py:183
+msgid "New Package"
+msgstr "Nový balík"
+
+#: ../src/yumex/const.py:184
+msgid "Security"
+msgstr "Bezpečnosť"
+
+#: ../src/yumex/const.py:185
+msgid "Enhancement"
+msgstr "Vylepšenie"
+
+#: ../src/yumex/old_init.py:283
+msgid "Changes was successfully applied to the system"
+msgstr "Zmeny boli úspešne aplikované v systéme"
+
+#: ../src/yumex/old_init.py:1305
+msgid ""
+"\n"
+"\n"
+"Yum Extender will close"
+msgstr "\n\nPrpgram Yum Extender bude ukončený"
+
+#: ../src/yumex/old_init.py:1307
+msgid "Error in starting notification icon"
+msgstr "Chyba pri spúšťaní oznamovacej ikony"
+
+#: ../src/yumex/old_init.py:1331
+msgid "Yum Extender will close"
+msgstr "Program Yum Extender bude zavretý"
+
+#: ../src/yumex/old_init.py:1333
+msgid "Error in locking notification icon"
+msgstr "Chyba pri uzamykaní oznamovacej ikony"
+
+#. timeout 10s
+#: ../src/yumex/updater.py:68
+msgid "Not Now"
+msgstr "Teraz nie"
+
+#: ../src/yumex/updater.py:70
+msgid "Show Updates"
+msgstr "Zobraziť aktualizácie"
+
+#: ../src/yumex/updater.py:165
+msgid "New Updates"
+msgstr "Nové aktualizácie"
+
+#: ../src/yumex/updater.py:166
+#, python-format
+msgid "%s available updates"
+msgstr "Dostupné aktualizácie: %s"
+
+#: ../src/yumex/gui/views.py:256
 msgid "Click to install all/remove all"
-msgstr ""
+msgstr "Kliknutím nainštalujete/odstránite všetky"
 
-#: ../src/yumex/gui/views.py:260
+#: ../src/yumex/gui/views.py:261
 msgid "Click to select/deselect all"
-msgstr ""
+msgstr "Kliknutím vyberie/zruší výber všetkých"
 
-#: ../src/yumex/gui/views.py:272
+#: ../src/yumex/gui/views.py:273
 msgid "Package"
 msgstr "Balík"
 
-#: ../src/yumex/gui/views.py:274
+#: ../src/yumex/gui/views.py:275
 msgid "Ver."
 msgstr "Ver."
 
-#: ../src/yumex/gui/views.py:276
+#: ../src/yumex/gui/views.py:277
 msgid "Arch."
 msgstr "Arch."
 
-#: ../src/yumex/gui/views.py:278
+#: ../src/yumex/gui/views.py:279
 msgid "click to filter archs"
 msgstr "Kliknutím vyfiltrujete architektúry"
 
-#: ../src/yumex/gui/views.py:279 ../src/yumex/gui/views.py:764
-#: ../src/yumex.ui.h:92
+#: ../src/yumex/gui/views.py:280 ../src/yumex/gui/views.py:769
+#: ../src/yumex.ui.h:73
 msgid "Summary"
 msgstr "Súhrn"
 
-#: ../src/yumex/gui/views.py:280
+#: ../src/yumex/gui/views.py:281
 msgid "Repo."
 msgstr "Repo."
 
-#: ../src/yumex/gui/views.py:281 ../src/yumex/gui/dialogs.py:223
+#: ../src/yumex/gui/views.py:282 ../src/yumex/gui/dialogs.py:210
 msgid "Size"
 msgstr "Veľkosť"
 
-#: ../src/yumex/gui/views.py:320
+#: ../src/yumex/gui/views.py:321
 msgid "Reinstall Package"
-msgstr ""
+msgstr "Preinštalovať balík"
 
-#: ../src/yumex/gui/views.py:335
+#: ../src/yumex/gui/views.py:336
 msgid "Downgrade Package"
-msgstr ""
+msgstr "Prejsť na nižšiu verziu balíka"
 
-#: ../src/yumex/gui/views.py:759 ../src/yumex.ui.h:58
+#: ../src/yumex/gui/views.py:764 ../src/yumex.ui.h:54
 msgid "Packages"
 msgstr "Balíky"
 
-#: ../src/yumex/gui/views.py:888
+#: ../src/yumex/gui/views.py:894
 #, python-format
 msgid "<b>Downgrade to</b> %s "
-msgstr ""
+msgstr "<b>Prejsť na nižšiu verziu</b> %s "
 
-#: ../src/yumex/gui/views.py:912
+#: ../src/yumex/gui/views.py:917
 msgid "History (Date/Time)"
 msgstr "História (Dátum/čas)"
 
-#: ../src/yumex/gui/views.py:990
+#: ../src/yumex/gui/views.py:994
 msgid "History Packages"
-msgstr ""
+msgstr "História balíkov"
 
 #. Setup reponame & repofile column's
-#: ../src/yumex/gui/views.py:1283 ../src/yumex/gui/views.py:1330
-#: ../src/yumex/gui/dialogs.py:222
+#: ../src/yumex/gui/views.py:1082 ../src/yumex/gui/views.py:1129
+#: ../src/yumex/gui/dialogs.py:209
 msgid "Repository"
 msgstr "Repozitár"
 
-#: ../src/yumex/gui/views.py:1283
+#: ../src/yumex/gui/views.py:1082
 msgid "Filename"
 msgstr "Názov súboru"
 
-#: ../src/yumex/gui/views.py:1314
+#: ../src/yumex/gui/views.py:1113
 msgid ""
 "Click here to switch between\n"
 " none/all/default selected"
-msgstr ""
+msgstr "Kliknutím sem prepnete medzi vybratím\nžiadneho/všetkých/predvoleného"
 
-#: ../src/yumex/gui/views.py:1331 ../src/yumex/gui/dialogs.py:219
-#: ../src/yumex.ui.h:91
+#: ../src/yumex/gui/views.py:1130 ../src/yumex/gui/dialogs.py:206
+#: ../src/yumex.ui.h:71
 msgid "Name"
 msgstr "Názov"
 
-#: ../src/yumex/gui/dialogs.py:220
+#: ../src/yumex/gui/dialogs.py:207
 msgid "Arch"
 msgstr "Architektúra"
 
-#: ../src/yumex/gui/dialogs.py:221
+#: ../src/yumex/gui/dialogs.py:208
 msgid "Ver"
 msgstr "Verzia"
 
-#: ../src/yumex/gui/dialogs.py:264
+#: ../src/yumex/gui/dialogs.py:251
 msgid "<b>replacing</b> {}"
-msgstr ""
+msgstr "<b>nahradzuje sa</b> {}"
 
-#: ../src/yumex/gui/dialogs.py:300
+#: ../src/yumex/gui/dialogs.py:287
 #, python-format
 msgid ""
 " Do you want to import this GPG key\n"
@@ -367,217 +423,174 @@ msgid ""
 " Key        : 0x%s:\n"
 " Userid     : \"%s\"\n"
 " From       : %s"
-msgstr ""
+msgstr " Chcete importovať tento kľúč GPG\n potrebný na overenie balíka %s?\n\n Kľúč                     : 0x%s:\n ID používateľa     : \"%s\"\n Od                        : %s"
 
-#: ../src/yumex/gui/widgets.py:111
+#: ../src/yumex/gui/widgets.py:116
 msgid "Getting Package Metadata"
-msgstr ""
+msgstr "Získavajú sa metaúdaje balíka"
 
-#. PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-#: ../src/yumex/gui/widgets.py:178
-msgid "Package Description"
-msgstr "Popis balíka"
-
-#: ../src/yumex/gui/widgets.py:182
-msgid "Package Update Information"
-msgstr ""
-
-#. tip = _("Package Changelog")
-#. vbox.add(self._get_radio_button(
-#. 'bookmark-new-symbolic', "changelog", rb, tip))
-#: ../src/yumex/gui/widgets.py:188
-msgid "Package Filelist"
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:191
-msgid "Package Requirements"
-msgstr ""
-
-#: ../src/yumex/gui/widgets.py:313
+#: ../src/yumex/gui/widgets.py:621
 #, python-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "Značky: %s\n"
 
-#: ../src/yumex/gui/widgets.py:318
+#: ../src/yumex/gui/widgets.py:626
 msgid "Links: "
-msgstr ""
+msgstr "Odkazy:"
 
-#: ../src/yumex/gui/widgets.py:341
+#: ../src/yumex/gui/widgets.py:649
 msgid "No update information is available"
-msgstr ""
+msgstr "Nie sú dostupné žiadne informácie o aktualizácii"
 
-#: ../src/yumex/gui/widgets.py:343
+#: ../src/yumex/gui/widgets.py:651
 msgid ""
 "\n"
 "Fedora Updates:"
-msgstr ""
+msgstr "\nAktualizácie systému Fedora:"
 
-#: ../src/yumex/gui/widgets.py:353
+#: ../src/yumex/gui/widgets.py:661
 msgid "Release"
 msgstr "Vydanie"
 
-#: ../src/yumex/gui/widgets.py:354
+#: ../src/yumex/gui/widgets.py:662
 msgid "Type"
 msgstr "Typ"
 
 #. head += ("%14s " % _("Status")) + ": %(status)s\n"
-#: ../src/yumex/gui/widgets.py:357
+#: ../src/yumex/gui/widgets.py:665
 msgid "Issued"
-msgstr ""
+msgstr "Vydané"
 
-#: ../src/yumex/gui/widgets.py:394 ../src/yumex.ui.h:93
+#: ../src/yumex/gui/widgets.py:702 ../src/yumex.ui.h:75
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/yumex/gui/widgets.py:416
+#: ../src/yumex/gui/widgets.py:724
 msgid "No changelog information is available"
-msgstr ""
+msgstr "Nie sú dostupné žiadne informácie o zozname zmien"
 
-#: ../src/yumex/gui/widgets.py:418
+#: ../src/yumex/gui/widgets.py:726
 msgid ""
 "\n"
 "Online Changelog:"
-msgstr ""
+msgstr "\nZoznam zmien online:"
 
-#: ../src/yumex/gui/widgets.py:433
+#: ../src/yumex/gui/widgets.py:741
 msgid "No filelist information is available"
-msgstr ""
+msgstr "Nie sú dostupné žiadne informácie o zozname súborov"
 
-#. timeout 10s
-#: ../dbus/dbus_status.py:177
-msgid "Open Yum Extender"
-msgstr ""
+#: ../src/yumex/gui/widgets.py:771
+msgid "Newest only"
+msgstr "Iba najnovšie"
 
-#: ../dbus/dbus_status.py:179
-msgid "Apply Updates"
-msgstr ""
+#: ../src/yumex/gui/widgets.py:772
+msgid "Erase unused requirements"
+msgstr "Vymazať nepoužívané požiadavky"
 
-#: ../dbus/dbus_status.py:226 ../src/yumex.ui.h:79
+#: ../src/yumex/gui/widgets.py:774
+msgid "Cleanup old instonly packages "
+msgstr "Vyčistiť staré balíky určené iba na inštaláciu"
+
+#: ../src/yumex/gui/widgets.py:776
+msgid "Options"
+msgstr "Voľby"
+
+#: ../src/yumex/gui/widgets.py:778
+msgid "About"
+msgstr "O programe"
+
+#: ../src/yumex/gui/widgets.py:779
+msgid "Documentation"
+msgstr "Dokumentácia"
+
+#: ../src/yumex/gui/widgets.py:780
+msgid "Help"
+msgstr "Pomocník"
+
+#: ../src/yumex/gui/widgets.py:782 ../src/yumex.ui.h:1
+msgid "Preferences"
+msgstr "Nastavenia"
+
+#: ../src/yumex/gui/widgets.py:783
 msgid "Quit"
 msgstr "Ukončiť"
 
-#: ../dbus/dbus_status.py:227
-msgid "Search for Updates"
-msgstr "Vyhľadať aktualizácie"
-
-#: ../dbus/dbus_status.py:228
-msgid "Start Yum Extender"
-msgstr ""
-
-#: ../dbus/dbus_status.py:253
-msgid "Yum Extender: Need user input"
-msgstr ""
-
-#: ../dbus/dbus_status.py:257
-msgid "Yum Extender: Working"
-msgstr ""
-
-#: ../dbus/dbus_status.py:266
-msgid "Yum Extender"
-msgstr ""
-
-#: ../dbus/dbus_status.py:271
-msgid "Yum Extender: Error"
-msgstr ""
-
-#: ../dbus/dbus_status.py:274
-msgid "Yum Extender: No updates"
-msgstr ""
-
-#: ../dbus/dbus_status.py:280
-#, python-format
-msgid "Yum Extender: %s updates available"
-msgstr ""
-
-#: ../dbus/dbus_status.py:571
-msgid "New Updates"
-msgstr ""
-
-#: ../dbus/dbus_status.py:572
-#, python-format
-msgid "%s available updates"
-msgstr ""
-
 #: ../misc/yumex-dnf-local.desktop.in.h:1
 msgid "Yumex Package Installer"
-msgstr ""
+msgstr "Inštalátor balíkov Yumex"
 
 #: ../misc/yumex-dnf-local.desktop.in.h:2
 msgid "Install local packages on system"
-msgstr ""
+msgstr "Inštaluje lokálne balíky do systému"
 
 #: ../misc/yumex-dnf.desktop.in.h:1
 msgid "Yum Extender (DNF)"
-msgstr ""
+msgstr "Yum Extender (DNF)"
 
 #: ../misc/yumex-dnf.desktop.in.h:2
 msgid "Install, update and remove applications"
-msgstr ""
+msgstr "Inštaluje, aktualizuje a odstraňuje aplikácie"
 
 #: ../misc/yumex-dnf.desktop.in.h:3
 msgid "Software Installer"
-msgstr ""
+msgstr "Inštalátor softvéru"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:1
 msgid "Graphical package manager"
-msgstr ""
+msgstr "Grafický správca balíkov"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:2
 msgid ""
 "Yum Extender is a graphical package management application. It allows you to"
 " search and browse for packages to install, remove and update on your "
 "computer."
-msgstr ""
+msgstr "Program Yum Extender je grafický správca balíkov. Umožňuje vám vyhľadať a prehliadať balíky, ktoré môžu byť nainštalované, odstránené a aktualizované vo vašom počítači."
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:3
 msgid ""
 "It is designed to give you full control over the packages on your computer "
 "and to be used by all users."
-msgstr ""
+msgstr "Je navrhnutý tak, aby vám poskytol úplnú kontrolu nad balíkmi vo vašom počítači, a aby ho mohli používať všetci používatelia."
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:4
 msgid "Features:"
-msgstr ""
+msgstr "Funkcie:"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:5
 msgid "Browse packages available for installation or update"
-msgstr ""
+msgstr "Prehliadanie balíkov dostupných na inštaláciu alebo aktualizáciu"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:6
 msgid "Browse packages installed on your computer"
-msgstr ""
+msgstr "Prehliadanie balíkov nainštalovaných vo vašom počítači"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:7
 msgid "Search packages by name, summary, description"
-msgstr ""
+msgstr "vyhľadávanie balíkov podľa názvu, súhrnu, popisu"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:8
 msgid "Watch the history of package action on your system"
-msgstr ""
+msgstr "Sledovanie histórie akcií balíkov vo vašom počítači"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:9
 msgid "Browse and install/remove package groups"
-msgstr ""
+msgstr "Prehliadanie a inštalovanie/odstránenie skupín balíkov"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:10
 msgid "Browse packages by size, repository"
-msgstr ""
+msgstr "Prehliadanie balíkov podľa veľkosti, repozitára"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:11
 msgid "Control what package repositories are enabled for the current session"
-msgstr ""
-
-#: ../src/yumex.ui.h:1
-msgid "Preferences"
-msgstr "Nastavenia"
+msgstr "Kontrola povolených repozitárov balíkov pre aktuálnu reláciu"
 
 #: ../src/yumex.ui.h:2
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/yumex.ui.h:3
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušiť"
 
 #: ../src/yumex.ui.h:4
 msgid ""
@@ -585,317 +598,261 @@ msgid ""
 "Yum Extender starts.\n"
 "Will show only latest version of available\n"
 "packages"
-msgstr ""
+msgstr "Zobraziť iba najnovšie je aktívne, iba pri\nspustení programu Yum Extender.\nZobrazí iba najnovšie verzie dsotupných\nbalíkov"
 
 #: ../src/yumex.ui.h:8
 msgid "Default: Show newest only"
-msgstr ""
+msgstr "Predvolené: Zobraziť iba najnovšie"
 
 #: ../src/yumex.ui.h:9
 msgid ""
 "Erase unused requirement option is\n"
 "active when Yum Extender starts"
-msgstr ""
+msgstr "Voľba vymazať nepoužívané požiadavky\nje aktívna pri spustení programu Yum Extender"
 
 #: ../src/yumex.ui.h:11
 msgid "Default: Erase Unused Requirements"
-msgstr ""
+msgstr "Predvolené: Vymazať nepoužívané požiadavky"
 
 #: ../src/yumex.ui.h:12
 msgid ""
 "Change the close action for the main window, so it just hides the\n"
 "window when the close button is clicked"
-msgstr ""
+msgstr "Zmení akciu zavretia hlavného okna tak, že sa iba skryje okno po\njeho stlačení"
 
 #: ../src/yumex.ui.h:14
 msgid "Close will only minimize window"
-msgstr ""
+msgstr "Tlačidlo zavrieť iba minimalizuje okno"
 
 #: ../src/yumex.ui.h:15
 msgid ""
 "Use the toolbar in the header of the window\n"
 "standard when using GNOME"
-msgstr ""
+msgstr "Použije štandardný panel nástrojov v záhlaví okna,\nkeď sa používa prostredie GNOME"
 
 #: ../src/yumex.ui.h:17
 msgid "Show toolbar in window headerbar"
-msgstr ""
+msgstr "Zobraziť panel nástrojov v záhlaví okna"
 
 #: ../src/yumex.ui.h:18
 msgid ""
 "Select all available updates when \n"
 "Yum Extender is started"
-msgstr ""
+msgstr "Vyberie všetky dostupné aktualizácie po\nspustení programu Yum Extender"
 
 #: ../src/yumex.ui.h:20
 msgid "Select updates at startup"
-msgstr ""
+msgstr "Vybrať aktualizácie po spustení"
 
 #: ../src/yumex.ui.h:21
-msgid "The interval in hour, when the DNF cache will be expired and updated"
-msgstr ""
+msgid ""
+"The interval in hour, when the DNF cache will be expired and updated (0 = "
+"disabled)"
+msgstr "Interval v hodinách, kedy vyprší vyrovnávacia pamäť nástroja DNF a bude aktualizovaná (0 = zakázané)"
 
 #: ../src/yumex.ui.h:22
 msgid "Cache expire interval (hours)"
-msgstr ""
+msgstr "Interval vypršania vyrovnávacej pamäte (v hodinách)"
 
 #: ../src/yumex.ui.h:23
-msgid "Default: Cleanup Old Installonly packages"
-msgstr ""
+msgid "12"
+msgstr "12"
 
 #: ../src/yumex.ui.h:24
-msgid "Number of installonly packages to keep"
-msgstr ""
+msgid "Default: Cleanup Old Installonly packages"
+msgstr "Predvolené: Vyčistiť staré balíky určené iba na inštaláciu"
 
 #: ../src/yumex.ui.h:25
-msgid "Settings"
-msgstr ""
+msgid "Number of installonly packages to keep"
+msgstr "Počet balíkov určených iba na inštaláciu, ktoré ponechať"
 
 #: ../src/yumex.ui.h:26
-msgid "Autostart the Yum Extender status icon at user login"
-msgstr ""
+msgid "3"
+msgstr "3"
 
 #: ../src/yumex.ui.h:27
-msgid "Start status icon at user login"
-msgstr ""
+msgid "Settings"
+msgstr "Nastavenia"
 
 #: ../src/yumex.ui.h:28
-msgid "Enable scheduled check for available updates"
-msgstr ""
+msgid "Autostart the Yum Extender update checker at user login"
+msgstr "Automaticky spustí nástroj na kontrolu aktualizácií programu Yum Extender po prihlásení používateľa"
 
 #: ../src/yumex.ui.h:29
-msgid "Scheduled check for new updates"
-msgstr ""
+msgid "Start update checker at user login"
+msgstr "Spustiť nástroj na kontrolu aktualizácií po prihlásení používateľa"
 
 #: ../src/yumex.ui.h:30
 msgid "How often the update checker will run"
-msgstr ""
+msgstr "Ako často sa majú kontrolovať aktualizácie"
 
 #: ../src/yumex.ui.h:31
 msgid "Update check interval (minutes)"
-msgstr ""
+msgstr "Interval kontroly aktualizácií (v minútach)"
 
 #: ../src/yumex.ui.h:32
-msgid ""
-"Delay from when Yum Extender is started\n"
-"to when it checks for updates.\n"
-"Gives the system time to settle down when\n"
-"Yum Extender is started when the user logins."
-msgstr ""
+msgid "Update Checker"
+msgstr "Nástroj na kontrolu aktualizácií"
+
+#: ../src/yumex.ui.h:33
+msgid "Color for installed packages"
+msgstr "Farba nainštalovaných balíkov"
+
+#: ../src/yumex.ui.h:34
+msgid "Color for available updates"
+msgstr "Farba dostupných balíkov"
+
+#: ../src/yumex.ui.h:35
+msgid "Color for available packages"
+msgstr "Farba dostupných balíkov"
 
 #: ../src/yumex.ui.h:36
-msgid "Update checker startup delay (seconds)"
-msgstr ""
+msgid "Color for obsoleted packages"
+msgstr "Farba zastaraných balíkov"
 
 #: ../src/yumex.ui.h:37
-msgid "Show notification when updates are found"
-msgstr ""
+msgid "Color for available downgrades"
+msgstr "Farba dostupných prechodov na nižšiu verziu"
 
 #: ../src/yumex.ui.h:38
-msgid "Show status icon when no updates are found"
-msgstr ""
-
-#: ../src/yumex.ui.h:39
-msgid "Status Icon"
-msgstr ""
-
-#: ../src/yumex.ui.h:40
-msgid "Color for installed packages"
-msgstr ""
-
-#: ../src/yumex.ui.h:41
-msgid "Color for available updates"
-msgstr ""
-
-#: ../src/yumex.ui.h:42
-msgid "Color for available packages"
-msgstr ""
-
-#: ../src/yumex.ui.h:43
-msgid "Color for obsoleted packages"
-msgstr ""
-
-#: ../src/yumex.ui.h:44
-msgid "Color for available downgrades"
-msgstr ""
-
-#: ../src/yumex.ui.h:45
 msgid "Advanced"
 msgstr "Pokročilé"
 
-#: ../src/yumex.ui.h:46
+#: ../src/yumex.ui.h:39
 msgid "Repositories used in current session"
-msgstr ""
+msgstr "Repozitáre použité v aktuálnej relácii"
 
-#: ../src/yumex.ui.h:47
+#: ../src/yumex.ui.h:40
 msgid ""
 "Save the current selected repositories\n"
 "so they will be used next time you\n"
 "start Yum Extender"
-msgstr ""
+msgstr "Uloží aktuálne vybraté repozitáre,\ntakže budú použité po ďalšom spustení\nprogramu Yum Extender"
 
-#: ../src/yumex.ui.h:50
+#: ../src/yumex.ui.h:43
 msgid "Save selected repositories"
-msgstr ""
+msgstr "Uložiť vybraté repozitáre"
 
-#: ../src/yumex.ui.h:51
+#: ../src/yumex.ui.h:44
 msgid "Repositories"
 msgstr "Repozitáre"
 
-#: ../src/yumex.ui.h:52
-msgid "Main menu"
-msgstr ""
-
-#: ../src/yumex.ui.h:53
-msgid "Apply pending changes"
-msgstr "Aplikovať čakajúce zmeny"
-
-#: ../src/yumex.ui.h:54
-msgid "Select the package types to show"
-msgstr ""
-
-#: ../src/yumex.ui.h:55
-msgid "Search options"
-msgstr "Voľby vyhľadávania"
-
-#: ../src/yumex.ui.h:56
+#: ../src/yumex.ui.h:45
 msgid "label"
 msgstr "menovka"
 
-#: ../src/yumex.ui.h:57
-msgid "Show packages"
-msgstr ""
+#: ../src/yumex.ui.h:46
+msgid "Show available updates"
+msgstr "Zobrazí dostupné aktualizácie"
 
-#: ../src/yumex.ui.h:59
-msgid "Show group & categories"
-msgstr ""
+#: ../src/yumex.ui.h:47
+msgid "Updates"
+msgstr "Aktualizácie"
 
-#: ../src/yumex.ui.h:60
+#: ../src/yumex.ui.h:48
+msgid "Show installed packages"
+msgstr "Zobrazí nainštalované balíky"
+
+#: ../src/yumex.ui.h:49
+msgid "Installed"
+msgstr "Nainštalované"
+
+#: ../src/yumex.ui.h:50
+msgid "Show available packages"
+msgstr "Zobrazí dostupné balíky"
+
+#: ../src/yumex.ui.h:51
+msgid "Available"
+msgstr "Dostupné"
+
+#: ../src/yumex.ui.h:52
+msgid "Show all packages"
+msgstr "Zobrazí všetky balíky"
+
+#: ../src/yumex.ui.h:53
+msgid "All"
+msgstr "Všetky"
+
+#: ../src/yumex.ui.h:55
 msgid "Groups"
-msgstr ""
+msgstr "Skupiny"
 
-#: ../src/yumex.ui.h:61
-msgid "Show history of changes"
-msgstr ""
+#: ../src/yumex.ui.h:56
+msgid "Undo"
+msgstr "Vrátiť späť"
 
-#: ../src/yumex.ui.h:62
+#: ../src/yumex.ui.h:57
 msgid "History"
-msgstr ""
+msgstr "História"
 
-#: ../src/yumex.ui.h:63
-msgid "Show pending changes"
-msgstr "Zobraziť čakajúce balíky"
-
-#: ../src/yumex.ui.h:64
+#: ../src/yumex.ui.h:58
 msgid "Pending Actions"
 msgstr "Čakajúce akcie"
 
+#: ../src/yumex.ui.h:59
+msgid "Package Description"
+msgstr "Popis balíka"
+
+#: ../src/yumex.ui.h:60
+msgid "Package Update Information"
+msgstr "Informácie o aktualizácii balíka"
+
+#: ../src/yumex.ui.h:61
+msgid "Package Filelist"
+msgstr "Zoznam súborov balíka"
+
+#: ../src/yumex.ui.h:62
+msgid "Package Requirements"
+msgstr "Požiadavky balíka"
+
+#: ../src/yumex.ui.h:63
+msgid "Search (show/hide)"
+msgstr "Zobrazí alebo skryje vyhľadávanie"
+
+#: ../src/yumex.ui.h:64
+msgid "Apply pending actions"
+msgstr "Použije čakajúce akcie"
+
 #: ../src/yumex.ui.h:65
-msgid "Edit Preferences"
-msgstr "Upraviť nastavenia"
+msgid "Prefix"
+msgstr "Predpona"
 
 #: ../src/yumex.ui.h:66
-msgid "Options"
-msgstr "Voľby"
+msgid "Package names starting with search key"
+msgstr "Názvy balíkov začínajúce na hľadaný kľúč"
 
 #: ../src/yumex.ui.h:67
-msgid "Show only newest version of packages"
-msgstr "Zobraziť iba najnovšie verzie balíkov"
+msgid "Keyword"
+msgstr "Kľúčové slovo"
 
 #: ../src/yumex.ui.h:68
-msgid "Newest Only"
-msgstr "Iba najnovšie"
+msgid "Package names containing search key"
+msgstr "Názvy balíkov obsahujúce hľadaný kľúč"
 
 #: ../src/yumex.ui.h:69
-msgid "Uninstall unused requirements when removing a package"
-msgstr ""
+msgid "Fields"
+msgstr "Polia"
 
 #: ../src/yumex.ui.h:70
-msgid "Erase Unused Requirements"
-msgstr "Vymazať nepotrebné požiadavky"
+msgid "Specified package fields containing search keys."
+msgstr "Špecifikované polia balíkov obsahujúce hľadané kľúče."
 
-#: ../src/yumex.ui.h:71
-msgid ""
-"Removing old version of installonly packages\n"
-"(ex. kernel)"
-msgstr ""
-
-#: ../src/yumex.ui.h:73
-msgid "Cleanup old Instonly packages "
-msgstr ""
+#: ../src/yumex.ui.h:72
+msgid "Package name"
+msgstr "Názov balíka"
 
 #: ../src/yumex.ui.h:74
-msgid "Help"
-msgstr "Pomocník"
-
-#: ../src/yumex.ui.h:75
-msgid "About Yum Extender"
-msgstr ""
+msgid "Package summary"
+msgstr "Súhrn balíka"
 
 #: ../src/yumex.ui.h:76
-msgid "About"
-msgstr ""
+msgid "Package description"
+msgstr "Popis balíka"
 
 #: ../src/yumex.ui.h:77
-msgid "Documentation (Online)"
-msgstr ""
+msgid "Package actions to perform"
+msgstr "Akcie balíkov, ktoré sa majú vykonať"
 
 #: ../src/yumex.ui.h:78
-msgid "Quit Yum Extender"
-msgstr ""
-
-#: ../src/yumex.ui.h:80
-msgid "Updates"
-msgstr ""
-
-#: ../src/yumex.ui.h:81
-msgid "Installed"
-msgstr ""
-
-#: ../src/yumex.ui.h:82
-msgid "Available"
-msgstr ""
-
-#: ../src/yumex.ui.h:83
-msgid "All"
-msgstr ""
-
-#: ../src/yumex.ui.h:84
-msgid "Delete Selected"
-msgstr ""
-
-#: ../src/yumex.ui.h:85
-msgid "Package name starts with <keyword>"
-msgstr ""
-
-#: ../src/yumex.ui.h:86
-msgid "Prefix"
-msgstr ""
-
-#: ../src/yumex.ui.h:87
-msgid "Keyword in package name"
-msgstr ""
-
-#: ../src/yumex.ui.h:88
-msgid "Keyword"
-msgstr ""
-
-#: ../src/yumex.ui.h:89
-msgid "Keywords in selected package attributes"
-msgstr ""
-
-#: ../src/yumex.ui.h:90
-msgid "Fields"
-msgstr ""
-
-#: ../src/yumex.ui.h:94
-msgid "Undo"
-msgstr ""
-
-#: ../src/yumex.ui.h:95
-msgid "Package actions to perform"
-msgstr ""
-
-#: ../src/yumex.ui.h:96
 msgid "Size:"
-msgstr ""
+msgstr "Veľkosť:"

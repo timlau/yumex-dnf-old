@@ -738,6 +738,10 @@ class PackageQueue:
 
 
 class QueueView(Gtk.TreeView):
+    __gsignals__ = {'queue-refresh': (GObject.SignalFlags.RUN_FIRST,
+                                    None,
+                                    (GObject.TYPE_INT,))
+                    }
 
     def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
@@ -853,6 +857,7 @@ class QueueView(Gtk.TreeView):
             self.populate_group_list(label, grps)
         self.populate_list_downgrade()
         self.expand_all()
+        self.emit('queue-refresh', self.queue.total())
 
     def populate_list(self, label, pkg_list):
         '''
@@ -945,6 +950,10 @@ class HistoryView(Gtk.TreeView):
             dcat = ddict[d]
             self.model.append(dcat, [t, tid])
         self.collapse_all()
+        path = Gtk.TreePath.new_from_string("0:0:0:0")
+        self.expand_to_path(path)
+        self.get_selection().select_path(path)
+        self.on_cursor_changed(self)
         self.is_populated = True
 
     def on_cursor_changed(self, widget):
@@ -1040,8 +1049,9 @@ class HistoryPackageView(Gtk.TreeView):
         # apply packages to model in right order
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
-                cat = self.model.append(
-                    None, ["<b>%s</b>" % const.HISTORY_STATE_LABLES[state]])
+                num = len(states[state])
+                cat = self.model.append(None, ["<b>%s (%i)</b>" %
+                          (const.HISTORY_STATE_LABLES[state], num)])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
@@ -1054,6 +1064,7 @@ class HistoryPackageView(Gtk.TreeView):
                         pkg_id, st, is_inst = pkg_list[1]
                         name = self._fullname(pkg_id)
                         self.model.append(pkg_cat, [name])
+        self.expand_all()
 
     def _fullname(self, pkg_id):
         ''' Package fullname  '''

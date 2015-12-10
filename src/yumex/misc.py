@@ -29,6 +29,7 @@ import gettext
 import locale
 import logging
 import os.path
+import re
 import subprocess
 import sys
 import yumex.config as config
@@ -108,6 +109,16 @@ def rgb_to_hex(r, g, b):
 
 def color_to_hex(color):
     return rgb_to_hex(color.red, color.green, color.blue)
+
+
+def is_url(url):
+    urls = re.findall(
+        '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
+        '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+    if urls:
+        return True
+    else:
+        return False
 
 
 def format_block(block, indent):
@@ -242,6 +253,11 @@ def logger_setup(logroot='yumex',
     logger.addHandler(handler)
 
 
+def is_gnome():
+    """Return True if desktop is Gnome."""
+    return os.environ.get("XDG_CURRENT_DESKTOP") == "GNOME"
+
+
 class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
@@ -262,18 +278,14 @@ class YumexConf(config.BaseConfig):
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
     autocheck_updates = config.BoolOption(False)
-    hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
     refresh_interval = config.IntOption(12)
     # headerbar is default if running gnome
-    if 'GDMSESSION' in os.environ:
-        hb_default = 'gnome' in os.environ['GDMSESSION']
-    else:
-        hb_default = False
+    hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
     search_default = config.CaselessSelectionOption(
                             default='prefix',
-                            allowed=('prefix', 'key', 'fields'))
+                            allowed=('prefix', 'keyword', 'fields', 'key'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)

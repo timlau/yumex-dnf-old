@@ -58,7 +58,7 @@ class BaseYumex:
         now = datetime.datetime.now()
         refresh_period = datetime.timedelta(hours=CONFIG.conf.refresh_interval)
         # check if cache management is disabled
-        if refresh_period == 0:
+        if CONFIG.conf.refresh_interval == 0:
             return False
         if cache_type == 'session':
             last_refresh = datetime.datetime.strptime(
@@ -224,7 +224,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             return True
 
     def on_delete_event(self, *args):
-        if CONFIG.conf.hide_on_close or self.is_working:
+        if self.is_working:
             self.iconify()
             return True
         else:
@@ -295,7 +295,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         Gtk.main_quit()
         sys.exit(1)
 
-    def set_working(self, state, insensitive=False):
+    def set_working(self, state, insensitive=True):
         """Set the working state.
 
         - show/hide the progress spinner
@@ -307,11 +307,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.is_working = state
         if state:
             self._set_busy_cursor(insensitive)
-            self._disable_buttons(False)
+            if insensitive:
+                self._disable_buttons(False)
         else:
             self.infobar.hide()
             self._set_normal_cursor()
-            self._disable_buttons(True)
+            if insensitive:
+                self._disable_buttons(True)
 
     def _disable_buttons(self, state):
         WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
@@ -361,7 +363,7 @@ class Window(BaseWindow):
         else:
             self.active_archs = list(const.PLATFORM_ARCH)
         self._grps = None   # Group and Category cache
-        self.active_page = None  # Active content page
+        self.active_page = 'packages'  # Active content page
         self.search_fields = CONFIG.conf.search_fields
 
         if self.install_mode:
@@ -388,6 +390,9 @@ class Window(BaseWindow):
                 logger.debug('create autostart: %s',
                              const.USER_DESKTOP_FILE)
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
+        # key is renamed to keyword
+        if CONFIG.conf.search_default == 'key':
+            CONFIG.conf.search_default = 'keyword'
 
 ###############################################################################
 # Gui Setup
@@ -458,8 +463,6 @@ class Window(BaseWindow):
         CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
         CONFIG.session.newest_only = CONFIG.conf.newest_only
         CONFIG.session.clean_unused = CONFIG.conf.clean_unused
-        self.options = widgets.Options(self)
-        self.options.connect('option-changed', self.on_option_changed)
         # setup the package/queue/history views
         self._setup_action_page()
         self._setup_package_page()
@@ -483,26 +486,30 @@ class Window(BaseWindow):
         self.preferences = dialogs.Preferences(self)
 
         # main menu setup
-        wid = self.get_ui('main_about')
-        wid.connect('activate', self.on_about)
-        wid = self.get_ui('main_doc')
-        wid.connect('activate', self.on_docs)
-        wid = self.get_ui('main_pref')
-        wid.connect('activate', self.on_pref)
-        wid = self.get_ui('button_run')
-        wid.connect('clicked', self.on_apply_changes)
-        wid = self.get_ui('main_quit')
-        wid.connect('activate', self.on_quit)
+        self.main_menu = widgets.MainMenu(self)
+        self.main_menu.connect('menu-changed', self.on_mainmenu)
+        self.apply_button = self.get_ui('button_run')
+        self.apply_button.connect('clicked', self.on_apply_changes)
+        self.apply_button.set_sensitive(False)
 
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
         self.arch_filter.change(self.active_archs)
 
+        # shortcuts
+        self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
+        self.app.set_accels_for_action('win.docs', ['F1'])
+        self.app.set_accels_for_action('win.newest_only(true)', ['<Alt>N'])
+        self.app.set_accels_for_action('win.clean_unused(true)', ['<Alt>E'])
+        self.app.set_accels_for_action('win.clean_instonly(true)', ['<Alt>C'])
+        self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
+
     def _setup_action_page(self):
         """Setup Pending Action page."""
         queue_menu = self.get_ui('queue_menu')
         self.queue_view = views.QueueView(queue_menu)
+        self.queue_view.connect('queue-refresh', self.on_queue_refresh)
         # Queue Page
         sw = self.get_ui('queue_sw')
         sw.add(self.queue_view)
@@ -542,13 +549,11 @@ class Window(BaseWindow):
 
     def _setup_history_page(self):
         """Setup the history page."""
-        hb = Gtk.Box()
-        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        right_sw = self.get_ui('history_right_sw')
+        left_sw = self.get_ui('history_left_sw')
         self.history_view = views.HistoryView(self)
-        hb.pack_start(self.history_view, False, False, 0)
-        hb.pack_start(self.history_view.pkg_view, True, True, 0)
-        sw = self.get_ui('history_sw')
-        sw.add(hb)
+        left_sw.add(self.history_view)
+        right_sw.add(self.history_view.pkg_view)
         # setup history buttons
         undo = self.get_ui('history_undo')
         undo.connect('clicked', self.on_history_undo)
@@ -559,7 +564,7 @@ class Window(BaseWindow):
 
     def _open_url(self, url):
         """Open URL in default browser."""
-        if self._is_url(url):  # just to be sure and prevent shell injection
+        if misc.is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call('xdg-open %s' % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
@@ -910,7 +915,7 @@ class Window(BaseWindow):
 
         if event_and_modifiers != 0:
             # Open search bar on Ctrl + S
-            if (event.keyval == Gdk.KEY_s and
+            if (event.keyval == Gdk.KEY_f and
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
                 if self.active_page == 'packages':
                     self.search_bar.toggle()
@@ -922,29 +927,71 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_2 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('groups')
-            # Switch to groups page on Alt + 3
+            # Switch to history page on Alt + 3
             if (event.keyval == Gdk.KEY_3 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('history')
-            # Switch to groups page on Alt + 4
+            # Switch to queue page on Alt + 4
             if (event.keyval == Gdk.KEY_4 and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._switch_to('actions')
+            # Apply pending actiond on Alt + A
+            if (event.keyval == Gdk.KEY_a and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self._process_actions()
+            # Filter = 'updates' on Ctrl + 1
+            if (event.keyval == Gdk.KEY_1 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('updates')
+            # Filter = 'installed' on Ctrl + 2
+            if (event.keyval == Gdk.KEY_2 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('installed')
+            # Filter = 'available' on Ctrl + 3
+            if (event.keyval == Gdk.KEY_3 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('available')
+            # Filter = 'all' on Ctrl + 4
+            if (event.keyval == Gdk.KEY_4 and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.pkg_filter.set_active('all')
+            # Select All on Ctrl + A
+            if (event.keyval == Gdk.KEY_a and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                if self.active_page == 'packages':
+                    self.package_view.on_section_header_clicked(None)
+
+    def on_mainmenu(self, widget, action, data):
+        """Handle mainmenu actions"""
+        if action == 'pref':
+            need_reset = self.preferences.run()
+            if need_reset:
+                self._reset()
+        elif action == 'quit':
+            if self.can_close():
+                self.app.quit()
+        elif action == 'about':
+            dialog = dialogs.AboutDialog()
+            dialog.run()
+            dialog.destroy()
+        elif action == 'docs':
+            self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
+        elif action in ['newest_only', 'clean_instonly', 'clean_unused']:
+            setattr(CONFIG.session, action, data)
+            logger.debug('session option : %s = %s' %
+                     (action, getattr(CONFIG.session, action)))
+            if action in ['newest_only']:  # search again
+                self._refresh()
+            if action in ['clean_instonly', 'clean_unused']:
+                self._reset_on_error()
 
     def on_apply_changes(self, widget):
         """Apply Changes button callback."""
         self._process_actions()
-
-    def on_pref(self, widget):
-        """Preferences selected callback."""
-        need_reset = self.preferences.run()
-        if need_reset:
-            self._reset()
-
-    def on_quit(self, widget):
-        """Quit Callback."""
-        if self.can_close():
-            self.app.quit()
 
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
@@ -962,17 +1009,6 @@ class Window(BaseWindow):
         elif page == 'history':
             self._load_history()
         self.active_page = page
-
-    def on_about(self, widget):
-        """ Main Menu: Help -> About """
-        dialog = dialogs.AboutDialog()
-        dialog.run()
-        dialog.destroy()
-
-    def on_docs(self, widget):
-        """ Main Menu: Help -> Documentation"""
-        self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
-        pass
 
     def on_search(self, widget, key, sch_type, fields):
         """Handle search."""
@@ -1021,15 +1057,12 @@ class Window(BaseWindow):
         else:
             self.package_view.set_header_click(False)
 
-    def on_option_changed(self, widget, option, state):
-        """Handle changes in options."""
-        setattr(CONFIG.session, option, state)
-        logger.debug('session option : %s = %s' %
-                     (option, getattr(CONFIG.session, option)))
-        if option in ['newest_only']:  # search again
-            self._refresh()
-        if option in ['clean_instonly', 'clean_unused']:
-            self._reset_on_error()
+    def on_queue_refresh(self, widget, total):
+        '''Handle content of the queue is changed.'''
+        if total > 0:
+            self.apply_button.set_sensitive(True)
+        else:
+            self.apply_button.set_sensitive(False)
 
     def on_arch_changed(self, widget, data):
         """Arch changed in arch menu callback."""
