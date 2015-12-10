@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A GUI for yum
-#    Copyright (C) 2013 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
+#    Copyright (C) 2015 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,11 +33,10 @@ if here != '/usr/bin':
     sys.path[0] = here
     print("set PYTHONPATH to %s" % here)
 
-
-from yumex import YumexApplication
+from yumex.updater import UpdateApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = YumexApplication()
+    app = UpdateApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
 except Exception as e:

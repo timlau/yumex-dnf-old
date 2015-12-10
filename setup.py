@@ -8,6 +8,8 @@ from distutils import log
 import os
 from os.path import join, basename, split
 
+RENAME_SCRIPTS = {'main.py': 'yumex-dnf',
+                  'update.py': 'yumex-dnf-updatechecker'}
 
 class BuildScripts(build_scripts):
     def run(self):
@@ -16,9 +18,9 @@ class BuildScripts(build_scripts):
             script = convert_path(script)
             outfile = join(self.build_dir, basename(script))
             if os.path.exists(outfile) and outfile.endswith(".py"):
-                if basename(outfile) == "main.py":
+                if basename(outfile) in RENAME_SCRIPTS:
                     dn, fn = split(outfile)
-                    newfile = join(dn, "yumex-dnf")
+                    newfile = join(dn, RENAME_SCRIPTS[fn])
                     log.info("renaming %s -> %s", outfile, basename(newfile))
                     os.rename(outfile, newfile)
 
@@ -31,7 +33,7 @@ setup(name="yumex-dnf",
       url='http://yumex.dk',
       packages=['yumex', 'yumex.gui'],
       package_dir={'': 'src'},
-      scripts=['src/main.py'],
+      scripts=['src/main.py', 'src/update.py'],
       data_files=[('', ['src/yumex.ui'])],
       cmdclass={
         'build_scripts': BuildScripts,

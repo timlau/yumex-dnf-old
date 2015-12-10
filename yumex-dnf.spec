@@ -1,7 +1,7 @@
 %global appname yumex
 
 Name:     %{appname}-dnf
-Version:  4.1.4
+Version:  4.3.0
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -21,6 +21,7 @@ Requires: python3-gobject >= 3.10
 Requires: python3-pyxdg
 Requires: python3-dbus
 Requires: python3-cairo
+Requires: libnotify
 
 %description
 Graphical package tool for maintain packages on the system
@@ -58,14 +59,16 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %files -f  %{name}.lang
 %doc README.md COPYING
 %{_datadir}/%{name}
-%{_bindir}/%{name}
+%{_bindir}/%{name}*
 %{python3_sitelib}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
-%{_datadir}/dbus-1/services/*
 %{_datadir}/appdata/*.xml
 
 %changelog
+
+* Tue Dec 1 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.3.0-1
+- bumped release to 4.3.0 (dev)
 
 * Wed Sep 30 2015 Tim Lauridsen <timlau@fedoraproject.org> 4.1.4-1
 - bumped release to 4.1.4

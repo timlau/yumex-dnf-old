@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=Yum Extender
+Name=Yum Extender Update Checker
 Type=Application
-Exec=yumex-dnf --icononly
+Exec=yumex-dnf-updatechecker
 Terminal=false
 Icon=yumex
-Comment=Graphical Package Manager
+Comment=Autostart yumex-dnf-updatechecker script
 NoDisplay=false
 Categories=Utility;

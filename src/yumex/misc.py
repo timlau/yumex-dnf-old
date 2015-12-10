@@ -21,8 +21,7 @@ from __future__ import absolute_import
 
 import time
 
-from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gtk, Gdk, Notify
 
 import configparser
 import dnfdaemon.client
@@ -65,13 +64,6 @@ class TransactionSolveError(Exception):
         self.msgs = msgs
 
 
-def dbus_statusicon(cmd):
-    subprocess.call(
-        '/usr/bin/dbus-send --session --print-reply '
-        '--dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.%s' % cmd,
-        shell=True)
-
-
 def dbus_dnfsystem(cmd):
     subprocess.call(
         '/usr/bin/dbus-send --system --print-reply '
@@ -111,7 +103,7 @@ def rgb_to_hex(r, g, b):
         r *= 255
         g *= 255
         b *= 255
-    return "#%02X%02X%02X" % (r, g, b)
+    return "#{0:02X}{1:02X}{2:02X}".format(int(r), int(g), int(b))
 
 
 def color_to_hex(color):
@@ -131,7 +123,10 @@ def format_block(block, indent):
 def get_style_color(widget):
     """Get the default color for a widget in current theme."""
     context = widget.get_style_context()
-    color = context.get_color(Gtk.StateFlags.NORMAL)
+    context.save()
+    context.set_state(Gtk.StateFlags.NORMAL)
+    color = context.get_color(context.get_state())
+    context.restore()
     return color
 
 
@@ -220,10 +215,31 @@ def format_number(number, SI=0, space=' '):
     return(fmt % (float(number or 0), space, symbols[depth]))
 
 
+def notify(summary, body):
+    Notify.init('Yum Extender')
+    icon = "yumex-dnf"
+    notification = Notify.Notification.new(summary, body, icon)
+    notification.set_timeout(5000)  # timeout 5s
+    notification.show()
+
+
 def check_dark_theme():
     """Returns True if Gtk using a dark theme"""
     gtk_settings = Gtk.Settings.get_default()
     return gtk_settings.get_property("gtk-application-prefer-dark-theme")
+
+
+def logger_setup(logroot='yumex',
+                  logfmt='%(asctime)s: %(message)s',
+                  loglvl=logging.INFO):
+    """Setup Python logging."""
+    logger = logging.getLogger(logroot)
+    logger.setLevel(loglvl)
+    formatter = logging.Formatter(logfmt, '%H:%M:%S')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.propagate = False
+    logger.addHandler(handler)
 
 
 class YumexConf(config.BaseConfig):
@@ -245,9 +261,6 @@ class YumexConf(config.BaseConfig):
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
-    update_startup_delay = config.IntOption(30)
-    update_notify = config.BoolOption(True)
-    update_showicon = config.BoolOption(True)
     autocheck_updates = config.BoolOption(False)
     hide_on_close = config.BoolOption(False)
     system_refresh = config.Option('2000-01-01 00:01')
@@ -263,14 +276,15 @@ class YumexConf(config.BaseConfig):
                             allowed=('prefix', 'key', 'fields'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
-    win_width = config.IntOption(1024)
+    win_width = config.IntOption(1150)
+    info_paned = config.IntOption(450)
     win_maximized = config.BoolOption(False)
     auto_select_updates = config.BoolOption(False)
     repo_saved = config.BoolOption(False)
     repo_enabled = config.KeyListOption([])
     archs = config.KeyListOption([])
     protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
-    clean_instonly = config.BoolOption(False)
+    clean_instonly = config.BoolOption(True)
     installonly_limit = config.PositiveIntOption(3, range_min=2,
                                                  names_of_0=["0", "<off>"])
 

@@ -23,16 +23,16 @@ from __future__ import absolute_import
 from gi.repository import Pango
 from yumex.misc import _
 
+import os
 import os.path
 import re
 import subprocess
 import sys
 import hawkey
 
-VERSION = "4.1.4"
+VERSION = "4.3.0"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
-NEEDED_STATUS_API = 1  # The needed statusicon API version
 
 # find the data dir for resources
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -44,6 +44,13 @@ else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
+
+HOME_DIR = os.environ['HOME']
+AUTOSTART_DIR = HOME_DIR + '/.config/autostart'
+USER_DESKTOP_FILE = AUTOSTART_DIR + '/yumex-dnf-updater.desktop'
+SYS_DESKTOP_FILE = MISC_DIR + "/yumex-dnf-updater.desktop"
+LEGACY_DESKTOP_FILE = AUTOSTART_DIR + "/yumex-dnf.desktop"
+
 
 ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
@@ -67,11 +74,6 @@ ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
 ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
 ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
 ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
-
-# Fonts
-XSMALL_FONT = Pango.FontDescription("sans 6")
-SMALL_FONT = Pango.FontDescription("sans 8")
-BIG_FONT = Pango.FontDescription("sans 12")
 
 # Constants
 

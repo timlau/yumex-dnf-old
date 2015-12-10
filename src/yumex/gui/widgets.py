@@ -22,7 +22,7 @@ from __future__ import absolute_import
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Gio
+from gi.repository import Pango
 from yumex.misc import _, CONFIG
 
 import datetime
@@ -167,76 +167,404 @@ class ArchMenu(GObject.GObject):
         self.emit("arch-changed", archs)
 
 
-class PackageInfoWidget(Gtk.Box):
+class SearchBar(GObject.GObject):
+    """Handling the search UI."""
+
+    __gsignals__ = {'search': (GObject.SignalFlags.RUN_FIRST,
+                                    None,
+                                    (GObject.TYPE_STRING,
+                                     GObject.TYPE_STRING,
+                                     GObject.TYPE_PYOBJECT,))
+                    }
+
+    FIELDS = ['name', 'summary', 'description']
+    TYPES = ['prefix', 'keyword', 'fields']
+
+    def __init__(self, win):
+        GObject.GObject.__init__(self)
+        self.win = win
+        self.search_type = 'prefix'
+        self.search_fields = ['name', 'summary']
+        self.active = False
+        # widgets
+        self._bar = self.win.get_ui('search_bar')
+        # Searchbar togglebutton
+        self._toggle = self.win.get_ui('sch_togglebutton')
+        self._toggle.connect('toggled', self.on_toggle)
+        # Search Entry
+        self._entry = self.win.get_ui('search_entry')
+        self._entry.connect('activate', self.on_entry_activate)
+        self._entry.connect('icon-press', self.on_entry_icon)
+        # Search Options
+        self._options = self.win.get_ui('search-options')
+        self._options_button = self.win.get_ui('sch_options_button')
+        self._options_button.connect('clicked', self.on_options_button)
+        # Search Spinner
+        self._spinner = self.win.get_ui('search_spinner')
+        self._spinner.stop()
+        # setup field checkboxes
+        for key in SearchBar.FIELDS:
+            wid = self.win.get_ui('sch_fld_%s' % key)
+            if key in self.search_fields:
+                wid.set_active(True)
+            wid.connect('toggled', self.on_fields_changed, key)
+        self._set_fields_sensitive(False)
+        # setup search type radiobuttons
+        for key in SearchBar.TYPES:
+            wid = self.win.get_ui('sch_opt_%s' % key)
+            if key == self.search_type:
+                wid.set_active(True)
+            wid.connect('toggled', self.on_type_changed, key)
+        # setup search option popover
+        self.opt_popover = Gtk.Popover.new(self._options_button)
+        self.opt_popover.set_size_request(50, 100)
+        self.opt_popover.set_position(Gtk.PositionType.BOTTOM)
+        opt_grid = self.win.get_ui('sch_opt_grid')
+        self.opt_popover.add(opt_grid)
+
+    def show_spinner(self, state=True):
+        """Set is spinner in searchbar is running."""
+        if state:
+            self._spinner.start()
+        else:
+            self._spinner.stop()
+
+    def toggle(self):
+        self._toggle.set_active(not self._toggle.get_active())
+
+    def _set_fields_sensitive(self, state=True):
+        """Set sensitivity of field checkboxes."""
+        for key in SearchBar.FIELDS:
+            wid = self.win.get_ui('sch_fld_%s' % key)
+            wid.set_sensitive(state)
+
+    def _get_active_field(self):
+        """Get the active search fields, based on checkbox states."""
+        active = []
+        for key in SearchBar.FIELDS:
+            wid = self.win.get_ui('sch_fld_%s' % key)
+            if wid.get_active():
+                active.append(key)
+        return active
+
+    def _set_focus(self):
+        """Set focus on search entry and move cursor to end of text."""
+        self._entry.grab_focus()
+        self._entry.emit(
+            'move-cursor', Gtk.MovementStep.BUFFER_ENDS, 1, False)
+
+    def on_options_button(self, widget):
+        """Search Option button is toggled."""
+        if self.opt_popover.get_visible():
+            self.opt_popover.hide()
+            self._set_focus()
+        else:
+            self.opt_popover.show_all()
+
+    def on_toggle(self, widget=None):
+        """Search Toggle button is toggled."""
+        self._bar.set_search_mode(not self._bar.get_search_mode())
+        if self._bar.get_search_mode():
+            self._set_focus()
+        self.active = self._bar.get_search_mode()
+
+    def on_type_changed(self, widget, key):
+        """Search type is changed."""
+        if widget.get_active():
+            self.search_type = key
+            if self.search_type == 'fields':
+                self._set_fields_sensitive(True)
+            else:
+                self._set_fields_sensitive(False)
+
+    def on_fields_changed(self, widget, key):
+        """Search fields is changed."""
+        self.search_fields = self._get_active_field()
+
+    def on_entry_activate(self, widget):
+        """Seach entry is activated"""
+        # make sure search option is hidden
+        self.signal()
+
+    def on_entry_icon(self, widget, icon_pos, event):
+        """Search icon press callback."""
+        # clear icon pressed
+        if icon_pos == Gtk.EntryIconPosition.SECONDARY:
+            self._entry.set_text('')
+            self._entry.emit('activate')
+
+    def signal(self):
+        """Emit a seach signal with key, search type & fields."""
+        txt = self._entry.get_text()
+        if self.search_type == 'fields':
+            self.emit('search', txt, self.search_type, self.search_fields)
+        else:
+            self.emit('search', txt, self.search_type, [])
+
+    def reset(self):
+        self._entry.set_text('')
+
+    def hide(self):
+        if self.active:
+            self._bar.set_search_mode(False)
+
+    def show(self):
+        if self.active:
+            self._bar.set_search_mode(True)
+            self._set_focus()
+
+
+class Options(GObject.GObject):
+    """Handling the mainmenu options"""
+
+    __gsignals__ = {'option-changed': (GObject.SignalFlags.RUN_FIRST,
+                                       None,
+                                       (GObject.TYPE_STRING,
+                                        GObject.TYPE_BOOLEAN,)
+                                       )}
+
+    OPTIONS = ['newest_only', 'clean_unused', 'clean_instonly']
+
+    def __init__(self, win):
+        GObject.GObject.__init__(self)
+        self.win = win
+        for key in Options.OPTIONS:
+            wid = self.win.get_ui('option_%s' % key)
+            wid.set_active(getattr(CONFIG.session, key))
+            wid.connect('toggled', self.on_toggled, key)
+
+    def on_toggled(self, widget, flt):
+        """An option is changed."""
+        self.emit('option-changed', flt, widget.get_active())
+
+
+class FilterSidebar(GObject.GObject):
+    """Sidebar selector widget. """
+
+    __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
+                                       None,
+                                       (GObject.TYPE_STRING,)
+                                       )}
+
+    INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
+
+    def __init__(self, parent):
+        GObject.GObject.__init__(self)
+        self._lb = parent.get_ui('pkg_listbox')
+        self._parent = parent
+        self._current = None
+        self._lb.unselect_all()
+        self._lb.connect('row-selected', self.on_toggled)
+
+    def on_toggled(self, widget, row):
+        """Active filter is changed."""
+        if row:
+            ndx = row.get_index()
+            key = FilterSidebar.INDEX[ndx]
+            if key != self._current:
+                self.emit('sidebar_changed', key)
+                self._current = key
+
+    def set_active(self, key):
+        """Set the active item based on key."""
+        if self._current == key:
+            self.emit('sidebar_changed', key)
+        else:
+            row_name = 'pkg_flt_row_' + key
+            row = self._parent.get_ui(row_name)
+            self._lb.select_row(row)
+
+
+class Filters(GObject.GObject):
+    """Handling the package filter UI."""
+
+    __gsignals__ = {'filter-changed': (GObject.SignalFlags.RUN_FIRST,
+                                       None,
+                                       (GObject.TYPE_STRING,)
+                                       )}
+
+    FILTERS = ['updates', 'installed', 'available', 'all']
+
+    def __init__(self, win):
+        GObject.GObject.__init__(self)
+        self.win = win
+        self._sidebar = FilterSidebar(self.win)
+        self.current = 'updates'
+        self._sidebar.connect('sidebar-changed', self.on_toggled)
+
+    def on_toggled(self, widget, flt):
+        """Active filter is changed."""
+        self.current = flt
+        self.emit('filter-changed', flt)
+
+    def set_active(self, flt):
+        """Set the active filter."""
+        self._sidebar.set_active(flt)
+
+
+class Content(GObject.GObject):
+    """Handling the content pages"""
+
+    __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
+                                       None,
+                                       (GObject.TYPE_STRING,)
+                                       )}
+
+    def __init__(self, win):
+        GObject.GObject.__init__(self)
+        self.win = win
+        self._stack = self.win.get_ui('main_stack')
+        self.switcher = self.win.get_ui('main_switcher')
+        # catch changes in active page in stack
+        self._stack.connect('notify::visible-child', self.on_switch)
+
+    def select_page(self, page):
+        """Set the active page."""
+        self._stack.set_visible_child_name(page)
+
+    def on_menu_select(self, widget, page):
+        """Main menu page entry is seleceted"""
+        self.select_page(page)
+
+    def on_switch(self, widget, data):
+        """The active page is changed."""
+        child = self._stack.get_visible_child_name()
+        self.emit('page-changed', child)
+
+
+class PackageDetails(GObject.GObject):
     __gsignals__ = {'info-changed': (GObject.SignalFlags.RUN_FIRST,
                                      None,
                                      (GObject.TYPE_STRING,))
                     }
 
-    def __init__(self, window, url_handler):
-        Gtk.Box.__init__(self)
-        vbox = Gtk.Box()
-        vbox.set_orientation(Gtk.Orientation.VERTICAL)
-        # PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
-        tip = _("Package Description")
-        rb = self._get_radio_button('dialog-information-symbolic', "desc",
-                                    tooltip=tip)
-        vbox.add(rb)
-        tip = _("Package Update Information")
-        vbox.add(self._get_radio_button(
-            'software-update-available-symbolic', "updinfo", rb, tip))
-        #tip = _("Package Changelog")
-        #vbox.add(self._get_radio_button(
-            #'bookmark-new-symbolic', "changelog", rb, tip))
-        tip = _("Package Filelist")
-        vbox.add(self._get_radio_button(
-            'drive-multidisk-symbolic', "files", rb, tip))
-        tip = _("Package Requirements")
-        vbox.add(self._get_radio_button('insert-object-symbolic', "deps", rb,
-                                        tip))
-        vbox.set_margin_right(5)
-        self.pack_start(vbox, False, False, 0)
-        sw = Gtk.ScrolledWindow()
-        self.view = yumex.gui.views.PackageInfoView(window, url_handler)
-        sw.add(self.view)
-        self.pack_start(sw, True, True, 0)
+    VALUES = {0: 'desc', 1: 'updinfo', 2: 'files', 3: 'deps'}
+    DEFAULT_STYLES = ['description', 'filelist', 'changelog',
+                      'changelog-header']
 
-    def _get_radio_button(self, icon_name, name, group=None, tooltip=None):
-        if group:
-            wid = Gtk.RadioButton.new_from_widget(group)
+    def __init__(self, win, url_handler=None):
+        super(PackageDetails, self).__init__()
+        self.win = win
+        self.widget = self.win.get_ui('info_box')
+        self._listbox = self.win.get_ui('info_list')
+        self._listbox.connect('row-selected', self.on_toggled)
+
+        self._text = self.win.get_ui('info_text')
+        self._text.connect("motion_notify_event", self.on_mouse_motion)
+        self._buffer = self.win.get_ui('info_buffer')
+        self._tags = self.win.get_ui('info_tags')
+        self._default_style = self._tags.lookup('')
+        self._url_handler = url_handler
+        # List of active URLs in the tab
+        self.url_tags = []
+        self.underlined_url = False
+        self.url_list = {}
+
+    def show(self, show=True):
+        if show:
+            self.widget.show_all()
+            self.clear()
         else:
-            wid = Gtk.RadioButton.new(None)
-        icon = Gio.ThemedIcon(name=icon_name)
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.MENU)
-        wid.set_image(image)
-        if tooltip:
-            wid.set_tooltip_text(tooltip)
-        wid.connect('toggled', self._on_filter_changed, name)
-        # we only want an image, not the black dot indicator
-        wid.set_property("draw-indicator", False)
-        return wid
+            self.widget.hide()
 
-    def _on_filter_changed(self, button, data):
+    def on_toggled(self, listbox, row):
+        if row:
+            ndx = row.get_index()
+            key = PackageDetails.VALUES[ndx]
+            self.emit('info-changed', key)
+
+    def get_style(self, tag_name):
+        if tag_name in PackageDetails.DEFAULT_STYLES and \
+           yumex.misc.check_dark_theme():
+            tag_name += '_dark'
+        style = self._tags.lookup(tag_name)
+        return style
+
+    def write(self, txt, style_name=None, newline=True):
+        if not txt:
+            return
+        if newline and txt[-1] != '\n':
+            txt += '\n'
+        start, end = self._buffer.get_bounds()
+        if style_name:
+            style = self.get_style(style_name)
+        else:
+            style = self.get_style('description')
+        if style:
+            self._buffer.insert_with_tags(end, txt, style)
+        else:
+            self._buffer.insert(end, txt)
+        self._text.scroll_to_iter(self._buffer.get_end_iter(),
+                                  0.0, True, 0.0, 0.0)
+
+    def clear(self):
+        self._buffer.set_text('')
+
+    def goto_top(self):
+        self._text.scroll_to_iter(self._buffer.get_start_iter(),
+                                  0.0, False, 0.0, 0.0)
+
+    def on_url_event(self, tag, widget, event, iterator):
+        """ Catch when the user clicks the URL """
+        if event.type == Gdk.EventType.BUTTON_RELEASE:
+            url = self.url_list[tag.get_property("name")]
+            if self._url_handler:
+                self._url_handler(url)
+
+    def on_mouse_motion(self, widget, event, data=None):
         '''
-        Radio Button changed handler
-        Change the info in the view to match the selection
-Gtk.Image()
-        :param button:
+        Mouse movement handler for TextView
+
+        :param widget:
+        :param event:
         :param data:
         '''
-        if button.get_active():
-            logger.debug("pkginfo: %s selected" % data)
-            self.emit("info-changed", data)
+        window = widget.get_window(Gtk.TextWindowType.WIDGET)
+        # Get x,y pos for widget
+        w, x, y, mask = window.get_pointer()
+        # convert coords to TextBuffer coords
+        x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
+        # Get the tags on current pointer location
+        tags = widget.get_iter_at_location(x, y).get_tags()
+        # Remove underline and hand mouse pointer
+        if self.underlined_url:
+            self.underlined_url.set_property("underline", Pango.Underline.NONE)
+            widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
+            self.underlined_url = None
+        for tag in tags:
+            if tag in self.url_tags:
+                # underline the tags and change mouse pointer to hand
+                tag.set_property("underline", Pango.Underline.SINGLE)
+                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+                    Gdk.Cursor(Gdk.CursorType.HAND2))
+                self.underlined_url = tag
+        return False
+
+    def add_url(self, text, url, newline=False):
+        """ Append URL to textbuffer and connect an event """
+        # Try to see if we already got the current url as a tag
+        tag = self._tags.lookup(text)
+        if not tag:
+            if yumex.misc.check_dark_theme():
+                tag = self._buffer.create_tag(text,
+                                             foreground="#4C4CFF")
+            else:
+                tag = self._buffer.create_tag(text,
+                                             foreground="blue")
+            tag.connect("event", self.on_url_event)
+            self.url_tags.append(tag)
+            self.url_list[text] = url
+        self.write(text, style_name=text, newline=False)
+        self.write(' ', style_name='describtion', newline=newline)
 
 
-class PackageInfo(PackageInfoWidget):
+class PackageInfo(PackageDetails):
     '''
     class for handling the Package Information view
     '''
 
     def __init__(self, window, base):
-        PackageInfoWidget.__init__(self, window, url_handler=self._url_handler)
-        self.set_name('YumexPackageInfo')
+        PackageDetails.__init__(self, window, self._url_handler)
         self.window = window
         self.base = base
         self.current_package = None
@@ -262,8 +590,7 @@ class PackageInfo(PackageInfoWidget):
         '''
         update the information in the Package info view
         '''
-        self.view.clear()
-        self.view.write("\n")
+        self.clear()
         if self.current_package:
             if self.active_filter == 'desc':
                 self._show_description()
@@ -279,8 +606,8 @@ class PackageInfo(PackageInfoWidget):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                print("Package info not found: ", self.active_filter)
-        self.view.goTop()
+                logger.error("Package info not found: ", self.active_filter)
+        self.goto_top()
 
     def _is_url(self, url):
         urls = re.findall(
@@ -292,7 +619,7 @@ class PackageInfo(PackageInfoWidget):
             return False
 
     def _url_handler(self, url):
-        print('URL activated: ' + url)
+        logger.debug('URL activated: ' + url)
         if self._is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
@@ -305,27 +632,27 @@ class PackageInfo(PackageInfoWidget):
         return urllib.parse.quote_plus(self.current_package.name)
 
     def _is_fedora_pkg(self):
-        if self.current_package.repository in const.FEDORA_REPOS:
-            return True
-        else:
-            return False
+        if self.current_package:
+            if self.current_package.repository in const.FEDORA_REPOS:
+                return True
+        return False
 
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
-            self.view.write(_("Tags: %s\n") %
+            self.write(_("Tags: %s\n") %
                             ", ".join(tags), "changelog-header")
         desc = self.current_package.description
-        self.view.write(desc)
-        self.view.write('\n')
-        self.view.write(_("Links: "), "changelog-header", newline=True)
-        self.view.write('  ', newline=False)
+        self.write(desc)
+        self.write('\n')
+        self.write(_("Links: "), "changelog-header", newline=True)
+        self.write('  ', newline=False)
         url_hp = self.current_package.URL
-        self.view.add_url(url_hp, url_hp, newline=True)
+        self.add_url(url_hp, url_hp, newline=True)
         if self._is_fedora_pkg():
-            self.view.write('  ', newline=False)
+            self.write('  ', newline=False)
             url_fp = const.FEDORA_PACKAGES_URL + self._get_name_for_url()
-            self.view.add_url(url_fp, url_fp, newline=True)
+            self.add_url(url_fp, url_fp, newline=True)
             self.base.set_working(False)
 
     def _show_updateinfo(self):
@@ -341,13 +668,13 @@ class PackageInfo(PackageInfoWidget):
                 if cnt == 3:
                     break
         else:
-            self.view.write(_("No update information is available"))
+            self.write(_("No update information is available"))
             if self._is_fedora_pkg():
-                self.view.write(_("\nFedora Updates:"), "changelog-header",
+                self.write(_("\nFedora Updates:"), "changelog-header",
                                 newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
-                self.view.add_url(url, url, newline=True)
+                self.add_url(url, url, newline=True)
 
         self.base.set_working(False)
 
@@ -363,7 +690,7 @@ class PackageInfo(PackageInfoWidget):
         #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
         #    head += "    Updated : %s" % upd_info['updated']
 
-        self.view.write(head)
+        self.write(head)
         head = ""
 
         # Add our bugzilla references
@@ -371,14 +698,14 @@ class PackageInfo(PackageInfoWidget):
             bzs = [r for r in upd_info['references']
                    if r and r[0] == hawkey.REFERENCE_BUGZILLA]
             if len(bzs):
-                self.view.write('\n')
+                self.write('\n')
                 header = "Bugzilla"
                 for bz in bzs:
                     (typ, bug, title, url) = bz
                     bug_msg = '- %s' % title
-                    self.view.write("%14s : " % header, newline=False)
-                    self.view.add_url(bug, url)
-                    self.view.write(bug_msg)
+                    self.write("%14s : " % header, newline=False)
+                    self.add_url(bug, url)
+                    self.write(bug_msg)
                     header = " "
 
         ## Add our CVE references
@@ -397,7 +724,7 @@ class PackageInfo(PackageInfoWidget):
         head += "\n%14s : %s\n" % (_("Description"),
                                    yumex.misc.format_block(desc, 17))
         head += "\n"
-        self.view.write(head)
+        self.write(head)
 
     def _show_changelog(self):
         self.base.set_working(True)
@@ -406,23 +733,23 @@ class PackageInfo(PackageInfoWidget):
             i = 0
             for (c_date, c_ver, msg) in changelog:
                 i += 1
-                self.view.write(
+                self.write(
                     "* %s %s" %
                     (datetime.date.fromtimestamp(c_date).isoformat(), c_ver),
                     "changelog-header")
                 for line in msg.split('\n'):
-                    self.view.write("%s" % line, "changelog")
-                self.view.write('\n')
+                    self.write("%s" % line, "changelog")
+                self.write('\n')
                 if i == 5:  # only show the last 5 entries
                     break
         else:
-            self.view.write(_("No changelog information is available"))
+            self.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
-                self.view.write(_("\nOnline Changelog:"), "changelog-header",
+                self.write(_("\nOnline Changelog:"), "changelog-header",
                                 newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"
-                self.view.add_url(url, url, newline=True)
+                self.add_url(url, url, newline=True)
 
         self.base.set_working(False)
 
@@ -431,57 +758,17 @@ class PackageInfo(PackageInfoWidget):
         filelist = self.current_package.filelist
         if filelist:
             for fname in sorted(filelist):
-                self.view.write(fname)
+                self.write(fname)
         else:
-            self.view.write(_("No filelist information is available"))
+            self.write(_("No filelist information is available"))
         self.base.set_working(False)
 
     def _show_requirements(self):
         self.base.set_working(True)
         reqs = self.current_package.requirements
         for key in reqs:
-            self.view.write(key)
+            self.write(key)
             for pkg_id in reqs[key]:
                 pkg = yumex.misc.id2fullname(pkg_id)
-                self.view.write(' --> {}'.format(pkg))
+                self.write(' --> {}'.format(pkg))
         self.base.set_working(False)
-
-
-class YumexHeaderBar(Gtk.HeaderBar):
-    """Header bar for main window."""
-    # TODO: move to gui.widget
-    def __init__(self, ui):
-        Gtk.HeaderBar.__init__(self)
-        self.props.show_close_button = True
-        self.ui = ui
-        self.pack_start(self.ui.get_object('header_start'))
-        self.pack_end(self.ui.get_object('header_end'))
-        self.ui.get_object('header_menu').set_popup(
-            self.ui.get_object('main_menu'))
-        self.ui.get_object('header_search_options').set_popup(
-            self.ui.get_object('search_menu'))
-        self.ui.get_object('header_filters').set_popup(
-            self.ui.get_object('menu_filters'))
-
-
-class YumexToolBar(Gtk.Box):
-    """Header bar for main window."""
-    # TODO: move to gui.widget
-    def __init__(self, ui):
-        Gtk.Box.__init__(self)
-        self.set_name('YumexToolBar')
-        self.props.orientation = Gtk.Orientation.HORIZONTAL
-        self.props.hexpand = True
-        self.set_margin_start(6)
-        self.set_margin_end(6)
-        self.set_margin_top(6)
-        self.set_margin_bottom(6)
-        self.ui = ui
-        self.pack_start(self.ui.get_object('header_start'), True, True, 0)
-        self.pack_end(self.ui.get_object('header_end'), False, False, 0)
-        self.ui.get_object('header_menu').set_popup(
-            self.ui.get_object('main_menu'))
-        self.ui.get_object('header_search_options').set_popup(
-            self.ui.get_object('search_menu'))
-        self.ui.get_object('header_filters').set_popup(
-            self.ui.get_object('menu_filters'))
