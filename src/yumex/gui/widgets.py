@@ -768,15 +768,6 @@ class MainMenu(Gio.Menu):
         self._button.connect('clicked', self._on_button)
         self._popover = Gtk.Popover.new_from_model(self._button,
                                                    self)
-
-        option_menu = Gio.Menu()
-        self._add_menu_checkbox(option_menu, _("Newest only"), 'newest_only')
-        self._add_menu_checkbox(option_menu, _("Erase unused requirements"),
-                               'clean_unused')
-        self._add_menu_checkbox(option_menu,
-                                _("Cleanup old instonly packages "),
-                                'clean_instonly')
-        self.append_section(_("Options"), option_menu)
         help_menu = Gio.Menu()
         self._add_menu(help_menu, _("About"), 'about')
         self._add_menu(help_menu, _("Documentation"), 'docs')
@@ -791,23 +782,6 @@ class MainMenu(Gio.Menu):
         menu.append(label, 'win.{}'.format(name))
         # action
         action = Gio.SimpleAction.new(name, None)
-        self.win.add_action(action)
-        action.connect('activate', self._on_menu, name)
-        return action
-
-    def _add_menu_checkbox(self, menu, label, name):
-        # menu item
-        item = Gio.MenuItem.new(label, 'win.{}'.format(name))
-        item.set_action_and_target_value('win.{}'.format(name), G_TRUE)
-        menu.append_item(item)
-        # action
-        action = Gio.SimpleAction.new_stateful(name, G_FALSE.get_type(),
-                                               G_FALSE)
-        state = getattr(CONFIG.session, name)
-        if state:
-            action.set_state(G_TRUE)
-        else:
-            action.set_state(G_FALSE)
         self.win.add_action(action)
         action.connect('activate', self._on_menu, name)
         return action
