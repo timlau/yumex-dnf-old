@@ -492,6 +492,11 @@ class Window(BaseWindow):
         self.apply_button.connect('clicked', self.on_apply_changes)
         self.apply_button.set_sensitive(False)
 
+        # Setup more filters
+        action = Gio.SimpleAction.new('morefilter', None)
+        self.add_action(action)
+        action.connect('activate', self.on_morefilter)
+
         # get the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
@@ -985,6 +990,9 @@ class Window(BaseWindow):
                 self._refresh()
             if action in ['clean_instonly', 'clean_unused']:
                 self._reset_on_error()
+
+    def on_morefilter(self, widget, action):
+        pass
 
     def on_apply_changes(self, widget):
         """Apply Changes button callback."""
