@@ -372,6 +372,7 @@ class Window(BaseWindow):
         else:
             self._setup_gui()
             self.show_all()
+            self._setup_arch()
             # setup default selections
             self.pkg_filter.set_active('updates')
 
@@ -497,15 +498,17 @@ class Window(BaseWindow):
         self.add_action(action)
         action.connect('activate', self.on_morefilter)
 
-        # get the arch filter
-        self.arch_filter = self.backend.get_filter('arch')
-        self.arch_filter.set_active(True)
-        self.arch_filter.change(self.active_archs)
-
         # shortcuts
         self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
         self.app.set_accels_for_action('win.docs', ['F1'])
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
+
+    def _setup_arch(self):
+        self.infobar.info(_('Downloading Repository Metadata'))
+        # setup the arch filter
+        self.arch_filter = self.backend.get_filter('arch')
+        self.arch_filter.set_active(True)
+        self.arch_filter.change(self.active_archs)
 
     def _setup_action_page(self):
         """Setup Pending Action page."""
