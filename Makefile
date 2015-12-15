@@ -37,6 +37,7 @@ clean: $(CLEAN_TARGETS)
 	-rm -f *.tar.gz
 	-rm -rf build
 	-rm -rf dist
+	
 
 get-builddeps:
 	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool transifex-client
@@ -44,9 +45,10 @@ get-builddeps:
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
-	@cp ${APPNAME}-$(VERSION).tar.gz $(shell rpm -E '%_sourcedir')
+	@mkdir -p ${BUILDDIR}/SOURCES
+	@cp ${APPNAME}-$(VERSION).tar.gz ${BUILDDIR}/SOURCES
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
-	@echo "The archive is in ${APPNAME}-$(VERSION).tar.gz"
+	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 	
 # needs perl-TimeDate for git2cl
 changelog:
@@ -102,7 +104,7 @@ test-release:
 	
 rpm:
 	@$(MAKE) archive
-	@rpmbuild --define '_topdir $(BUILDDIR)' -ba $(APPNAME).spec
+	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
 test-builds:
 	@$(MAKE) test-release
