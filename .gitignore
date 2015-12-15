@@ -10,3 +10,4 @@ __pycache__/
 /po/*.mo
 *~
 /docs/_*
+/build/
