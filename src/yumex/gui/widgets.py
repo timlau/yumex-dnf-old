@@ -772,6 +772,9 @@ class ExtraFilters(GObject.GObject):
         self.newest_only.set_active(CONFIG.conf.newest_only)
         self.newest_only.connect('toggled', self._on_newest)
 
+    def popup(self):
+        self._on_button(self._button)
+
     def _on_button(self, button):
         self._popover.show_all()
 

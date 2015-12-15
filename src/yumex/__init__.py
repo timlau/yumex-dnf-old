@@ -936,6 +936,10 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_a and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._process_actions()
+            # Apply pending actiond on Alt + X
+            if (event.keyval == Gdk.KEY_x and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self.extra_filters.popup()
             # Filter = 'updates' on Ctrl + 1
             if (event.keyval == Gdk.KEY_1 and
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
@@ -979,6 +983,7 @@ class Window(BaseWindow):
             self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
 
     def on_extra_filters(self, widget, data, para):
+        """Handle the Extra Filters"""
         if data == 'arch':
             self.active_archs = para
             self.arch_filter.change(self.active_archs)
