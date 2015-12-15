@@ -116,59 +116,6 @@ class InfoProgressBar:
                 self.info(_("Getting Package Metadata"))
 
 
-class ArchMenu(GObject.GObject):
-    '''
-    Class to handle a menu to select what arch to show in package view
-    '''
-    __gsignals__ = {'arch-changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,))}
-
-    def __init__(self, arch_menu_widget, archs):
-        GObject.GObject.__init__(self)
-        self.all_archs = archs
-        self.arch_menu_widget = arch_menu_widget
-        if not CONFIG.conf.archs:
-            CONFIG.conf.archs = list(archs)
-            CONFIG.write()
-        self.current_archs = set(CONFIG.conf.archs)
-        self.arch_menu = self._setup_archmenu()
-
-    def _setup_archmenu(self):
-        arch_menu = self.arch_menu_widget
-        for arch in self.all_archs:
-            cb = Gtk.CheckMenuItem()
-            cb.set_label(arch)
-            if arch in CONFIG.conf.archs:
-                cb.set_active(True)
-            else:
-                cb.set_active(False)
-            cb.show()
-            cb.connect('toggled', self.on_archmenu_clicked)
-            arch_menu.add(cb)
-
-        return arch_menu
-
-    def on_arch_clicked(self, button, event=None):
-        #print('clicked : event : %s' % event.button)
-        if event.button == 1:  # Left click
-            self.arch_menu.popup(
-                None, None, None, None, event.button, event.time)
-            return True
-
-    def on_archmenu_clicked(self, widget):
-        state = widget.get_active()
-        label = widget.get_label()
-        if state:
-            self.current_archs.add(label)
-        else:
-            self.current_archs.remove(label)
-        archs = ",".join(list(self.current_archs))
-        CONFIG.conf.archs = list(self.current_archs)
-        CONFIG.write()
-        self.emit("arch-changed", archs)
-
-
 class SearchBar(GObject.GObject):
     """Handling the search UI."""
 
@@ -799,3 +746,61 @@ class MainMenu(Gio.Menu):
 
     def _on_button(self, button):
         self._popover.show_all()
+
+
+class ExtraFilters(GObject.GObject):
+    __gsignals__ = {'changed': (GObject.SignalFlags.RUN_FIRST,
+                                     None,
+                                     (GObject.TYPE_STRING,
+                                      GObject.TYPE_PYOBJECT,))
+                    }
+
+    def __init__(self, win):
+        super(ExtraFilters, self).__init__()
+        self.win = win
+        self.all_archs = const.PLATFORM_ARCH
+        self.current_archs = None
+        self._button = self.win.get_ui('button_more_filters')
+        self._button.connect('clicked', self._on_button)
+        self._popover = Gtk.Popover.new(self._button)
+        self._popover.set_position(Gtk.PositionType.TOP)
+        grid = self.win.get_ui('grid_more_filters')
+        self._popover.add(grid)
+        self._arch_box = self.win.get_ui('box_archs')
+        self._setup_archs()
+        self.newest_only = self.win.get_ui('cb_newest_only')
+        self.newest_only.set_active(CONFIG.conf.newest_only)
+        self.newest_only.connect('toggled', self._on_newest)
+
+    def _on_button(self, button):
+        self._popover.show_all()
+
+    def _setup_archs(self):
+        if not CONFIG.conf.archs:
+            CONFIG.conf.archs = list(self.all_archs)
+            CONFIG.write()
+        self.current_archs = set(CONFIG.conf.archs)
+        for arch in self.all_archs:
+            cb = Gtk.CheckButton(label=arch)
+            self._arch_box.pack_start(cb, True, True, 0)
+            if arch in CONFIG.conf.archs:
+                cb.set_active(True)
+            else:
+                cb.set_active(False)
+            cb.show()
+            cb.connect('toggled', self._on_arch)
+
+    def _on_arch(self, widget):
+        state = widget.get_active()
+        label = widget.get_label()
+        if state:
+            self.current_archs.add(label)
+        else:
+            self.current_archs.remove(label)
+        CONFIG.conf.archs = list(self.current_archs)
+        CONFIG.write()
+        self.emit("changed", 'arch', list(self.current_archs))
+
+    def _on_newest(self, widget):
+        state = widget.get_active()
+        self.emit('changed', 'newest_only', state)

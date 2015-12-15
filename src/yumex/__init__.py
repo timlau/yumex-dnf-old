@@ -493,11 +493,6 @@ class Window(BaseWindow):
         self.apply_button.connect('clicked', self.on_apply_changes)
         self.apply_button.set_sensitive(False)
 
-        # Setup more filters
-        action = Gio.SimpleAction.new('morefilter', None)
-        self.add_action(action)
-        action.connect('activate', self.on_morefilter)
-
         # shortcuts
         self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
         self.app.set_accels_for_action('win.docs', ['F1'])
@@ -521,17 +516,15 @@ class Window(BaseWindow):
 
     def _setup_package_page(self):
         """Setup the package page."""
-        arch_menu_widget = self.get_ui('arch_menu')
-        self.arch_menu = widgets.ArchMenu(arch_menu_widget,
-                                          const.PLATFORM_ARCH)
-        self.arch_menu.connect('arch-changed', self.on_arch_changed)
-        self.package_view = views.PackageView(self.queue_view, self.arch_menu)
+        self.package_view = views.PackageView(self.queue_view)
         self.package_view.connect(
             'pkg_changed', self.on_pkg_view_selection_changed)
         sw = self.get_ui('package_sw')
         sw.add(self.package_view)
         # setup info view
         self.info = widgets.PackageInfo(self, self)
+        self.extra_filters = widgets.ExtraFilters(self)
+        self.extra_filters.connect('changed', self.on_extra_filters)
 
     def _setup_group_page(self):
         """Setup the group page."""
@@ -546,8 +539,7 @@ class Window(BaseWindow):
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
         self.group_package_view = views.PackageView(
-            self.queue_view, self.arch_menu, group_mode=True)
-        #self.group_package_view.connect('arch-changed', self.on_arch_changed)
+            self.queue_view, group_mode=True)
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
@@ -985,17 +977,17 @@ class Window(BaseWindow):
             dialog.destroy()
         elif action == 'docs':
             self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
-        elif action in ['newest_only', 'clean_instonly', 'clean_unused']:
-            setattr(CONFIG.session, action, data)
-            logger.debug('session option : %s = %s' %
-                     (action, getattr(CONFIG.session, action)))
-            if action in ['newest_only']:  # search again
-                self._refresh()
-            if action in ['clean_instonly', 'clean_unused']:
-                self._reset_on_error()
 
-    def on_morefilter(self, widget, action):
-        pass
+    def on_extra_filters(self, widget, data, para):
+        if data == 'arch':
+            self.active_archs = para
+            self.arch_filter.change(self.active_archs)
+            logger.debug('arch changed : %s' % self.active_archs)
+            self._refresh()
+        elif data == 'newest_only':
+            CONFIG.session.newest_only = para
+            logger.debug('newest_only changed : %s' % para)
+            self._refresh()
 
     def on_apply_changes(self, widget):
         """Apply Changes button callback."""
@@ -1071,13 +1063,6 @@ class Window(BaseWindow):
             self.apply_button.set_sensitive(True)
         else:
             self.apply_button.set_sensitive(False)
-
-    def on_arch_changed(self, widget, data):
-        """Arch changed in arch menu callback."""
-        self.active_archs = data.split(',')
-        logger.debug('arch-changed : %s' % self.active_archs)
-        self.arch_filter.change(self.active_archs)
-        self._refresh()
 
     def on_pkg_view_selection_changed(self, widget, pkg):
         """Handle package selection on package page."""

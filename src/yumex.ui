@@ -693,6 +693,93 @@ start Yum Extender</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
   </object>
+  <object class="GtkGrid" id="grid_more_filters">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <child>
+      <object class="GtkLabel" id="label_pkg_version">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="label" translatable="yes">&lt;b&gt;Package Versions&lt;/b&gt;</property>
+        <property name="use_markup">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_archs">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="label" translatable="yes">&lt;b&gt;Archs&lt;/b&gt;</property>
+        <property name="use_markup">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box_archs">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">12</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator" id="separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="cb_newest_only">
+        <property name="label" translatable="yes">Newest Only</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Show only the latest package versions</property>
+        <property name="margin_left">12</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkTextTagTable" id="info_tags">
     <child type="tag">
       <object class="GtkTextTag" id="description">
@@ -989,7 +1076,6 @@ start Yum Extender</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="tooltip_text" translatable="yes">More filtering options</property>
-                                    <property name="action_name">win.morefilter</property>
                                     <property name="use_underline">True</property>
                                     <property name="icon_name">open-menu-symbolic</property>
                                   </object>
