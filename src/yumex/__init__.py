@@ -93,6 +93,19 @@ class BaseYumex:
         return self.get_root_backend()
 
     @misc.ExceptionHandler
+    def reset_cache(self):
+        logger.debug('Refresh system cache')
+        self.set_working(True, True)
+        self.infobar.info(_('Refreshing Repository Metadata'))
+        rc = self._root_backend.ExpireCache()
+        self.set_working(False)
+        if rc:
+            self._set_cache_refreshed('system')
+        else:
+            dialogs.show_information(
+                self, _('Could not refresh the DNF cache (root)'))
+
+    @misc.ExceptionHandler
     def get_root_backend(self):
         """Get the current root backend.
 
@@ -107,16 +120,7 @@ class BaseYumex:
             if locked:
                 self._root_locked = True
                 if self._check_cache_expired('system'):
-                    logger.debug('Refresh system cache')
-                    self.set_working(True, True)
-                    self.infobar.info(_('Refreshing Repository Metadata'))
-                    rc = self._root_backend.ExpireCache()
-                    self.set_working(False)
-                    if rc:
-                        self._set_cache_refreshed('system')
-                    else:
-                        dialogs.show_information(
-                            self, _('Could not refresh the DNF cache (root)'))
+                    self.reset_cache()
             else:
                 logger.critical("can't get root backend lock")
                 if msg == 'not-authorized':  # user canceled the polkit dialog
@@ -981,6 +985,8 @@ class Window(BaseWindow):
             dialog.destroy()
         elif action == 'docs':
             self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
+        elif action == 'reload':
+            self.reset_cache()
 
     def on_extra_filters(self, widget, data, para):
         """Handle the Extra Filters"""
