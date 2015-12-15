@@ -10,6 +10,8 @@ NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0
 NEW_REL=0.1.${GITDATE}
 DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=develop
+CURDIR = ${shell pwd}
+BUILDDIR= $(CURDIR)/build
 
 all: build
 
@@ -95,12 +97,12 @@ test-release:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
 	# Build RPMS
-	@-rpmbuild -ta ${APPNAME}-${NEW_VER}.tar.gz
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${NEW_VER}.tar.gz
 	@$(MAKE) test-cleanup
 	
 rpm:
 	@$(MAKE) archive
-	@rpmbuild -ba $(APPNAME).spec
+	@rpmbuild --define '_topdir $(BUILDDIR)' -ba $(APPNAME).spec
 
 test-builds:
 	@$(MAKE) test-release
