@@ -321,7 +321,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def _disable_buttons(self, state):
         WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
-                               'package_sidebar']
+                               'package_sidebar', 'center_buttons']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
 
@@ -1008,9 +1008,11 @@ class Window(BaseWindow):
         """Handle content page is changed."""
         if page == 'packages':
             self._search_toggle.set_sensitive(True)
+            self.extra_filters.set_sensitive(True)
             self.search_bar.show()
             self.info.show()
         else:
+            self.extra_filters.set_sensitive(False)
             self._search_toggle.set_sensitive(False)
             self.search_bar.hide()
             self.info.show(False)

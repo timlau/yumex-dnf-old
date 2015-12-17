@@ -776,6 +776,9 @@ class ExtraFilters(GObject.GObject):
     def popup(self):
         self._on_button(self._button)
 
+    def set_sensitive(self, state):
+        self._button.set_sensitive(state)
+
     def _on_button(self, button):
         self._popover.show_all()
 
