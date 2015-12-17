@@ -157,7 +157,8 @@ class SearchBar(GObject.GObject):
             if key in self.search_fields:
                 wid.set_active(True)
             wid.connect('toggled', self.on_fields_changed, key)
-        self._set_fields_sensitive(False)
+        # set fields sensitive if type == 'fields'
+        self._set_fields_sensitive(self.search_type == 'fields')
         # setup search type radiobuttons
         for key in SearchBar.TYPES:
             wid = self.win.get_ui('sch_opt_%s' % key)
