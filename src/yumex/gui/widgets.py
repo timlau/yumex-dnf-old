@@ -765,7 +765,7 @@ class ExtraFilters(GObject.GObject):
         self._button = self.win.get_ui('button_more_filters')
         self._button.connect('clicked', self._on_button)
         self._popover = Gtk.Popover.new(self._button)
-        self._popover.set_position(Gtk.PositionType.TOP)
+        self._popover.set_position(Gtk.PositionType.BOTTOM)
         grid = self.win.get_ui('grid_more_filters')
         self._popover.add(grid)
         self._arch_box = self.win.get_ui('box_archs')
