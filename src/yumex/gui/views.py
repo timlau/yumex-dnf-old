@@ -223,7 +223,7 @@ class PackageView(SelectionView):
                                     (GObject.TYPE_PYOBJECT,))
                     }
 
-    def __init__(self, qview, arch_menu, group_mode=False):
+    def __init__(self, qview, group_mode=False):
         self.logger = logging.getLogger('yumex.PackageView')
         SelectionView.__init__(self)
         self.set_name('YumexPackageView')
@@ -231,7 +231,6 @@ class PackageView(SelectionView):
         self._click_header_state = ""
         self.queue = qview.queue
         self.queueView = qview
-        self.arch_menu = arch_menu
         self.store = self._setup_model()
         self.connect('cursor-changed', self.on_cursor_changed)
         self.connect('button-press-event', self.on_mouse_button)
@@ -273,10 +272,7 @@ class PackageView(SelectionView):
         self.create_text_column(_("Package"), 'name', size=200)
 
         self.create_text_column(_("Ver."), 'fullver', size=120)
-        self.create_text_column(
-            _("Arch."), 'arch', size=60,
-            click_handler=self.arch_menu.on_arch_clicked,
-            tooltip=_('click to filter archs'))
+        self.create_text_column(_("Arch."), 'arch', size=60)
         self.create_text_column(_("Summary"), 'summary', size=400)
         self.create_text_column(_("Repo."), 'repository', size=90)
         self.create_text_column(_("Size"), 'sizeM', size=90)

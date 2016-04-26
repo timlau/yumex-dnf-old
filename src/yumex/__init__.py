@@ -93,6 +93,19 @@ class BaseYumex:
         return self.get_root_backend()
 
     @misc.ExceptionHandler
+    def reset_cache(self):
+        logger.debug('Refresh system cache')
+        self.set_working(True, True)
+        self.infobar.info(_('Refreshing Repository Metadata'))
+        rc = self._root_backend.ExpireCache()
+        self.set_working(False)
+        if rc:
+            self._set_cache_refreshed('system')
+        else:
+            dialogs.show_information(
+                self, _('Could not refresh the DNF cache (root)'))
+
+    @misc.ExceptionHandler
     def get_root_backend(self):
         """Get the current root backend.
 
@@ -107,16 +120,7 @@ class BaseYumex:
             if locked:
                 self._root_locked = True
                 if self._check_cache_expired('system'):
-                    logger.debug('Refresh system cache')
-                    self.set_working(True, True)
-                    self.infobar.info(_('Refreshing Repository Metadata'))
-                    rc = self._root_backend.ExpireCache()
-                    self.set_working(False)
-                    if rc:
-                        self._set_cache_refreshed('system')
-                    else:
-                        dialogs.show_information(
-                            self, _('Could not refresh the DNF cache (root)'))
+                    self.reset_cache()
             else:
                 logger.critical("can't get root backend lock")
                 if msg == 'not-authorized':  # user canceled the polkit dialog
@@ -317,7 +321,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def _disable_buttons(self, state):
         WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
-                               'package_sidebar']
+                               'package_sidebar', 'center_buttons']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
 
@@ -372,6 +376,7 @@ class Window(BaseWindow):
         else:
             self._setup_gui()
             self.show_all()
+            self._setup_arch()
             # setup default selections
             self.pkg_filter.set_active('updates')
 
@@ -492,18 +497,17 @@ class Window(BaseWindow):
         self.apply_button.connect('clicked', self.on_apply_changes)
         self.apply_button.set_sensitive(False)
 
-        # get the arch filter
-        self.arch_filter = self.backend.get_filter('arch')
-        self.arch_filter.set_active(True)
-        self.arch_filter.change(self.active_archs)
-
         # shortcuts
         self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
         self.app.set_accels_for_action('win.docs', ['F1'])
-        self.app.set_accels_for_action('win.newest_only(true)', ['<Alt>N'])
-        self.app.set_accels_for_action('win.clean_unused(true)', ['<Alt>E'])
-        self.app.set_accels_for_action('win.clean_instonly(true)', ['<Alt>C'])
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
+
+    def _setup_arch(self):
+        self.infobar.info(_('Downloading Repository Metadata'))
+        # setup the arch filter
+        self.arch_filter = self.backend.get_filter('arch')
+        self.arch_filter.set_active(True)
+        self.arch_filter.change(self.active_archs)
 
     def _setup_action_page(self):
         """Setup Pending Action page."""
@@ -516,17 +520,15 @@ class Window(BaseWindow):
 
     def _setup_package_page(self):
         """Setup the package page."""
-        arch_menu_widget = self.get_ui('arch_menu')
-        self.arch_menu = widgets.ArchMenu(arch_menu_widget,
-                                          const.PLATFORM_ARCH)
-        self.arch_menu.connect('arch-changed', self.on_arch_changed)
-        self.package_view = views.PackageView(self.queue_view, self.arch_menu)
+        self.package_view = views.PackageView(self.queue_view)
         self.package_view.connect(
             'pkg_changed', self.on_pkg_view_selection_changed)
         sw = self.get_ui('package_sw')
         sw.add(self.package_view)
         # setup info view
         self.info = widgets.PackageInfo(self, self)
+        self.extra_filters = widgets.ExtraFilters(self)
+        self.extra_filters.connect('changed', self.on_extra_filters)
 
     def _setup_group_page(self):
         """Setup the group page."""
@@ -541,8 +543,7 @@ class Window(BaseWindow):
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
         self.group_package_view = views.PackageView(
-            self.queue_view, self.arch_menu, group_mode=True)
-        #self.group_package_view.connect('arch-changed', self.on_arch_changed)
+            self.queue_view, group_mode=True)
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
@@ -939,6 +940,10 @@ class Window(BaseWindow):
             if (event.keyval == Gdk.KEY_a and
                     event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
                 self._process_actions()
+            # Apply pending actiond on Alt + X
+            if (event.keyval == Gdk.KEY_x and
+                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
+                self.extra_filters.popup()
             # Filter = 'updates' on Ctrl + 1
             if (event.keyval == Gdk.KEY_1 and
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
@@ -980,14 +985,20 @@ class Window(BaseWindow):
             dialog.destroy()
         elif action == 'docs':
             self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
-        elif action in ['newest_only', 'clean_instonly', 'clean_unused']:
-            setattr(CONFIG.session, action, data)
-            logger.debug('session option : %s = %s' %
-                     (action, getattr(CONFIG.session, action)))
-            if action in ['newest_only']:  # search again
-                self._refresh()
-            if action in ['clean_instonly', 'clean_unused']:
-                self._reset_on_error()
+        elif action == 'reload':
+            self.reset_cache()
+
+    def on_extra_filters(self, widget, data, para):
+        """Handle the Extra Filters"""
+        if data == 'arch':
+            self.active_archs = para
+            self.arch_filter.change(self.active_archs)
+            logger.debug('arch changed : %s' % self.active_archs)
+            self._refresh()
+        elif data == 'newest_only':
+            CONFIG.session.newest_only = para
+            logger.debug('newest_only changed : %s' % para)
+            self._refresh()
 
     def on_apply_changes(self, widget):
         """Apply Changes button callback."""
@@ -996,11 +1007,13 @@ class Window(BaseWindow):
     def on_page_changed(self, widget, page):
         """Handle content page is changed."""
         if page == 'packages':
-            self._search_toggle.show()
+            self._search_toggle.set_sensitive(True)
+            self.extra_filters.set_sensitive(True)
             self.search_bar.show()
             self.info.show()
         else:
-            self._search_toggle.hide()
+            self.extra_filters.set_sensitive(False)
+            self._search_toggle.set_sensitive(False)
             self.search_bar.hide()
             self.info.show(False)
         if page == 'groups':
@@ -1063,13 +1076,6 @@ class Window(BaseWindow):
             self.apply_button.set_sensitive(True)
         else:
             self.apply_button.set_sensitive(False)
-
-    def on_arch_changed(self, widget, data):
-        """Arch changed in arch menu callback."""
-        self.active_archs = data.split(',')
-        logger.debug('arch-changed : %s' % self.active_archs)
-        self.arch_filter.change(self.active_archs)
-        self._refresh()
 
     def on_pkg_view_selection_changed(self, widget, pkg):
         """Handle package selection on package page."""

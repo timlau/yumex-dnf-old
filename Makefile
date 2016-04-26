@@ -9,7 +9,9 @@ BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX
 NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
 NEW_REL=0.1.${GITDATE}
 DIST=${shell rpm --eval "%{dist}"}
-GIT_MASTER=master
+GIT_MASTER=develop
+CURDIR = ${shell pwd}
+BUILDDIR= $(CURDIR)/build
 
 all: build
 
@@ -35,6 +37,7 @@ clean: $(CLEAN_TARGETS)
 	-rm -f *.tar.gz
 	-rm -rf build
 	-rm -rf dist
+	
 
 get-builddeps:
 	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool transifex-client
@@ -42,9 +45,10 @@ get-builddeps:
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
-	@cp ${APPNAME}-$(VERSION).tar.gz $(shell rpm -E '%_sourcedir')
+	@mkdir -p ${BUILDDIR}/SOURCES
+	@cp ${APPNAME}-$(VERSION).tar.gz ${BUILDDIR}/SOURCES
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
-	@echo "The archive is in ${APPNAME}-$(VERSION).tar.gz"
+	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 	
 # needs perl-TimeDate for git2cl
 changelog:
@@ -53,15 +57,23 @@ changelog:
 upload: 
 	@scp ~/rpmbuild/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
 	
-release:
+release-branch:
+	@git branch -m ${GIT_MASTER} release-${VERSION}
+
+release-publish:
+	@git checkout release-${VERSION}
 	@git commit -a -m "bumped version to $(VERSION)"
 	@$(MAKE) changelog
 	@git commit -a -m "updated ChangeLog"
-	@git push
+	@git checkout release-devel
+	@git merge --no-ff release-${VERSION} -m "merge ${APPNAME}-${VERSION} release"
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
 	@$(MAKE) archive
 	@$(MAKE) rpm
+
+release-cleanup:	
+	@git branch -D release-${VERSION}
 
 test-cleanup:	
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
@@ -87,12 +99,12 @@ test-release:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
 	# Build RPMS
-	@-rpmbuild -ta ${APPNAME}-${NEW_VER}.tar.gz
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${NEW_VER}.tar.gz
 	@$(MAKE) test-cleanup
 	
 rpm:
 	@$(MAKE) archive
-	@rpmbuild -ba $(APPNAME).spec
+	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
 test-builds:
 	@$(MAKE) test-release

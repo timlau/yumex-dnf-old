@@ -1,3 +1,129 @@
+2016-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
+	4.3.2
+
+2016-04-26  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #99 from genodeftest/devel-paned  Fix main
+	GtkPaned being to small
+
+2016-04-26  Tim Lauridsen <tla@rasmil.dk>
+
+	Merge pull request #100 from genodeftest/devel-transactiondialog
+	Fix transaction dialog not expanding properly
+
+2016-04-26  Christian Stadelmann <dev@genodeftest.de>
+
+	* src/yumex.ui: Fix transaction dialog not expanding properly
+
+2016-04-26  Christian Stadelmann <dev@genodeftest.de>
+
+	* src/yumex.ui: Fix main GtkPaned being to small  Without this fix,
+	the GtkPaned could be resized in a way that one of its child widgets
+	partially or completely got hidden.
+
+2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: Extra filter popover should default
+	positon to bottom
+
+2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/gui/widgets.py: make fields sensitive if search type is
+	fields
+
+2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
+	move extra filters to headerbar
+
+2015-12-16  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: change the icon of Extra filters button
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile: build: use a relative build dir
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/gui/widgets.py: Add **Refresh
+	Metadata** to main menu (#84)
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* .gitignore: update .gitignore to dont include build/
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* README.md: update README
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile: build rpms in source tree ($pwd/build)
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py, src/yumex/gui/widgets.py: Added keyboard
+	shortcut Alt-X to Extra filters (#14)
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	Add reworked option and extra filters (#85)
+
+2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/views.py,
+	src/yumex/gui/widgets.py: Add Extra Filters menu with archs and
+	package version filters (#85)
+
+2015-12-14  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: show gui before the need to setup the
+	backend (#88)
+
+2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py: add action handler
+
+2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: add button for more filters
+
+2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
+	Remove options from main menu
+
+2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: Added new preferences dialog
+
+2015-12-10  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* Makefile: change Makefile for new release workflow
+
+2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: minor ui adjustment
+
+2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex/__init__.py: make search button insensitive, don't hide
+	(#74)
+
+2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* src/yumex.ui: UI adjustments (#74)   * Renamed 'Pending Action' to
+	'Queue' in headerbar  * Added comments for translators for headerbar
+	page buttons  * Removed space between searchbar and search options
+	button.
+
+2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+
+	* ChangeLog: updated ChangeLog
+
 2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
 
 	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to

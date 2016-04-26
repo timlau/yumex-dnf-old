@@ -21,10 +21,10 @@ Requirements
 dnf install python3 python3-gobject 
 ```
 
-[dnf-deamon](https://github.com/timlau/dnf-daemon) must also be installed.
+[dnf-deamon](https://github.com/timlau/dnf-daemon) python3 bindings must also be installed.
 
 ```
-dnf install dnfdaemon
+dnf install python3-dnfdaemon
 ```
 
 Or build the latest version from git
@@ -38,9 +38,19 @@ make test-inst
 
 Fedora Repository
 =======================
-yumex-dnf is available in the Fedora repositories for f21, f22 & Rawhide
+yumex-dnf is available in the Fedora repositories for f22, f23 & Rawhide
 
 Use this to install it.
 ```
 sudo dnf install yumex-dnf
+```
+
+Fedora Copr Repository
+=======================
+yumex-dnf & dnddaemon development packages is available in a [fedora Copr repository](https://copr.fedoraproject.org/coprs/timlau/yumex-dnf/) for f22, f23 & Rawhide
+
+
+Use this to enable it.
+```
+sudo dnf copr enable timlau/yumex-dnf
 ```
