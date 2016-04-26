@@ -85,7 +85,6 @@
               <object class="GtkGrid" id="grid_settings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
                 <property name="margin_start">6</property>
                 <property name="margin_end">10</property>
                 <property name="row_spacing">6</property>
@@ -125,7 +124,6 @@ standard when using GNOME</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">The interval in hour, when the DNF cache will be expired and updated (0 = disabled)</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="label" translatable="yes">Cache expire interval (hours)</property>
                     <property name="ellipsize">end</property>
                   </object>
@@ -190,7 +188,6 @@ Yum Extender is started</property>
               <object class="GtkGrid" id="grid_updatechecker">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
@@ -211,7 +208,6 @@ Yum Extender is started</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Autostart the Yum Extender update checker at user login</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Start update checker at user login</property>
                   </object>
@@ -246,7 +242,6 @@ Yum Extender is started</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">How often the update checker will run</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
                   </object>
@@ -267,7 +262,6 @@ Yum Extender is started</property>
               <object class="GtkGrid" id="grid_dnf_options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
@@ -278,7 +272,6 @@ Yum Extender starts.
 Will show only latest version of available
 packages</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Show newest only</property>
                   </object>
@@ -305,7 +298,6 @@ packages</property>
                     <property name="tooltip_text" translatable="yes">Erase unused requirement option is
 active when Yum Extender starts</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Erase Unused Requirements</property>
                   </object>
@@ -402,7 +394,6 @@ active when Yum Extender starts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Color for installed packages</property>
                   </object>
@@ -417,7 +408,6 @@ active when Yum Extender starts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Color for available updates</property>
                   </object>
@@ -432,7 +422,6 @@ active when Yum Extender starts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Color for available packages</property>
                   </object>
@@ -447,7 +436,6 @@ active when Yum Extender starts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Color for obsoleted packages</property>
                   </object>
@@ -462,7 +450,6 @@ active when Yum Extender starts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Color for available downgrades</property>
                   </object>
