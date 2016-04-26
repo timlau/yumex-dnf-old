@@ -1200,6 +1200,8 @@ start Yum Extender</property>
                         <property name="position_set">True</property>
                         <child>
                           <object class="GtkScrolledWindow" id="groups_sw">
+                            <property name="width_request">200</property>
+                            <property name="height_request">250</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1209,11 +1211,13 @@ start Yum Extender</property>
                           </object>
                           <packing>
                             <property name="resize">False</property>
-                            <property name="shrink">True</property>
+                            <property name="shrink">False</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow" id="group_pkg_sw">
+                            <property name="width_request">350</property>
+                            <property name="height_request">250</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1223,7 +1227,7 @@ start Yum Extender</property>
                           </object>
                           <packing>
                             <property name="resize">True</property>
-                            <property name="shrink">True</property>
+                            <property name="shrink">False</property>
                           </packing>
                         </child>
                       </object>
@@ -1252,6 +1256,8 @@ start Yum Extender</property>
                         <property name="position">250</property>
                         <child>
                           <object class="GtkScrolledWindow" id="history_left_sw">
+                            <property name="width_request">200</property>
+                            <property name="height_request">250</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1261,11 +1267,13 @@ start Yum Extender</property>
                           </object>
                           <packing>
                             <property name="resize">False</property>
-                            <property name="shrink">True</property>
+                            <property name="shrink">False</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow" id="history_right_sw">
+                            <property name="width_request">350</property>
+                            <property name="height_request">250</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
@@ -1275,7 +1283,7 @@ start Yum Extender</property>
                           </object>
                           <packing>
                             <property name="resize">True</property>
-                            <property name="shrink">True</property>
+                            <property name="shrink">False</property>
                           </packing>
                         </child>
                       </object>
