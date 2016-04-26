@@ -73,6 +73,9 @@ release-publish:
 	@$(MAKE) rpm
 
 release-cleanup:	
+	@git checkout develop
+	@git merge --no-ff release-${VERSION} -m "merge ${APPNAME}-${VERSION} release"
+	@git push origin
 	@git branch -D release-${VERSION}
 
 test-cleanup:	
