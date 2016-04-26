@@ -97,8 +97,8 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Use the toolbar in the header of the window
 standard when using GNOME</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Show toolbar in window headerbar</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -160,8 +160,8 @@ standard when using GNOME</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Select all available updates when 
 Yum Extender is started</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Select updates at startup</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -214,7 +214,6 @@ Yum Extender is started</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Start update checker at user login</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -250,7 +249,6 @@ Yum Extender is started</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Update check interval (minutes)</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -332,8 +330,8 @@ active when Yum Extender starts</property>
                   <object class="GtkLabel" id="label_clean_instonly">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Cleanup Old Installonly packages</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -356,10 +354,10 @@ active when Yum Extender starts</property>
                   <object class="GtkLabel" id="label_installonly_limit">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="margin_left">25</property>
                     <property name="margin_start">25</property>
                     <property name="label" translatable="yes">Number of installonly packages to keep</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -555,6 +553,7 @@ active when Yum Extender starts</property>
                   <object class="GtkLabel" id="repo_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="margin_left">10</property>
                     <property name="margin_right">10</property>
                     <property name="margin_start">10</property>
@@ -562,7 +561,6 @@ active when Yum Extender starts</property>
                     <property name="margin_top">6</property>
                     <property name="margin_bottom">6</property>
                     <property name="label" translatable="yes">Repositories used in current session</property>
-                    <property name="xalign">0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -614,7 +612,7 @@ start Yum Extender</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -702,10 +700,10 @@ start Yum Extender</property>
       <object class="GtkLabel" id="label_pkg_version">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="margin_left">6</property>
         <property name="label" translatable="yes">&lt;b&gt;Package Versions&lt;/b&gt;</property>
         <property name="use_markup">True</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -717,10 +715,10 @@ start Yum Extender</property>
       <object class="GtkLabel" id="label_archs">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="margin_left">6</property>
         <property name="label" translatable="yes">&lt;b&gt;Archs&lt;/b&gt;</property>
         <property name="use_markup">True</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -769,8 +767,8 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Show only the latest package versions</property>
+        <property name="halign">start</property>
         <property name="margin_left">12</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1082,8 +1080,8 @@ start Yum Extender</property>
                                       <object class="GtkLabel" id="label_updates">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Updates</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1099,8 +1097,8 @@ start Yum Extender</property>
                                       <object class="GtkLabel" id="label_installed">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Installed</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1116,8 +1114,8 @@ start Yum Extender</property>
                                       <object class="GtkLabel" id="label_available">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Available</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1133,8 +1131,8 @@ start Yum Extender</property>
                                       <object class="GtkLabel" id="label_all">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">All</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1665,7 +1663,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Package names starting with search key</property>
-        <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -1681,7 +1678,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Package names containing search key</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">sch_opt_prefix</property>
       </object>
@@ -1697,7 +1693,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Specified package fields containing search keys.</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">sch_opt_prefix</property>
       </object>
@@ -1725,7 +1720,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Package name</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1740,7 +1734,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Package summary</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1755,7 +1748,6 @@ start Yum Extender</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="tooltip_text" translatable="yes">Package description</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
