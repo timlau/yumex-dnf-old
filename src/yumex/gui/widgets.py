@@ -47,44 +47,42 @@ class InfoProgressBar:
     def __init__(self, ui):
         self.ui = ui
         self.infobar = ui.get_object("infobar")  # infobar revealer
-        frame = ui.get_object("info_frame")
-        new_bg = Gdk.RGBA()
-        if yumex.misc.check_dark_theme():
-            new_bg.parse("rgb(0,0,0)")
-        else:
-            new_bg.parse("rgb(255,255,255)")
-        frame.override_background_color(Gtk.StateFlags.NORMAL, new_bg)
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
+        self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
-        self.infobar.set_reveal_child(show)
+        if show:
+            self.infobar.show()
+            self.spinner.start()
+        else:
+            self.spinner.stop()
+            self.infobar.hide()
+            self.label.hide()
+            self.sublabel.hide()
+            self.progress.hide()
+            self.progress.set_show_text(False)
 
     def show_progress(self, state):
         if state:
             self.show_label()
         else:
-            self.hide()
+            self._show_infobar(False)
 
     def hide(self):
-        self.label.hide()
-        self.sublabel.hide()
-        self.progress.hide()
         self._show_infobar(False)
-        self.progress.set_text("")
-        #self.progress.set_show_text (False)
 
     def hide_sublabel(self):
         self.sublabel.hide()
 
-    def show_label(self):
+    def show_label(self, msg=""):
+        self.label.set_text(msg)
         self.label.show()
-        self.label.set_text("")
 
-    def show_sublabel(self):
+    def show_sublabel(self, msg=""):
+        self.sublabel.set_text(msg)
         self.sublabel.show()
-        self.sublabel.set_text("")
 
     def show_all(self):
         self.show_label()
@@ -93,25 +91,27 @@ class InfoProgressBar:
 
     def info(self, msg):
         self._show_infobar(True)
-        self.show_label()
-        self.label.set_text(msg)
+        self.show_label(msg)
 
     def info_sub(self, msg):
         self._show_infobar(True)
-        self.show_sublabel()
-        self.sublabel.set_text(msg)
+        self.show_sublabel(msg)
 
     def set_progress(self, frac, label=None):
         if label:
             self.progress.set_text(label)
+            self.progress.set_show_text(True)
+        else:
+            self.progress.set_show_text(False)
+
         if frac >= 0.0 and frac <= 1.0:
-            self.infobar.show()
+            self._show_infobar()
             self.progress.show()
             self.progress.set_fraction(frac)
-            # make sure that the main label is shown, else the progres
-            # looks bad. this is normally happen when changlog
-            # or filelist info is needed for at package
-            # and it will trigger the yum daemon to download the need metadata.
+            # make sure that the main label is shown, else the progress
+            # looks bad. this normally happens when changlog or filelist info
+            # is needed for a package and it will trigger the yum daemon to
+            # download the need metadata.
             if not self.label.get_property('visible'):
                 self.info(_("Getting Package Metadata"))
 

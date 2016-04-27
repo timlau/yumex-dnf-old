@@ -871,8 +871,8 @@ start Yum Extender</property>
               <object class="GtkButton" id="sch_options_button">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
                 <property name="focus_on_click">False</property>
+                <property name="receives_default">True</property>
                 <child>
                   <object class="GtkImage" id="image4">
                     <property name="visible">True</property>
@@ -905,43 +905,53 @@ start Yum Extender</property>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkRevealer" id="infobar">
+      <object class="GtkInfoBar" id="infobar">
         <property name="visible">True</property>
+        <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
-        <child>
-          <object class="GtkFrame" id="info_frame">
-            <property name="visible">True</property>
+        <property name="border_width">5</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
-            <property name="margin_start">5</property>
-            <property name="margin_end">5</property>
-            <property name="margin_top">6</property>
-            <property name="margin_bottom">6</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">in</property>
+            <property name="spacing">6</property>
+            <property name="layout_style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child internal-child="content_area">
+          <object class="GtkBox">
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkGrid" id="info_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
                 <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
+                <property name="column_spacing">5</property>
                 <child>
                   <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
                     <property name="margin_start">6</property>
                     <property name="margin_end">10</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
                       <attribute name="weight" value="ultrabold"/>
@@ -956,27 +966,22 @@ start Yum Extender</property>
                   <object class="GtkProgressBar" id="infobar_progress">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="margin_right">12</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="infobar_sublabel">
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_left">16</property>
                     <property name="margin_start">20</property>
                     <property name="margin_end">10</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes">label</property>
                     <attributes>
                       <attribute name="scale" value="0.84999999999999998"/>
@@ -984,36 +989,44 @@ start Yum Extender</property>
                     </attributes>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinner" id="info_spinner">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="margin_right">6</property>
                     <property name="active">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
+                    <property name="height">3</property>
                   </packing>
                 </child>
               </object>
-            </child>
-            <child type="label_item">
-              <placeholder/>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">0</property>
       </packing>
     </child>
     <child>
