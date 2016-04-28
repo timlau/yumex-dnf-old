@@ -46,13 +46,14 @@ class InfoProgressBar:
 
     def __init__(self, ui):
         self.ui = ui
-        self.infobar = ui.get_object("infobar")  # infobar revealer
+        self.infobar = ui.get_object("info_revealer")  # infobar revealer
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
         self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
+        self.infobar.set_reveal_child(show)
         if show:
             self.infobar.show()
             self.spinner.start()
@@ -98,12 +99,6 @@ class InfoProgressBar:
         self.show_sublabel(msg)
 
     def set_progress(self, frac, label=None):
-        if label:
-            self.progress.set_text(label)
-            self.progress.set_show_text(True)
-        else:
-            self.progress.set_show_text(False)
-
         if frac >= 0.0 and frac <= 1.0:
             self._show_infobar()
             self.progress.show()
