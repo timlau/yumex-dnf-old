@@ -453,19 +453,23 @@ class PackageDetails(GObject.GObject):
         # convert coords to TextBuffer coords
         x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
         # Get the tags on current pointer location
-        tags = widget.get_iter_at_location(x, y).get_tags()
-        # Remove underline and hand mouse pointer
-        if self.underlined_url:
-            self.underlined_url.set_property("underline", Pango.Underline.NONE)
-            widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
-            self.underlined_url = None
-        for tag in tags:
-            if tag in self.url_tags:
-                # underline the tags and change mouse pointer to hand
-                tag.set_property("underline", Pango.Underline.SINGLE)
-                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor(Gdk.CursorType.HAND2))
-                self.underlined_url = tag
+        itr = widget.get_iter_at_location(x, y)
+        if isinstance(itr, tuple):
+            itr = itr[1]
+            tags = itr.get_tags()
+            # Remove underline and hand mouse pointer
+            if self.underlined_url:
+                self.underlined_url.set_property("underline",
+                                                 Pango.Underline.NONE)
+                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
+                self.underlined_url = None
+            for tag in tags:
+                if tag in self.url_tags:
+                    # underline the tags and change mouse pointer to hand
+                    tag.set_property("underline", Pango.Underline.SINGLE)
+                    widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+                        Gdk.Cursor(Gdk.CursorType.HAND2))
+                    self.underlined_url = tag
         return False
 
     def add_url(self, text, url, newline=False):
