@@ -1060,6 +1060,33 @@ start Yum Extender</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
+                              <object class="GtkToolbar" id="toolbar_more_filters">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="icon_size">2</property>
+                                <child>
+                                  <object class="GtkToolButton" id="button_more_filters">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">More filtering options</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="icon_name">view-list-symbolic</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkListBox" id="pkg_listbox">
                                 <property name="width_request">120</property>
                                 <property name="visible">True</property>
@@ -1521,33 +1548,10 @@ start Yum Extender</property>
     <property name="can_focus">False</property>
     <property name="show_close_button">True</property>
     <child>
-      <object class="GtkBox" id="left_buttons">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <child>
-          <object class="GtkButton" id="button_more_filters">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Extra filtering options</property>
-            <child>
-              <object class="GtkImage" id="image9">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="icon_name">view-list-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
+      <placeholder/>
     </child>
     <child type="title">
-      <object class="GtkBox" id="center_buttons">
+      <object class="GtkBox" id="left_buttons">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">24</property>
