@@ -132,7 +132,7 @@ class BaseYumex:
                     errmsg = _(
                         'DNF is locked by another process.\n\n'
                         'Yum Extender will exit')
-                dialogs.show_information(self, errmsg)
+                self.error_dialog.show(errmsg)
                 # close down and exit yum extender
                 #self.status.SetWorking(False)  # reset working state
                 #self.status.SetYumexIsRunning(self.pid, False)
@@ -171,7 +171,8 @@ class BaseYumex:
             close = False
         if errmsg == '':
             errmsg = msg
-        dialogs.show_information(self, errmsg)
+        self.error_dialog.show(errmsg)
+
         # try to exit the backends, ignore errors
         if close:
             try:
@@ -216,6 +217,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             sys.exit()
         # transaction result dialog
         self.transaction_result = dialogs.TransactionResult(self)
+        self.error_dialog = dialogs.ErrorDialog(self)
 
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)
@@ -289,7 +291,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             close = False
         if errmsg == '':
             errmsg = msg
-        dialogs.show_information(self, errmsg)
+        self.error_dialog.show(errmsg)
         # try to exit the backends, ignore errors
         if close:
             try:
@@ -879,9 +881,8 @@ class Window(BaseWindow):
             # check for protected packages
             check = self._check_protected(result)
             if check:
-                dialogs.show_information(
-                self, _("Can't remove protected package(s)"),
-                        '\n'.join(check))
+                self.error_dialog.show(
+                _("Can't remove protected package(s)") + '\n'.join(check))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog
@@ -897,14 +898,13 @@ class Window(BaseWindow):
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
         except misc.TransactionBuildError as e:  # Error in building transaction
-            dialogs.show_information(
-                self, _('Error(s) in building transaction'),
-                        '\n'.join(e.msgs))
+            self.error_dialog.show(
+                _('Error(s) in building transaction') + '\n'.join(e.msgs))
             self._reset_on_cancel()
         except misc.TransactionSolveError as e:
-            dialogs.show_information(
-                    self, _('Error(s) in search for dependencies'),
-                            '\n'.join(e.msgs))
+            self.error_dialog.show(
+                    _('Error(s) in search for dependencies') +
+                    '\n'.join(e.msgs))
             self._reset_on_error()
 
 ###############################################################################
