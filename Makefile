@@ -40,7 +40,7 @@ clean: $(CLEAN_TARGETS)
 	
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool transifex-client
+	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -50,9 +50,8 @@ archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 	
-# needs perl-TimeDate for git2cl
 changelog:
-	@git log --pretty --numstat --summary | tools/git2cl > ChangeLog
+	$(PYTHON) tools/git2cl.py
 	
 upload: 
 	@scp ~/rpmbuild/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
@@ -96,7 +95,7 @@ test-release:
 	@cat ${APPNAME}.spec | sed  -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
 	# Make Changelog
-	@git log --pretty --numstat --summary | ./tools/git2cl > ChangeLog
+	$(PYTHON) tools/git2cl.py
 	@git commit -a -m "updated ChangeLog"
 	# Make archive
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz

@@ -1,2914 +1,668 @@
-2016-04-26  Tim Lauridsen <timlau@fedoraproject.org>
+2016-04-28  Tim Lauridsen
 
-	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
-	4.3.2
+  * Add custom error dialog  fixes #90
+  * Make info progress behave under gtk 3.20
 
-2016-04-26  Tim Lauridsen <tla@rasmil.dk>
+2016-04-27  Christian Stadelmann
 
-	Merge pull request #99 from genodeftest/devel-paned  Fix main
-	GtkPaned being to small
+  * Remove tray icons  Remove tray icons and references to it in Makefile.
+  Makefile: Don't create empty directory any more.
+  * InfoBar: remove custom colors and code  Rely on Gtk theme for coloring the
+  info bar. Use a GtkInfoBar.  This will fix #87.
 
-2016-04-26  Tim Lauridsen <tla@rasmil.dk>
+2016-04-26  Tim Lauridsen
 
-	Merge pull request #100 from genodeftest/devel-transactiondialog
-	Fix transaction dialog not expanding properly
+  * bumped version to 4.3.2
 
-2016-04-26  Christian Stadelmann <dev@genodeftest.de>
+2015-12-17  Tim Lauridsen
 
-	* src/yumex.ui: Fix transaction dialog not expanding properly
+  * move extra filters to headerbar
 
-2016-04-26  Christian Stadelmann <dev@genodeftest.de>
+2015-12-15  Tim Lauridsen
 
-	* src/yumex.ui: Fix main GtkPaned being to small  Without this fix,
-	the GtkPaned could be resized in a way that one of its child widgets
-	partially or completely got hidden.
+  * Add **Refresh Metadata** to main menu (#84)
+  * Added keyboard shortcut Alt-X to Extra filters (#14)
+  * Add Extra Filters menu with archs and package version filters (#85)
 
-2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-11  Tim Lauridsen
 
-	* src/yumex/gui/widgets.py: Extra filter popover should default
-	positon to bottom
+  * add action handler
+  * Remove options from main menu
 
-2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-09  Tim Lauridsen
 
-	* src/yumex/gui/widgets.py: make fields sensitive if search type is
-	fields
+  * bumped version to 4.3.1
 
-2015-12-17  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-05  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
-	move extra filters to headerbar
+  * Transfix pull, *.po update
 
-2015-12-16  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-03  Tim Lauridsen
 
-	* src/yumex.ui: change the icon of Extra filters button
+  * added keyboard shortcuts (#14)  * Ctrl - Q = Quit * F1 = Open docs in
+  browser * Ctrl 1 - 4 (Select filter in package view)
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-02  Tim Lauridsen
 
-	* Makefile: build: use a relative build dir
+  * used paned for history view for more consistent look
+  * save search options  #74
+  * remove hide on close  #74
+  * Transfix push, yumex-dnf.pot update
+  * Transfix pull, *.po update
+  * rebuild .pot file
+  * use a popover menu for main menu  #74
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-12-01  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py: Add **Refresh
-	Metadata** to main menu (#84)
+  * The apply pending actions button only sensitive when there is something in
+  the pending action queue
+  * fix: flickering when changing package info type
+  * change version to 4.3.0, to use un-even version for development and even
+  for a stable release in the future.
+  * ui updates  * Rename **Actions** to **Pending Actions** * Remove pages from
+  main-menu  (#74)
+  * fix: handling of legacy autostart .desktop files
+  * fix: autostart dir calc and make quit work
+  * rename autostart update checker .desktop file
+  * make minimize on quit work again
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-30  Tim Lauridsen
 
-	* .gitignore: update .gitignore to dont include build/
+  * move package filter listbox to ui file
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-26  Tim Lauridsen
 
-	* README.md: update README
+  * Show notification instead of dialog when the user have performed an action
+  from the commandline
+  * cleanup update checker options
+  * Remove unused dk.yumex.StatusIcon files  * Add install code for
+  yumex-dnf-updatechecker * make autostart start yumex-dnf-updatechecker
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-25  Tim Lauridsen
 
-	* Makefile: build rpms in source tree ($pwd/build)
+  * Add initial parts for new update checker
+  * adjust margins in pkg info view
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-24  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py: Added keyboard
-	shortcut Alt-X to Extra filters (#14)
+  * cleanup debug print statements
+  * save main_paned position between session
+  * rework the Package Info widget  * created a new look for package info
+  selection * only one package info widget (packages + groups) * move filter
+  selector into package page.
+  * minor ui tweaks (info radiobutton)
+  * Make it possible to disable dnf cache handling by setting refresh interval
+  to 0.  (#76)
+  * Make the filter sidebar better
+  * Move filters into a sidebar
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-20  Christian Stadelmann
 
-	Add reworked option and extra filters (#85)
+  * Improve readability, remove hard-coded font sizes
 
-2015-12-15  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-20  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/views.py,
-	src/yumex/gui/widgets.py: Add Extra Filters menu with archs and
-	package version filters (#85)
+  * Add separate toolbar to filters
 
-2015-12-14  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-17  Tim Lauridsen
 
-	* src/yumex/__init__.py: show gui before the need to setup the
-	backend (#88)
+  * Integrate all the new UI parts in the right places
+  * add keyboard shortcuts  Alt 1-4 for selecting primary pages. Alt S for
+  opening/closing search on package page
+  * Add preferences
+  * add logging  * enable arch filter * fix issue with backend locked when some
+  options is changed
+  * Handle page change events in main window.  * load groups info * more
+  refactoring
 
-2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-16  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py: add action handler
+  * add stack switcher to show main pages
+  * cleanup spinners
+  * make buttons insensitive when working
+  * make search work in the new gui reworked the search option (popover)
 
-2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+2015-11-13  Tim Lauridsen
 
-	* src/yumex.ui: add button for more filters
+  * make setting the default filter smarter
+  * Added the basic parts for using a redesigned UI
 
-2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+2015-10-08  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
-	Remove options from main menu
+  * Use text color from theme (#63)
 
-2015-12-11  Tim Lauridsen <timlau@fedoraproject.org>
+2015-09-30  Tim Lauridsen
 
-	* src/yumex.ui: Added new preferences dialog
+  * bumped version to 4.1.4
 
-2015-12-10  Tim Lauridsen <timlau@fedoraproject.org>
+2015-06-09  Tim Lauridsen
 
-	* Makefile: change Makefile for new release workflow
+  * add show available updates, when newest only is unchecked.
 
-2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+2015-06-01  Tim Lauridsen
 
-	* src/yumex.ui: minor ui adjustment
+  * Added API version check for statusicon  (#43)
+  * Add dnfdaemon service not started handling in statusicon
+  * added check for we have the need version of dnfdaemon API  (#43)
 
-2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-27  Tim Lauridsen
 
-	* src/yumex/__init__.py: make search button insensitive, don't hide
-	(#74)
+  * bumped version to 4.1.3
+  * i18n: translation updates
 
-2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-22  Tim Lauridsen
 
-	* src/yumex.ui: UI adjustments (#74)   * Renamed 'Pending Action' to
-	'Queue' in headerbar  * Added comments for translators for headerbar
-	page buttons  * Removed space between searchbar and search options
-	button.
+  * fix: RunTransaction api change, no more max_err parameter  Removed
+  max_dnl_err yumex.conf option, not used any more
 
-2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-20  Tim Lauridsen
 
-	* ChangeLog: updated ChangeLog
+  * all statusicon -> yumex signal has pid
+  * refactor: move gpg confirmation dialog to gui.dialogs  pep8: cleanup
+  * fix: yumex already running, is always stopping running version  refactor:
+  dbus-send shell commands
 
-2015-12-09  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-19  Tim Lauridsen
 
-	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
-	4.3.1
+  * make the status-icon daemon store the pid of the caller  So we can
+  difference callers
+  * refactor: process actions and use exception instead of return codes
 
-2015-12-07  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-18  Tim Lauridsen
 
-	* src/yumex/__init__.py: Alt+A : Apply pending actions (#14)
+  * Add basics for history undo  (#7)
 
-2015-12-07  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-14  Tim Lauridsen
 
-	* src/yumex/__init__.py: Ctrl-A toggle selection of all packages in
-	package view (#14)  Same action as clicking the column header.
+  * make clean unused requirement work  pep8 cleanup don't reset everything
+  when changing session option
+  * fix: make clean_instonly work when default on at launch
+  * Add option to set number of installonly packages to keep, when
+  clean_instonly is set.  (#24)
+  * Add support of removing old version of install only pkgs  (#24)
 
-2015-12-05  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-12  Tim Lauridsen
 
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/zh_CN.po, po/zh_TW.po: Transfix pull, *.po update
+  * refactor: move pkg_id convertion fn into lib
+  * add package requirement page to package info (#8)
 
-2015-12-03  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-10  Tim Lauridsen
 
-	* src/yumex/updater.py: updater: always launch /usr/bin/yumex-dnf
+  * Translation update (transifex)
 
-2015-12-03  Tim Lauridsen <timlau@fedoraproject.org>
+2015-05-06  Tim Lauridsen
 
-	* src/yumex/__init__.py: Added more keyboard shortcuts (#14)    *
-	<Alt>Return open preferences   * <Alt>N toggle Newest only option
-	* <Alt>E toggle Erase unused requirements option   * <Alt>C toggle
-	Cleanup old instonly packages option
+  * bumped version to 4.1.2
+  * protect against removing yumex-dnf and req. (#29)
 
-2015-12-05  Tim Lauridsen <tla@rasmil.dk>
+2015-04-30  Tim Lauridsen
 
-	Merge pull request #83 from rbuj/Catalan  add Catalan language
+  * fix: yumex notification icon launch fails if no yumex.conf  (RhBug:
+  1217165)
+  * make the saved arch filter work on first start (#28)
+  * fix: better handling of errors starting notification icon  (RhBug: 1217241)
+  * remember arch menu selections between sessions (#28)
 
-2015-12-04  Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>
+2015-04-29  Tim Lauridsen
 
-	* po/ca.po: add Catalan language  tx pull -l ca
+  * Remove skipbroken option, not used by dnf
+  * load custom styling from current theme (#26)  Add '--minimized' cmd option
+  to start yumex (#27)
 
-2015-12-03  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-28  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
-	added keyboard shortcuts (#14)   * Ctrl - Q = Quit  * F1 = Open docs
-	in browser  * Ctrl 1 - 4 (Select filter in package view)
+  * set styling name to toolbar & packageview (#26)
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-27  Tim Lauridsen
 
-	* src/yumex/gui/views.py: expand the latest history entry (#67)
+  * fix: make downgrades work  (#16)
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-26  Tim Lauridsen
 
-	* src/yumex/gui/views.py: add numbers of actions in history pkg view
-	(#69)
+  * bumped version to 4.1.1
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-26  Piotr Drąg
 
-	* src/yumex.ui, src/yumex/__init__.py: used paned for history view
-	for more consistent look
+  * Improve some strings
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-26  Tim Lauridsen
 
-	* src/yumex.ui: fix: add "Remove Selected" to queue menu
+  * Added --updateall there will apply all pending updates  * make apply from
+  status icon notification launch yumex with --updateall * fix: hide status
+  icon when no updates is found (#23)
+  * move all status icon setting to a separate page in pref.  added
+  notification on update to pref. added show only icon when updates to pref
+  added Makefile targets to test statusicon dbus daemon  (#23)
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-25  Tim Lauridsen
 
-	* src/yumex/__init__.py: fix: when refresh_interval=0, don't refresh
-	dnf metadata
+  * Add configurable notification on update
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-24  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py,
-	src/yumex/misc.py: save search options  #74
+  * save selected repositories, if "save selected repositories" is enabled 
+  (RhBug: 1214062)
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-23  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: remove hide on close  #74
+  * Added support of showing update information about fedora updates  (Fixes #5
+  & RhBug: 1121946)  requires dnfdaemon >= 0.3.7 for supplying update
+  information
+  * Added option to auto select all available updates at startup  (Fixes #22 &
+  RhBug: 1214052)
+  * refactor: move HeaderBar and ToolBar to gui/widgets
+  * save window size and maximize state between sessions  (fixes #18 & RhBug:
+  1214047)
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-22  Tim Lauridsen
 
-	* src/yumex/__init__.py: fix: Ctrl-F should open/close searchbar all
-	the time  #74
+  * Strech searchbox to use available space  (fixes #19 & RhBug: 1214059)
+  * save search option between session  (fixes #20 & RhBug: 1214057)
+  * set search defaults from config settings
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-14  Tim Lauridsen
 
-	* po/yumex-dnf.pot, src/yumex/gui/widgets.py: Transfix push,
-	yumex-dnf.pot update
+  * doc: update info about yumex is already running  Add faq entry about
+  selecting all updates
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-13  Tim Lauridsen
 
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/zh_CN.po, po/zh_TW.po, src/yumex/__init__.py: Transfix pull, *.po
-	update
+  * update translations
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-12  Tim Lauridsen
 
-	* po/POTFILES.in, po/yumex-dnf.pot: rebuild .pot file
+  * bumped version to 4.1.0
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-11  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py,
-	src/yumex/misc.py: use a popover menu for main menu  #74
+  * fix review issues
+  * update fsf address
 
-2015-12-02  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-09  Tim Lauridsen
 
-	* src/yumex/misc.py: better GNOME detection
+  * add custom gtk styling
+  * bumped version to 4.0.10
+  * Make yumex already running better
+  * show yumex ui always if started again an working in the background
+  * make better handling of yumex is started twice
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2015-04-07  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/views.py: The apply pending
-	actions button only sensitive when there is something in the pending
-	action queue
+  * bumped version to 4.0.9
+  * Make toolbar in headerbar an config option. Enabled by default in gnome,
+  and disabled in other DE's
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2014-10-21  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py: fix: flickering
-	when changing package info type
+  * bumped version to 4.0.8
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2014-10-11  Tim Lauridsen
 
-	* src/yumex/const.py, yumex-dnf.spec: change version to 4.3.0, to
-	use un-even version for development and even for a stable release in
-	the future.
+  * fix: only show fedora packages links for packages in fedora repos
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2014-10-02  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/gui/widgets.py: ui updates  * Rename
-	**Actions** to **Pending Actions** * Remove pages from main-menu
-	(#74)
+  * Use FRENZY Software Manager icons
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2014-09-25  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/const.py: fix: handling of legacy
-	autostart .desktop files
+  * ui: use standard gtk+ spinner
+  * fix: make main menu quit work
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+2014-09-24  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/gui/dialogs.py: fix: autostart dir calc and make quit work
+  * ui: added progress for package verify after transaction is completted
 
+2014-09-21  Tim Lauridsen
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+  * bumped version to 4.0.7
+  * cleanup: gtk 3.12 deprecated ui
 
-	* src/yumex/gui/dialogs.py: fix typo
+2014-09-05  Tim Lauridsen
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+  * cleanup: deprecated Gtk
+  * fix: better exception handling when Dbus backend dies
+  * fix: deprecated Gtk stuff
 
-	* src/yumex/misc.py: cleanup legacy unused code
+2014-09-02  Tim
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+  * bumped version to 4.0.6
 
-	* misc/Makefile, misc/yumex-dnf-autostart.desktop,
-	misc/yumex-dnf-updater.desktop, src/yumex/const.py,
-	src/yumex/gui/dialogs.py: rename autostart update checker .desktop
-	file
+2014-06-21  Tim Lauridsen
 
-2015-12-01  Tim Lauridsen <timlau@fedoraproject.org>
+  * Fix the language setup, so Gtk.builder get translated
+  * i18n: updated translations
+  * Set translation domain for GtkBuilder, use right translation domain for
+  notification domain
 
-	* src/yumex.ui, src/yumex/__init__.py: make minimize on quit work
-	again
+2014-06-08  Tim Lauridsen
 
-2015-11-30  Tim Lauridsen <timlau@fedoraproject.org>
+  * Adjust headerbar
 
-	* src/yumex/__init__.py: Setup session based config vars from the
-	default from preferences
+2014-06-06  Tim Lauridsen
 
-2015-11-30  Tim Lauridsen <timlau@fedoraproject.org>
+  * bumped version to 4.0.5
 
-	* src/yumex.ui: Add more tooltips
+2014-06-03  Tim Lauridsen
 
-2015-11-30  Tim Lauridsen <timlau@fedoraproject.org>
+  * added fedora packages links to package info
 
-	* src/yumex.ui: add tooltips to filters
+2014-05-12  Tim Lauridsen
 
-2015-11-30  Tim Lauridsen <timlau@fedoraproject.org>
+  * cleanup: doc strings and minor refactoring
+  * cleanup imports
 
-	* src/yumex.ui, src/yumex/gui/widgets.py: move package filter
-	listbox to ui file
+2014-05-09  Tim Lauridsen
 
-2015-11-30  Tim Lauridsen <timlau@fedoraproject.org>
+  * use new dnfdaemon GetPackges, the works with attrs
+  * bumped version to 4.0.4
+  * adjust to  dnfdaemon code changes
 
-	* src/yumex.ui: Add tooltips to package info buttons
+2014-05-03  Tim Lauridsen
 
-2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+  * bumped version to 4.0.3
 
-	* src/yumex/misc.py: always return 0 as 00 (hex) in color code
+2014-04-25  Tim Lauridsen
 
-2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+  * code cleanup
 
-	* src/yumex/misc.py: fix problem with color to hex convertion (#81)
+2014-04-10  Tim Lauridsen
 
+  * fix: typo in appdata file
+  * cleanup: PEP8 issues
+  * fix. use absolute imports in all modules
+  * pull translations from transifex
+  * fix: split up appdata translation in more elements
 
-2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+2014-04-09  Tim Lauridsen
 
-	* src/yumex/misc.py: workaround for changes in Gtk 3.19.x
-	https://blogs.gnome.org/mclasen/2015/11/20/a-gtk-update/
+  * add appdata file
+  * cleanup: make the code follow PEP8
 
-2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+2014-04-02  Tim Lauridsen
 
-	* src/yumex/misc.py: Cleanup old instonly packages is enabled by
-	default
+  * refactor: split yumex.widget into yumex.gui.views, dialogs, widgets
 
-2015-11-27  Tim Lauridsen <timlau@fedoraproject.org>
+2014-04-01  Tim Lauridsen
 
-	* src/yumex/__init__.py: PEP8 cleanup
+  * bumped version to 4.0.2
+  * update .pot & pull po from transifex
+  * add: added code for installing and removing groups
+  * refactor: group should be reprecented as python objects in group view, to
+  make it possible to unselect the group, when remove from the queue view.
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-31  Tim Lauridsen
 
-	* yumex-dnf.spec: include all bins to spec
+  * translation: rename yum to dnf in strings & rebuild .pot file doc: added
+  link to translation page at transifex
+  * add: added Help to main menu, with About Dialog & Online docs
+  * doc: added debug info to FAQ
+  * doc: added FAQ and updated doc
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-30  Tim Lauridsen
 
-	* yumex-dnf.spec: remove dbus services from spec
+  * fix: pending queue right click menu not shown
+  * doc: Added docs
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-29  Tim Lauridsen
 
-	* yumex-dnf.spec: bunp spec version
+  * bumped version to 4.0.1
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-28  Tim Lauridsen
 
-	* src/yumex/__init__.py: Add support for running action from
-	commandline when yumex-dnf is already started and idle  (#80)
+  * cleanup: remove unsued code
+  * add: always use the dnf root backend, to avoid the mess with 2 caches,
+  there can be different
+  * add: Use Gtk.Stack for main content and Gtk.Revealer from Gtk 3.10, to show
+  animations, when changing pages and let the infobar slide down.
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-27  Tim Lauridsen
 
-	* src/main.py, src/yumex/__init__.py, src/yumex/misc.py: Show
-	notification instead of dialog when the user have performed an
-	action from the commandline
+  * add: make prefix the default search type
+  * optimize: make search faster by using new dnfdeamon API to get attributes
+  with the search results
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-26  Tim Lauridsen
 
-	* src/yumex/__init__.py: Added support for execute action from the
-	commandline in a minimal UI.  * added --install PACKAGE * added
-	--remove PACKAGE * added --updateall * added --yes
+  * add: add new yumex ui
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-21  Tim Lauridsen
 
-	* src/yumex/__init__.py: cleanup yumex.misc import
+  * fix: show information is dnf cache can't be refreshed
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-20  Tim Lauridsen
 
-	* src/yumex.ui: remove ident for update checker interval in
-	preferences
+  * add: add ui for setting the expire cache interval in perferences
+  * add: make time between cache expire a number of hours
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-19  Tim Lauridsen
 
-	* src/yumex/updater.py: impromvement to update-checker  * Clicking
-	"Not Now" on notification will show a new notification   for a
-	period of 10x check interval. * Don't show a new notification until
-	the number of updates   changes or the user has closed the previous
-	one.
+  * add: only expire dnf cache once every day
+  * cleanup: fix typos
+  * removed unused repo build tools, we use Copr now
+  * remove .mo binary translation files
+  * Added support for translation files from transifex
+  * updated translation source
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-18  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: cleanup update checker options
+  * fix: show obsletes af fullname, not pkg_id
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-15  Tim Lauridsen
 
-	* Makefile, dbus/Makefile, dbus/dbus_status.py,
-	dbus/dk.yumex.StatusIcon.service, misc/yumex-dnf-autostart.desktop,
-	setup.py, src/yumex/status.py: Remove unused dk.yumex.StatusIcon
-	files  * Add install code for yumex-dnf-updatechecker * make
-	autostart start yumex-dnf-updatechecker
+  * cleanup: remove some unused code
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-13  Tim Lauridsen
 
-	* src/yumex/updater.py: Use Gio.Application
+  * Updated README and Makefile cleanup
 
-2015-11-26  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-12  Tim Lauridsen
 
-	* src/yumex/updater.py: make it possible to stop the updater by
-	running update.py --exit
+  * group packages optimizations
+  * Remove skip-broken option, dont exist in dnf
+  * Refresh dnf metadata on startup
 
-2015-11-25  Tim Lauridsen <timlau@fedoraproject.org>
+2014-03-11  Tim Lauridsen
 
-	* src/update.py, src/yumex/__init__.py, src/yumex/misc.py,
-	src/yumex/updater.py: Add initial parts for new update checker
+  * yumex-nextgen -> yumex-dnf rename
+  * Use the dnfdaemon for packaging action
 
-2015-11-25  Tim Lauridsen <timlau@fedoraproject.org>
+2014-02-18  Tim Lauridsen
 
-	* src/yumex.ui: Make package info TextView ReadOnly
+  * Change the default window close action to exit yumex add at setting in
+  preferences to change the window close action to just hide the window
 
-2015-11-25  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-24  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/gui/widgets.py: adjust margins in pkg info
-	view
+  * Changed the way yumex is build - use setup.py - use Makefile in subdirs
 
-2015-11-25  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-23  Tim Lauridsen
 
-	* src/yumex/__init__.py: Make the --exit option work in both first
-	and second run
+  * - Show project url in package description (Issue #169 - clean rpms before
+  upload to repo
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-16  Tim Lauridsen
 
-	* src/yumex.ui: minor ui tweak
+  * Add package filtering (updates, installed) on search results
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-14  Tim Lauridsen
 
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py: cleanup debug
-	print statements
+  * Added new mock_build target and build helper
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-13  Tim Lauridsen
 
-	* src/yumex/gui/widgets.py: only send signal if we have valid
-	selection
+  * add mock-build target to Makefile added script to build repo and upload to
+  fedorapeople.org
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-11  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/misc.py: save
-	main_paned position between session
+  * better handling of locked and not authorized error when getting the root
+  backend
+  * Added Right Click
+  * Make the arch menu entries reflect the current system
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-10  Tim Lauridsen
 
-	* src/yumex.ui: center the page switcher on the headerbar
+  * set archs based on current system arch
+  * - minor toolbar button rearrange - adjusted debug logging - Added GPG key
+  import support
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-09  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/views.py,
-	src/yumex/gui/widgets.py: rework the Package Info widget  * created
-	a new look for package info selection * only one package info widget
-	(packages + groups) * move filter selector into package page.
+  * - minor toolbar button rearrange - adjusted debug logging
+  * Store colors in hex, the rgb(R,G,B) notation dont work with markup like
+  foreground="...."
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-07  Tim Lauridsen
 
-	* src/yumex/gui/views.py: Make the info view font a little smaller
-	then the default Monospace size
+  * change the search entry so it only does auto search when searching only in
+  package names, when searching a wider scope, then first do the search when
+  return is pressed.
+  * Click on selection column header in group view, will switch between: -
+  install all packages in group (not already install) - remove all packages
+  already installed in group - back to initial selection  Click on selection
+  column header in package view (updates only) will switch between: - select
+  all updates. - deselect all updates. - back to initial selection  Added
+  '--exit' command line option to exit session based dbus services started by a
+  yumex (Status icon & YumReadonlyBackend)
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-04  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/gui/widgets.py: minor ui tweaks (info
-	radiobutton)
+  * - Added group and category content - reworked package view to use signals -
+  extracted archmenu into ArchMenu object - made a package info widget, so it
+  can be reused for group view
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-03  Tim Lauridsen
 
-	* src/yumex/misc.py: increase default window width
+  * Inital support for groups (not complete yet)
+  * Add .desktop file for installation of local rpms Updated requirments in
+  .spec Add COPYING to be GPL complient
+  * changed po/Makefile to add .ui files with [type: gettext/glade] prefix
+  rebuild .pot and POTFILES.in
+  * Show a main label when downloading extra metadata (changelog, filelists
+  etc.) Minor ui adjustments to info progress bar
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-02  Tim Lauridsen
 
-	* src/yumex/gui/widgets.py: Show updates on start
+  * Updated README and minor Makefile adjustments
+  * Added schduled update checker in status icon Added update check interval
+  and and startup delay to preferences
+  * Added 'Start Yum Extender' to status icon added '--icononly' option to
+  yumex, it will only start the status icon change autostart option in pref to
+  start status icon only
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-10-01  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py: Make it possible to disable
-	dnf cache handling by setting refresh interval to 0.  (#76)
+  * Send signals from the status icon on actions and listen and do the right
+  action in the client.
+  * Added DBus based Status Icon
+  * Added command line install & remove support using --install package or
+  --install package. Using a smaller ui (only info progress bar) -y/--yes
+  command line option will disable questions and info dialogs when running
+  actions from the command line. Added small spinner to info progress bar.
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-30  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
-	Make the filter sidebar better
+  * Better progress infomation when downloading metadata
+  * - minor ui adjustments - use the right yumex-nextgen icon
+  * Better info/progress bar look & feel Changed progress strings. minor code
+  clean up
 
-2015-11-24  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-29  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/widgets.py: 
-	Move filters into a sidebar
+  * Added arch filtering,  click on the header of the arch column to select to
+  archs to show
 
-2015-11-20  Tim Lauridsen <tla@rasmil.dk>
+2013-09-28  Tim Lauridsen
 
-	Merge pull request #77 from genodeftest/font-sizes  Font sizes
+  * Change bg color of progress infobar to very light gray
+  * minor ui cleanup added accelerator (dont work )
+  * make we always set the active repos in the root backend
 
-2015-11-20  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-27  Tim Lauridsen
 
-	* src/yumex/__init__.py: Add auto gnome detection
+  * Make changes to enabled repositories work both in root and non-root backend
 
-2015-11-20  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-26  Tim Lauridsen
 
-	* src/yumex.ui: Add some tooltips and other UI tweaks
+  * added repositories to preferences
+  * added repositories to preferences
+  * - change colors of differnt package types in preferences - make package
+  view use the config colors
+  * - Added autostart - create a blank yumex.conf if it dont exists - install
+  spinner & tray icons - added default values for options in perferences
+  * - Add config classes from yum, migrated to python3 - Added inital
+  preference dialog
 
-2015-11-20  Christian Stadelmann <dev@genodeftest.de>
+2013-09-23  Tim Lauridsen
 
-	* src/yumex/const.py, src/yumex/gui/views.py: Improve readability,
-	remove hard-coded font sizes
+  * updated tooltips for search types
+  * search in pkgtags
+  * show pkgtags in description
+  * - better output when showing packages under RPM Transaction - removed used
+  import
+  * Added main content notebook page enums. Added doc strings Check if window
+  is created in shutdown handler
+  * more output to logger
 
-2015-11-20  Christian Stadelmann <dev@genodeftest.de>
+2013-09-22  Tim Lauridsen
 
-	* src/yumex.ui: infobar_sublabel: Fix visibility, use relative font
-	Without this change infobar_sublabel is visible by default. It uses
-	an absolute font which is not required but might interfere with
-	users choosing their own custom font size.
+  * debug output to debug logger
+  * code formatting
+  * - Migrated StatusIcon from yumex3.0 and make it work with gtk3 - Set
+  windows icon
 
-2015-11-20  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-20  Tim Lauridsen
 
-	* src/yumex.ui, src/yumex/__init__.py: Add separate toolbar to
-	filters
+  * - Added options to options menu - use newest_only option in search - search
+  again when search type is changed
+  * adjusted toolbar and added menu to pref button
+  * removed a lot of debug print() statements
+  * Added better progress while performing package actions and downloading meta
+  data.
+  * - click on selection column header will select/deselect all when showing
+  updates - added right click handler on selection column header (for future
+  use) - removed some commented out code.
 
-2015-11-20  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-19  Tim Lauridsen
 
-	* src/yumex.ui: cleanup margins in preferences
+  * Add search config menu with 4 kind of searches
+  * added search entry and progress spinner inside toolbar
 
-2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-18  Tim Lauridsen
 
-	* src/yumex/gui/widgets.py: fix possible traceback  RhBug: 1253630
+  * Added processing of pending tasks
 
-2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+2013-09-17  Tim Lauridsen
 
-	* dbus/dbus_status.py: don't use deprecated GObject.SIGNAL_RUN_FIRST
+  * Added yum callback handlers
+  * Added a dynamic root backend make the history view use the root backend
 
+2013-09-16  Tim Lauridsen
 
-2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
+  * Added History parts, but they dont work yet, there need a root backend to
+  work
+  * self.builder -> self.ui rename
+  * - Added infobar mesages on fetching package list - i18n refactoring
+  * Added infobar
+  * - changed package info icons - added top margin to info view -incressed
+  windows default size - show progress spinner when populating info view
+  (filelist, changelog, updateinfo)
+  * - move constants to const,py - move misc helpers to misc.py - move
+  busy/normal_cursor methods to YumexWindow class - package view population
+  optimations
+  * - New spinner icon - Process Gtk event while populating package view
+  * animated gif spinner
 
-	* yumex-dnf.spec: add libnotify requirement  RhBug: 1279992
+2013-09-15  Tim Lauridsen
 
-2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/status.py: don't act on statusicon dbus signals, if
-	there is no window
-
-2015-11-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: fix gi warnings
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: Set direction on the search option
-	popover
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py, src/new-main.py, src/yumex-new.ui, src/yumex.ui,
-	src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/gui/new_widgets.py, src/yumex/gui/widgets.py,
-	src/yumex/old_init.py: Integrate all the new UI parts in the right
-	places
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	Add the new redesigned yumex ui to master
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py: Added Transactions processing parts
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex/gui/new_widgets.py: add keyboard
-	shortcuts  Alt 1-4 for selecting primary pages. Alt S for
-	opening/closing search on package page
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex/gui/new_widgets.py: Add preferences
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex/gui/new_widgets.py: add logging  *
-	enable arch filter * fix issue with backend locked when some options
-	is changed
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py: handle option changes
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py: load and populate history information
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex/gui/new_widgets.py: Handle page change
-	events in main window.  * load groups info * more refactoring
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py: Refactor code and add better doc strings
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/new_widgets.py: add docstrings/comments
-
-2015-11-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex-new.ui: stack should expand
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex-new.ui, src/yumex/gui/new_widgets.py: add stack switcher
-	to show main pages
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex-new.ui, src/yumex/gui/new_widgets.py: 
-	cleanup spinners
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex-new.ui: minor adj. to spinner
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex-new.ui: adjust ui margins to look better
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex-new.ui, src/yumex/gui/new_widgets.py: 
-	make buttons insensitive when working
-
-2015-11-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex-new.ui, src/yumex/gui/new_widgets.py: 
-	make search work in the new gui reworked the search option (popover)
-
-
-2015-11-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex/gui/new_widgets.py: make setting the
-	default filter smarter
-
-2015-11-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/new-main.py, src/yumex-new.ui, src/yumex/gui/new_widgets.py: 
-	Added the basic parts for using a redesigned UI
-
-2015-11-04  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: adjust toolbar margins
-
-2015-11-04  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py: use gi.require_version('Gtk', '3.0')
-
-2015-11-04  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #73 from timlau/revert-72-patch-2  Revert
-	99091b39c5639df2f7ea331465cb3f8e6c30cf3f
-
-2015-11-04  Tim Lauridsen <tla@rasmil.dk>
-
-	* src/main.py: Revert 99091b39c5639df2f7ea331465cb3f8e6c30cf3f
-
-2015-11-04  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #72 from genodeftest/patch-2  Require Gtk
-	version 3.10
-
-2015-11-03  Christian Stadelmann <dev@genodeftest.de>
-
-	* src/main.py: Require Gtk version 3.10  This fixes some warnings
-	from gi. I chose Gtk 3.10 since yumex-dnf uses `GtkHeaderBar`s which
-	require 3.10.
-
-2015-10-20  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #66 from genodeftest/patch-1  Unify page
-	borders/margins
-
-2015-10-20  Christian Stadelmann <dev@genodeftest.de>
-
-	* src/yumex.ui: Unify page borders/margins
-
-2015-10-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: Wrap text in Package Info view (#62)
-
-2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: Use text color from
-	theme (#63)
-
-2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: add helper to get default color for a widget
-
-2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: cleanup: more PEP8 fixes
-
-2015-10-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: cleanup: PEP8 fixes
-
-2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: check_dark theme is a function
-
-2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: Make repoview column header click work
-	fixes RhBug: #1233376
-
-2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py: remove -tt from python3 shebang
-
-2015-10-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Fix traceback on errors in building group
-	transaction  (RhBug: 1262879)
-
-2015-10-05  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #49 from tamimym/master  Change font colors
-	if using dark theme
-
-2015-10-05  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #56 from
-	genodeftest/genodeftest-patch-trayicon  Fix a warning when
-	rightclick-opening a tray popup menu
-
-2015-10-02  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #58 from
-	genodeftest/genodeftest-patch-pythonargs  Remove deprecated python
-	option `-tt`
-
-2015-10-02  Christian Stadelmann <dev@genodeftest.de>
-
-	* dbus/dbus_status.py: Remove deprecated python option `-tt`  The
-	`-t` option was removed in python3. It has no effect any more and is
-	ignored. It can be safely removed. See
-	https://bugzilla.redhat.com/show_bug.cgi?id=1268262
-
-2015-10-02  Christian Stadelmann <dev@genodeftest.de>
-
-	* dbus/dbus_status.py: Fix a warning when rightclick-opening a tray
-	popup menu  Currently on F22 when opening a popup menu on yumex's
-	status icon I get this message on stderr: `TypeError: pos() takes 2
-	positional arguments but 4 were given` This is caused by an API
-	break in Gtk3's GObject/Python bindings, see
-	https://github.com/lazka/pgi-docgen/issues/92 for details.  This
-	change fixes the issue for me on F22/Gtk+ 3.16. Needs testing on
-	3.18 and 3.14, I can't do that right now.  If this change doesn't
-	work on all supported Gtk versions, another idea can be found in
-	https://github.com/exaile/exaile/pull/112
-
-2015-10-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py: Handle SIGINT, So Ctrl-C will not leave yumex-dnf in
-	limbo (#55)
-
-2015-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.4
-
-2015-07-28  tamimym <tamimym@gmail.com>
-
-	* src/yumex/gui/widgets.py: Checks for dark GTK theme when setting
-	background color of InfoBar
-
-2015-07-28  tamimym <tamimym@gmail.com>
-
-	* src/yumex/gui/views.py: Checks for dark GTK theme and set colors
-	in PackageInfoView and of url
-
-2015-07-28  tamimym <tamimym@gmail.com>
-
-	* src/yumex/misc.py: Added check_dark_theme function and changed
-	default font colors if using dark GTK theme
-
-2015-06-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/dnf_backend.py: add show available updates, when newest
-	only is unchecked.
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: don't reset queue on download errors  (#41)
-
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py, src/yumex/status.py: 
-	Added API version check for statusicon  (#43)
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: cleanup: pep8 fixes
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: show the full error msg, when status icon
-	can't launch dnfdaemon
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/dnf_backend.py: Add dnfdaemon
-	service not started handling in statusicon
-
-2015-06-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/dnf_backend.py: added check for we
-	have the need version of dnfdaemon API  (#43)
-
-2015-05-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: fix: show download size in bytes, not
-	bits  (RhBug: 1226572)
-
-2015-05-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: fix: support reinstall in rpm progress strings
-	(RhBug: 1226617)
-
-2015-05-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/dialogs.py: fix: create autostart dir if it don't
-	exists (RhBug: 1225518)
-
-2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog, setup.py, src/yumex/const.py, yumex-dnf.spec: bumped
-	version to 4.1.3
-
-2015-05-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config, po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po,
-	po/da.po, po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po,
-	po/fr.po, po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po,
-	po/ko.po, po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po,
-	po/ru.po, po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po,
-	po/uk.po, po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: i18n:
-	translation updates
-
-2015-05-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: fix: RunTransaction api
-	change, no more max_err parameter  Removed max_dnl_err yumex.conf
-	option, not used any more
-
-2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
-	all statusicon -> yumex signal has pid
-
-2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/gui/dialogs.py, src/yumex/gui/widgets.py,
-	src/yumex/misc.py, src/yumex/status.py: refactor: move gpg
-	confirmation dialog to gui.dialogs  pep8: cleanup
-
-2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: doc: added some comments
-
-2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: build: add some extra Makefile targets
-
-2015-05-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: fix: yumex already
-	running, is always stopping running version  refactor: dbus-send
-	shell commands
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
-	make the status-icon daemon store the pid of the caller  So we can
-	difference callers
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: cleanup: GtkButton:xalign is deprecated
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: cleanup: margin_left/right -> margin_begin/end
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: populate_transaction don't return
-	anything
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: refactor: process
-	actions and use exception instead of return codes
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: don't show 2 dialogs, when queue is
-	empty
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: traceback when group is empty
-
-2015-05-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: make history undo work  (#7)
-
-2015-05-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/views.py: Add
-	basics for history undo  (#7)
-
-2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/dnf_backend.py,
-	src/yumex/misc.py: make clean unused requirement work  pep8 cleanup
-	don't reset everything when changing session option
-
-2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/dnf_backend.py: fix: make
-	clean_instonly work when default on at launch
-
-2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/dnf_backend.py, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: Add option to set number of installonly packages
-	to keep, when clean_instonly is set.  (#24)
-
-2015-05-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/dnf_backend.py,
-	src/yumex/gui/dialogs.py, src/yumex/misc.py: Add support of removing
-	old version of install only pkgs  (#24)
-
-2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: only show error in transaction dialog
-	on errors
-
-2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: fix: misc. grammar errors  (RhBug:
-	#1221155)
-
-2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: fix: misc. grammar errors  (RhBug:
-	#1221155)
-
-2015-05-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: traceback in arch menu changes.
-	(RhBug #1220949)
-
-2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py: add better exception handling (#36)
-
-2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py, src/yumex/misc.py: refactor: move pkg_id
-	convertion fn into lib
-
-2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py, src/yumex/gui/widgets.py,
-	src/yumex/misc.py: add package requirement page to package info (#8)
-
-
-2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: separate gpg errors with other transaction
-	errors
-
-2015-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: show packages with problem when building
-	transaction
-
-2015-05-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: Translation update
-	(transifex)
-
-2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, setup.py, src/yumex/const.py, yumex-dnf.spec: 
-	bumped version to 4.1.2
-
-2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: protect against removing
-	yumex-dnf and req. (#29)
-
-2015-05-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: refresh search when newest_only is
-	changed.(#30)
-
-2015-05-04  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: Only active arch menu using left click
-	Right click makes strange problems (RhBug: 1217730)
-
-2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: dont show statusicon while working, if it is
-	disabed  (#27)
-
-2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: fix: yumex notification
-	icon launch fails if no yumex.conf  (RhBug: 1217165)
-
-2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/gui/widgets.py: make the saved arch filter work on first
-	start (#28)
-
-2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/status.py: fix: better handling
-	of errors starting notification icon  (RhBug: 1217241)
-
-2015-04-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/gui/widgets.py, src/yumex/misc.py: 
-	remember arch menu selections between sessions (#28)
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: Remove skipbroken
-	option, not used by dnf
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: map ADVISORY_UNKNOWN to 'New Package'  (RhBug:
-	1216192)
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: changes locations where looking for custom
-	styling  looking for ~/.themes/**name**/apps/yumex.css
-	/usr/share/themes/**name**/apps/yumex.css  (#26)
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: statusicon should use system dnddaemon, to no
-	reloading all metadata in users context.
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* setup.py, src/gtk-style.css, src/yumex/__init__.py: load custom
-	styling from current theme (#26)  Add '--minimized' cmd option to
-	start yumex (#27)
-
-2015-04-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: show error dialog on gpg check errors
-
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: Make downgrade/reinstall work as expected
-	(#16)
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py, src/yumex/gui/widgets.py: set styling name
-	to toolbar & packageview (#26)
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: set styling name to main window (#26)
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: ui adjustments
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: change toolbar execute to GtkMenuButton
-
-2015-04-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: add 'apps.yumex-dnf' as application id
-
-2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: better debug output move ClearTransaction
-
-2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: import downgrade/reinstall menu
-
-2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: add package view right click menu with
-	reinstall & downgrade  (#16)
-
-2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/gui/views.py: fix: make
-	downgrades work  (#16)
-
-2015-04-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Added support for handling of gpgkey
-	import.  (#6, RhBug: 1215428)
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/yumex-dnf.pot: Transfix push, yumex-dnf.pot update
-
-2015-04-26  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #25 from piotrdrag/master  Improve some
-	strings
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.1
-
-2015-04-26  Piotr Drąg <piotrdrag@gmail.com>
-
-	* dbus/dbus_status.py, misc/yumex-dnf.appdata.xml.in,
-	misc/yumex-dnf.desktop.in, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/const.py, src/yumex/dnf_backend.py,
-	src/yumex/gui/dialogs.py, src/yumex/gui/widgets.py: Improve some
-	strings
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: pep8: fixes
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/yumex-dnf.pot: Transfix push, yumex-dnf.pot update
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: Added translation wrappers
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: increase the update notification timeout to
-	10s
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py: Added --updateall
-	there will apply all pending updates  * make apply from status icon
-	notification launch   yumex with --updateall * fix: hide status icon
-	when no updates is found (#23)
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, src/yumex.ui, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: move all status icon setting to a separate page
-	in pref.  added notification on update to pref. added show only icon
-	when updates to pref added Makefile targets to test statusicon dbus
-	daemon  (#23)
-
-2015-04-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: Add notifcation to statusicon update checker
-	and setting to hide icon if no updates. (#23)
-
-2015-04-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/Makefile, dbus/dbus_status.py, src/yumex/misc.py: Add
-	configurable notification on update
-
-2015-04-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md: doc: update readme
-
-2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/gui/dialogs.py: save selected
-	repositories, if "save selected repositories" is enabled  (RhBug:
-	1214062)
-
-2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: set enabled repos from config, if
-	repo_saved is set
-
-2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: Add options to save enabled repositories
-
-2015-04-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: added save checkbox to repo perferences  Added more
-	and better tooltip to options in preferences
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: enable package info file list view
-	supported in dnf-daemon by this commit
-
-	https://github.com/timlau/dnf-daemon/commit/f2ee3eda585e4aab3de7bf6197359f04848a2c67
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: Don't show package info tabs for
-	changelog, filelist & requirement  The dnfdaemon/dnf backend dont
-	support it yet
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/gui/widgets.py: Added support of
-	showing update information about fedora updates  (Fixes #5 & RhBug:
-	1121946)  requires dnfdaemon >= 0.3.7 for supplying update
-	information
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: fix: don't show hand cursor outside link
-	in package info  (Fixes RhBug #1214050)
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: arch_menu traceback  (fixes RhBug:
-	1214045)
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: Added option to auto select all available updates
-	at startup  (Fixes #22 & RhBug: 1214052)
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/gui/widgets.py: refactor: move
-	HeaderBar and ToolBar to gui/widgets
-
-2015-04-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: save window size and
-	maximize state between sessions  (fixes #18 & RhBug: 1214047)
-
-2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: set right search type from config, not
-	just ui
-
-2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: Strech searchbox to use
-	available space  (fixes #19 & RhBug: 1214059)
-
-2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/config.py, src/yumex/misc.py: 
-	save search option between session  (fixes #20 & RhBug: 1214057)
-
-2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: set search defaults from
-	config settings
-
-2015-04-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: add some padding below titlebar  (Fixes #20
-	&  RhBug: 1214057)
-
-2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: require latest dnfdaemon
-
-2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/dialogs.py: make replaces look better in transaction
-	result dialog
-
-2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Revert "dont show obsoletes as updates,
-	that gives strange results"  This reverts commit
-	11ab683ef9cd1a18c0dde1acedbe51871bbf615d.
-
-2015-04-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: Revert "support for showing obsoletes as own
-	category in transaction dialog"  This reverts commit
-	008065311b07a55ab3124a955c4c6b7306217598.
-
-2015-04-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: support for showing obsoletes as own category
-	in transaction dialog
-
-2015-04-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/faq.rst, docs/img/error-running.png, docs/main.rst: doc:
-	update info about yumex is already running  Add faq entry about
-	selecting all updates
-
-2015-04-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config, po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po,
-	po/da.po, po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po,
-	po/fr.po, po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po,
-	po/ko.po, po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po,
-	po/ru.po, po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po,
-	po/uk.po, po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: update
-	translations
-
-2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: dont show obsoletes as updates, that gives
-	strange results
-
-2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: bumped version to 4.1.0
-
-2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.1.0
-
-2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: fix more fedora review issues
-
-2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: fix cut & paste error
-
-2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md, yumex-dnf.spec: fix review issues
-
-2015-04-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* COPYING, dbus/dbus_status.py, src/main.py, src/yumex/__init__.py,
-	src/yumex/backend.py, src/yumex/config.py, src/yumex/const.py,
-	src/yumex/dnf_backend.py, src/yumex/gui/__init__.py,
-	src/yumex/gui/dialogs.py, src/yumex/gui/views.py,
-	src/yumex/gui/widgets.py, src/yumex/misc.py, src/yumex/status.py: 
-	update fsf address
-
-2015-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: check is GDMSESSION exits (Fixes #12)
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: better requirement message
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: make some tool tips better
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/gtk-style.css: fix gtk css stylling
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: Use at text label, not an image in
-	selection column
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* setup.py, src/gtk-style.css, src/yumex/__init__.py,
-	src/yumex/gui/views.py: add custom gtk styling
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.10
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py: Make yumex already
-	running better
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: fix detection of gnome
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
-	show yumex ui always if started again an working in the background
-
-2015-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py,
-	src/yumex/gui/dialogs.py, src/yumex/status.py: make better handling
-	of yumex is started twice
-
-2015-04-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: Add an icon to the selection column header
-
-
-2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: bumped version to 4.0.9
-
-2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.9
-
-2015-04-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/gui/dialogs.py,
-	src/yumex/misc.py: Make toolbar in headerbar an config option.
-	Enabled by default in gnome, and disabled in other DE's
-
-2014-10-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-10-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.8
-
-2014-10-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: build: require python3-dnfdaemon
-
-2014-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/gui/widgets.py: fix: only show
-	fedora packages links for packages in fedora repos
-
-2014-10-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: build: use dnf update for test-inst target, in dnf 6.2,
-	it will only do the action your ask for
-
-2014-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: add close button again
-
-2014-10-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* gfx/yumex-icon.png, gfx/yumex-icon.svg: Use FRENZY Software
-	Manager icons
-
-2014-09-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: ui: minor headerbar adjustments
-
-2014-09-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: ui: use standard gtk+ spinner
-
-
-2014-09-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: fix: make main menu quit work
-
-
-2014-09-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/dnf_backend.py: ui: added progress
-	for package verify after transaction is completted
-
-2014-09-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: ui: add dummy quit menu handler
-
-2014-09-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: ui: don't show windows close in headerbar,
-	looks bad in non-gnome
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: make search entry, undo icon work
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: cleanup: remove deprecated Gtk
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/dialogs.py: fix: only set transient_for if we have a
-	parent window
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: fix: don't traceback when user cancel
-	PolicyKit dialog
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: don't reset backend if user cancel the
-	transaction confirmation
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/dialogs.py: cleanup: use transient_for instead of
-	deprecated parent
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/yumex-dnf.pot: i18n: updated .pot file
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config: i18: updated and push .pot file to transifex
-
-2014-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: ui: added tooltip to package info
-	buttons
-
-2014-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: fix: url does not have correct target
-
-2014-09-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-09-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.7
-
-2014-09-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/gui/widgets.py: cleanup: gtk 3.12
-	deprecated ui
-
-2014-09-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: gui adjustments
-
-2014-09-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: cleanup: dont use deprecated GtkMisc pad & alignment
-
-
-2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/gui/views.py: cleanup: deprecated Gtk
-
-2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: fix: load and save with glade 3.18.3 (Gtk 3.12)
-
-2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/const.py,
-	src/yumex/dnf_backend.py: fix: better exception handling when Dbus
-	backend dies
-
-2014-09-05  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/dialogs.py, src/yumex/gui/views.py: fix: deprecated
-	Gtk stuff
-
-2014-09-02  Tim <tim@localhost.localdomain>
-
-	* ChangeLog: updated ChangeLog
-
-2014-09-02  Tim <tim@localhost.localdomain>
-
-	* src/yumex/const.py, yumex-dnf.spec: bumped version to 4.0.6
-
-2014-07-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: fix callback on downgrade message
-
-2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/misc.py: Fix the language setup, so
-	Gtk.builder get translated
-
-2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: i18n: updated
-	translations
-
-2014-06-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/__init__.py: Set translation domain
-	for GtkBuilder, use right translation domain for notification domain
-
-
-2014-06-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: i18n: use the yumex-dnf translation domain
-
-2014-06-08  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: Adjust headerbar
-
-2014-06-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-06-06  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* setup.py, src/yumex/const.py, yumex-dnf.spec: bumped version to
-	4.0.5
-
-2014-06-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: encode package names with '-', when used
-	in url
-
-2014-06-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/gui/views.py, src/yumex/gui/widgets.py: added fedora
-	packages links to package info
-
-2014-06-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: reset main menu selection on reload after
-	processed transaction
-
-2014-06-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/views.py: reset group selection state when populated
-
-
-2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: cleanup: docstring, single/double quotes,
-	remove unused code
-
-2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/dnf_backend.py,
-	src/yumex/gui/views.py: cleanup: doc strings and minor refactoring
-
-2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/gui/widgets.py: cleanup : imports
-
-2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/config.py,
-	src/yumex/const.py, src/yumex/gui/dialogs.py, src/yumex/misc.py,
-	src/yumex/status.py: cleanup imports
-
-2014-05-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: cleanup code (PEP8) and no wildcard
-	imports
-
-2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py, src/yumex/misc.py: use new dnfdaemon
-	GetPackges, the works with attrs
-
-2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: cleanup: fixed pep8 issues
-
-2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/const.py, yumex-dnf.spec: bumped
-	version to 4.0.4
-
-2014-05-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py, src/yumex/dnf_backend.py,
-	src/yumex/gui/widgets.py, src/yumex/misc.py: adjust to  dnfdaemon
-	code changes
-
-2014-05-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-05-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/conf.py, src/yumex/const.py, yumex-dnf.spec: bumped version
-	to 4.0.3
-
-2014-04-25  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/config.py, src/yumex/misc.py: code cleanup
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* setup.py: cleanup: removed unused exports
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config, misc/yumex-dnf.appdata.xml.in, po/yumex-dnf.pot: fix:
-	typo in appdata file
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/yumex-dnf.pot: i18n: update .pot file
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/backend.py, src/yumex/const.py,
-	src/yumex/dnf_backend.py, src/yumex/gui/dialogs.py,
-	src/yumex/gui/views.py, src/yumex/gui/widgets.py: cleanup: PEP8
-	issues
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py, src/yumex/__init__.py, src/yumex/backend.py,
-	src/yumex/config.py, src/yumex/const.py, src/yumex/dnf_backend.py,
-	src/yumex/misc.py: fix. use absolute imports in all modules
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix absolute imports
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* setup.py: build: install yumex.gui sub module
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/zh_CN.po, po/zh_TW.po: pull translations from transifex
-
-2014-04-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* misc/yumex-dnf.appdata.xml.in, po/yumex-dnf.pot: fix: split up
-	appdata translation in more elements
-
-2014-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* misc/Makefile, misc/yumex-dnf.appdata.xml.in, po/Makefile,
-	po/POTFILES.in, po/yumex-dnf.pot, yumex-dnf.spec: add appdata file
-
-2014-04-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/config.py,
-	src/yumex/const.py, src/yumex/dnf_backend.py,
-	src/yumex/gui/__init__.py, src/yumex/gui/dialogs.py,
-	src/yumex/gui/views.py, src/yumex/gui/widgets.py,
-	src/yumex/misc.py, src/yumex/status.py: cleanup: make the code
-	follow PEP8
-
-2014-04-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/main.py, src/yumex/__init__.py, src/yumex/gui/__init__.py,
-	src/yumex/gui/dialogs.py, src/yumex/gui/views.py,
-	src/yumex/gui/widgets.py, src/yumex/misc.py, src/yumex/widgets.py: 
-	refactor: split yumex.widget into yumex.gui.views, dialogs, widgets
-
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config: fix: only pull yumex-dnf translations from transiflex
-
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/conf.py, setup.py, src/yumex/const.py, yumex-dnf.spec: bumped
-	version to 4.0.2
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/ar.po, po/bg.po, po/bn_IN.po, po/cmn.po, po/cs.po, po/da.po,
-	po/de.po, po/el.po, po/es.po, po/es_ES.po, po/fa.po, po/fr.po,
-	po/gu.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
-	po/ky.po, po/nl.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ru.po,
-	po/sk.po, po/sr.po, po/sr@latin.po, po/tr_TR.po, po/uk.po,
-	po/yumex-dnf.pot, po/zh_CN.po, po/zh_TW.po: update .pot & pull po
-	from transifex
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: optimize: setting fixed heigt in TreeView
-	makes adding package 10x faster :)
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: add: added code for
-	installing and removing groups
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: add: group view: show group install state as
-	stared/non-started icon
-
-2014-04-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py, src/yumex/widgets.py: refactor: group
-	should be reprecented as python objects in group view, to make it
-	possible to unselect the group, when remove from the queue view.
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: add: groups are objects, add groups to
-	queue, not packages
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/main.rst, po/POTFILES.in, po/yumex-dnf.pot,
-	src/yumex/__init__.py: translation: rename yum to dnf in strings &
-	rebuild .pot file doc: added link to translation page at transifex
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/widgets.py: add: added Help to main menu, with About
-	Dialog & Online docs
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/faq.rst, docs/img/error-running.png: doc: added debug info to
-	FAQ
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/index.rst: doc: remove indexes etc, this is not python api
-	docs.
-
-2014-03-31  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* docs/faq.rst, docs/index.rst, docs/main.rst: doc: added FAQ and
-	updated doc
-
-2014-03-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/dnf_backend.py: fix: pending queue right
-	click menu not shown
-
-2014-03-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, docs/Makefile, docs/conf.py, docs/img/arch-menu.png,
-	docs/img/button-apply.png, docs/img/button-filters.png,
-	docs/img/button-main-menu.png, docs/img/button-search-options.png,
-	docs/img/button-search-options.svg, docs/img/filter-menu.png,
-	docs/img/filters.png, docs/img/groups.png, docs/img/history.png,
-	docs/img/main-menu.png, docs/img/options.png,
-	docs/img/package-info.png, docs/img/queue.png,
-	docs/img/search-bar.png, docs/img/search-options.png,
-	docs/img/search.png, docs/img/top-bar.png,
-	docs/img/updates-selection.png, docs/img/updates.png,
-	docs/index.rst, docs/main.rst: doc: Added docs
-
-2014-03-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: updated ChangeLog
-
-2014-03-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, dbus/dbus_status.py, src/yumex/const.py, yumex-dnf.spec: 
-	bumped version to 4.0.1
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: cleanup: remove
-	unsued code
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py: cleanup: removed unused conf option
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: filtering of seach result
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: clear search entry on reset & set
-	forcus on search entry when packages is loaded
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: refactor: move attr to var
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: fix; use DnfSystem.GetPackagesByName,
-	not DnfSystem.GetPackagesByNameWithAttr
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/dnf_backend.py: fix; use DnfSystem.Search, not
-	DnfSystem.SearchWithAttr
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/dnf_backend.py,
-	src/yumex/yum_backend.py: add: always use the dnf root backend, to
-	avoid the mess with 2 caches, there can be different
-
-2014-03-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/widgets.py: add: Use Gtk.Stack for main content and
-	Gtk.Revealer from Gtk 3.10, to show animations, when changing pages
-	and let the infobar slide down.
-
-2014-03-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: add: make prefix the default
-	search type
-
-2014-03-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: optimize: make
-	search faster by using new dnfdeamon API to get attributes with the
-	search results
-
-2014-03-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: build: we need python3-gobject >= 3.10, as we new
-	stuff from gtk-3.10
-
-2014-03-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/const.py, src/yumex/widgets.py, src/yumex/yum_backend.py: 
-	add: add new yumex ui
-
-2014-03-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: cleanup: change error message on download
-	errors to be more generic
-
-2014-03-21  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: fix: show information is
-	dnf cache can't be refreshed
-
-2014-03-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: add: show download errors, if download
-	bails out
-
-2014-03-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/widgets.py: add: add ui for setting the
-	expire cache interval in perferences
-
-2014-03-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: add: show if there is to many errors in
-	downloads
-
-2014-03-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: add: make time between
-	cache expire a number of hours
-
-2014-03-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: refactor: cleanup the cache expire check
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py: add: only expire dnf
-	cache once every day
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/da.po, po/yumex-dnf.pot, src/yumex.ui, src/yumex/widgets.py: 
-	cleanup: fix typos
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* tools/repo-build.py, tools/syncrepo.sh: removed unused repo build
-	tools, we use Copr now
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, po/da.mo: remove .mo binary translation files
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .tx/config, Makefile: Added support for translation files from
-	transifex
-
-2014-03-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/POTFILES.in, po/da.po, po/yumex-dnf.pot: updated translation
-	source
-
-2014-03-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py, src/yumex/yum_backend.py: fix: show obsletes
-	af fullname, not pkg_id
-
-2014-03-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: add: show number of files download in
-	progress
-
-2014-03-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: make sure the gui is setup, before
-	setting up the dnf backend, so ww can show the progress
-
-2014-03-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: add: rpm progress logging in debug mode
-
-
-2014-03-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: add: show package download in Mb,Kb ...
-
-
-2014-03-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: cleanup: remove some unused code
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-dnf.spec: cleanup: remove used python2 requirements
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* dbus/dbus_status.py: refactor: convert yumex statusicon Dbus
-	service to python3
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: cleanup: remove constants not used by
-	dnf-daemon
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: fix: support Downgrades in transaction result
-	dialog
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: better handling af ui after
-	transaction is completed or aborted
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: fix: dont fail if there is obsoletes in search
-	result
-
-2014-03-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: handling af depsolve errors
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: close yumex nicely on lock error
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: yumex-dnf --exit shoud close the
-	DnfSystem DBus service also
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: cleanup cmdline install code to work
-	with dnf-daemon
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: dont refresh metadata, when running
-	install from cmdline
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: fix: update test-cleanup Makefile tag to use the new git
-	branch (master)
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix: AttributeError: 'YumexInstallWindow'
-	object has no attribute 'set_working'
-
-2014-03-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, README.md: Updated README and Makefile cleanup
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: more debug info to logging cleanup some
-	unused code
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: group packages
-	optimizations
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: use dnf for test-inst target in Makefile
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/const.py, src/yumex/widgets.py: Remove skip-broken option,
-	dont exist in dnf
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: Refresh dnf
-	metadata on startup
-
-2014-03-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: Added file download progress
-
-2014-03-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, dbus/Makefile, dbus/dbus_status.py,
-	dbus/dk.yumex.StatusIcon.service, gfx/Makefile, misc/Makefile,
-	misc/yumex-dnf-autostart.desktop, misc/yumex-dnf-local.desktop.in,
-	misc/yumex-dnf.desktop.in, misc/yumex-nextgen-autostart.desktop,
-	misc/yumex-nextgen-local.desktop.in, misc/yumex-nextgen.desktop.in,
-	po/Makefile, po/POTFILES.in, po/da.mo, po/da.po, po/yumex-dnf.pot,
-	po/yumex-nextgen.pot, setup.py, src/yumex/__init__.py,
-	src/yumex/const.py, src/yumex/misc.py, src/yumex/status.py,
-	src/yumex/widgets.py, yumex-dnf.spec, yumex-nextgen.spec: 
-	yumex-nextgen -> yumex-dnf rename
-
-2014-03-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, src/yumex/__init__.py, src/yumex/yum_backend.py: Use
-	the dnfdaemon for packaging action
-
-2014-02-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: Add some tooltips
-
-2014-02-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/misc.py,
-	src/yumex/widgets.py: Change the default window close action to exit
-	yumex add at setting in preferences to change the window close
-	action to just hide the window
-
-2013-11-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: added python2-devel to get-builddeps
-
-2013-11-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix search is not working after a
-	transaction is performed
-
-2013-10-27  Tim Lauridsen <tim@localhost.localdomain>
-
-	* src/yumex/const.py: added 'i386' to arch filter, many 3 party pkgs
-	is i386
-
-2013-10-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, dbus/Makefile, dbus/dbus_status.py, gfx/Makefile,
-	misc/Makefile, po/Makefile, po/POTFILES.in, po/yumex-nextgen.pot,
-	setup.py, src/Makefile, src/dbus_status.py, src/yumex/Makefile,
-	yumex-nextgen.spec: Changed the way yumex is build - use setup.py -
-	use Makefile in subdirs
-
-2013-10-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py, tools/repo-build.py: - Show project url in package description (Issue #169 - clean rpms
-	before upload to repo
-
-2013-10-23  Tim Lauridsen <tla@rasmil.dk>
-
-	Merge pull request #17 from genodeftest/patch-1  remove typos:
-	"Used Requirment" -> "Unused Requirement"
-
-2013-10-22  Christian Stadelmann <dev@genodeftest.de>
-
-	* src/yumex.ui: remove typos: "Used Requirment" -> "Unused
-	Requirement"
-
-2013-10-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: added docstrings
-
-2013-10-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: make sure view get updated, when we clear
-	the search entry and the previous pkg fliter is the same as the
-	current search pkg filter.
-
-2013-10-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: Add package filtering
-	(updates, installed) on search results
-
-2013-10-15  tim <tim@localhost.localdomain>
-
-	* src/yumex/widgets.py: make select column wider so check mark will
-	fit on adwaita gtk3 theme
-
-2013-10-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* tools/syncrepo.sh: fixed syncrepo delete old .rpms before upload
-
-2013-10-14  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, tools/makerepo.sh, tools/repo-build.py,
-	tools/update-repo.sh: Added new mock_build target and build helper
-
-2013-10-13  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, tools/makerepo.sh, tools/syncrepo.sh,
-	tools/update-repo.sh: add mock-build target to Makefile added script
-	to build repo and upload to fedorapeople.org
-
-2013-10-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: make test-release should not remove the whole ~/rpmbuild
-	tree
-
-2013-10-12  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: tell user if queue is empty
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: - Make search entry insensitive on non package pages - minor
-	refactoring
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: reset group package view after transaction
-	is ended
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: better handling
-	of locked and not authorized error when getting the root backend
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: switch to group view, when processing
-	actions
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: Add support for armfp in arch menu
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Also show obsoletes in update view
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/widgets.py: Added
-	Right Click
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/const.py, src/yumex/widgets.py: Make the
-	arch menu entries reflect the current system
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: don't blow up if we dont have an arch list for
-	this system, just use a default
-
-2013-10-11  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py: rpm report arch to i386 on a 32 bit system
-
-2013-10-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py: set archs based on
-	current system arch
-
-2013-10-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	Merge branch 'future' of github.com:timlau/yumex into future
-
-2013-10-10  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/backend.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: - minor toolbar button rearrange - adjusted debug logging - Added
-	GPG key import support
-
-2013-10-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/backend.py, src/yumex/widgets.py: - minor toolbar button rearrange - adjusted debug logging
-
-2013-10-09  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/misc.py, src/yumex/widgets.py: Store colors in hex, the
-	rgb(R,G,B) notation dont work with markup like foreground="...."
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: When group is remove from queue, then the
-	group packages is always unselected
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md: remove downgrade instructions from readme, dont make
-	sense as we install in parallel with stable yumex
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: make sure we dont search for ""
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: change the search
-	entry so it only does auto search when searching only in package
-	names, when searching a wider scope, then first do the search when
-	return is pressed.
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/dbus_status.py: Start yumex when user click status icon and
-	there is available updates
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: Click on selection
-	column header in group view, will switch between:  - install all
-	packages in group (not already install)  - remove all packages
-	already installed in group  - back to initial selection  Click on
-	selection column header in package view (updates only) will switch
-	between:  - select all updates.  - deselect all updates.  - back to
-	initial selection  Added '--exit' command line option to exit
-	session based dbus services started by a yumex (Status icon &
-	YumReadonlyBackend)
-
-2013-10-07  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: added some extra logging
-
-2013-10-04  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/Makefile, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: - Added group and category content - reworked package view to use
-	signals - extracted archmenu into ArchMenu object - made a package
-	info widget, so it can be reused for group view
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: Inital support for
-	groups (not complete yet)
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: show package to install/remove using
-	command line handle local rpms special reset status icon working &
-	yumex is running on exception
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* COPYING, Makefile, misc/yumex-nextgen-local.desktop.in,
-	yumex-nextgen.spec: Add .desktop file for installation of local rpms
-	Updated requirments in .spec Add COPYING to be GPL complient
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/Makefile, po/POTFILES.in, po/yumex-nextgen.pot: changed
-	po/Makefile to add .ui files with [type: gettext/glade] prefix
-	rebuild .pot and POTFILES.in
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Set working in status icon when running
-	--install / --remove actions from the command line
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/widgets.py: Show a main label when
-	downloading extra metadata (changelog, filelists etc.) Minor ui
-	adjustments to info progress bar
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: more PKGNAME -> APPNAME cleanup in Makefile
-
-2013-10-03  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: fix wrong name in Makefile test-inst & test-reinst
-
-2013-10-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, README.md: Updated README and minor Makefile adjustments
-
-
-2013-10-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: If autostart and auto update checkis not
-	set then quitting, then exit the status icon else leave it running
-
-2013-10-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/dbus_status.py, src/yumex.ui, src/yumex/misc.py,
-	src/yumex/widgets.py: Added schduled update checker in status icon
-	Added update check interval and and startup delay to preferences
-
-2013-10-02  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* misc/yumex-nextgen-autostart.desktop, src/dbus_status.py,
-	src/yumex.ui, src/yumex/__init__.py: Added 'Start Yum Extender' to
-	status icon added '--icononly' option to yumex, it will only start
-	the status icon change autostart option in pref to start status icon
-	only
-
-2013-10-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: Install small spinner icon
-
-2013-10-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/dbus_status.py, src/yumex/__init__.py, src/yumex/status.py: 
-	Send signals from the status icon on actions and listen and do the
-	right action in the client.
-
-2013-10-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, dbus/dk.yumex.StatusIcon.service, src/Makefile,
-	src/dbus_status.py, yumex-nextgen.spec: Added DBus based Status Icon
-
-
-2013-10-01  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* gfx/spinner-small.gif, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: Added command line
-	install & remove support using --install package or --install
-	package. Using a smaller ui (only info progress bar) -y/--yes
-	command line option will disable questions and info dialogs when
-	running actions from the command line. Added small spinner to info
-	progress bar.
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: center window
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: Always show main label, when progress bar is
-	shown
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/yum_backend.py: Same progress output in non-root backend
-	as in root backend, when downloading metadata
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/yum_backend.py: Better progress infomation when
-	downloading metadata
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, misc/yumex-nextgen.desktop.in, src/yumex.ui,
-	src/yumex/__init__.py, src/yumex/widgets.py: - minor ui adjustments - use the right yumex-nextgen icon
-
-2013-09-30  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/backend.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: Better info/progress
-	bar look & feel Changed progress strings. minor code clean up
-
-2013-09-29  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/Makefile, src/yumex.ui, src/yumex/__init__.py,
-	src/yumex/backend.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: Added arch filtering,  click on the header
-	of the arch column to select to archs to show
-
-2013-09-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/widgets.py: Change bg color of progress
-	infobar to very light gray
-
-2013-09-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: minor ui cleanup added
-	accelerator (dont work )
-
-2013-09-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: - Make click on repo view selection column work - add tool tip to
-	repoview selection column
-
-2013-09-28  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: make we always
-	set the active repos in the root backend
-
-2013-09-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: Make changes to enabled repositories work
-	both in root and non-root backend
-
-2013-09-27  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Make buttons insensitive when running
-	transaction
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/widgets.py: added repositories to
-	preferences
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py, src/yumex/yum_backend.py: added repositories
-	to preferences
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: Added test-inst & test-reinst target to Makefile
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/misc.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: - change colors of differnt package types in preferences - make
-	package view use the config colors
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui: Adjusted Settings page in preference dialog
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, misc/yumex-nextgen-autostart.desktop, src/yumex.ui,
-	src/yumex/__init__.py, src/yumex/const.py, src/yumex/misc.py,
-	src/yumex/widgets.py: - Added autostart - create a blank yumex.conf if it dont exists -
-	install spinner & tray icons - added default values for options in
-	perferences
-
-2013-09-26  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/config.py,
-	src/yumex/misc.py, src/yumex/widgets.py: - Add config classes from yum, migrated to python3 - Added inital
-	preference dialog
-
-2013-09-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	Merge branch 'future' of github.com:timlau/yumex into future
-
-2013-09-24  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix show number of updates in status icon
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: fix error on exception
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/yum_backend.py: updated tooltips for
-	search types
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/yum_backend.py: search in pkgtags
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py, src/yumex/yum_backend.py: show pkgtags in
-	description
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: - better output when showing packages under RPM Transaction -
-	removed used import
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py: Added main content
-	notebook page enums. Added doc strings Check if window is created in
-	shutdown handler
-
-2013-09-23  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/yum_backend.py: more output to
-	logger
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/misc.py, src/yumex/widgets.py: 
-	debug output to debug logger
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: added logger on -d option
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Added command line handler
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: windows close only hides the window
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/const.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: code formatting
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: minor refactoring
-
-2013-09-22  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* gfx/tray-error.png, gfx/tray-info.png, gfx/tray-no-updates.png,
-	gfx/tray-updates.png, gfx/tray-working.png, src/yumex/__init__.py,
-	src/yumex/const.py, src/yumex/widgets.py: - Migrated StatusIcon from yumex3.0 and make it work with gtk3 - Set
-	windows icon
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/misc.py,
-	src/yumex/widgets.py: - Added options to options menu - use newest_only option in search -
-	search again when search type is changed
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/yum_backend.py: 
-	adjusted toolbar and added menu to pref button
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: removed a lot of
-	debug print() statements
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: Show dialog message on problems in
-	transaction
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: select updates view by default after
-	transaction is completted
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/const.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: Added better progress while performing
-	package actions and downloading meta data.
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: Added tooltip to selection column
-
-2013-09-20  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: - click on selection column header will select/deselect all when
-	showing updates - added right click handler on selection column
-	header (for future use) - removed some commented out code.
-
-2013-09-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: Set transaction confirmation dialog to be
-	transient from main window
-
-2013-09-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: Add search config menu with 4
-	kind of searches
-
-2013-09-19  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: added search entry and
-	progress spinner inside toolbar
-
-2013-09-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: Make infobar messages bold
-
-2013-09-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/const.py,
-	src/yumex/widgets.py, src/yumex/yum_backend.py: Added processing of
-	pending tasks
-
-2013-09-18  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: removed duplicated code
-
-2013-09-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py, src/yumex/yum_backend.py: Added yum callback
-	handlers
-
-2013-09-17  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py,
-	src/yumex/yum_backend.py: Added a dynamic root backend make the
-	history view use the root backend
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py, src/yumex/misc.py,
-	src/yumex/widgets.py: Added History parts, but they dont work yet,
-	there need a root backend to work
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/widgets.py: self.builder ->
-	self.ui rename
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py, src/yumex/misc.py,
-	src/yumex/widgets.py: - Added infobar mesages on fetching package list - i18n refactoring
-
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/widgets.py: Added
-	infobar
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/widgets.py: Add notice about SearchEntry widget
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py, src/yumex/widgets.py: - changed package info icons - added top margin to info view
-	-incressed windows default size - show progress spinner when
-	populating info view (filelist, changelog, updateinfo)
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/const.py,
-	src/yumex/misc.py, src/yumex/widgets.py, src/yumex/yum_backend.py: - move constants to const,py - move misc helpers to misc.py - move
-	busy/normal_cursor methods to YumexWindow class - package view
-	population optimations
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* gfx/spinner-arrows.gif, gfx/spinner.gif, src/yumex.ui,
-	src/yumex/widgets.py: - New spinner icon - Process Gtk event while populating package view
-
-
-2013-09-16  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* gfx/spinner-arrows.gif, gfx/spinner.gif, src/yumex.ui,
-	src/yumex/__init__.py, src/yumex/const.py: animated gif spinner
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex.ui, src/yumex/__init__.py: Added progress spinner
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py: search will search for *keyword* instead of
-	keyword*
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* .gitignore, src/yumex/__init__.py, src/yumex/widgets.py: - Reset package info on search and package filter change - Detach
-	package store  from view, when clearing view - swich to package view
-	on search
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/backend.py, src/yumex/const.py,
-	src/yumex/misc.py, src/yumex/widgets.py, src/yumex/yum_backend.py: 
-	Added GPL header and some code pylint based refactoring
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/Makefile, src/yumex/test_backend.py: remove unneeded
-	files and make Makefile clean __pycache__ dir
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-nextgen.spec: change .spec description
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-nextgen.spec: fix version, release, source0, url in .spec
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* misc/yumex-nextgen.desktop.in: Fix Exec= in .desktop file
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-nextgen.spec: add translation support to spec
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/da.po: Added da translation template
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: include po in install
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* po/POTFILES.in, po/yumex-nextgen.pot: Make intltool include
-	translations from the .ui file
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* src/yumex/__init__.py, src/yumex/const.py: Use DATA_DIR for
-	Builder ui file
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, po/Makefile, po/POTFILES.in, po/yumex-nextgen.pot: Added
-	translation files
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, misc/yumex-nextgen.desktop,
-	misc/yumex-nextgen.desktop.in, yumex-nextgen.spec: fix .desktop
-	install
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* yumex-nextgen.spec: use the current fedora .desktop installation
-	routine
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile: Makefile fixed to swich back to future branch
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* ChangeLog: added changelog
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Makefile, gfx/yumex-icon.png, gfx/yumex-icon.svg,
-	misc/yumex-nextgen.desktop, src/Makefile, src/yumex/Makefile,
-	tools/git2cl, yumex-nextgen.spec: Added Makefiles, .spec, icon,
-	.desktop
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md: cleanup readme
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* README.md: cleanup readme
-
-2013-09-15  Tim Lauridsen <timlau@fedoraproject.org>
-
-	* Inital commit of Yum Extender rewrite
-
+  * Added progress spinner
+  * - Reset package info on search and package filter change - Detach package
+  store  from view, when clearing view - swich to package view on search
+  * Added GPL header and some code pylint based refactoring
+  * remove unneeded files and make Makefile clean __pycache__ dir
+  * Make intltool include translations from the .ui file
+  * Use DATA_DIR for Builder ui file
+  * Added translation files
+  * fix .desktop install
+  * Added Makefiles, .spec, icon, .desktop
