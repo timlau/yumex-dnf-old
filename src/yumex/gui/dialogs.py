@@ -168,6 +168,26 @@ class Preferences:
                     os.unlink(const.USER_DESKTOP_FILE)
 
 
+class ErrorDialog:
+
+    def __init__(self, base):
+        self.base = base
+        self.dialog = self.base.ui.get_object("error_dialog")
+        self.dialog.set_transient_for(base)
+        self._buffer = self.base.ui.get_object('error_buffer')
+
+    def show(self, txt):
+        self._set_text(txt)
+        self.dialog.show_all()
+        rc = self.dialog.run()
+        self.dialog.hide()
+        self._buffer.set_text('')
+        return rc == 1
+
+    def _set_text(self, txt):
+        self._buffer.set_text(txt)
+
+
 class TransactionResult:
 
     def __init__(self, base):
