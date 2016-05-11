@@ -1,3 +1,7 @@
+2016-04-29  Tim Lauridsen
+
+  * Add python based ChangeLog generation without email addrs
+
 2016-04-28  Tim Lauridsen
 
   * Add custom error dialog  fixes #90
