@@ -263,8 +263,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                              Gdk.WindowState.MAXIMIZED != 0
 
     def on_window_changed(self, widget, data):
-        self.cur_height = data.height
-        self.cur_width = data.width
+        size = widget.get_size()
+        self.cur_height = size.height
+        self.cur_width = size.width
 
     def exception_handler(self, e):
         """Called if exception occours in methods with the
