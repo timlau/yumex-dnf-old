@@ -324,7 +324,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
+        WIDGETS_INSENSITIVE = ['left_header', 'right_header',
                                'package_sidebar']
         for widget in WIDGETS_INSENSITIVE:
                         self.ui.get_object(widget).set_sensitive(state)
@@ -450,13 +450,20 @@ class Window(BaseWindow):
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
         if self.gnome:  # Gnome, headerbar in titlebar
-            self.set_titlebar(self.get_ui('headerbar'))
+            hb = self.get_ui('headerbar')
+            rb = self.get_ui('right_header')
+            lb = self.get_ui('left_header')
+            hb.set_custom_title(lb)
+            hb.pack_end(rb)
+            self.set_titlebar(hb)
             self._headerbar.set_show_close_button(True)
         else:
-            box.pack_start(self.get_ui('headerbar'), False, True, 0)
-            self._headerbar.set_show_close_button(False)
-            self._headerbar.set_title("")
-            self._headerbar.set_subtitle("")
+            hb = self.get_ui('headerbox')
+            rb = self.get_ui('right_header')
+            lb = self.get_ui('left_header')
+            hb.set_center_widget(lb)
+            hb.pack_end(rb, False, True, 0)
+            box.pack_start(hb, False, True, 0)
         box.pack_start(self.get_ui('main_box'), False, True, 0)
         # Setup search
         self.search_bar = widgets.SearchBar(self)
