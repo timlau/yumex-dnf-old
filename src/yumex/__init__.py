@@ -201,6 +201,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                                        title='Yum Extender - Powered by DNF',
                                        application=app)
         BaseYumex.__init__(self)
+        self.get_style_context().add_class("yumex-dnf-window")
         self.app = app
         self.connect('delete_event', self.on_delete_event)
         icon = Gtk.IconTheme.get_default().load_icon('yumex-dnf', 128, 0)
