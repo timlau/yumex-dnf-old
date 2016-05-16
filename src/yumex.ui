@@ -999,7 +999,6 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
-        <property name="search_mode_enabled">True</property>
         <child>
           <object class="GtkBox" id="search_content">
             <property name="visible">True</property>
@@ -1811,7 +1810,6 @@ start Yum Extender</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Search (show/hide)</property>
         <property name="halign">start</property>
-        <property name="active">True</property>
         <child>
           <object class="GtkImage" id="image1">
             <property name="visible">True</property>
