@@ -161,11 +161,7 @@ class SearchBar(GObject.GObject):
                 wid.set_active(True)
             wid.connect('toggled', self.on_type_changed, key)
         # setup search option popover
-        self.opt_popover = Gtk.Popover.new(self._options_button)
-        self.opt_popover.set_size_request(50, 100)
-        self.opt_popover.set_position(Gtk.PositionType.BOTTOM)
-        opt_grid = self.win.get_ui('sch_opt_grid')
-        self.opt_popover.add(opt_grid)
+        self.opt_popover = self.win.get_ui('sch_opt_popover')
 
     def show_spinner(self, state=True):
         """Set is spinner in searchbar is running."""
@@ -763,10 +759,7 @@ class ExtraFilters(GObject.GObject):
         self.current_archs = None
         self._button = self.win.get_ui('button_more_filters')
         self._button.connect('clicked', self._on_button)
-        self._popover = Gtk.Popover.new(self._button)
-        self._popover.set_position(Gtk.PositionType.BOTTOM)
-        grid = self.win.get_ui('grid_more_filters')
-        self._popover.add(grid)
+        self._popover = self.win.get_ui('more_filters_popover')
         self._arch_box = self.win.get_ui('box_archs')
         self._setup_archs()
         self.newest_only = self.win.get_ui('cb_newest_only')
