@@ -265,8 +265,12 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def on_window_changed(self, widget, data):
         size = widget.get_size()
-        self.cur_height = size.height
-        self.cur_width = size.width
+        if isinstance(size, tuple):
+            self.cur_height = size[1]
+            self.cur_width = size[0]
+        else:
+            self.cur_height = size.height
+            self.cur_width = size.width
 
     def exception_handler(self, e):
         """Called if exception occours in methods with the
