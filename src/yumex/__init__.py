@@ -491,6 +491,8 @@ class Window(BaseWindow):
         CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
         CONFIG.session.newest_only = CONFIG.conf.newest_only
         CONFIG.session.clean_unused = CONFIG.conf.clean_unused
+        if CONFIG.conf.repo_saved:
+            CONFIG.session.enabled_repos = CONFIG.conf.repo_enabled
         # setup the package/queue/history views
         self._setup_action_page()
         self._setup_package_page()

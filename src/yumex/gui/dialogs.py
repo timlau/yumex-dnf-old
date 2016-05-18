@@ -98,6 +98,8 @@ class Preferences:
         # get the repositories
         self.repos = self.base.backend.get_repositories()
         self.repo_view.populate(self.repos)
+        if CONFIG.conf.repo_saved:
+            self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
 
     def on_clean_instonly(self, *args):
         '''Handler for clean_instonly switch'''
