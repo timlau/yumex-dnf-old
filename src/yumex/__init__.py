@@ -1003,7 +1003,7 @@ class Window(BaseWindow):
             if self.can_close():
                 self.app.quit()
         elif action == 'about':
-            dialog = dialogs.AboutDialog()
+            dialog = dialogs.AboutDialog(self)
             dialog.run()
             dialog.destroy()
         elif action == 'docs':

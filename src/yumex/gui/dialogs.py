@@ -37,7 +37,7 @@ logger = logging.getLogger('yumex.gui.dialogs')
 
 class AboutDialog(Gtk.AboutDialog):
 
-    def __init__(self):
+    def __init__(self, parent):
         Gtk.AboutDialog.__init__(self)
         self.props.program_name = 'Yum Extender (dnf)'
         self.props.version = const.VERSION
@@ -46,6 +46,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.copyright = '(C) 2015 Tim Lauridsen'
         self.props.website = 'https://github.com/timlau/yumex-dnf'
         self.props.logo_icon_name = 'yumex-dnf'
+        self.set_transient_for(parent)
 
 
 class Preferences:
