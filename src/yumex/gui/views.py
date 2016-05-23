@@ -438,10 +438,6 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def select_by_keys(self, keys):
-        '''
-
-        @param keys:
-        '''
         iterator = self.store.get_iter_first()
         while iterator is not None:
             obj = self.store.get_value(iterator, 0)
@@ -458,9 +454,6 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def get_selected(self):
-        '''
-
-        '''
         selected = []
         for el in self.store:
             obj = el[0]
@@ -469,9 +462,6 @@ class PackageView(SelectionView):
         return selected
 
     def get_notselected(self):
-        '''
-
-        '''
         notselected = []
         for el in self.store:
             obj = el[0]
@@ -610,9 +600,6 @@ class PackageQueue:
     '''
 
     def __init__(self):
-        '''
-        Init the queue
-        '''
         self.packages = {}
         self._setup_packages()
         self.groups = {}
@@ -625,9 +612,6 @@ class PackageQueue:
             self.packages[key] = []
 
     def clear(self):
-        '''
-
-        '''
         del self.packages
         self.packages = {}
         self._setup_packages()
@@ -637,19 +621,12 @@ class PackageQueue:
         self._name_arch_index = {}
 
     def get(self, action=None):
-        '''
-
-        @param action:
-        '''
         if action is None:
             return self.packages
         else:
             return self.packages[action]
 
     def total(self):
-        '''
-
-        '''
         num = 0
         for key in const.QUEUE_PACKAGE_TYPES:
             num += len(self.packages[key])
@@ -778,9 +755,6 @@ class QueueView(Gtk.TreeView):
         return model
 
     def deleteSelected(self, widget=None):
-        '''
-
-        '''
         rmvlist = []
         model, paths = self.get_selection().get_selected_rows()
         for path in paths:
@@ -864,28 +838,16 @@ class QueueView(Gtk.TreeView):
         self.emit('queue-refresh', self.queue.total())
 
     def populate_list(self, label, pkg_list):
-        '''
-
-        @param header:
-        @param pkg_list:
-        '''
         parent = self.store.append(None, [label, ""])
         for pkg in pkg_list:
             self.store.append(parent, [str(pkg), pkg.summary])
 
     def populate_group_list(self, label, grps):
-        '''
-        @param label:
-        @param pkg_list:
-        '''
         parent = self.store.append(None, [label, ""])
         for grp in grps.values():
             self.store.append(parent, [grp.name, grp.description])
 
     def populate_list_downgrade(self):
-        '''
-
-        '''
         pkg_list = self.queue.packages['do']
         label = "<b>%s</b>" % P_(
             "Package to downgrade", "Packages to downgrade", len(pkg_list))
@@ -902,10 +864,6 @@ class QueueView(Gtk.TreeView):
 class HistoryView(Gtk.TreeView):
     """ History View Class"""
     def __init__(self, base):
-        '''
-
-        @param widget:
-        '''
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
@@ -986,10 +944,6 @@ class HistoryView(Gtk.TreeView):
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
     def __init__(self, base):
-        '''
-
-        @param widget:
-        '''
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
@@ -1085,10 +1039,6 @@ class RepoView(SelectionView):
     This class controls the repo TreeView
     """
     def __init__(self):
-        '''
-
-        @param widget:
-        '''
         SelectionView.__init__(self)
         self.headers = [_('Repository'), _('Filename')]
         self.store = self.setup_view()
@@ -1150,13 +1100,6 @@ class RepoView(SelectionView):
             self.store.append([state, ident, name, gpg])
 
     def new_pixbuf(self, column, cell, model, iterator, data):
-        '''
-
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        '''
         gpg = model.get_value(iterator, 3)
         if gpg:
             cell.set_property('visible', True)
@@ -1164,9 +1107,6 @@ class RepoView(SelectionView):
             cell.set_property('visible', False)
 
     def get_selected(self):
-        '''
-
-        '''
         selected = []
         for elem in self.store:
             state = elem[0]
@@ -1176,9 +1116,6 @@ class RepoView(SelectionView):
         return selected
 
     def get_notselected(self):
-        '''
-
-        '''
         notselected = []
         for elem in self.store:
             state = elem[0]
@@ -1188,10 +1125,6 @@ class RepoView(SelectionView):
         return notselected
 
     def select_by_keys(self, keys):
-        '''
-
-        @param keys:
-        '''
         iterator = self.store.get_iter_first()
         while iterator is not None:
             repoid = self.store.get_value(iterator, 1)
@@ -1222,8 +1155,6 @@ class Group:
 
 
 class GroupView(Gtk.TreeView):
-    '''
-    '''
     __gsignals__ = {'group-changed': (GObject.SignalFlags.RUN_FIRST,
                                       None,
                                       (GObject.TYPE_STRING,))}
@@ -1319,10 +1250,6 @@ class GroupView(Gtk.TreeView):
                     self.emit('group-changed', obj.id)
 
     def populate(self, data):
-        '''
-
-        @param data:
-        '''
         self.freeze_child_notify()
         self.set_model(None)
         self.model.clear()
