@@ -1120,7 +1120,7 @@ class Window(BaseWindow):
         logger.debug('History Undo : %s', tid)
         rc, messages = self.backend.HistoryUndo(tid)
         if rc:
-            self.process_actions(from_queue=False)
+            self._process_actions(from_queue=False)
         else:
             msg = "Can't undo history transaction :\n%s" % \
                   ("\n".join(messages))
