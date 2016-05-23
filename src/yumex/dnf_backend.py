@@ -219,7 +219,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                        te_total, ts_current, ts_total):
         num = ' ( %i/%i )' % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
-            name = misc.pkg_id_to_full_name(package)
+            name = yumex.misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
         logger.debug('on_RPMProgress : [%s]', package)
