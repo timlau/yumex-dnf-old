@@ -64,18 +64,12 @@ class BaseYumex:
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.session_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
         elif cache_type == 'system':
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.system_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
 
     def _set_cache_refreshed(self, cache_type):
         time_fmt = '%Y-%m-%d %H:%M'

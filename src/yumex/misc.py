@@ -115,10 +115,7 @@ def is_url(url):
     urls = re.findall(
         r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
         r'[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-    if urls:
-        return True
-    else:
-        return False
+    return urls
 
 
 def format_block(block, indent):

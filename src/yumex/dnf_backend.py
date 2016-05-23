@@ -158,10 +158,7 @@ class DnfPackage(yumex.backend.Package):
     @property
     def is_update(self):
         """Package is an update/replacement to another package."""
-        if self.action == 'o' or self.action == 'u':
-            return True
-        else:
-            return False
+        return self.action == 'o' or self.action == 'u'
 
 
 class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
