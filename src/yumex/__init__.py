@@ -162,12 +162,12 @@ class BaseYumex:
         err, errmsg = self._parse_error(msg)
         logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
-            errmsg = 'DNF is locked by another process.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF is locked by another process.\n' \
+                '\nYum Extender will exit'
             close = False
         elif err == 'NoReply':
-            errmsg = 'DNF D-Bus backend is not responding.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF D-Bus backend is not responding.\n' \
+                '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
