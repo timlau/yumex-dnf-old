@@ -679,7 +679,7 @@ class PackageInfo(PackageDetails):
         for key in reqs:
             self.write(key)
             for pkg_id in reqs[key]:
-                pkg = yumex.misc.id2fullname(pkg_id)
+                pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
                 self.write(' --> {}'.format(pkg))
         self.base.set_working(False, False)
 

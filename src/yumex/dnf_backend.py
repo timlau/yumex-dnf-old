@@ -62,7 +62,7 @@ class DnfPackage(yumex.backend.Package):
 
     @property
     def fullname(self):
-        return yumex.misc.id2fullname(self.pkg_id)
+        return yumex.misc.pkg_id_to_full_name(self.pkg_id)
 
     @ExceptionHandler
     def get_attribute(self, attr):
@@ -219,7 +219,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                        te_total, ts_current, ts_total):
         num = ' ( %i/%i )' % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
-            name = self._fullname(package)
+            name = misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
         logger.debug('on_RPMProgress : [%s]' % package)
@@ -461,11 +461,3 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         attrs = ['summary', 'size', 'action']
         pkgs = self.GetGroupPackages(grp_id, grp_flt, attrs)
         return self._make_pkg_object_with_attr(pkgs)
-
-    def _fullname(self, pkg_id):
-        """ Package fullname from a pkg_id """
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return '%s-%s:%s-%s.%s (%s)' % (n, e, v, r, a, repo_id)
-        else:
-            return '%s-%s-%s.%s (%s)' % (n, v, r, a, repo_id)

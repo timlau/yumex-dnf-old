@@ -28,6 +28,7 @@ from gi.repository import GObject
 
 from yumex import const
 from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction
+import yumex.misc as misc
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -1015,23 +1016,16 @@ class HistoryPackageView(Gtk.TreeView):
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
                         name = '<span foreground="%s">%s</span>' % (
-                            CONFIG.conf.color_install, self._fullname(pkg_id))
+                            CONFIG.conf.color_install,
+                            misc.pkg_id_to_full_name(pkg_id))
                     else:
-                        name = self._fullname(pkg_id)
+                        name = misc.pkg_id_to_full_name(pkg_id)
                     pkg_cat = self.model.append(cat, [name])
                     if len(pkg_list) == 2:
                         pkg_id, st, is_inst = pkg_list[1]
-                        name = self._fullname(pkg_id)
+                        name = misc.pkg_id_to_full_name(pkg_id)
                         self.model.append(pkg_cat, [name])
         self.expand_all()
-
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
 
 
 class RepoView(SelectionView):

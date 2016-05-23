@@ -78,11 +78,10 @@ def to_pkg_tuple(pkg_id):
     return (n, e, v, r, a, repo_id)
 
 
-def id2fullname(pkg_id):
+def pkg_id_to_full_name(pkg_id):
     (n, e, v, r, a, repo_id) = to_pkg_tuple(pkg_id)
     if e and e != '0':
-        return "%s-%s:%s-%s.%s" %\
-               (n, e, v, r, a)
+        return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
     else:
         return "%s-%s-%s.%s" % (n, v, r, a)
 

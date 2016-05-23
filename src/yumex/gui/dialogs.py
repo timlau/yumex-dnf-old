@@ -208,14 +208,6 @@ class TransactionResult:
     def clear(self):
         self.store.clear()
 
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
-
     def setup_view(self, view):
         '''
         Setup the TreeView
