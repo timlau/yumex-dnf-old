@@ -234,6 +234,7 @@ class PackageView(SelectionView):
         self.store = self._setup_model()
         self.connect('cursor-changed', self.on_cursor_changed)
         self.connect('button-press-event', self.on_mouse_button)
+        self.connect('key_press_event', self._on_key_press)
         self.state = 'normal'
         self._last_selected = []
         self.popup = None
@@ -282,6 +283,16 @@ class PackageView(SelectionView):
         self.set_reorderable(False)
         self.set_fixed_height_mode(True)
         return store
+
+    def _on_key_press(self, widget, event):
+        modifiers = Gtk.accelerator_get_default_mod_mask()
+        event_and_modifiers = (event.state & modifiers)
+
+        if event_and_modifiers != 0:
+            # Select All on Ctrl + A
+            if (event.keyval == Gdk.KEY_a and
+                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
+                self.on_section_header_clicked(widget)
 
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
