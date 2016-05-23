@@ -260,8 +260,8 @@ class TransactionResult:
         for sub, lvl1 in pkglist:
             label = "<b>%s</b>" % const.TRANSACTION_RESULT_TYPES[sub]
             level1 = model.append(None, [label, "", "", "", ""])
-            for id, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id) = str(id).split(',')
+            for pkgid, size, replaces in lvl1:
+                (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
                              yumex.misc.format_number(size)])

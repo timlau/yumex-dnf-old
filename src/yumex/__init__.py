@@ -140,7 +140,7 @@ class BaseYumex:
         return self._root_backend
 
     @misc.ExceptionHandler
-    def release_root_backend(self, quit=False):
+    def release_root_backend(self, quit_dnfdaemon=False):
         """Release the current root backend, if it is setup and locked."""
         if self._root_backend is None:
             return
@@ -148,7 +148,7 @@ class BaseYumex:
             logger.debug('Unlock the DNF root daemon')
             self._root_backend.Unlock()
             self._root_locked = False
-        if quit:
+        if quit_dnfdaemon:
             logger.debug('Exit the DNF root daemon')
             self._root_backend.Exit()
 
@@ -176,7 +176,7 @@ class BaseYumex:
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
         #self.status.SetWorking(False)  # reset working state
@@ -301,7 +301,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
         Gtk.main_quit()
@@ -765,8 +765,8 @@ class Window(BaseWindow):
         protected = []
         for action, pkgs in trans:
             if action == 'remove':
-                for id, size, replaces in pkgs:
-                    (n, e, v, r, a, repo_id) = str(id).split(',')
+                for pkgid, size, replaces in pkgs:
+                    (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                     if n in CONFIG.conf.protected:
                         protected.append(n)
         return protected
@@ -881,7 +881,7 @@ class Window(BaseWindow):
                 self, _('Error(s) in search for dependencies'),
                 '\n'.join(result))
         if app_quit:
-            self.release_root_backend(quit=True)
+            self.release_root_backend(quit_dnfdaemon=True)
             self.app.quit()
 
     @misc.ExceptionHandler
@@ -1213,7 +1213,7 @@ class YumexApplication(Gtk.Application):
                 CONFIG.conf.win_width = self.window.cur_width
                 CONFIG.conf.win_height = self.window.cur_height
                 CONFIG.conf.win_maximized = False
-            self.window.release_root_backend(quit=True)
+            self.window.release_root_backend(quit_dnfdaemon=True)
         logger.info('Saving config on exit')
         CONFIG.write()
         return 0
