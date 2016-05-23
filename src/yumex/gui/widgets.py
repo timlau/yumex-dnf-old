@@ -531,18 +531,9 @@ class PackageInfo(PackageDetails):
                 logger.error("Package info not found: ", self.active_filter)
         self.goto_top()
 
-    def _is_url(self, url):
-        urls = re.findall(
-            r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-            r'[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-        if urls:
-            return True
-        else:
-            return False
-
     def _url_handler(self, url):
         logger.debug('URL activated: ' + url)
-        if self._is_url(url):  # just to be sure and prevent shell injection
+        if yumex.misc.is_url(url):  # just to be sure and prevent shell injection
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
