@@ -897,7 +897,8 @@ class Window(BaseWindow):
             check = self._check_protected(result)
             if check:
                 self.error_dialog.show(
-                    _("Can't remove protected package(s)") + '\n'.join(check))
+                    _("Can't remove protected package(s):") +
+                    misc.list_to_string(check, "\n ", ",\n "))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog

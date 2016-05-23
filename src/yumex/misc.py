@@ -78,6 +78,14 @@ def to_pkg_tuple(pkg_id):
     return (n, e, v, r, a, repo_id)
 
 
+def list_to_string(pkg_list, first_delimitier, delimiter):
+    """Creates a multiline string from a list of packages"""
+    string = first_delimitier
+    for pkg_name in pkg_list:
+        string = string + pkg_name + delimiter
+    return string
+
+
 def pkg_id_to_full_name(pkg_id):
     (n, e, v, r, a, repo_id) = to_pkg_tuple(pkg_id)
     if e and e != '0':
