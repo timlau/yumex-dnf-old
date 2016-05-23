@@ -1196,7 +1196,7 @@ class YumexApplication(Gtk.Application):
                 if self.window.can_close():
                     self.quit()
                 else:
-                    self.logger.info("Application is busy")
+                    logger.info("Application is busy")
             if self.current_args.install or self.current_args.remove or \
                self.current_args.updateall:
                 self.install_mode = True

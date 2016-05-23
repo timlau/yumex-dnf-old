@@ -526,7 +526,7 @@ class PackageInfo(PackageDetails):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                logger.error("Package info not found: ", self.active_filter)
+                logger.error("Package info not found: %s", self.active_filter)
         self.goto_top()
 
     def _url_handler(self, url):
