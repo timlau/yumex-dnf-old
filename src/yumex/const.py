@@ -67,7 +67,7 @@ if ARCH in ARCH_DICT:
 else:  # use x86_64 as fallback
     PLATFORM_ARCH = ARCH_DICT['x86_64']
 
-DBUS_ERR_RE = re.compile('.*GDBus.Error:([\w\.]*): (.*)$')
+DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w\.]*): (.*)$')
 
 ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
 ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'

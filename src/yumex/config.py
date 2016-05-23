@@ -36,7 +36,7 @@ def read_in_items_from_dot_dir(thisglob, line_as_list=True):
     results = []
     for fname in glob.glob(thisglob):
         for line in open(fname):
-            if re.match('\s*(#|$)', line):
+            if re.match(r'\s*(#|$)', line):
                 continue
             line = line.rstrip()  # no more trailing \n's
             line = line.lstrip()  # be nice
