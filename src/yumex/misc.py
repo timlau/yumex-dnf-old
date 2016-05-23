@@ -122,13 +122,13 @@ def is_url(url):
 
 
 def format_block(block, indent):
-        ''' Format a block of text so they get the same indentation'''
-        spaces = " " * indent
-        lines = str(block).split('\n')
-        result = lines[0] + "\n"
-        for line in lines[1:]:
-            result += spaces + line + '\n'
-        return result
+    ''' Format a block of text so they get the same indentation'''
+    spaces = " " * indent
+    lines = str(block).split('\n')
+    result = lines[0] + "\n"
+    for line in lines[1:]:
+        result += spaces + line + '\n'
+    return result
 
 
 def get_style_color(widget):
