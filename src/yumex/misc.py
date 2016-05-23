@@ -241,8 +241,8 @@ def check_dark_theme():
 
 
 def logger_setup(logroot='yumex',
-                  logfmt='%(asctime)s: %(message)s',
-                  loglvl=logging.INFO):
+                 logfmt='%(asctime)s: %(message)s',
+                 loglvl=logging.INFO):
     """Setup Python logging."""
     logger = logging.getLogger(logroot)
     logger.setLevel(loglvl)

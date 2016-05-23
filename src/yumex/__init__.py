@@ -255,7 +255,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             css_provider.load_from_path(css_fn)
             context = Gtk.StyleContext()
             context.add_provider_for_screen(screen, css_provider,
-                                    Gtk.STYLE_PROVIDER_PRIORITY_USER)
+                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
             logger.debug('loading custom styling : %s', css_fn)
 
     def on_window_state(self, widget, event):
@@ -293,7 +293,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             close = False
         elif err == 'NoReply':
             errmsg = 'DNF Dbus backend is not responding \n'\
-            '\nYum Extender will exit'
+                     '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
@@ -820,19 +820,19 @@ class Window(BaseWindow):
             else:  # error in signature verification
                 dialogs.show_information(
                     self, _('Error checking package signatures\n'),
-                             '\n'.join(result))
+                    '\n'.join(result))
                 break
 
         if rc == 4:  # Download errors
             dialogs.show_information(
                 self, _('Downloading error(s)\n'),
-                         '\n'.join(result))
+                '\n'.join(result))
             self._reset_on_cancel()
             return
         elif rc != 0:  # other transaction errors
             dialogs.show_information(
                 self, _('Error in transaction\n'),
-                         '\n'.join(result))
+                '\n'.join(result))
         self._reset()
         return
 
@@ -879,7 +879,7 @@ class Window(BaseWindow):
         else:
             dialogs.show_information(
                 self, _('Error(s) in search for dependencies'),
-                        '\n'.join(result))
+                '\n'.join(result))
         if app_quit:
             self.release_root_backend(quit=True)
             self.app.quit()
@@ -905,7 +905,7 @@ class Window(BaseWindow):
             check = self._check_protected(result)
             if check:
                 self.error_dialog.show(
-                _("Can't remove protected package(s)") + '\n'.join(check))
+                    _("Can't remove protected package(s)") + '\n'.join(check))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog
@@ -1129,9 +1129,10 @@ class YumexApplication(Gtk.Application):
     """Main application."""
 
     def __init__(self):
-        Gtk.Application.__init__(self,
-                    application_id="dk.yumex.yumex-ui",
-                    flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gtk.Application.__init__(
+            self,
+            application_id="dk.yumex.yumex-ui",
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
         self.connect("activate", self.on_activate)
         self.connect("command-line", self.on_command_line)
@@ -1159,8 +1160,10 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument(
             '-y', '--yes', action='store_true',
-             help='Answer yes/ok to all questions')
-        parser.add_argument('--exit', action='store_true',
+            help='Answer yes/ok to all questions')
+        parser.add_argument(
+            '--exit',
+            action='store_true',
             help='tell dnfdaemon dbus services used by yumex to exit')
         parser.add_argument(
             '-I', '--install', type=str, metavar='PACKAGE',

@@ -53,10 +53,10 @@ class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
     COLORS = ['color_install', 'color_update', 'color_normal',
-                     'color_obsolete', 'color_downgrade']
+              'color_obsolete', 'color_downgrade']
     FLAGS = ['autostart', 'clean_unused', 'newest_only',
              'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
-            ]
+             ]
 
     def __init__(self, base):
         self.base = base
@@ -264,7 +264,7 @@ class TransactionResult:
                 (n, e, v, r, a, repo_id) = str(id).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
-                    yumex.misc.format_number(size)])
+                             yumex.misc.format_number(size)])
                 # packages there need to be downloaded
                 if sub in ['install', 'update', 'install-deps',
                            'update-deps', 'obsoletes']:
@@ -272,7 +272,7 @@ class TransactionResult:
                 for r in replaces:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
                     model.append(level2, [_("<b>replacing</b> {}").format(n),
-                                           a, "%s.%s" % (v, r), repo_id,
+                                          a, "%s.%s" % (v, r), repo_id,
                                           yumex.misc.format_number(size)])
         self.base.ui.get_object("result_size").set_text(
             yumex.misc.format_number(total_size))
@@ -312,8 +312,8 @@ def ask_for_gpg_import(window, values):
              ' Key        : 0x%s:\n'
              ' Userid     : "%s"\n'
              ' From       : %s') %
-          (pkg_name, hexkeyid, userid,
-           keyurl.replace("file://", "")))
+           (pkg_name, hexkeyid, userid,
+            keyurl.replace("file://", "")))
 
     dialog = Gtk.MessageDialog(
         window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)

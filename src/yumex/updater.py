@@ -52,7 +52,7 @@ DELAYED_START = 5 * 60  # Seconds before first check
 class Notification(GObject.GObject):
     __gsignals__ = {
         'notify-action': (GObject.SignalFlags.RUN_FIRST, None,
-                      (str,))
+                          (str,))
     }
 
     def __init__(self, summary, body):
@@ -249,9 +249,10 @@ class UpdateApplication(Gio.Application):
     """Update application."""
 
     def __init__(self):
-        Gio.Application.__init__(self,
-                    application_id="dk.yumex.yumex-updater",
-                    flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gio.Application.__init__(
+            self,
+            application_id="dk.yumex.yumex-updater",
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
         self.connect("activate", self.on_activate)
         self.connect("command-line", self.on_command_line)

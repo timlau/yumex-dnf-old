@@ -272,7 +272,7 @@ class UrlOption(Option):
             return self.schemes[0]
         else:
             return '%s or %s' % (', '.join(self.schemes[:-1]),
-                   self.schemes[-1])
+                                 self.schemes[-1])
 
 
 class IntOption(Option):

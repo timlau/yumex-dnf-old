@@ -182,7 +182,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                                      "\ndon't match"
                                      '\nneeded api version : %d') %
                                    (self.running_api_version,
-                                   const.NEEDED_DAEMON_API))
+                                    const.NEEDED_DAEMON_API))
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':

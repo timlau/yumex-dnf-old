@@ -115,10 +115,10 @@ class SearchBar(GObject.GObject):
     """Handling the search UI."""
 
     __gsignals__ = {'search': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_STRING,
-                                     GObject.TYPE_STRING,
-                                     GObject.TYPE_PYOBJECT,))
+                               None,
+                               (GObject.TYPE_STRING,
+                                GObject.TYPE_STRING,
+                                GObject.TYPE_PYOBJECT,))
                     }
 
     FIELDS = ['name', 'summary', 'description']
@@ -261,9 +261,8 @@ class FilterSidebar(GObject.GObject):
     """Sidebar selector widget. """
 
     __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                        None,
+                                        (GObject.TYPE_STRING,))}
 
     INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
 
@@ -325,9 +324,9 @@ class Content(GObject.GObject):
     """Handling the content pages"""
 
     __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                     None,
+                                     (GObject.TYPE_STRING,)
+                                     )}
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
@@ -470,10 +469,10 @@ class PackageDetails(GObject.GObject):
         if not tag:
             if yumex.misc.check_dark_theme():
                 tag = self._buffer.create_tag(text,
-                                             foreground="#4C4CFF")
+                                              foreground="#4C4CFF")
             else:
                 tag = self._buffer.create_tag(text,
-                                             foreground="blue")
+                                              foreground="blue")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -564,7 +563,7 @@ class PackageInfo(PackageDetails):
         tags = self.current_package.pkgtags
         if tags:
             self.write(_("Tags: %s\n") %
-                            ", ".join(tags), "changelog-header")
+                       ", ".join(tags), "changelog-header")
         desc = self.current_package.description
         self.write(desc)
         self.write('\n')
@@ -594,7 +593,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No update information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nFedora Updates:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
                 self.add_url(url, url, newline=True)
@@ -669,7 +668,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nOnline Changelog:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"
                 self.add_url(url, url, newline=True)
@@ -747,9 +746,9 @@ class MainMenu(Gio.Menu):
 
 class ExtraFilters(GObject.GObject):
     __gsignals__ = {'changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,
-                                      GObject.TYPE_PYOBJECT,))
+                                None,
+                                (GObject.TYPE_STRING,
+                                 GObject.TYPE_PYOBJECT,))
                     }
 
     def __init__(self, win):

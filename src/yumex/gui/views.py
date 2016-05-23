@@ -250,12 +250,14 @@ class PackageView(SelectionView):
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
         if self.group_mode:
-            self.create_selection_colunm('selected',
+            self.create_selection_colunm(
+                'selected',
                 click_handler=self.on_section_header_clicked_group,
                 popup_handler=self.on_section_header_button,
                 tooltip=_("Click to install all/remove all"))
         else:
-            self.create_selection_colunm('selected',
+            self.create_selection_colunm(
+                'selected',
                 click_handler=self.on_section_header_clicked,
                 popup_handler=self.on_section_header_button,
                 tooltip=_("Click to select/deselect all"))
@@ -567,8 +569,8 @@ class PackageView(SelectionView):
                 pkg = pkgs[0]
                 # Installed pkg is all-ready downgraded by another package
                 if pkg.action == 'do' or \
-                    self.queue.has_pkg_with_name_arch(pkg):
-                        return
+                        self.queue.has_pkg_with_name_arch(pkg):
+                    return
                 pkg.queued = 'do'
                 pkg.selected = True
                 pkg.downgrade_po = obj
@@ -665,10 +667,10 @@ class PackageQueue:
             action = pkg.action
         na = "%s.%s" % (pkg.name, pkg.arch)
         if not pkg in self.packages[action] and \
-            not na in self._name_arch_index:
-                self.packages[action].append(pkg)
-                na = "%s.%s" % (pkg.name, pkg.arch)
-                self._name_arch_index[na] = 1
+                not na in self._name_arch_index:
+            self.packages[action].append(pkg)
+            na = "%s.%s" % (pkg.name, pkg.arch)
+            self._name_arch_index[na] = 1
 
     def remove(self, pkg, action=None):
         """Remove package from queue"""
@@ -746,9 +748,8 @@ class PackageQueue:
 
 class QueueView(Gtk.TreeView):
     __gsignals__ = {'queue-refresh': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_INT,))
-                    }
+                                      None,
+                                      (GObject.TYPE_INT,))}
 
     def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
@@ -899,7 +900,7 @@ class QueueView(Gtk.TreeView):
                                          [str(pkg.downgrade_po), pkg.summary])
                 self.store.append(
                     item, [_("<b>Downgrade to</b> %s ") %
-                    str(pkg), ""])
+                           str(pkg), ""])
 
 
 class HistoryView(Gtk.TreeView):
@@ -1057,8 +1058,9 @@ class HistoryPackageView(Gtk.TreeView):
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
                 num = len(states[state])
-                cat = self.model.append(None, ["<b>%s (%i)</b>" %
-                          (const.HISTORY_STATE_LABLES[state], num)])
+                cat = self.model.append(
+                    None, ["<b>%s (%i)</b>" %
+                           (const.HISTORY_STATE_LABLES[state], num)])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
