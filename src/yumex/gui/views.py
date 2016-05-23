@@ -27,11 +27,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
-from gi.repository import Pango
 
 from yumex import const
-from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction, \
-     check_dark_theme
+from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction
 
 logger = logging.getLogger('yumex.gui.views')
 

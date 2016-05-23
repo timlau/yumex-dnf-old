@@ -33,7 +33,6 @@ import sys
 import time
 
 import yumex.misc as misc
-import yumex.const as const
 
 LOG_ROOT = 'yumex.updater'
 

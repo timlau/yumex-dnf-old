@@ -28,13 +28,11 @@ from yumex.misc import _, CONFIG
 import datetime
 import hawkey
 import logging
-import re
 import subprocess
 import urllib.parse
 
 
 import yumex.const as const
-import yumex.gui.views
 import yumex.misc
 
 logger = logging.getLogger('yumex.gui.widget')

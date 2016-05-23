@@ -20,10 +20,8 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Pango
 from yumex.misc import _
 
-import os
 import os.path
 import re
 import subprocess
