@@ -531,7 +531,8 @@ class PackageInfo(PackageDetails):
 
     def _url_handler(self, url):
         logger.debug('URL activated: ' + url)
-        if yumex.misc.is_url(url):  # just to be sure and prevent shell injection
+        # just to be sure and prevent shell injection
+        if yumex.misc.is_url(url):
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:

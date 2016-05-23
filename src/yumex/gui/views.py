@@ -1210,6 +1210,7 @@ class RepoView(SelectionView):
             self.store.set_value(iterator, 0, state)
             iterator = self.store.iter_next(iterator)
 
+
 class Group:
     """ Object to represent a dnf group/category """
 

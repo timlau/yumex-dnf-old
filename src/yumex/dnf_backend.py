@@ -153,7 +153,7 @@ class DnfPackage(yumex.backend.Package):
     @property
     @ExceptionHandler
     def requirements(self):
-        return  self.get_attribute('requires')
+        return self.get_attribute('requires')
 
     @property
     def is_update(self):
@@ -175,7 +175,8 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self._files_to_download = 0
         self._files_downloaded = 0
         if self.running_api_version == const.NEEDED_DAEMON_API:
-            logger.debug('dnfdaemon api version (%d)', self.running_api_version)
+            logger.debug('dnfdaemon api version (%d)',
+                         self.running_api_version)
         else:
             raise dnfdaemon.client.APIVersionError(
                                    _('dnfdaemon api version : %d'

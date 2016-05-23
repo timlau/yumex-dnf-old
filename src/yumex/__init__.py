@@ -331,7 +331,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         WIDGETS_INSENSITIVE = ['left_header', 'right_header',
                                'package_sidebar']
         for widget in WIDGETS_INSENSITIVE:
-                        self.ui.get_object(widget).set_sensitive(state)
+            self.ui.get_object(widget).set_sensitive(state)
 
     def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window."""
@@ -920,7 +920,8 @@ class Window(BaseWindow):
             self.set_working(False)
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
-        except misc.TransactionBuildError as e:  # Error in building transaction
+        except misc.TransactionBuildError as e:
+            # Error in building transaction
             self.error_dialog.show(
                 _('Error(s) in building transaction') + '\n'.join(e.msgs))
             self._reset_on_cancel()
