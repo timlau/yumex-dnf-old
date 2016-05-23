@@ -167,7 +167,7 @@ class Filters:
         self._filters = {}
 
     def add(self, filter_cls):
-        if not filter_cls.name in self._filters:
+        if filter_cls.name not in self._filters:
             self._filters[filter_cls.name] = filter_cls
 
     def delete(self, name):

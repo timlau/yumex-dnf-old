@@ -666,8 +666,8 @@ class PackageQueue:
         if not action:
             action = pkg.action
         na = "%s.%s" % (pkg.name, pkg.arch)
-        if not pkg in self.packages[action] and \
-                not na in self._name_arch_index:
+        if pkg not in self.packages[action] and \
+                na not in self._name_arch_index:
             self.packages[action].append(pkg)
             na = "%s.%s" % (pkg.name, pkg.arch)
             self._name_arch_index[na] = 1
@@ -693,7 +693,7 @@ class PackageQueue:
         '''
         logger.debug('add_group : %s - %s' % (grp.id, action))
         grps = self.groups[action]
-        if not grp.id in grps:
+        if grp.id not in grps:
             grps[grp.id] = grp
             grp.selected = True
 
@@ -725,7 +725,7 @@ class PackageQueue:
             new_dict = {}
             grps = self.groups[action]
             for grp in grps.values():
-                if not grp.name in group_names:
+                if grp.name not in group_names:
                     new_dict[grp.id] = grp  # copy to new dict
                 else:  # unselect the group object
                     grp.selected = False
@@ -942,17 +942,17 @@ class HistoryView(Gtk.TreeView):
             da, t = dt.split('T')
             y, m, d = da.split('-')
             # year
-            if not y in main:
+            if y not in main:
                 ycat = self.model.append(None, [y, -1])
                 main[y] = (ycat, {})
             ycat, mdict = main[y]
             # month
-            if not m in mdict:
+            if m not in mdict:
                 mcat = self.model.append(ycat, [m, -1])
                 mdict[m] = (mcat, {})
             mcat, ddict = mdict[m]
             # day
-            if not d in ddict:
+            if d not in ddict:
                 dcat = self.model.append(mcat, [d, -1])
                 ddict[d] = dcat
             dcat = ddict[d]
