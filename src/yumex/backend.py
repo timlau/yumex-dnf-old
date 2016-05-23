@@ -20,6 +20,7 @@
 from __future__ import absolute_import
 
 import logging
+
 import yumex.const as const
 
 logger = logging.getLogger('yumex.backend')

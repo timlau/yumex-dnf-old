@@ -19,10 +19,6 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Gio, Gtk, Gdk
-
-from yumex.misc import _, CONFIG
-
 import argparse
 import datetime
 import logging
@@ -31,6 +27,9 @@ import shutil
 import subprocess
 import sys
 
+from gi.repository import Gio, Gtk, Gdk
+
+from yumex.misc import _, CONFIG
 import yumex.const as const
 import yumex.misc as misc
 import yumex.dnf_backend

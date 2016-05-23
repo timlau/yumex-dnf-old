@@ -20,11 +20,7 @@
 from __future__ import absolute_import
 
 import time
-
-from gi.repository import Gtk, Gdk, Notify
-
 import configparser
-import dnfdaemon.client
 import gettext
 import locale
 import logging
@@ -32,6 +28,11 @@ import os.path
 import re
 import subprocess
 import sys
+
+from gi.repository import Gtk, Gdk, Notify
+
+import dnfdaemon.client
+
 import yumex.config as config
 
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')

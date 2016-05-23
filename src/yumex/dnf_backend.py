@@ -20,14 +20,16 @@
 
 from __future__ import absolute_import
 
-from yumex.misc import ExceptionHandler, TimeFunction, _, CONFIG
+import logging
+
 from gi.repository import Gdk
 
 import dnfdaemon.client
-import logging
+
 import yumex.backend
 import yumex.misc
 import yumex.const as const
+from yumex.misc import ExceptionHandler, TimeFunction, _, CONFIG
 
 logger = logging.getLogger('yumex.yum_backend')
 

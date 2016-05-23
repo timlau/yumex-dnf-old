@@ -20,13 +20,14 @@
 
 from __future__ import absolute_import
 
-from yumex.misc import _
-
 import os.path
 import re
 import subprocess
 import sys
+
 import hawkey
+
+from yumex.misc import _
 
 VERSION = "4.3.2"
 

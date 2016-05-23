@@ -20,18 +20,19 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Gio, Gtk, Notify, GObject
-from yumex.misc import _, CONFIG
-from subprocess import Popen
-from xdg import BaseDirectory
-
 import argparse
-import dnfdaemon.client
 import logging
 import os
 import sys
 import time
+from subprocess import Popen
 
+from gi.repository import Gio, Gtk, Notify, GObject
+from xdg import BaseDirectory
+
+import dnfdaemon.client
+
+from yumex.misc import _, CONFIG
 import yumex.misc as misc
 
 LOG_ROOT = 'yumex.updater'

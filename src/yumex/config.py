@@ -21,7 +21,6 @@ It is modified to work in Python 3
 """
 
 from urllib.parse import urlparse
-
 import copy
 import glob
 import re

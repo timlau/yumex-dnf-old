@@ -19,19 +19,18 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Gtk, Gio, GLib
-from gi.repository import Gdk
-from gi.repository import GObject
-from gi.repository import Pango
-from yumex.misc import _, CONFIG
-
 import datetime
-import hawkey
 import logging
 import subprocess
 import urllib.parse
 
+from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import Pango
+import hawkey
 
+from yumex.misc import _, CONFIG
 import yumex.const as const
 import yumex.misc
 

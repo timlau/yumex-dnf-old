@@ -21,16 +21,17 @@
 
 from __future__ import absolute_import
 
-from gi.repository import Gtk
-from gi.repository import GObject
-from yumex import const
-from yumex.misc import _, CONFIG
-
 import logging
 import os
 import shutil
+
+from gi.repository import Gtk
+from gi.repository import GObject
+
+from yumex import const
 import yumex.gui.views
 import yumex.misc
+from yumex.misc import _, CONFIG
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
