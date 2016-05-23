@@ -79,7 +79,7 @@ class Preferences:
     def get_settings(self):
         # set boolean states
         for option in Preferences.FLAGS:
-            logger.debug("%s : %s " % (option, getattr(CONFIG.conf, option)))
+            logger.debug("%s : %s ", option, getattr(CONFIG.conf, option))
             widget = self.base.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler

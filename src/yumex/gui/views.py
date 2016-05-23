@@ -347,7 +347,7 @@ class PackageView(SelectionView):
 
     def on_package_reinstall(self, widget, pkg):
         """Handler for package right click menu"""
-        logger.debug('reinstall: %s ' % str(pkg))
+        logger.debug('reinstall: %s ', str(pkg))
         pkg.queued = 'ri'
         pkg.selected = True
         self.queue.add(pkg, 'ri')
@@ -357,7 +357,7 @@ class PackageView(SelectionView):
     def on_package_downgrade(self, widget, event, pkg, do_pkg):
         """Downgrade package right click menu handler"""
         if event.button == 1:  # Left Click
-            logger.debug('downgrade to : %s ' % str(do_pkg))
+            logger.debug('downgrade to : %s ', str(do_pkg))
             #pkg.action = 'do'
             pkg.queued = 'do'
             pkg.selected = True
@@ -665,7 +665,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('add_group : %s - %s' % (grp.id, action))
+        logger.debug('add_group : %s - %s', grp.id, action)
         grps = self.groups[action]
         if grp.id not in grps:
             grps[grp.id] = grp
@@ -677,7 +677,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('removeGroup : %s - %s' % (grp.id, action))
+        logger.debug('removeGroup : %s - %s', grp.id, action)
         grps = self.groups[action]
         if grp.id in grps:
             del grps[grp.id]

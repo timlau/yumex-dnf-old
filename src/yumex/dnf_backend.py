@@ -213,7 +213,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         elif event == 'end-run':
             self.frontend.infobar.show_progress(False)
         else:
-            logger.debug('TransactionEvent : %s' % event)
+            logger.debug('TransactionEvent : %s', event)
 
     def on_RPMProgress(self, package, action, te_current,
                        te_total, ts_current, ts_total):
@@ -222,7 +222,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             name = misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
-        logger.debug('on_RPMProgress : [%s]' % package)
+        logger.debug('on_RPMProgress : [%s]', package)
         self.frontend.infobar.info_sub(const.RPM_ACTIONS[action] % name)
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
@@ -231,7 +231,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
         values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
         self._gpg_confirm = values
-        logger.debug('received signal : GPGImport%s' % (repr(values)))
+        logger.debug('received signal : GPGImport %s', repr(values))
 
     def on_DownloadStart(self, num_files, num_bytes):
         """Starting a new parallel download batch."""
@@ -256,15 +256,15 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         #values =  (name, status, msg)
         #print('on_DownloadEnd : %s' % (repr(values)))
         if status == -1 or status == 2:  # download OK or already exists
-            logger.debug('Downloaded : %s' % name)
+            logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
         else:
-            logger.debug('Download Error : %s - %s' % (name, msg))
+            logger.debug('Download Error : %s - %s', name, msg)
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
         values = (name, frac)
-        logger.debug('on_RepoMetaDataProgress (root): %s' % (repr(values)))
+        logger.debug('on_RepoMetaDataProgress (root): %s', repr(values))
         if frac == 0.0:
             self.frontend.infobar.info_sub(name)
         else:
@@ -311,7 +311,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         logger.debug('clean_requirements_on_remove = %s',
                      CONFIG.session.clean_unused)
         if CONFIG.session.enabled_repos:
-            logger.debug('root: Setting repos : %s' %
+            logger.debug('root: Setting repos : %s',
                          CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
 
