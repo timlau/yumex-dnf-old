@@ -17,11 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from __future__ import absolute_import
-
-from gi.repository import Gio, Gtk, Gdk
-
-from yumex.misc import _, CONFIG
 
 import argparse
 import datetime
@@ -31,6 +26,9 @@ import shutil
 import subprocess
 import sys
 
+from gi.repository import Gio, Gtk, Gdk
+
+from yumex.misc import _, CONFIG
 import yumex.const as const
 import yumex.misc as misc
 import yumex.dnf_backend
@@ -64,18 +62,12 @@ class BaseYumex:
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.session_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
         elif cache_type == 'system':
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.system_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
 
     def _set_cache_refreshed(self, cache_type):
         time_fmt = '%Y-%m-%d %H:%M'
@@ -140,7 +132,7 @@ class BaseYumex:
         return self._root_backend
 
     @misc.ExceptionHandler
-    def release_root_backend(self, quit=False):
+    def release_root_backend(self, quit_dnfdaemon=False):
         """Release the current root backend, if it is setup and locked."""
         if self._root_backend is None:
             return
@@ -148,7 +140,7 @@ class BaseYumex:
             logger.debug('Unlock the DNF root daemon')
             self._root_backend.Unlock()
             self._root_locked = False
-        if quit:
+        if quit_dnfdaemon:
             logger.debug('Exit the DNF root daemon')
             self._root_backend.Exit()
 
@@ -162,12 +154,12 @@ class BaseYumex:
         err, errmsg = self._parse_error(msg)
         logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
-            errmsg = 'DNF is locked by another process.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF is locked by another process.\n' \
+                '\nYum Extender will exit'
             close = False
         elif err == 'NoReply':
-            errmsg = 'DNF D-Bus backend is not responding.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF D-Bus backend is not responding.\n' \
+                '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
@@ -176,7 +168,7 @@ class BaseYumex:
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
         #self.status.SetWorking(False)  # reset working state
@@ -255,7 +247,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             css_provider.load_from_path(css_fn)
             context = Gtk.StyleContext()
             context.add_provider_for_screen(screen, css_provider,
-                                    Gtk.STYLE_PROVIDER_PRIORITY_USER)
+                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
             logger.debug('loading custom styling : %s', css_fn)
 
     def on_window_state(self, widget, event):
@@ -293,7 +285,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             close = False
         elif err == 'NoReply':
             errmsg = 'DNF Dbus backend is not responding \n'\
-            '\nYum Extender will exit'
+                     '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
@@ -301,7 +293,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
         Gtk.main_quit()
@@ -331,7 +323,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         WIDGETS_INSENSITIVE = ['left_header', 'right_header',
                                'package_sidebar']
         for widget in WIDGETS_INSENSITIVE:
-                        self.ui.get_object(widget).set_sensitive(state)
+            self.ui.get_object(widget).set_sensitive(state)
 
     def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window."""
@@ -765,8 +757,8 @@ class Window(BaseWindow):
         protected = []
         for action, pkgs in trans:
             if action == 'remove':
-                for id, size, replaces in pkgs:
-                    (n, e, v, r, a, repo_id) = str(id).split(',')
+                for pkgid, size, replaces in pkgs:
+                    (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                     if n in CONFIG.conf.protected:
                         protected.append(n)
         return protected
@@ -820,19 +812,19 @@ class Window(BaseWindow):
             else:  # error in signature verification
                 dialogs.show_information(
                     self, _('Error checking package signatures\n'),
-                             '\n'.join(result))
+                    '\n'.join(result))
                 break
 
         if rc == 4:  # Download errors
             dialogs.show_information(
                 self, _('Downloading error(s)\n'),
-                         '\n'.join(result))
+                '\n'.join(result))
             self._reset_on_cancel()
             return
         elif rc != 0:  # other transaction errors
             dialogs.show_information(
                 self, _('Error in transaction\n'),
-                         '\n'.join(result))
+                '\n'.join(result))
         self._reset()
         return
 
@@ -879,9 +871,9 @@ class Window(BaseWindow):
         else:
             dialogs.show_information(
                 self, _('Error(s) in search for dependencies'),
-                        '\n'.join(result))
+                '\n'.join(result))
         if app_quit:
-            self.release_root_backend(quit=True)
+            self.release_root_backend(quit_dnfdaemon=True)
             self.app.quit()
 
     @misc.ExceptionHandler
@@ -905,7 +897,8 @@ class Window(BaseWindow):
             check = self._check_protected(result)
             if check:
                 self.error_dialog.show(
-                _("Can't remove protected package(s)") + '\n'.join(check))
+                    _("Can't remove protected package(s):") +
+                    misc.list_to_string(check, "\n ", ",\n "))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog
@@ -920,7 +913,8 @@ class Window(BaseWindow):
             self.set_working(False)
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
-        except misc.TransactionBuildError as e:  # Error in building transaction
+        except misc.TransactionBuildError as e:
+            # Error in building transaction
             self.error_dialog.show(
                 _('Error(s) in building transaction') + '\n'.join(e.msgs))
             self._reset_on_cancel()
@@ -1129,9 +1123,10 @@ class YumexApplication(Gtk.Application):
     """Main application."""
 
     def __init__(self):
-        Gtk.Application.__init__(self,
-                    application_id="dk.yumex.yumex-ui",
-                    flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gtk.Application.__init__(
+            self,
+            application_id="dk.yumex.yumex-ui",
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
         self.connect("activate", self.on_activate)
         self.connect("command-line", self.on_command_line)
@@ -1159,8 +1154,10 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument(
             '-y', '--yes', action='store_true',
-             help='Answer yes/ok to all questions')
-        parser.add_argument('--exit', action='store_true',
+            help='Answer yes/ok to all questions')
+        parser.add_argument(
+            '--exit',
+            action='store_true',
             help='tell dnfdaemon dbus services used by yumex to exit')
         parser.add_argument(
             '-I', '--install', type=str, metavar='PACKAGE',
@@ -1193,7 +1190,7 @@ class YumexApplication(Gtk.Application):
                 if self.window.can_close():
                     self.quit()
                 else:
-                    self.logger.info("Application is busy")
+                    logger.info("Application is busy")
             if self.current_args.install or self.current_args.remove or \
                self.current_args.updateall:
                 self.install_mode = True
@@ -1209,7 +1206,7 @@ class YumexApplication(Gtk.Application):
                 CONFIG.conf.win_width = self.window.cur_width
                 CONFIG.conf.win_height = self.window.cur_height
                 CONFIG.conf.win_maximized = False
-            self.window.release_root_backend(quit=True)
+            self.window.release_root_backend(quit_dnfdaemon=True)
         logger.info('Saving config on exit')
         CONFIG.write()
         return 0

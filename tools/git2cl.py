@@ -2,8 +2,7 @@
 # Copyright 2008 Marcus D. Hanwell <marcus@cryos.org>
 # Distributed under the terms of the GNU General Public License v2 or later
 
-from __future__ import absolute_import
-from __future__ import print_function
+
 import string, re, os
 
 # Execute git log with the desired command line options.

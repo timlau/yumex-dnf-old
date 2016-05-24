@@ -21,7 +21,6 @@ It is modified to work in Python 3
 """
 
 from urllib.parse import urlparse
-
 import copy
 import glob
 import re
@@ -36,7 +35,7 @@ def read_in_items_from_dot_dir(thisglob, line_as_list=True):
     results = []
     for fname in glob.glob(thisglob):
         for line in open(fname):
-            if re.match('\s*(#|$)', line):
+            if re.match(r'\s*(#|$)', line):
                 continue
             line = line.rstrip()  # no more trailing \n's
             line = line.lstrip()  # be nice
@@ -272,7 +271,7 @@ class UrlOption(Option):
             return self.schemes[0]
         else:
             return '%s or %s' % (', '.join(self.schemes[:-1]),
-                   self.schemes[-1])
+                                 self.schemes[-1])
 
 
 class IntOption(Option):

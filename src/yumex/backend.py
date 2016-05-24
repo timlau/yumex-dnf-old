@@ -17,9 +17,8 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
 import logging
+
 import yumex.const as const
 
 logger = logging.getLogger('yumex.backend')
@@ -167,7 +166,7 @@ class Filters:
         self._filters = {}
 
     def add(self, filter_cls):
-        if not filter_cls.name in self._filters:
+        if filter_cls.name not in self._filters:
             self._filters[filter_cls.name] = filter_cls
 
     def delete(self, name):

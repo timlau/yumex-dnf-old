@@ -19,18 +19,17 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
-from gi.repository import Gtk
-from gi.repository import GObject
-from yumex import const
-from yumex.misc import _, CONFIG
-
 import logging
 import os
 import shutil
+
+from gi.repository import Gtk
+from gi.repository import GObject
+
+from yumex import const
 import yumex.gui.views
 import yumex.misc
+from yumex.misc import _, CONFIG
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
@@ -53,10 +52,10 @@ class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
     COLORS = ['color_install', 'color_update', 'color_normal',
-                     'color_obsolete', 'color_downgrade']
+              'color_obsolete', 'color_downgrade']
     FLAGS = ['autostart', 'clean_unused', 'newest_only',
              'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
-            ]
+             ]
 
     def __init__(self, base):
         self.base = base
@@ -80,7 +79,7 @@ class Preferences:
     def get_settings(self):
         # set boolean states
         for option in Preferences.FLAGS:
-            logger.debug("%s : %s " % (option, getattr(CONFIG.conf, option)))
+            logger.debug("%s : %s ", option, getattr(CONFIG.conf, option))
             widget = self.base.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler
@@ -209,14 +208,6 @@ class TransactionResult:
     def clear(self):
         self.store.clear()
 
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
-
     def setup_view(self, view):
         '''
         Setup the TreeView
@@ -260,11 +251,11 @@ class TransactionResult:
         for sub, lvl1 in pkglist:
             label = "<b>%s</b>" % const.TRANSACTION_RESULT_TYPES[sub]
             level1 = model.append(None, [label, "", "", "", ""])
-            for id, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id) = str(id).split(',')
+            for pkgid, size, replaces in lvl1:
+                (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
-                    yumex.misc.format_number(size)])
+                             yumex.misc.format_number(size)])
                 # packages there need to be downloaded
                 if sub in ['install', 'update', 'install-deps',
                            'update-deps', 'obsoletes']:
@@ -272,7 +263,7 @@ class TransactionResult:
                 for r in replaces:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
                     model.append(level2, [_("<b>replacing</b> {}").format(n),
-                                           a, "%s.%s" % (v, r), repo_id,
+                                          a, "%s.%s" % (v, r), repo_id,
                                           yumex.misc.format_number(size)])
         self.base.ui.get_object("result_size").set_text(
             yumex.misc.format_number(total_size))
@@ -312,8 +303,8 @@ def ask_for_gpg_import(window, values):
              ' Key        : 0x%s:\n'
              ' Userid     : "%s"\n'
              ' From       : %s') %
-          (pkg_name, hexkeyid, userid,
-           keyurl.replace("file://", "")))
+           (pkg_name, hexkeyid, userid,
+            keyurl.replace("file://", "")))
 
     dialog = Gtk.MessageDialog(
         window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)

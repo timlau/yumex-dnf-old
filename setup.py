@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
+import os
+from os.path import join, basename, split
 from distutils.core import setup
 from distutils.util import convert_path
 from distutils.command.build_scripts import build_scripts
 from distutils import log
 
-import os
-from os.path import join, basename, split
 
 RENAME_SCRIPTS = {'main.py': 'yumex-dnf',
                   'update.py': 'yumex-dnf-updatechecker'}

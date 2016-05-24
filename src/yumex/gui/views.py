@@ -18,8 +18,6 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
 import os
 import logging
 
@@ -27,11 +25,10 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
-from gi.repository import Pango
 
 from yumex import const
-from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction, \
-     check_dark_theme
+from yumex.misc import _, P_, CONFIG, doGtkEvents, TimeFunction
+import yumex.misc as misc
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -250,12 +247,14 @@ class PackageView(SelectionView):
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
         if self.group_mode:
-            self.create_selection_colunm('selected',
+            self.create_selection_colunm(
+                'selected',
                 click_handler=self.on_section_header_clicked_group,
                 popup_handler=self.on_section_header_button,
                 tooltip=_("Click to install all/remove all"))
         else:
-            self.create_selection_colunm('selected',
+            self.create_selection_colunm(
+                'selected',
                 click_handler=self.on_section_header_clicked,
                 popup_handler=self.on_section_header_button,
                 tooltip=_("Click to select/deselect all"))
@@ -348,7 +347,7 @@ class PackageView(SelectionView):
 
     def on_package_reinstall(self, widget, pkg):
         """Handler for package right click menu"""
-        logger.debug('reinstall: %s ' % str(pkg))
+        logger.debug('reinstall: %s ', str(pkg))
         pkg.queued = 'ri'
         pkg.selected = True
         self.queue.add(pkg, 'ri')
@@ -358,7 +357,7 @@ class PackageView(SelectionView):
     def on_package_downgrade(self, widget, event, pkg, do_pkg):
         """Downgrade package right click menu handler"""
         if event.button == 1:  # Left Click
-            logger.debug('downgrade to : %s ' % str(do_pkg))
+            logger.debug('downgrade to : %s ', str(do_pkg))
             #pkg.action = 'do'
             pkg.queued = 'do'
             pkg.selected = True
@@ -440,10 +439,6 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def select_by_keys(self, keys):
-        '''
-
-        @param keys:
-        '''
         iterator = self.store.get_iter_first()
         while iterator is not None:
             obj = self.store.get_value(iterator, 0)
@@ -460,9 +455,6 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def get_selected(self):
-        '''
-
-        '''
         selected = []
         for el in self.store:
             obj = el[0]
@@ -471,9 +463,6 @@ class PackageView(SelectionView):
         return selected
 
     def get_notselected(self):
-        '''
-
-        '''
         notselected = []
         for el in self.store:
             obj = el[0]
@@ -567,8 +556,8 @@ class PackageView(SelectionView):
                 pkg = pkgs[0]
                 # Installed pkg is all-ready downgraded by another package
                 if pkg.action == 'do' or \
-                    self.queue.has_pkg_with_name_arch(pkg):
-                        return
+                        self.queue.has_pkg_with_name_arch(pkg):
+                    return
                 pkg.queued = 'do'
                 pkg.selected = True
                 pkg.downgrade_po = obj
@@ -612,9 +601,6 @@ class PackageQueue:
     '''
 
     def __init__(self):
-        '''
-        Init the queue
-        '''
         self.packages = {}
         self._setup_packages()
         self.groups = {}
@@ -627,9 +613,6 @@ class PackageQueue:
             self.packages[key] = []
 
     def clear(self):
-        '''
-
-        '''
         del self.packages
         self.packages = {}
         self._setup_packages()
@@ -639,19 +622,12 @@ class PackageQueue:
         self._name_arch_index = {}
 
     def get(self, action=None):
-        '''
-
-        @param action:
-        '''
         if action is None:
             return self.packages
         else:
             return self.packages[action]
 
     def total(self):
-        '''
-
-        '''
         num = 0
         for key in const.QUEUE_PACKAGE_TYPES:
             num += len(self.packages[key])
@@ -664,11 +640,11 @@ class PackageQueue:
         if not action:
             action = pkg.action
         na = "%s.%s" % (pkg.name, pkg.arch)
-        if not pkg in self.packages[action] and \
-            not na in self._name_arch_index:
-                self.packages[action].append(pkg)
-                na = "%s.%s" % (pkg.name, pkg.arch)
-                self._name_arch_index[na] = 1
+        if pkg not in self.packages[action] and \
+                na not in self._name_arch_index:
+            self.packages[action].append(pkg)
+            na = "%s.%s" % (pkg.name, pkg.arch)
+            self._name_arch_index[na] = 1
 
     def remove(self, pkg, action=None):
         """Remove package from queue"""
@@ -689,9 +665,9 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('add_group : %s - %s' % (grp.id, action))
+        logger.debug('add_group : %s - %s', grp.id, action)
         grps = self.groups[action]
-        if not grp.id in grps:
+        if grp.id not in grps:
             grps[grp.id] = grp
             grp.selected = True
 
@@ -701,7 +677,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         '''
-        logger.debug('removeGroup : %s - %s' % (grp.id, action))
+        logger.debug('removeGroup : %s - %s', grp.id, action)
         grps = self.groups[action]
         if grp.id in grps:
             del grps[grp.id]
@@ -723,7 +699,7 @@ class PackageQueue:
             new_dict = {}
             grps = self.groups[action]
             for grp in grps.values():
-                if not grp.name in group_names:
+                if grp.name not in group_names:
                     new_dict[grp.id] = grp  # copy to new dict
                 else:  # unselect the group object
                     grp.selected = False
@@ -746,9 +722,8 @@ class PackageQueue:
 
 class QueueView(Gtk.TreeView):
     __gsignals__ = {'queue-refresh': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_INT,))
-                    }
+                                      None,
+                                      (GObject.TYPE_INT,))}
 
     def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
@@ -781,9 +756,6 @@ class QueueView(Gtk.TreeView):
         return model
 
     def deleteSelected(self, widget=None):
-        '''
-
-        '''
         rmvlist = []
         model, paths = self.get_selection().get_selected_rows()
         for path in paths:
@@ -867,28 +839,16 @@ class QueueView(Gtk.TreeView):
         self.emit('queue-refresh', self.queue.total())
 
     def populate_list(self, label, pkg_list):
-        '''
-
-        @param header:
-        @param pkg_list:
-        '''
         parent = self.store.append(None, [label, ""])
         for pkg in pkg_list:
             self.store.append(parent, [str(pkg), pkg.summary])
 
     def populate_group_list(self, label, grps):
-        '''
-        @param label:
-        @param pkg_list:
-        '''
         parent = self.store.append(None, [label, ""])
         for grp in grps.values():
             self.store.append(parent, [grp.name, grp.description])
 
     def populate_list_downgrade(self):
-        '''
-
-        '''
         pkg_list = self.queue.packages['do']
         label = "<b>%s</b>" % P_(
             "Package to downgrade", "Packages to downgrade", len(pkg_list))
@@ -899,16 +859,12 @@ class QueueView(Gtk.TreeView):
                                          [str(pkg.downgrade_po), pkg.summary])
                 self.store.append(
                     item, [_("<b>Downgrade to</b> %s ") %
-                    str(pkg), ""])
+                           str(pkg), ""])
 
 
 class HistoryView(Gtk.TreeView):
     """ History View Class"""
     def __init__(self, base):
-        '''
-
-        @param widget:
-        '''
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
@@ -941,17 +897,17 @@ class HistoryView(Gtk.TreeView):
             da, t = dt.split('T')
             y, m, d = da.split('-')
             # year
-            if not y in main:
+            if y not in main:
                 ycat = self.model.append(None, [y, -1])
                 main[y] = (ycat, {})
             ycat, mdict = main[y]
             # month
-            if not m in mdict:
+            if m not in mdict:
                 mcat = self.model.append(ycat, [m, -1])
                 mdict[m] = (mcat, {})
             mcat, ddict = mdict[m]
             # day
-            if not d in ddict:
+            if d not in ddict:
                 dcat = self.model.append(mcat, [d, -1])
                 ddict[d] = dcat
             dcat = ddict[d]
@@ -989,10 +945,6 @@ class HistoryView(Gtk.TreeView):
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
     def __init__(self, base):
-        '''
-
-        @param widget:
-        '''
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
@@ -1057,29 +1009,23 @@ class HistoryPackageView(Gtk.TreeView):
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
                 num = len(states[state])
-                cat = self.model.append(None, ["<b>%s (%i)</b>" %
-                          (const.HISTORY_STATE_LABLES[state], num)])
+                cat = self.model.append(
+                    None, ["<b>%s (%i)</b>" %
+                           (const.HISTORY_STATE_LABLES[state], num)])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:
                         name = '<span foreground="%s">%s</span>' % (
-                            CONFIG.conf.color_install, self._fullname(pkg_id))
+                            CONFIG.conf.color_install,
+                            misc.pkg_id_to_full_name(pkg_id))
                     else:
-                        name = self._fullname(pkg_id)
+                        name = misc.pkg_id_to_full_name(pkg_id)
                     pkg_cat = self.model.append(cat, [name])
                     if len(pkg_list) == 2:
                         pkg_id, st, is_inst = pkg_list[1]
-                        name = self._fullname(pkg_id)
+                        name = misc.pkg_id_to_full_name(pkg_id)
                         self.model.append(pkg_cat, [name])
         self.expand_all()
-
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
 
 
 class RepoView(SelectionView):
@@ -1087,10 +1033,6 @@ class RepoView(SelectionView):
     This class controls the repo TreeView
     """
     def __init__(self):
-        '''
-
-        @param widget:
-        '''
         SelectionView.__init__(self)
         self.headers = [_('Repository'), _('Filename')]
         self.store = self.setup_view()
@@ -1152,13 +1094,6 @@ class RepoView(SelectionView):
             self.store.append([state, ident, name, gpg])
 
     def new_pixbuf(self, column, cell, model, iterator, data):
-        '''
-
-        @param column:
-        @param cell:
-        @param model:
-        @param iterator:
-        '''
         gpg = model.get_value(iterator, 3)
         if gpg:
             cell.set_property('visible', True)
@@ -1166,9 +1101,6 @@ class RepoView(SelectionView):
             cell.set_property('visible', False)
 
     def get_selected(self):
-        '''
-
-        '''
         selected = []
         for elem in self.store:
             state = elem[0]
@@ -1178,9 +1110,6 @@ class RepoView(SelectionView):
         return selected
 
     def get_notselected(self):
-        '''
-
-        '''
         notselected = []
         for elem in self.store:
             state = elem[0]
@@ -1190,10 +1119,6 @@ class RepoView(SelectionView):
         return notselected
 
     def select_by_keys(self, keys):
-        '''
-
-        @param keys:
-        '''
         iterator = self.store.get_iter_first()
         while iterator is not None:
             repoid = self.store.get_value(iterator, 1)
@@ -1210,6 +1135,7 @@ class RepoView(SelectionView):
             self.store.set_value(iterator, 0, state)
             iterator = self.store.iter_next(iterator)
 
+
 class Group:
     """ Object to represent a dnf group/category """
 
@@ -1223,8 +1149,6 @@ class Group:
 
 
 class GroupView(Gtk.TreeView):
-    '''
-    '''
     __gsignals__ = {'group-changed': (GObject.SignalFlags.RUN_FIRST,
                                       None,
                                       (GObject.TYPE_STRING,))}
@@ -1320,10 +1244,6 @@ class GroupView(Gtk.TreeView):
                     self.emit('group-changed', obj.id)
 
     def populate(self, data):
-        '''
-
-        @param data:
-        '''
         self.freeze_child_notify()
         self.set_model(None)
         self.model.clear()

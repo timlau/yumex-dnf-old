@@ -17,24 +17,20 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from __future__ import absolute_import
+
+import datetime
+import logging
+import subprocess
+import urllib.parse
 
 from gi.repository import Gtk, Gio, GLib
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
-from yumex.misc import _, CONFIG
-
-import datetime
 import hawkey
-import logging
-import re
-import subprocess
-import urllib.parse
 
-
+from yumex.misc import _, CONFIG
 import yumex.const as const
-import yumex.gui.views
 import yumex.misc
 
 logger = logging.getLogger('yumex.gui.widget')
@@ -115,10 +111,10 @@ class SearchBar(GObject.GObject):
     """Handling the search UI."""
 
     __gsignals__ = {'search': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_STRING,
-                                     GObject.TYPE_STRING,
-                                     GObject.TYPE_PYOBJECT,))
+                               None,
+                               (GObject.TYPE_STRING,
+                                GObject.TYPE_STRING,
+                                GObject.TYPE_PYOBJECT,))
                     }
 
     FIELDS = ['name', 'summary', 'description']
@@ -261,9 +257,8 @@ class FilterSidebar(GObject.GObject):
     """Sidebar selector widget. """
 
     __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                        None,
+                                        (GObject.TYPE_STRING,))}
 
     INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
 
@@ -325,9 +320,9 @@ class Content(GObject.GObject):
     """Handling the content pages"""
 
     __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                     None,
+                                     (GObject.TYPE_STRING,)
+                                     )}
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
@@ -470,10 +465,10 @@ class PackageDetails(GObject.GObject):
         if not tag:
             if yumex.misc.check_dark_theme():
                 tag = self._buffer.create_tag(text,
-                                             foreground="#4C4CFF")
+                                              foreground="#4C4CFF")
             else:
                 tag = self._buffer.create_tag(text,
-                                             foreground="blue")
+                                              foreground="blue")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -529,21 +524,13 @@ class PackageInfo(PackageDetails):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                logger.error("Package info not found: ", self.active_filter)
+                logger.error("Package info not found: %s", self.active_filter)
         self.goto_top()
-
-    def _is_url(self, url):
-        urls = re.findall(
-            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-            '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-        if urls:
-            return True
-        else:
-            return False
 
     def _url_handler(self, url):
         logger.debug('URL activated: ' + url)
-        if self._is_url(url):  # just to be sure and prevent shell injection
+        # just to be sure and prevent shell injection
+        if yumex.misc.is_url(url):
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
@@ -564,7 +551,7 @@ class PackageInfo(PackageDetails):
         tags = self.current_package.pkgtags
         if tags:
             self.write(_("Tags: %s\n") %
-                            ", ".join(tags), "changelog-header")
+                       ", ".join(tags), "changelog-header")
         desc = self.current_package.description
         self.write(desc)
         self.write('\n')
@@ -594,7 +581,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No update information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nFedora Updates:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
                 self.add_url(url, url, newline=True)
@@ -669,7 +656,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nOnline Changelog:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"
                 self.add_url(url, url, newline=True)
@@ -692,7 +679,7 @@ class PackageInfo(PackageDetails):
         for key in reqs:
             self.write(key)
             for pkg_id in reqs[key]:
-                pkg = yumex.misc.id2fullname(pkg_id)
+                pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
                 self.write(' --> {}'.format(pkg))
         self.base.set_working(False, False)
 
@@ -747,9 +734,9 @@ class MainMenu(Gio.Menu):
 
 class ExtraFilters(GObject.GObject):
     __gsignals__ = {'changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,
-                                      GObject.TYPE_PYOBJECT,))
+                                None,
+                                (GObject.TYPE_STRING,
+                                 GObject.TYPE_PYOBJECT,))
                     }
 
     def __init__(self, win):

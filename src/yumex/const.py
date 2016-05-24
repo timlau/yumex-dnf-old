@@ -18,17 +18,14 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
-from gi.repository import Pango
-from yumex.misc import _
-
-import os
 import os.path
 import re
 import subprocess
 import sys
+
 import hawkey
+
+from yumex.misc import _
 
 VERSION = "4.3.2"
 
@@ -67,7 +64,7 @@ if ARCH in ARCH_DICT:
 else:  # use x86_64 as fallback
     PLATFORM_ARCH = ARCH_DICT['x86_64']
 
-DBUS_ERR_RE = re.compile('.*GDBus.Error:([\w\.]*): (.*)$')
+DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w\.]*): (.*)$')
 
 ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
 ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
@@ -179,8 +176,8 @@ FEDORA_REPOS = ['fedora', 'updates', 'updates-testing', 'rawhide']
 
 
 ADVISORY_TYPES = {
-hawkey.ADVISORY_BUGFIX: _('Bugfix'),
-hawkey.ADVISORY_UNKNOWN: _('New Package'),
-hawkey.ADVISORY_SECURITY: _('Security'),
-hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
+    hawkey.ADVISORY_BUGFIX: _('Bugfix'),
+    hawkey.ADVISORY_UNKNOWN: _('New Package'),
+    hawkey.ADVISORY_SECURITY: _('Security'),
+    hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
 }
