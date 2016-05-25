@@ -676,11 +676,12 @@ class PackageInfo(PackageDetails):
     def _show_requirements(self):
         self.base.set_working(True, False)
         reqs = self.current_package.requirements
-        for key in reqs:
-            self.write(key)
-            for pkg_id in reqs[key]:
-                pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
-                self.write(' --> {}'.format(pkg))
+        if reqs:
+            for key in reqs:
+                self.write(key)
+                for pkg_id in reqs[key]:
+                    pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
+                    self.write(' --> {}'.format(pkg))
         self.base.set_working(False, False)
 
 
