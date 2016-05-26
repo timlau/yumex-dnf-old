@@ -502,7 +502,9 @@ class PackageInfo(PackageDetails):
         :param pkg: package to set as active package
         '''
         self.current_package = pkg
+        self.win.set_working(True, True)
         self.update()
+        self.win.set_working(False)
 
     def update(self):
         '''
