@@ -49,6 +49,8 @@ DELAYED_START = 5 * 60  # Seconds before first check
 
 
 class _Notification(GObject.GObject):
+    """Used to notify users of available updates"""
+
     __gsignals__ = {
         'notify-action': (GObject.SignalFlags.RUN_FIRST, None,
                           (str,))
@@ -67,6 +69,7 @@ class _Notification(GObject.GObject):
         self.__notification.connect('closed', self.__on_closed)
 
     def show(self):
+        """Show the notification. This call does not block."""
         self.__notification.show()
 
     def __callback(self, widget, action):
@@ -87,7 +90,7 @@ def error_notify(summary, body):
 class _UpdateTimestamp:
 
     '''
-    a persistent timestamp. eg for storing the last update check
+    a persistent timestamp. e.g. for storing the last update check
     '''
 
     def __init__(self, file_name=TIMESTAMP_FILE):
@@ -113,6 +116,7 @@ class _UpdateTimestamp:
         return -1
 
     def store_current_time(self):
+        """Save current time stamp permanently."""
         t = int(time.time())
         f = open(self.__time_file, 'w')
         f.write(str(t))
@@ -200,8 +204,7 @@ class _Updater:
         Popen(cmd).pid
 
     def startup_init_update_timer(self):
-        """ start the update timer with a delayed startup
-        """
+        """ start the update timer with a delayed startup. """
         logger.debug('Starting delayed update timer')
         GObject.timeout_add_seconds(DELAYED_START, self.start_update_timer)
 
