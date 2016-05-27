@@ -53,6 +53,5 @@ except Exception as e:
             '/usr/bin/dbus-send --system --print-reply '
             '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
             shell=True)
-    except:
-        pass
-sys.exit(1)
+    finally:
+        sys.exit(1)
