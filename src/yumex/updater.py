@@ -102,26 +102,26 @@ class _UpdateTimestamp:
         returns time difference to last check in seconds >=0 or -1 on error
         '''
         try:
-            t = int(time.time())
+            now = int(time.time())
             if self.__last_time == -1:
-                f = open(self.__time_file, 'r')
-                t_old = int(f.read())
-                f.close()
+                file = open(self.__time_file, 'r')
+                t_old = int(file.read())
+                file.close()
                 self.__last_time = t_old
-            if self.__last_time > t:
+            if self.__last_time > now:
                 return -1
-            return t - self.__last_time
+            return now - self.__last_time
         except:
             pass
         return -1
 
     def store_current_time(self):
         """Save current time stamp permanently."""
-        t = int(time.time())
-        f = open(self.__time_file, 'w')
-        f.write(str(t))
-        f.close()
-        self.__last_time = t
+        now = int(time.time())
+        file = open(self.__time_file, 'w')
+        file.write(str(now))
+        file.close()
+        self.__last_time = now
 
 
 class _Updater:
@@ -139,8 +139,8 @@ class _Updater:
         # dnfdaemon client setup
         try:
             self.__backend = dnfdaemon.client.Client()
-        except dnfdaemon.client.DaemonError as e:
-            msg = str(e)
+        except dnfdaemon.client.DaemonError as error:
+            msg = str(error)
             logger.debug('Error starting dnfdaemon service: [%s]', msg)
             error_notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
@@ -150,26 +150,28 @@ class _Updater:
         try:
             if self.__backend.Lock():
                 pkgs = self.__backend.GetPackages('updates')
-                rc = len(pkgs)
-                logger.debug('# of updates : %d' % rc)
+                update_count = len(pkgs)
+                logger.debug('# of updates : %d' % update_count)
                 self.__backend.Unlock()
             else:
                 logger.debug('Error getting the dnfdaemon lock')
-                rc = -1
+                update_count = -1
         except:  # catch backend exception
             logger.debug('Error in getting updates')
-            rc = -1
-        if rc > 0:
+            update_count = -1
+        if update_count > 0:
             if self.__mute_count < 1:
                 # Only show the same notification once
                 # until the user closes the notification
-                if rc != self.__last_num_updates:
-                    logger.debug('notification opened : # updates = %d', rc)
+                if update_count != self.__last_num_updates:
+                    logger.debug('notification opened : # updates = %d',
+                                 update_count)
                     notify = _Notification(_('New Updates'),
-                                          _('%s available updates') % rc)
+                                           _('%s available updates')
+                                           % update_count)
                     notify.connect('notify-action', self.__on_notify_action)
                     notify.show()
-                    self.__last_num_updates = rc
+                    self.__last_num_updates = update_count
                 else:
                     logger.debug('skipping notification (same # of updates)')
             else:
@@ -178,7 +180,7 @@ class _Updater:
                              self.__mute_count)
         self.__update_timestamp.store_current_time()
         self.start_update_timer()  # restart update timer if necessary
-        return rc
+        return update_count
 
 #=========================================================================
 # Callbacks
