@@ -141,17 +141,13 @@ class _Updater:
 
     def __get_updates(self):
         logger.debug('Checking for updates')
-        try:
-            if self.__backend.Lock():
-                pkgs = self.__backend.GetPackages('updates')
-                update_count = len(pkgs)
-                logger.debug('# of updates : %d' % update_count)
-                self.__backend.Unlock()
-            else:
-                logger.debug('Error getting the dnfdaemon lock')
-                update_count = -1
-        except:  # catch backend exception
-            logger.debug('Error in getting updates')
+        if self.__backend.Lock():
+            pkgs = self.__backend.GetPackages('updates')
+            update_count = len(pkgs)
+            self.__backend.Unlock()
+            logger.debug('#Number of updates : %d', update_count)
+        else:
+            logger.debug('Could not get the dnfdaemon lock')
             update_count = -1
         if update_count > 0:
             if self.__mute_count < 1:
