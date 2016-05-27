@@ -93,19 +93,21 @@ class _UpdateTimestamp:
         '''
         returns time difference to last check in seconds >=0 or -1 on error
         '''
-        try:
-            now = int(time.time())
-            if self.__last_time == -1:
+        now = int(time.time())
+        if self.__last_time == -1:
+            try:
                 file = open(self.__time_file, 'r')
                 t_old = int(file.read())
                 file.close()
                 self.__last_time = t_old
-            if self.__last_time > now:
-                return -1
-            return now - self.__last_time
-        except:
-            pass
-        return -1
+            except OSError as ose:
+                # File has not been written yet, this might happen on first run
+                logger.info('Error reading last timestamp from file: %s',
+                            ose.strerror)
+                self.__last_time = 0
+        if self.__last_time > now:
+            return -1
+        return now - self.__last_time
 
     def store_current_time(self):
         """Save current time stamp permanently."""
