@@ -190,18 +190,15 @@ class _Updater:
             logger.debug('setting mute_count = 10')
             self.__mute_count = 10
         elif action == 'show':
-            self.__run_yumex()
+            logger.debug('Starting: %s', YUMEX_BIN)
+            flags = Gio.AppInfoCreateFlags.NONE
+            yumex_app = Gio.AppInfo.create_from_commandline(
+                YUMEX_BIN, YUMEX_BIN, flags)
+            yumex_app.launch(None, None)
         elif action == 'closed':
             # reset the last number of updates notified
             # so we will get a new notification at next check
             self.__last_num_updates = 0
-
-    def __run_yumex(self, param=[]):
-        logger.debug('run yumex')
-        cmd = [YUMEX_BIN]
-        cmd.extend(param)
-        logger.debug('Starting: %s' % " ".join(cmd))
-        Popen(cmd).pid
 
     def startup_init_update_timer(self):
         """ start the update timer with a delayed startup. """
