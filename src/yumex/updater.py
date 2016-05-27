@@ -48,7 +48,7 @@ TIMESTAMP_FILE = os.path.join(CONF_DIR, 'update_timestamp.conf')
 DELAYED_START = 5 * 60  # Seconds before first check
 
 
-class Notification(GObject.GObject):
+class _Notification(GObject.GObject):
     __gsignals__ = {
         'notify-action': (GObject.SignalFlags.RUN_FIRST, None,
                           (str,))
@@ -58,20 +58,21 @@ class Notification(GObject.GObject):
         GObject.GObject.__init__(self)
         Notify.init('Yum Extender')
         icon = "yumex-dnf"
-        self.notification = Notify.Notification.new(summary, body, icon)
-        self.notification.set_timeout(10000)  # timeout 10s
-        self.notification.add_action('later', _('Not Now'),
-                                     self.callback)
-        self.notification.add_action('show', _('Show Updates'), self.callback)
-        self.notification.connect('closed', self.on_closed)
+        self.__notification = Notify.Notification.new(summary, body, icon)
+        self.__notification.set_timeout(10000)  # timeout 10s
+        self.__notification.add_action('later', _('Not Now'),
+                                       self.__callback)
+        self.__notification.add_action('show', _('Show Updates'),
+                                       self.__callback)
+        self.__notification.connect('closed', self.__on_closed)
 
     def show(self):
-        self.notification.show()
+        self.__notification.show()
 
-    def callback(self, widget, action):
+    def __callback(self, widget, action):
         self.emit('notify-action', action)
 
-    def on_closed(self, widget):
+    def __on_closed(self, widget):
         self.emit('notify-action', 'closed')
 
 
@@ -83,15 +84,15 @@ def error_notify(summary, body):
     notification.show()
 
 
-class UpdateTimestamp:
+class _UpdateTimestamp:
 
     '''
     a persistent timestamp. eg for storing the last update check
     '''
 
     def __init__(self, file_name=TIMESTAMP_FILE):
-        self.time_file = file_name
-        self.last_time = -1
+        self.__time_file = file_name
+        self.__last_time = -1
 
     def get_last_time_diff(self):
         '''
@@ -99,55 +100,55 @@ class UpdateTimestamp:
         '''
         try:
             t = int(time.time())
-            if self.last_time == -1:
-                f = open(self.time_file, 'r')
+            if self.__last_time == -1:
+                f = open(self.__time_file, 'r')
                 t_old = int(f.read())
                 f.close()
-                self.last_time = t_old
-            if self.last_time > t:
+                self.__last_time = t_old
+            if self.__last_time > t:
                 return -1
-            return t - self.last_time
+            return t - self.__last_time
         except:
             pass
         return -1
 
     def store_current_time(self):
         t = int(time.time())
-        f = open(self.time_file, 'w')
+        f = open(self.__time_file, 'w')
         f.write(str(t))
         f.close()
-        self.last_time = t
+        self.__last_time = t
 
 
-class Updater:
+class _Updater:
 
     def __init__(self):
         # update checking
-        self.update_timer_id = -1
-        self.update_timestamp = UpdateTimestamp()
-        self.next_update = 0
-        self.last_timestamp = 0
-        self.muted = False
-        self.mute_count = 0
-        self.last_num_updates = 0
+        self.__update_timer_id = -1
+        self.__update_timestamp = _UpdateTimestamp()
+        self.__next_update = 0
+        self.__last_timestamp = 0
+        self.__muted = False
+        self.__mute_count = 0
+        self.__last_num_updates = 0
 
         # dnfdaemon client setup
         try:
-            self.backend = dnfdaemon.client.Client()
+            self.__backend = dnfdaemon.client.Client()
         except dnfdaemon.client.DaemonError as e:
             msg = str(e)
             logger.debug('Error starting dnfdaemon service: [%s]', msg)
             error_notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
 
-    def get_updates(self, *args):
+    def __get_updates(self, *args):
         logger.debug('Checking for updates')
         try:
-            if self.backend.Lock():
-                pkgs = self.backend.GetPackages('updates')
+            if self.__backend.Lock():
+                pkgs = self.__backend.GetPackages('updates')
                 rc = len(pkgs)
                 logger.debug('# of updates : %d' % rc)
-                self.backend.Unlock()
+                self.__backend.Unlock()
             else:
                 logger.debug('Error getting the dnfdaemon lock')
                 rc = -1
@@ -155,43 +156,43 @@ class Updater:
             logger.debug('Error in getting updates')
             rc = -1
         if rc > 0:
-            if self.mute_count < 1:
+            if self.__mute_count < 1:
                 # Only show the same notification once
                 # until the user closes the notification
-                if rc != self.last_num_updates:
+                if rc != self.__last_num_updates:
                     logger.debug('notification opened : # updates = %d', rc)
-                    notify = Notification(_('New Updates'),
+                    notify = _Notification(_('New Updates'),
                                           _('%s available updates') % rc)
-                    notify.connect('notify-action', self.on_notify_action)
+                    notify.connect('notify-action', self.__on_notify_action)
                     notify.show()
-                    self.last_num_updates = rc
+                    self.__last_num_updates = rc
                 else:
                     logger.debug('skipping notification (same # of updates)')
             else:
-                self.mute_count -= 1
+                self.__mute_count -= 1
                 logger.debug('skipping notification : mute_count = %s',
-                             self.mute_count)
-        self.update_timestamp.store_current_time()
+                             self.__mute_count)
+        self.__update_timestamp.store_current_time()
         self.start_update_timer()  # restart update timer if necessary
         return rc
 
 #=========================================================================
 # Callbacks
 #=========================================================================
-    def on_notify_action(self, widget, action):
+    def __on_notify_action(self, widget, action):
         """Handle notification actions. """
         logger.debug('notify-action: %s', action)
         if action == 'later':
             logger.debug('setting mute_count = 10')
-            self.mute_count = 10
+            self.__mute_count = 10
         elif action == 'show':
-            self.run_yumex()
+            self.__run_yumex()
         elif action == 'closed':
             # reset the last number of updates notified
             # so we will get a new notification at next check
-            self.last_num_updates = 0
+            self.__last_num_updates = 0
 
-    def run_yumex(self, param=[]):
+    def __run_yumex(self, param=[]):
         logger.debug('run yumex')
         cmd = [YUMEX_BIN]
         cmd.extend(param)
@@ -208,11 +209,11 @@ class Updater:
         """
         start or restart the update timer: check when the last update was done
         """
-        if self.update_timer_id != -1:
-            GObject.source_remove(self.update_timer_id)
+        if self.__update_timer_id != -1:
+            GObject.source_remove(self.__update_timer_id)
 
         # in seconds
-        time_diff = self.update_timestamp.get_last_time_diff()
+        time_diff = self.__update_timestamp.get_last_time_diff()
         delay = CONFIG.conf.update_interval - int(time_diff / 60)
         if time_diff == -1 or delay < 0:
             delay = 0
@@ -220,30 +221,30 @@ class Updater:
         logger.debug(
             'Starting update timer with a '
             'delay of {0} min (time_diff={1})'.format(delay, time_diff))
-        self.next_update = delay
-        self.last_timestamp = int(time.time())
-        self.update_timer_id = GObject.timeout_add_seconds(
-            1, self.update_timeout)
+        self.__next_update = delay
+        self.__last_timestamp = int(time.time())
+        self.__update_timer_id = GObject.timeout_add_seconds(
+            1, self.__update_timeout)
         return False
 
-    def update_timeout(self):
-        self.next_update = self.next_update - 1
-        self.update_timer_id = -1
-        if self.next_update < 0:
+    def __update_timeout(self):
+        self.__next_update = self.__next_update - 1
+        self.__update_timer_id = -1
+        if self.__next_update < 0:
             # check for updates: this will automatically restart the
             # timer
-            self.get_updates()
+            self.__get_updates()
         else:
             cur_timestamp = int(time.time())
-            if cur_timestamp - self.last_timestamp > 60 * 2:
+            if cur_timestamp - self.__last_timestamp > 60 * 2:
                 # this can happen on hibernation/suspend
                 # or when the system time changes
                 logger.debug('Time changed: restarting update timer')
                 self.start_update_timer()
             else:
-                self.update_timer_id = GObject.timeout_add_seconds(
-                    60, self.update_timeout)
-            self.last_timestamp = cur_timestamp
+                self.__update_timer_id = GObject.timeout_add_seconds(
+                    60, self.__update_timeout)
+            self.__last_timestamp = cur_timestamp
         return False
 
 
@@ -256,25 +257,25 @@ class UpdateApplication(Gio.Application):
             application_id="dk.yumex.yumex-updater",
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
-        self.connect("activate", self.on_activate)
-        self.connect("command-line", self.on_command_line)
-        self.connect("shutdown", self.on_shutdown)
-        self.running = False
-        self.args = None
-        self.updater = None
+        self.connect("activate", self.__on_activate)
+        self.connect("command-line", self.__on_command_line)
+        self.connect("shutdown", self.__on_shutdown)
+        self.__running = False
+        self.__args = None
+        self.__updater = None
 
-    def on_activate(self, app):
-        self.running = True
-        self.updater = Updater()
-        if not self.args.delay:
-            self.updater.startup_init_update_timer()
+    def __on_activate(self, app):
+        self.__running = True
+        self.__updater = _Updater()
+        if not self.__args.delay:
+            self.__updater.startup_init_update_timer()
         else:
-            self.updater.start_update_timer()
+            self.__updater.start_update_timer()
         Gtk.main()
         return 0
 
-    def _log_setup(self):
-        if self.args.debug:
+    def __log_setup(self):
+        if self.__args.debug:
             misc.logger_setup(
                 logroot='yumex.updater',
                 logfmt='%(asctime)s: [%(name)s] - %(message)s',
@@ -282,33 +283,33 @@ class UpdateApplication(Gio.Application):
         else:
             misc.logger_setup()
 
-    def on_command_line(self, app, args):
+    def __on_command_line(self, app, args):
         parser = argparse.ArgumentParser(prog='app')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('--exit', action='store_true')
         parser.add_argument('--delay', type=int)
-        if not self.running:
+        if not self.__running:
             # First run
-            self.args = parser.parse_args(args.get_arguments()[1:])
-            self._log_setup()
-            if self.args.delay:
-                CONFIG.conf.update_interval = self.args.delay
+            self.__args = parser.parse_args(args.get_arguments()[1:])
+            self.__log_setup()
+            if self.__args.delay:
+                CONFIG.conf.update_interval = self.__args.delay
             logger.debug('first run')
         else:
             logger.debug('second run')
             # Second Run
             # parse cmdline in a non quitting way
-            self.current_args = \
+            self.__current_args = \
                 parser.parse_known_args(args.get_arguments()[1:])[0]
-            if self.current_args.exit:
+            if self.__current_args.exit:
                 logger.debug('quitting')
                 self.quit()
                 sys.exit(0)
-        if self.args.exit:  # kill dnf daemon and quit
+        if self.__args.exit:  # kill dnf daemon and quit
             misc.dbus_dnfsystem('Exit')
             sys.exit(0)
         self.activate()
         return 0
 
-    def on_shutdown(self, app):
+    def __on_shutdown(self, app):
         return 0
