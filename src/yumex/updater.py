@@ -145,7 +145,7 @@ class _Updater:
             error_notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
 
-    def __get_updates(self, *args):
+    def __get_updates(self):
         logger.debug('Checking for updates')
         try:
             if self.__backend.Lock():
