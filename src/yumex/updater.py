@@ -247,7 +247,7 @@ class UpdateApplication(Gio.Application):
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
         self.connect("activate", self.__on_activate)
-        self.connect("command-line", self.__on_command_line)
+        self.connect("command-line", UpdateApplication.__on_command_line)
         self.__updater = None
         self.__main_loop = GLib.MainLoop.new(GLib.MainContext.default(), False)
 
