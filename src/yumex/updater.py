@@ -79,14 +79,6 @@ class _Notification(GObject.GObject):
         self.emit('notify-action', 'closed')
 
 
-def error_notify(summary, body):
-    Notify.init('Yum Extender')
-    icon = "yumex-dnf"
-    notification = Notify.Notification.new(summary, body, icon)
-    notification.set_timeout(5000)  # timeout 5s
-    notification.show()
-
-
 class _UpdateTimestamp:
 
     '''
@@ -142,7 +134,7 @@ class _Updater:
         except dnfdaemon.client.DaemonError as error:
             msg = str(error)
             logger.debug('Error starting dnfdaemon service: [%s]', msg)
-            error_notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
+            misc.notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
 
     def __get_updates(self):
