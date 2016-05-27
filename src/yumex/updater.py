@@ -17,6 +17,7 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+from _signal import SIGINT, SIGTERM, SIGHUP
 
 
 import argparse
@@ -261,7 +262,15 @@ class UpdateApplication(Gio.Application):
             self.__updater.startup_init_update_timer()
         else:
             self.__updater.start_update_timer()
+        signals = [SIGINT, SIGTERM, SIGHUP]
+        for signal in signals:
+            GLib.unix_signal_add_full(GLib.PRIORITY_HIGH, signal,
+                                      self.__on_unix_signal)
         self.__main_loop.run()
+
+    def __on_unix_signal(self):
+        self.__cleanup_and_quit()
+        return GLib.SOURCE_REMOVE
 
     def __cleanup_and_quit(self):
         # all of UpdateApplication is running in main loop, so this is easy
