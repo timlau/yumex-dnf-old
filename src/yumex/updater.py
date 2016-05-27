@@ -19,8 +19,6 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 from _signal import SIGINT, SIGTERM, SIGHUP
 
-
-import argparse
 import logging
 import os
 import sys
@@ -252,13 +250,26 @@ class UpdateApplication(Gio.Application):
 
         self.connect("activate", self.__on_activate)
         self.connect("command-line", self.__on_command_line)
-        self.__args = None
         self.__updater = None
         self.__main_loop = GLib.MainLoop.new(GLib.MainContext.default(), False)
 
+        self.add_main_option(
+            "debug", ord('d'), GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
+            "Enable advanced debug output", None)
+        self.__debug = False
+        self.add_main_option(
+            "exit", 0, GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
+            "Quit other updater instance", None)
+        self.add_main_option(
+            "delay", 0, GLib.OptionFlags.NONE, GLib.OptionArg.INT,
+            "Specify delay between update notifications, in seconds. "
+            "If omitted, the value will be read from configuration files.",
+            "timeout")
+        self.__delay = None
+
     def __on_activate(self, app):
         self.__updater = _Updater()
-        if not self.__args.delay:
+        if not self.__delay:
             self.__updater.startup_init_update_timer()
         else:
             self.__updater.start_update_timer()
@@ -278,7 +289,7 @@ class UpdateApplication(Gio.Application):
         self.__main_loop.quit()
 
     def __log_setup(self):
-        if self.__args.debug:
+        if self.__debug:
             misc.logger_setup(
                 logroot='yumex.updater',
                 logfmt='%(asctime)s: [%(name)s] - %(message)s',
@@ -287,30 +298,53 @@ class UpdateApplication(Gio.Application):
             misc.logger_setup()
 
     def __on_command_line(self, new_cli):
-        parser = argparse.ArgumentParser(prog='app')
-        parser.add_argument('-d', '--debug', action='store_true')
-        parser.add_argument('--exit', action='store_true')
-        parser.add_argument('--delay', type=int)
+        options = new_cli.get_options_dict()
+        debug = options.contains('debug')
+        do_exit = options.contains('exit')
+        if options.contains('delay'):
+            delay = options.lookup_value('delay', GLib.VariantType("i")) \
+                .get_int32()
+            if not delay > 0:
+                Gio.ApplicationCommandLine.do_printerr_literal(
+                    new_cli, "Delay must be a number greater than 0.\n")
+                return 2
+        else:
+            delay = False
+
+        exit_status = 0
 
         if new_cli.get_is_remote():  # second instance
-            # First run
-            self.__args = parser.parse_args(args.get_arguments()[1:])
-            self.__log_setup()
-            if self.__args.delay:
-                CONFIG.conf.update_interval = self.__args.delay
-            logger.debug('first run')
+            logger.debug('Successive run. Remote arguments: %s',
+                         new_cli.get_arguments())
+            # --debug
+            if self.__debug:
+                Gio.ApplicationCommandLine.do_printerr_literal(
+                    new_cli, "Can't change debug level of remote updater.\n")
+                exit_status = 1
+            # --delay
+            if delay:
+                logger.debug('Changing delay from remote command')
+                self.__delay = delay
+                # TODO restart timer
+                CONFIG.conf.update_interval = delay
+            # --exit
+            if do_exit:  # kill dnf daemon and quit
+                logger.debug('quitting from remote command')
+                self.__cleanup_and_quit()
+            return exit_status  # return status of second instance
         else:
-            logger.debug('second run')
-            # Second Run
-            # parse cmdline in a non quitting way
-            self.__current_args = \
-                parser.parse_known_args(args.get_arguments()[1:])[0]
-            if self.__current_args.exit:
-                logger.debug('quitting')
-                self.quit()
-                sys.exit(0)
-        if self.__args.exit:  # kill dnf daemon and quit
-            misc.dbus_dnfsystem('Exit')
-            sys.exit(0)
-        self.activate()
-        return 0
+            # --debug
+            self.__debug = debug
+            self.__log_setup()
+            logger.debug('First run')
+            # --delay
+            if delay:
+                self.__delay = delay
+                CONFIG.conf.update_interval = delay
+            # --exit
+            if do_exit:
+                print("Updater was not running")
+                exit_status = 1
+            # run
+            self.activate()
+        return exit_status
