@@ -72,10 +72,10 @@ class _Notification(GObject.GObject):
         """Show the notification. This call does not block."""
         self.__notification.show()
 
-    def __callback(self, widget, action):
+    def __callback(self, notification, action):
         self.emit('notify-action', action)
 
-    def __on_closed(self, widget):
+    def __on_closed(self, notification):
         self.emit('notify-action', 'closed')
 
 
@@ -177,7 +177,7 @@ class _Updater:
 #=========================================================================
 # Callbacks
 #=========================================================================
-    def __on_notify_action(self, widget, action):
+    def __on_notify_action(self, notification, action):
         """Handle notification actions. """
         logger.debug('notify-action: %s', action)
         if action == 'later':
