@@ -1,4 +1,10 @@
-#!/usr/bin/python3
+"""
+    Anything needed to provide update notifications for users by a headless
+    background process.
+
+    This module is intended to be called by instantiating UpdateApplication
+    from src/yumex/update.py.
+"""
 # -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A GUI for yum
 #    Copyright (C) 2015 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
@@ -23,7 +29,6 @@ import logging
 import os
 import sys
 import time
-from subprocess import Popen
 
 from gi.repository import Gio, Notify, GObject, GLib
 from xdg import BaseDirectory
@@ -51,8 +56,7 @@ class _Notification(GObject.GObject):
     """Used to notify users of available updates"""
 
     __gsignals__ = {
-        'notify-action': (GObject.SignalFlags.RUN_FIRST, None,
-                          (str,))
+        'notify-action': (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
     def __init__(self, summary, body):
@@ -79,7 +83,6 @@ class _Notification(GObject.GObject):
 
 
 class _UpdateTimestamp:
-
     '''
     a persistent timestamp. e.g. for storing the last update check
     '''
@@ -125,7 +128,6 @@ class _Updater:
         self.__update_timestamp = _UpdateTimestamp()
         self.__next_update = 0
         self.__last_timestamp = 0
-        self.__muted = False
         self.__mute_count = 0
         self.__last_num_updates = 0
 
@@ -171,9 +173,6 @@ class _Updater:
         self.start_update_timer()  # restart update timer if necessary
         return update_count
 
-#=========================================================================
-# Callbacks
-#=========================================================================
     def __on_notify_action(self, notification, action):
         """Handle notification actions. """
         logger.debug('notify-action: %s', action)
@@ -209,9 +208,8 @@ class _Updater:
         if time_diff == -1 or delay < 0:
             delay = 0
 
-        logger.debug(
-            'Starting update timer with a '
-            'delay of {0} min (time_diff={1})'.format(delay, time_diff))
+        logger.debug('Starting update timer with a delay of %i min'
+                     ' (time_diff=%i)', delay, time_diff)
         self.__next_update = delay
         self.__last_timestamp = int(time.time())
         self.__update_timer_id = GObject.timeout_add_seconds(
@@ -268,6 +266,7 @@ class UpdateApplication(Gio.Application):
         self.__delay = None
 
     def __on_activate(self, app):
+        logger.debug("UpdateApplication activated")
         self.__updater = _Updater()
         if not self.__delay:
             self.__updater.startup_init_update_timer()
