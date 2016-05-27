@@ -26,7 +26,7 @@ import sys
 import time
 from subprocess import Popen
 
-from gi.repository import Gio, Gtk, Notify, GObject
+from gi.repository import Gio, Notify, GObject, GLib
 from xdg import BaseDirectory
 
 import dnfdaemon.client
@@ -251,20 +251,22 @@ class UpdateApplication(Gio.Application):
 
         self.connect("activate", self.__on_activate)
         self.connect("command-line", self.__on_command_line)
-        self.connect("shutdown", self.__on_shutdown)
-        self.__running = False
         self.__args = None
         self.__updater = None
+        self.__main_loop = GLib.MainLoop.new(GLib.MainContext.default(), False)
 
     def __on_activate(self, app):
-        self.__running = True
         self.__updater = _Updater()
         if not self.__args.delay:
             self.__updater.startup_init_update_timer()
         else:
             self.__updater.start_update_timer()
-        Gtk.main()
-        return 0
+        self.__main_loop.run()
+
+    def __cleanup_and_quit(self):
+        # all of UpdateApplication is running in main loop, so this is easy
+        misc.dbus_dnfsystem('Exit')
+        self.__main_loop.quit()
 
     def __log_setup(self):
         if self.__args.debug:
@@ -275,12 +277,13 @@ class UpdateApplication(Gio.Application):
         else:
             misc.logger_setup()
 
-    def __on_command_line(self, app, args):
+    def __on_command_line(self, new_cli):
         parser = argparse.ArgumentParser(prog='app')
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument('--exit', action='store_true')
         parser.add_argument('--delay', type=int)
-        if not self.__running:
+
+        if new_cli.get_is_remote():  # second instance
             # First run
             self.__args = parser.parse_args(args.get_arguments()[1:])
             self.__log_setup()
@@ -301,7 +304,4 @@ class UpdateApplication(Gio.Application):
             misc.dbus_dnfsystem('Exit')
             sys.exit(0)
         self.activate()
-        return 0
-
-    def __on_shutdown(self, app):
         return 0
