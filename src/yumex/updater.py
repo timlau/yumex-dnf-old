@@ -304,7 +304,7 @@ class UpdateApplication(Gio.Application):
             delay = options.lookup_value('delay', GLib.VariantType("i")) \
                 .get_int32()
             if not delay > 0:
-                Gio.ApplicationCommandLine.do_printerr_literal(
+                new_cli.do_printerr_literal(
                     new_cli, "Delay must be a number greater than 0.\n")
                 return 2
         else:
@@ -314,10 +314,10 @@ class UpdateApplication(Gio.Application):
 
         if new_cli.get_is_remote():  # second instance
             logger.debug('Successive run. Remote arguments: %s',
-                         new_cli.get_arguments())
+                         " ".join(new_cli.get_arguments()))
             # --debug
             if self.__debug:
-                Gio.ApplicationCommandLine.do_printerr_literal(
+                new_cli.do_printerr_literal(
                     new_cli, "Can't change debug level of remote updater.\n")
                 exit_status = 1
             # --delay
