@@ -66,12 +66,6 @@ else:  # use x86_64 as fallback
 
 DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w\.]*): (.*)$')
 
-ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
-ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
-ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
-ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
-ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
-
 # Constants
 
 # Main UI stack names
@@ -87,18 +81,6 @@ ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
 FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
                   'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri',
                   'localinstall': 'li', 'updates_all': 'u'}
-
-
-PACKAGE_COLORS = {
-    'i': 'black',
-    'u': 'red',
-    'r': 'darkgreen',
-    'o': 'blue',
-    'ri': 'red',
-    'do': 'goldenrod',
-    'li': 'black'
-
-}
 
 BACKEND_ACTIONS = {'update': 'u', 'install': 'i', 'remove': 'r',
                    'obsolete': 'o', 'downgrade': 'do'}
