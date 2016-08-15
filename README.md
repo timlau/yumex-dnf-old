@@ -54,3 +54,7 @@ Use this to enable it.
 ```
 sudo dnf copr enable timlau/yumex-dnf
 ```
+
+Contributing
+============
+Please [report bugs](https://github.com/timlau/yumex-dnf/issues) if you find some. In case you want to [propose changes](https://github.com/timlau/yumex-dnf/pulls), please do so on Github after [testing](https://github.com/timlau/yumex-dnf/wiki/Testing-yumex-for-developing) them. If you want to contribute translations, please do so on [Transifex](https://www.transifex.com/timlau/yumex/).
