@@ -96,7 +96,7 @@ msgstr "%s wurde erfolgreich entfernt"
 
 #: ../src/yumex/__init__.py:826 ../src/yumex/old_init.py:264
 msgid "Updating all available updates"
-msgstr "Update alle verfügbaren Aktualisierungen"
+msgstr "Installiere alle verfügbaren Aktualisierungen"
 
 #: ../src/yumex/__init__.py:827
 msgid "Available updates was applied successfully"
@@ -129,7 +129,7 @@ msgstr "Pakete werden zur Ansicht hinzugefügt"
 
 #: ../src/yumex/__init__.py:1064 ../src/yumex/old_init.py:728
 msgid "Error in undo history transaction"
-msgstr "Fehler beim Zurückrollen der Transaktion"
+msgstr "Fehler beim Rückgängig machen der Transaktion"
 
 #: ../src/yumex/dnf_backend.py:181
 #, python-format
@@ -650,7 +650,7 @@ msgstr "Alle verfügbaren Aktualisierungen beim Start auswählen"
 msgid ""
 "The interval in hour, when the DNF cache will be expired and updated (0 = "
 "disabled)"
-msgstr "Interval in Stunden, nachdem der DNF-Zwischenspeicher als veraltet markiert und aktualisiert wird (0 = deaktiviert)"
+msgstr "Intervall in Stunden, nachdem der DNF-Zwischenspeicher als veraltet markiert und aktualisiert wird (0 = deaktiviert)"
 
 #: ../src/yumex.ui.h:22
 msgid "Cache expire interval (hours)"
@@ -821,7 +821,7 @@ msgstr "Präfix des Paketnamens"
 
 #: ../src/yumex.ui.h:66
 msgid "Package names starting with search key"
-msgstr "Paketnamen die mit Suchwort beginnen"
+msgstr "Paketnamen die mit Suchbegriff beginnen"
 
 #: ../src/yumex.ui.h:67
 msgid "Keyword"
@@ -829,7 +829,7 @@ msgstr "Schlüsselwort"
 
 #: ../src/yumex.ui.h:68
 msgid "Package names containing search key"
-msgstr "Paketnamen die Suchwort enthalten"
+msgstr "Paketnamen die den Suchbegriff enthalten"
 
 #: ../src/yumex.ui.h:69
 msgid "Fields"
