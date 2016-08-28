@@ -55,7 +55,7 @@ ARCH = subprocess.check_output(
 ARCH_DICT = {
     "x86_64": set(['x86_64', 'i686', 'i386', 'noarch']),
     "i386": set(['i686', 'i386', 'noarch']),
-    "armhfp": set(['armv7hl', 'noarch'])
+    "arm": set(['armv7hl', 'noarch'])
 }
 
 # arch for this platform
