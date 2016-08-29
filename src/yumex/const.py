@@ -27,7 +27,7 @@ import hawkey
 
 from yumex.misc import _
 
-VERSION = "4.3.2"
+VERSION = "4.3.3"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 
@@ -55,7 +55,7 @@ ARCH = subprocess.check_output(
 ARCH_DICT = {
     "x86_64": set(['x86_64', 'i686', 'i386', 'noarch']),
     "i386": set(['i686', 'i386', 'noarch']),
-    "armhfp": set(['armv7hl', 'noarch'])
+    "arm": set(['armv7hl', 'noarch'])
 }
 
 # arch for this platform
