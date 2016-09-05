@@ -373,6 +373,7 @@ class PackageDetails(GObject.GObject):
         self.url_tags = []
         self.underlined_url = False
         self.url_list = {}
+        self._listbox.select_row(self.win.get_ui('list_desc'))
 
     def show(self, show=True):
         if show:
