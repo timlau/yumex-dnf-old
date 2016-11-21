@@ -35,7 +35,7 @@ from xdg import BaseDirectory
 
 import dnfdaemon.client
 
-from yumex.misc import _, CONFIG
+from yumex.misc import _, ngettext, CONFIG
 import yumex.misc as misc
 
 LOG_ROOT = 'yumex.updater'
@@ -158,7 +158,10 @@ class _Updater:
                     logger.debug('notification opened : # updates = %d',
                                  update_count)
                     notify = _Notification(_('New Updates'),
-                                           _('%s available updates')
+                    # Translators: %d is a number of available updates
+                                           ngettext('%d available update',
+                                                    '%d available updates',
+                                                    update_count)
                                            % update_count)
                     notify.connect('notify-action', self.__on_notify_action)
                     notify.show()

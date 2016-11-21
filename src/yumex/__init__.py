@@ -28,7 +28,7 @@ import sys
 
 from gi.repository import Gio, Gtk, Gdk
 
-from yumex.misc import _, CONFIG
+from yumex.misc import _, ngettext, CONFIG
 import yumex.const as const
 import yumex.misc as misc
 import yumex.dnf_backend
@@ -817,13 +817,17 @@ class Window(BaseWindow):
 
         if rc == 4:  # Download errors
             dialogs.show_information(
-                self, _('Downloading error(s)\n'),
+                self,
+                ngettext('Downloading error\n',
+                         'Downloading errors\n', len(result)),
                 '\n'.join(result))
             self._reset_on_cancel()
             return
         elif rc != 0:  # other transaction errors
             dialogs.show_information(
-                self, _('Error in transaction\n'),
+                self,
+                ngettext('Error in transaction\n',
+                         'Errors in transaction\n', len(result)),
                 '\n'.join(result))
         self._reset()
         return
@@ -870,7 +874,9 @@ class Window(BaseWindow):
                 misc.notify('Yum Extender', exit_msg)
         else:
             dialogs.show_information(
-                self, _('Error(s) in search for dependencies'),
+                self,
+                ngettext('Error in search for dependencies',
+                         'Errors in search for dependencies', len(result)),
                 '\n'.join(result))
         if app_quit:
             self.release_root_backend(quit_dnfdaemon=True)
@@ -897,7 +903,8 @@ class Window(BaseWindow):
             check = self._check_protected(result)
             if check:
                 self.error_dialog.show(
-                    _("Can't remove protected package(s):") +
+                    ngettext("Can't remove protected package:",
+                             "Can't remove protected packages:", len(check)) +
                     misc.list_to_string(check, "\n ", ",\n "))
                 self._reset_on_cancel()
                 return
@@ -916,11 +923,14 @@ class Window(BaseWindow):
         except misc.TransactionBuildError as e:
             # Error in building transaction
             self.error_dialog.show(
-                _('Error(s) in building transaction') + '\n'.join(e.msgs))
+                ngettext('Error in building transaction',
+                         'Errors in building transaction', len(e.msgs)) +
+                    '\n'.join(e.msgs))
             self._reset_on_cancel()
         except misc.TransactionSolveError as e:
             self.error_dialog.show(
-                    _('Error(s) in search for dependencies') +
+                    ngettext('Error in search for dependencies',
+                             'Errors in search for dependencies', len(e.msgs)) +
                     '\n'.join(e.msgs))
             self._reset_on_error()
 

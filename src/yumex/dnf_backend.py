@@ -27,7 +27,7 @@ import dnfdaemon.client
 import yumex.backend
 import yumex.misc
 import yumex.const as const
-from yumex.misc import ExceptionHandler, TimeFunction, _, CONFIG
+from yumex.misc import ExceptionHandler, TimeFunction, _, ngettext, CONFIG
 
 logger = logging.getLogger('yumex.yum_backend')
 
@@ -241,7 +241,12 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
         self.frontend.infobar.info_sub(
-            _('Downloading %d files (%sB)...') %
+            # Translators: %d will be replaced with the number of files
+            # to download; %s will be replaced with the preformatted
+            # number of bytes to download + the prefix (k, M, etc.)
+            # Note that 'B' for 'bytes' is already here, it must be preserved.
+            ngettext('Downloading %d file (%sB)...',
+                     'Downloading %d files (%sB)...', num_files) %
             (num_files, yumex.misc.format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):

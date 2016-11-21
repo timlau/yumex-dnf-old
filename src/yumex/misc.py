@@ -40,7 +40,7 @@ locale.bindtextdomain('yumex-dnf', LOCALE_DIR)
 gettext.bindtextdomain('yumex-dnf', LOCALE_DIR)
 gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
-P_ = gettext.ngettext
+ngettext = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
