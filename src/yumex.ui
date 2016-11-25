@@ -912,7 +912,6 @@ start Yum Extender</property>
                         <property name="margin_right">10</property>
                         <property name="margin_start">6</property>
                         <property name="margin_end">10</property>
-                        <property name="label" translatable="yes">label</property>
                         <attributes>
                           <attribute name="weight" value="ultrabold"/>
                         </attributes>
@@ -945,7 +944,6 @@ start Yum Extender</property>
                         <property name="margin_right">10</property>
                         <property name="margin_start">20</property>
                         <property name="margin_end">10</property>
-                        <property name="label" translatable="yes">label</property>
                         <attributes>
                           <attribute name="scale" value="0.84999999999999998"/>
                           <attribute name="stretch" value="condensed"/>
@@ -1126,7 +1124,7 @@ start Yum Extender</property>
                                   <object class="GtkListBoxRow" id="pkg_flt_row_updates">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Show available updates (Ctrl - 1)</property>
+                                    <property name="tooltip_text" translatable="yes">Show available updates (Ctrl+1)</property>
                                     <property name="margin_left">6</property>
                                     <property name="margin_right">6</property>
                                     <child>
@@ -1143,7 +1141,7 @@ start Yum Extender</property>
                                   <object class="GtkListBoxRow" id="pkg_flt_row_installed">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Show installed packages (Ctrl - 2)</property>
+                                    <property name="tooltip_text" translatable="yes">Show installed packages (Ctrl+2)</property>
                                     <property name="margin_left">6</property>
                                     <property name="margin_right">6</property>
                                     <child>
@@ -1160,7 +1158,7 @@ start Yum Extender</property>
                                   <object class="GtkListBoxRow" id="pkg_flt_row_available">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Show available packages (Ctrl - 3)</property>
+                                    <property name="tooltip_text" translatable="yes">Show available packages (Ctrl+3)</property>
                                     <property name="margin_left">6</property>
                                     <property name="margin_right">6</property>
                                     <child>
@@ -1177,7 +1175,7 @@ start Yum Extender</property>
                                   <object class="GtkListBoxRow" id="pkg_flt_row_all">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Show all packages (Ctrl - 4)</property>
+                                    <property name="tooltip_text" translatable="yes">Show all packages (Ctrl+4)</property>
                                     <property name="margin_left">6</property>
                                     <property name="margin_right">6</property>
                                     <child>
