@@ -36,9 +36,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="can_focus">False</property>
-            <property name="margin_right">12</property>
-            <property name="margin_top">6</property>
-            <property name="margin_bottom">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pref_ok">
@@ -533,17 +530,14 @@ active when Yum Extender starts</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="repo_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
                     <property name="margin_start">10</property>
                     <property name="margin_end">10</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
                     <property name="label" translatable="yes">Repositories used in current session</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -560,8 +554,6 @@ active when Yum Extender starts</property>
                     <property name="height_request">400</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
                     <property name="margin_start">6</property>
                     <property name="margin_end">6</property>
                     <property name="vexpand">True</property>
@@ -578,36 +570,13 @@ active when Yum Extender starts</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box4">
+                  <object class="GtkCheckButton" id="pref_repo_saved">
+                    <property name="label" translatable="yes">Save selected repositories</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Save the current selected repositories
-so they will be used next time you
-start Yum Extender</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
-                    <property name="margin_start">10</property>
-                    <property name="margin_end">10</property>
-                    <property name="margin_top">5</property>
-                    <property name="margin_bottom">5</property>
-                    <child>
-                      <object class="GtkCheckButton" id="pref_repo_saved">
-                        <property name="label" translatable="yes">Save selected repositories</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="halign">start</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -646,8 +615,6 @@ start Yum Extender</property>
           <object class="GtkButtonBox" id="pref_header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_top">6</property>
-            <property name="margin_bottom">6</property>
             <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
@@ -678,12 +645,9 @@ start Yum Extender</property>
   <object class="GtkTextBuffer" id="error_buffer"/>
   <object class="GtkDialog" id="error_dialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Errors</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">600</property>
-    <property name="default_height">260</property>
-    <property name="destroy_with_parent">True</property>
+    <property name="title" translatable="yes">Error</property>
+    <property name="default_width">400</property>
+    <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -902,14 +866,12 @@ start Yum Extender</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">5</property>
+                    <property name="column_spacing">10</property>
                     <child>
                       <object class="GtkLabel" id="infobar_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">10</property>
                         <property name="margin_start">6</property>
                         <property name="margin_end">10</property>
                         <attributes>
@@ -925,8 +887,6 @@ start Yum Extender</property>
                       <object class="GtkProgressBar" id="infobar_progress">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
-                        <property name="margin_right">10</property>
                         <property name="margin_start">10</property>
                         <property name="margin_end">10</property>
                         <property name="hexpand">True</property>
@@ -940,8 +900,7 @@ start Yum Extender</property>
                       <object class="GtkLabel" id="infobar_sublabel">
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin_left">20</property>
-                        <property name="margin_right">10</property>
+                        <property name="margin_left">10</property>
                         <property name="margin_start">20</property>
                         <property name="margin_end">10</property>
                         <attributes>
