@@ -1,6 +1,6 @@
-23-03-2017
-==========
-yumex-dnf if no longer under active development
+23-03-2017: yumex-dnf if no longer under active development
+============================================================
+
 
 Yum Extender (yumex-dnf)
 =========================
