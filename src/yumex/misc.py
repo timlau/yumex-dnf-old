@@ -267,15 +267,20 @@ class YumexConf(config.BaseConfig):
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
 
-    color_install = config.Option('#4E9A06')
-    color_update = config.Option('#CC0000')
-    color_downgrade = config.Option('#C17D11')
-    color_normal = config.Option('#000000')
-
     if check_dark_theme():
-        color_obsolete = config.Option('#3481A4')
+        print("Dark Theme")
+        color_install = config.Option('#0044aa') # Dark Blue
+        color_update = config.Option('#008000') # Dark Green
+        color_downgrade = config.Option('#aa4400') # Dark Brown
+        color_normal = config.Option('#ffffff')  # White
+        color_obsolete = config.Option('#800080') # Dark Purple
     else:
-        color_obsolete = config.Option('#3465A4')
+        print("light Theme")
+        color_install = config.Option('#2ad4ff') # Light Blue
+        color_update = config.Option('#00ff00') # Light Green
+        color_downgrade = config.Option('#Cff6600') # Light Brown
+        color_normal = config.Option('#000000') # Black
+        color_obsolete = config.Option('#ff00ff') # Light Purple
 
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)

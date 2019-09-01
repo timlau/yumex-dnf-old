@@ -466,10 +466,10 @@ class PackageDetails(GObject.GObject):
         if not tag:
             if yumex.misc.check_dark_theme():
                 tag = self._buffer.create_tag(text,
-                                              foreground="#4C4CFF")
+                                              foreground="#ff7800")
             else:
                 tag = self._buffer.create_tag(text,
-                                              foreground="blue")
+                                              foreground="#ff7800")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
