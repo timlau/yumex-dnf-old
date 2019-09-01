@@ -27,7 +27,7 @@ import hawkey
 
 from yumex.misc import _
 
-VERSION = "4.3.3"
+VERSION = "4.4.0"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 
@@ -149,6 +149,7 @@ RPM_ACTIONS = {
     'obsolete': _("Obsoleting: %s"),
     'downgrade': _("Downgrading: %s"),
     'verify': _("Verifying: %s"),
+    'scriptlet' : _("Running scriptlet for: %s")
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",

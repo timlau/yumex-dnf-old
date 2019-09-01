@@ -44,7 +44,6 @@ ngettext = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
-
 class QueueEmptyError(Exception):
 
     def __init__(self):

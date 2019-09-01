@@ -223,7 +223,11 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         else:  # this is just a pkg name (cleanup)
             name = package
         logger.debug('on_RPMProgress : [%s]', package)
-        self.frontend.infobar.info_sub(const.RPM_ACTIONS[action] % name)
+        action_msg = const.RPM_ACTIONS.get(action,None)
+        if action_msg:
+            self.frontend.infobar.info_sub( action_msg % name)
+        else:
+            logger.info("RPM Progress: Undefinded action {}".format(action))
         if ts_current > 0 and ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
