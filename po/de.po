@@ -3,16 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Marco Woitschitzky, 2016
-# Christian Stadelmann, 2015
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2014
+# 45403005f243ceb65fbd5f43eb20670e, 2015
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 18:49+0100\n"
-"PO-Revision-Date: 2016-08-15 16:49+0000\n"
-"Last-Translator: Marco Woitschitzky\n"
+"PO-Revision-Date: 2017-09-20 01:03+0000\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/timlau/yumex/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,13 +25,13 @@ msgstr "Paketquellen-Metadaten werden aktualisiert"
 
 #: ../src/yumex/__init__.py:119 ../src/yumex/old_init.py:144
 msgid "Could not refresh the DNF cache (root)"
-msgstr "DNF-Zwischenspeicher konnte nicht aktualisiert werden (root)"
+msgstr "Dnf-Zwischenspeicher konnte nicht aktualisiert werden (Root)"
 
 #: ../src/yumex/__init__.py:124 ../src/yumex/old_init.py:149
 msgid ""
 "DNF root backend was not authorized.\n"
 "Yum Extender will exit"
-msgstr "Das Root-Backend von DNF wurde nicht autorisiert.\nYum Extender wird beendet."
+msgstr "Das Root-Backend von Dnf wurde nicht autorisiert.\nYum Extender wird beendet."
 
 #: ../src/yumex/__init__.py:129 ../src/yumex/old_init.py:154
 msgid ""
@@ -43,7 +42,7 @@ msgstr "DNF wird von einem anderen Prozess gesperrt.\n\nYum Extender wird beende
 
 #: ../src/yumex/__init__.py:623
 msgid "Reloading package information..."
-msgstr "Neu laden der Paketinformationen..."
+msgstr "Paketinformationen werden neu geladen …"
 
 #: ../src/yumex/__init__.py:746 ../src/yumex/__init__.py:829
 #: ../src/yumex/old_init.py:266 ../src/yumex/old_init.py:1047
@@ -87,7 +86,7 @@ msgstr "%s wurde erfolgreich installiert"
 #: ../src/yumex/__init__.py:820 ../src/yumex/old_init.py:259
 #, python-format
 msgid "Removing package: %s"
-msgstr "Entferne Paket: %s"
+msgstr "Entferne Paket %s"
 
 #: ../src/yumex/__init__.py:821
 #, python-format
@@ -96,11 +95,11 @@ msgstr "%s wurde erfolgreich entfernt"
 
 #: ../src/yumex/__init__.py:826 ../src/yumex/old_init.py:264
 msgid "Updating all available updates"
-msgstr "Installiere alle verfügbaren Aktualisierungen"
+msgstr "Alle verfügbaren Aktualisierungen werden verarbeitet"
 
 #: ../src/yumex/__init__.py:827
 msgid "Available updates was applied successfully"
-msgstr "Verfügbare Aktualisierungen wurden erfolgreich installiert"
+msgstr "Verfügbare Aktualisierungen wurden erfolgreich angewendet"
 
 #: ../src/yumex/__init__.py:846 ../src/yumex/__init__.py:896
 #: ../src/yumex/old_init.py:286 ../src/yumex/old_init.py:1149
@@ -129,7 +128,7 @@ msgstr "Pakete werden zur Ansicht hinzugefügt"
 
 #: ../src/yumex/__init__.py:1064 ../src/yumex/old_init.py:728
 msgid "Error in undo history transaction"
-msgstr "Fehler beim Rückgängig machen der Transaktion"
+msgstr "Fehler beim Zurücknehmen der Chronik-Transaktion"
 
 #: ../src/yumex/dnf_backend.py:181
 #, python-format
@@ -137,7 +136,7 @@ msgid ""
 "dnfdaemon api version : %d\n"
 "don't match\n"
 "needed api version : %d"
-msgstr "dnfdaemon API-Version: %d\npasst nicht\nbenötigte API-Version: %d"
+msgstr "dnfdaemon API-Version : %d\nentspricht nicht der\nbenötigten API-Version : %d"
 
 #: ../src/yumex/dnf_backend.py:191
 msgid "Downloading packages"
@@ -154,7 +153,7 @@ msgstr "Überprüfung der Änderungen am System"
 #: ../src/yumex/dnf_backend.py:246
 #, python-format
 msgid "Downloading %d files (%sB)..."
-msgstr "Lade %d Dateien herunter (%sB)..."
+msgstr "%d Dateien werden heruntergeladen (%sB) …"
 
 #: ../src/yumex/const.py:129
 msgid "Getting installed packages"
@@ -237,7 +236,7 @@ msgstr "Installiere %s"
 #: ../src/yumex/const.py:167
 #, python-format
 msgid "Reinstalling: %s"
-msgstr "Reinstalliere %s"
+msgstr "Wird erneut installiert: %s"
 
 #: ../src/yumex/const.py:168
 #, python-format
@@ -252,7 +251,7 @@ msgstr "Entferne %s"
 #: ../src/yumex/const.py:170
 #, python-format
 msgid "Obsoleting: %s"
-msgstr ""
+msgstr "Als veraltet markieren: %s"
 
 #: ../src/yumex/const.py:171
 #, python-format
@@ -289,24 +288,24 @@ msgid ""
 "\n"
 "\n"
 "Yum Extender will close"
-msgstr "\n\nYum Extender wird beendet"
+msgstr "\n\nYum Extender wird geschlossen"
 
 #: ../src/yumex/old_init.py:1307
 msgid "Error in starting notification icon"
-msgstr "Fehler beim Starten des Benachrichtigungssymbols"
+msgstr "Fehler beim Starten des Symbols in der Statusleiste"
 
 #: ../src/yumex/old_init.py:1331
 msgid "Yum Extender will close"
-msgstr "Yum Extender wird beendet"
+msgstr "Yum Extender wird geschlossen"
 
 #: ../src/yumex/old_init.py:1333
 msgid "Error in locking notification icon"
-msgstr "Fehler beim sperren des Benachrichtigungssymbols"
+msgstr "Fehler beim Sperren des Benachrichtigungssymbols"
 
 #. timeout 10s
 #: ../src/yumex/updater.py:68
 msgid "Not Now"
-msgstr "Später"
+msgstr "Nicht jetzt"
 
 #: ../src/yumex/updater.py:70
 msgid "Show Updates"
@@ -414,7 +413,7 @@ msgstr "Version"
 
 #: ../src/yumex/gui/dialogs.py:251
 msgid "<b>replacing</b> {}"
-msgstr "<b>ersetze</b> {}"
+msgstr ""
 
 #: ../src/yumex/gui/dialogs.py:287
 #, python-format
@@ -448,7 +447,7 @@ msgstr "Keine Information über Aktualisierungen des Paketes verfügbar"
 msgid ""
 "\n"
 "Fedora Updates:"
-msgstr "Fedora Aktualisierungen:"
+msgstr "\nFedora-Aktualisierungen:"
 
 #: ../src/yumex/gui/widgets.py:661
 msgid "Release"
@@ -469,13 +468,13 @@ msgstr "Beschreibung"
 
 #: ../src/yumex/gui/widgets.py:724
 msgid "No changelog information is available"
-msgstr "Keine Informationen über die Änderungshistorie dieses Pakets verfügbar."
+msgstr "Keine Informationen über die Aktualisierungen dieses Pakets verfügbar."
 
 #: ../src/yumex/gui/widgets.py:726
 msgid ""
 "\n"
 "Online Changelog:"
-msgstr "Online Änderungshistorie:"
+msgstr "\nOnline-Changelog:"
 
 #: ../src/yumex/gui/widgets.py:741
 msgid "No filelist information is available"
@@ -483,15 +482,15 @@ msgstr "Keine Liste der bereitgestellten Pakete vorhanden"
 
 #: ../src/yumex/gui/widgets.py:771
 msgid "Newest only"
-msgstr "Nur die Neusten"
+msgstr "Nur neueste"
 
 #: ../src/yumex/gui/widgets.py:772
 msgid "Erase unused requirements"
-msgstr "Lösche unbenutzte Abhängigkeiten"
+msgstr "Nicht mehr benötigte Abhängigkeiten entfernen"
 
 #: ../src/yumex/gui/widgets.py:774
 msgid "Cleanup old instonly packages "
-msgstr "Entferne alte »Installonly«-Pakete"
+msgstr ""
 
 #: ../src/yumex/gui/widgets.py:776
 msgid "Options"
@@ -499,7 +498,7 @@ msgstr "Optionen"
 
 #: ../src/yumex/gui/widgets.py:778
 msgid "About"
-msgstr "Über"
+msgstr "Info"
 
 #: ../src/yumex/gui/widgets.py:779
 msgid "Documentation"
@@ -650,7 +649,7 @@ msgstr "Alle verfügbaren Aktualisierungen beim Start auswählen"
 msgid ""
 "The interval in hour, when the DNF cache will be expired and updated (0 = "
 "disabled)"
-msgstr "Intervall in Stunden, nachdem der DNF-Zwischenspeicher als veraltet markiert und aktualisiert wird (0 = deaktiviert)"
+msgstr "Das Intervall in Stunden bis zum Ablauf und zur Aktualisierung des DNF-Zwischenspeichers (0 = deaktiviert)"
 
 #: ../src/yumex.ui.h:22
 msgid "Cache expire interval (hours)"
@@ -658,7 +657,7 @@ msgstr "Intervall, nachdem der Zwischenspeicher verfällt (in Stunden)"
 
 #: ../src/yumex.ui.h:23
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: ../src/yumex.ui.h:24
 msgid "Default: Cleanup Old Installonly packages"
@@ -670,7 +669,7 @@ msgstr "Anzahl der »Installonly«-Pakete, die behalten werden"
 
 #: ../src/yumex.ui.h:26
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: ../src/yumex.ui.h:27
 msgid "Settings"
@@ -678,23 +677,23 @@ msgstr "Einstellungen"
 
 #: ../src/yumex.ui.h:28
 msgid "Autostart the Yum Extender update checker at user login"
-msgstr "Lade Yum Extender bei der Benutzeranmeldung für die Hintergrundsuche nach Aktualisierungen" 
+msgstr "Aktualisierungsüberprüfung beim Anmelden des Benutzers automatisch starten"
 
 #: ../src/yumex.ui.h:29
 msgid "Start update checker at user login"
-msgstr "Lade Hintergrundsuche nach Aktualisierungen bei der Benutzeranmeldung"
+msgstr "Aktualisierungsüberprüfung bei Anmeldung starten"
 
 #: ../src/yumex.ui.h:30
 msgid "How often the update checker will run"
-msgstr "Häufigkeit mit der nach Aktualisierungen gesucht wird"
+msgstr "Das Intervall, in nach Updates gesucht wird"
 
 #: ../src/yumex.ui.h:31
 msgid "Update check interval (minutes)"
-msgstr "Intervall zur Suche nach Aktualisierungen (Minuten)"
+msgstr "Intervall zur Prüfung auf Aktualisierungen (Minuten)"
 
 #: ../src/yumex.ui.h:32
 msgid "Update Checker"
-msgstr "Aktualisierungssuche"
+msgstr "Aktualisierungsüberprüfung"
 
 #: ../src/yumex.ui.h:33
 msgid "Color for installed packages"
@@ -745,7 +744,7 @@ msgstr "Label"
 
 #: ../src/yumex.ui.h:46
 msgid "Show available updates"
-msgstr "Zeige verfügbare Aktualisierungen"
+msgstr "Verfügbare Aktualisierungen anzeigen"
 
 #: ../src/yumex.ui.h:47
 msgid "Updates"
@@ -753,7 +752,7 @@ msgstr "Aktualisierungen"
 
 #: ../src/yumex.ui.h:48
 msgid "Show installed packages"
-msgstr "Zeige installierte Pakete"
+msgstr "Installierte Pakete anzeigen"
 
 #: ../src/yumex.ui.h:49
 msgid "Installed"
@@ -761,7 +760,7 @@ msgstr "Installiert"
 
 #: ../src/yumex.ui.h:50
 msgid "Show available packages"
-msgstr "Zeige verfügbare Pakete"
+msgstr "Verfügbare Pakete anzeigen"
 
 #: ../src/yumex.ui.h:51
 msgid "Available"
@@ -769,7 +768,7 @@ msgstr "Verfügbar"
 
 #: ../src/yumex.ui.h:52
 msgid "Show all packages"
-msgstr "Zeige alle Pakete"
+msgstr "Alle Pakete anzeigen"
 
 #: ../src/yumex.ui.h:53
 msgid "All"
@@ -805,15 +804,15 @@ msgstr "Dateiliste des Pakets"
 
 #: ../src/yumex.ui.h:62
 msgid "Package Requirements"
-msgstr "Abhängigkeiten des Pakets"
+msgstr "benötigte Abhängigkeiten von diesem Paket"
 
 #: ../src/yumex.ui.h:63
 msgid "Search (show/hide)"
-msgstr "Suche (zeigen/verbergen)"
+msgstr "Suchen (anzeigen/verbergen)"
 
 #: ../src/yumex.ui.h:64
 msgid "Apply pending actions"
-msgstr "Auststehende Aktionen anwenden"
+msgstr "Ausstehende Aktionen anwenden"
 
 #: ../src/yumex.ui.h:65
 msgid "Prefix"
@@ -821,7 +820,7 @@ msgstr "Präfix des Paketnamens"
 
 #: ../src/yumex.ui.h:66
 msgid "Package names starting with search key"
-msgstr "Paketnamen die mit Suchbegriff beginnen"
+msgstr "Paketnamen, die mit dem Suchbegriff beginnen"
 
 #: ../src/yumex.ui.h:67
 msgid "Keyword"
@@ -829,7 +828,7 @@ msgstr "Schlüsselwort"
 
 #: ../src/yumex.ui.h:68
 msgid "Package names containing search key"
-msgstr "Paketnamen die den Suchbegriff enthalten"
+msgstr "Paketnamen, die den Suchbegriff enthalten"
 
 #: ../src/yumex.ui.h:69
 msgid "Fields"
@@ -837,7 +836,7 @@ msgstr "Felder"
 
 #: ../src/yumex.ui.h:70
 msgid "Specified package fields containing search keys."
-msgstr "Ausgewählte Paketfelder die Suchwörter enthalten"
+msgstr ""
 
 #: ../src/yumex.ui.h:72
 msgid "Package name"
@@ -845,11 +844,11 @@ msgstr "Paketname"
 
 #: ../src/yumex.ui.h:74
 msgid "Package summary"
-msgstr "Paketzusammenfassung"
+msgstr "Zusammenfassung"
 
 #: ../src/yumex.ui.h:76
 msgid "Package description"
-msgstr "Paketbeschreibung"
+msgstr "Beschreibung"
 
 #: ../src/yumex.ui.h:77
 msgid "Package actions to perform"

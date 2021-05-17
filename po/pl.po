@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Piotr Drąg <piotrdrag@gmail.com>, 2014-2015
+# Piotr Drąg <piotrdrag@gmail.com>, 2014-2017
 # Tim Lauridsen <tla@rasmil.dk>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 18:49+0100\n"
-"PO-Revision-Date: 2015-12-02 20:58+0000\n"
+"PO-Revision-Date: 2017-09-20 01:03+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/timlau/yumex/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../src/yumex/__init__.py:112 ../src/yumex/old_init.py:137
 msgid "Refreshing Repository Metadata"
@@ -42,7 +42,7 @@ msgstr "Program DNF jest zablokowany przez inny proces.\n\nProgram Yum Extender 
 
 #: ../src/yumex/__init__.py:623
 msgid "Reloading package information..."
-msgstr "Ponowne wczytywanie informacji o pakiecie…"
+msgstr "Ponowne wczytywanie informacji o pakiecie…"
 
 #: ../src/yumex/__init__.py:746 ../src/yumex/__init__.py:829
 #: ../src/yumex/old_init.py:266 ../src/yumex/old_init.py:1047
@@ -59,7 +59,7 @@ msgstr "Rozwiązano zależności"
 #: ../src/yumex/dnf_backend.py:206 ../src/yumex/old_init.py:276
 #: ../src/yumex/old_init.py:1063
 msgid "Applying changes to the system"
-msgstr "Zastosowywanie zmian w systemie"
+msgstr "Zastosowywanie zmian w systemie"
 
 #: ../src/yumex/__init__.py:787 ../src/yumex/old_init.py:1088
 msgid "Error checking package signatures\n"
@@ -116,7 +116,7 @@ msgstr "Nie można usunąć chronionych pakietów"
 
 #: ../src/yumex/__init__.py:887 ../src/yumex/old_init.py:1140
 msgid "No pending actions in queue"
-msgstr "Brak działań oczekujących w kolejce"
+msgstr "Brak działań oczekujących w kolejce"
 
 #: ../src/yumex/__init__.py:891 ../src/yumex/old_init.py:1144
 msgid "Error(s) in building transaction"
@@ -136,7 +136,7 @@ msgid ""
 "dnfdaemon api version : %d\n"
 "don't match\n"
 "needed api version : %d"
-msgstr "wersja API dnfdaemon: %d\nnie zgadza się z\nwymaganą wersją API: %d"
+msgstr "wersja API dnfdaemon: %d\nnie zgadza się\nz wymaganą wersją API: %d"
 
 #: ../src/yumex/dnf_backend.py:191
 msgid "Downloading packages"
@@ -148,12 +148,12 @@ msgstr "Sprawdzanie podpisów pakietów"
 
 #: ../src/yumex/dnf_backend.py:210
 msgid "Verify changes on the system"
-msgstr "Sprawdza poprawność zmian w systemie"
+msgstr "Sprawdza poprawność zmian w systemie"
 
 #: ../src/yumex/dnf_backend.py:246
 #, python-format
 msgid "Downloading %d files (%sB)..."
-msgstr "Pobieranie plików: %d (%s B)…"
+msgstr "Pobieranie plików: %d (%s B)…"
 
 #: ../src/yumex/const.py:129
 msgid "Getting installed packages"
@@ -281,7 +281,7 @@ msgstr "Ulepszenia"
 
 #: ../src/yumex/old_init.py:283
 msgid "Changes was successfully applied to the system"
-msgstr "Pomyślnie zastosowany zmiany w systemie"
+msgstr "Pomyślnie zastosowany zmiany w systemie"
 
 #: ../src/yumex/old_init.py:1305
 msgid ""
@@ -441,7 +441,7 @@ msgstr "Odnośniki: "
 
 #: ../src/yumex/gui/widgets.py:649
 msgid "No update information is available"
-msgstr "Brak dostępnych informacji o aktualizacji"
+msgstr "Brak dostępnych informacji o aktualizacji"
 
 #: ../src/yumex/gui/widgets.py:651
 msgid ""
@@ -468,17 +468,17 @@ msgstr "Opis"
 
 #: ../src/yumex/gui/widgets.py:724
 msgid "No changelog information is available"
-msgstr "Brak dostępnych informacji o zmianach"
+msgstr "Brak dostępnych informacji o zmianach"
 
 #: ../src/yumex/gui/widgets.py:726
 msgid ""
 "\n"
 "Online Changelog:"
-msgstr "\nDziennik zmian w sieci:"
+msgstr "\nDziennik zmian w sieci:"
 
 #: ../src/yumex/gui/widgets.py:741
 msgid "No filelist information is available"
-msgstr "Brak dostępnych informacji o liście plików"
+msgstr "Brak dostępnych informacji o liście plików"
 
 #: ../src/yumex/gui/widgets.py:771
 msgid "Newest only"
@@ -498,7 +498,7 @@ msgstr "Opcje"
 
 #: ../src/yumex/gui/widgets.py:778
 msgid "About"
-msgstr "O programie"
+msgstr "O programie"
 
 #: ../src/yumex/gui/widgets.py:779
 msgid "Documentation"
@@ -522,7 +522,7 @@ msgstr "Instalator pakietów Yumex"
 
 #: ../misc/yumex-dnf-local.desktop.in.h:2
 msgid "Install local packages on system"
-msgstr "Instaluje lokalne pakiety w systemie"
+msgstr "Instaluje lokalne pakiety w systemie"
 
 #: ../misc/yumex-dnf.desktop.in.h:1
 msgid "Yum Extender (DNF)"
@@ -530,7 +530,7 @@ msgstr "Yum Extender (DNF)"
 
 #: ../misc/yumex-dnf.desktop.in.h:2
 msgid "Install, update and remove applications"
-msgstr "Instalowanie, aktualizowanie i usuwanie aplikacji"
+msgstr "Instalowanie, aktualizowanie i usuwanie aplikacji"
 
 #: ../misc/yumex-dnf.desktop.in.h:3
 msgid "Software Installer"
@@ -545,13 +545,13 @@ msgid ""
 "Yum Extender is a graphical package management application. It allows you to"
 " search and browse for packages to install, remove and update on your "
 "computer."
-msgstr "Yum Extender jest graficzną aplikacją do zarządzania pakietami. Umożliwia ona wyszukiwanie i przeglądanie pakietów oraz ich instalowanie, usuwanie i aktualizowanie."
+msgstr "Yum Extender jest graficzną aplikacją do zarządzania pakietami. Umożliwia ona wyszukiwanie i przeglądanie pakietów oraz ich instalowanie, usuwanie i aktualizowanie."
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:3
 msgid ""
 "It is designed to give you full control over the packages on your computer "
 "and to be used by all users."
-msgstr "Została ona zaprojektowana tak, aby każdy użytkownik miał pełną kontrolę nad pakietami w swoim komputerze."
+msgstr "Została ona zaprojektowana tak, aby każdy użytkownik miał pełną kontrolę nad pakietami w swoim komputerze."
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:4
 msgid "Features:"
@@ -563,7 +563,7 @@ msgstr "Przeglądanie pakietów dostępnych do instalacji lub aktualizacji"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:6
 msgid "Browse packages installed on your computer"
-msgstr "Przeglądanie pakietów zainstalowanych w komputerze"
+msgstr "Przeglądanie pakietów zainstalowanych w komputerze"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:7
 msgid "Search packages by name, summary, description"
@@ -571,11 +571,11 @@ msgstr "Przeszukiwanie pakietów według nazwy, podsumowaniu, opisie"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:8
 msgid "Watch the history of package action on your system"
-msgstr "Wyświetlanie historii działań na pakietach w systemie"
+msgstr "Wyświetlanie historii działań na pakietach w systemie"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:9
 msgid "Browse and install/remove package groups"
-msgstr "Przeglądanie i instalowanie/usuwanie grup pakietów"
+msgstr "Przeglądanie i instalowanie/usuwanie grup pakietów"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:10
 msgid "Browse packages by size, repository"
@@ -629,7 +629,7 @@ msgstr "Zamknięcie tylko minimalizuje okno"
 msgid ""
 "Use the toolbar in the header of the window\n"
 "standard when using GNOME"
-msgstr "Używanie paska narzędzi w nagłówku okna\npodczas używania środowiska GNOME"
+msgstr "Używanie paska narzędzi w nagłówku okna\npodczas używania środowiska GNOME"
 
 #: ../src/yumex.ui.h:17
 msgid "Show toolbar in window headerbar"
@@ -649,11 +649,11 @@ msgstr "Zaznaczanie aktualizacji po uruchomieniu"
 msgid ""
 "The interval in hour, when the DNF cache will be expired and updated (0 = "
 "disabled)"
-msgstr "Czas między wygasaniem i aktualizowaniem pamięci podręcznej programu DNF (0 = wyłączone)"
+msgstr "Czas między wygasaniem i aktualizowaniem pamięci podręcznej programu DNF (0 = wyłączone)"
 
 #: ../src/yumex.ui.h:22
 msgid "Cache expire interval (hours)"
-msgstr "Czas między wygasaniem pamięci podręcznej (w godzinach)"
+msgstr "Czas między wygasaniem pamięci podręcznej (w godzinach)"
 
 #: ../src/yumex.ui.h:23
 msgid "12"
@@ -689,7 +689,7 @@ msgstr "Jak często uruchamiać sprawdzanie aktualizacji"
 
 #: ../src/yumex.ui.h:31
 msgid "Update check interval (minutes)"
-msgstr "Czas między sprawdzaniem aktualizacji (w minutach)"
+msgstr "Czas między sprawdzaniem aktualizacji (w minutach)"
 
 #: ../src/yumex.ui.h:32
 msgid "Update Checker"
@@ -721,7 +721,7 @@ msgstr "Zaawansowane"
 
 #: ../src/yumex.ui.h:39
 msgid "Repositories used in current session"
-msgstr "Repozytoria używane w bieżącej sesji"
+msgstr "Repozytoria używane w bieżącej sesji"
 
 #: ../src/yumex.ui.h:40
 msgid ""
@@ -796,11 +796,11 @@ msgstr "Opis pakietu"
 
 #: ../src/yumex.ui.h:60
 msgid "Package Update Information"
-msgstr "Informacje o aktualizacji pakietu"
+msgstr "Informacje o aktualizacji pakietu"
 
 #: ../src/yumex.ui.h:61
 msgid "Package Filelist"
-msgstr "Lista plików w pakiecie"
+msgstr "Lista plików w pakiecie"
 
 #: ../src/yumex.ui.h:62
 msgid "Package Requirements"

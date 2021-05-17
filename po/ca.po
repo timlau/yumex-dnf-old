@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Robert Antoni Buj i Gelonch <rbuj@fedoraproject.org>, 2015
+# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 18:49+0100\n"
-"PO-Revision-Date: 2015-12-05 09:14+0000\n"
-"Last-Translator: Robert Antoni Buj i Gelonch <rbuj@fedoraproject.org>\n"
+"PO-Revision-Date: 2017-09-22 18:09+0000\n"
+"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/timlau/yumex/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -127,7 +127,7 @@ msgstr "Afegiment dels paquets a la vista"
 
 #: ../src/yumex/__init__.py:1064 ../src/yumex/old_init.py:728
 msgid "Error in undo history transaction"
-msgstr "Error en desfer la transacció de l'històric"
+msgstr "Error en desfer la transacció de l'historial"
 
 #: ../src/yumex/dnf_backend.py:181
 #, python-format
@@ -375,11 +375,11 @@ msgstr "<b>Reverteix a</b> %s "
 
 #: ../src/yumex/gui/views.py:917
 msgid "History (Date/Time)"
-msgstr "Històric (data/hora)"
+msgstr "Historial (data/hora)"
 
 #: ../src/yumex/gui/views.py:994
 msgid "History Packages"
-msgstr "Paquets de l'històric"
+msgstr "Paquets de l'historial"
 
 #. Setup reponame & repofile column's
 #: ../src/yumex/gui/views.py:1082 ../src/yumex/gui/views.py:1129
@@ -570,7 +570,7 @@ msgstr "Cerca paquets per nom, resum i descripció"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:8
 msgid "Watch the history of package action on your system"
-msgstr "Observa l'històric d'accions de paquet al vostre sistema"
+msgstr "Observa l'historial d'accions de paquet al vostre sistema"
 
 #: ../misc/yumex-dnf.appdata.xml.in.h:9
 msgid "Browse and install/remove package groups"
@@ -783,7 +783,7 @@ msgstr "Desfés"
 
 #: ../src/yumex.ui.h:57
 msgid "History"
-msgstr "Històric"
+msgstr "Historial"
 
 #: ../src/yumex.ui.h:58
 msgid "Pending Actions"
