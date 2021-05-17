@@ -54,7 +54,7 @@ changelog:
 	$(PYTHON) tools/git2cl.py
 	
 upload: 
-	@scp ~/rpmbuild/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
+	@scp $(BUILDDIR)/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
 	
 release-branch:
 	@git branch -m ${GIT_MASTER} release-${VERSION}
@@ -112,20 +112,20 @@ test-builds:
 	@$(MAKE) test-release
 	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
 	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
-	@scp ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
-	@scp ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 
 test-upd:
 	@$(MAKE) test-release
-	sudo dnf update ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf update $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 
 test-inst:
 	@$(MAKE) test-release
-	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf install $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 	
 test-reinst:
 	@$(MAKE) test-release
-	sudo dnf reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf reinstall $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 	
 	
 transifex-setup:
