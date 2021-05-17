@@ -222,7 +222,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             name = yumex.misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
-        logger.debug('on_RPMProgress : [%s]', package)
+        #logger.debug('on_RPMProgress : [%s]', package)
         action_msg = const.RPM_ACTIONS.get(action,None)
         if action_msg:
             self.frontend.infobar.info_sub( action_msg % name)
@@ -268,7 +268,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
         else:
-            logger.debug('Download Error : %s - %s', name, msg)
+            logger.debug('Download Error : %s - %s (status : %d )', name, msg, status)
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
