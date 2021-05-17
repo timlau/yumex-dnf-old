@@ -574,6 +574,9 @@ class Window(BaseWindow):
         right_sw.add(self.history_view.pkg_view)
         # setup history buttons
         undo = self.get_ui('history_undo')
+        # FIXME: History undo is broken in dnfdaemon, because of changes in private API
+        # so disable the botton
+        undo.set_sensitive(False)
         undo.connect('clicked', self.on_history_undo)
 
 ###############################################################################
