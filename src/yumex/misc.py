@@ -266,11 +266,11 @@ class YumexConf(config.BaseConfig):
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
 
-    color_install = config.Option('#3584e4') 
-    color_update = config.Option('#e01b24') 
-    color_downgrade = config.Option('#ff7800')
-    color_normal = config.Option('#000000') 
-    color_obsolete = config.Option('#ff7800') 
+    color_install = config.Option('#8BE8FD') 
+    color_update = config.Option('#FF79C6') 
+    color_downgrade = config.Option('#50FA7B')
+    color_normal = config.Option('#D3DAE3') 
+    color_obsolete = config.Option('#FFB86C') 
 
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)
