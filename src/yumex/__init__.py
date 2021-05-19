@@ -506,6 +506,7 @@ class Window(BaseWindow):
         # Setup info
         self.main_paned = self.get_ui('main_paned')
         self.main_paned.set_position(CONFIG.conf.info_paned)
+        self.main_paned.set_wide_handle(True) # use wide separator bar (off)
 
         # Get the theme default TreeView text color
         color_normal = misc.get_style_color(self.package_view)
