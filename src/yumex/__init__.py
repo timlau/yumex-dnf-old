@@ -229,6 +229,18 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         else:
             self.app.quit()
 
+    def apply_css(self, css_fn):
+        """apply a css for custom styling"""
+        if css_fn:
+            screen = Gdk.Screen.get_default()
+            css_provider = Gtk.CssProvider()
+            css_provider.load_from_path(css_fn)
+            context = Gtk.StyleContext()
+            context.add_provider_for_screen(screen, css_provider,
+                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
+            logger.debug('loading custom styling : %s', css_fn)
+
+
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
         css_fn = None
@@ -242,13 +254,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 css_fn = fn
                 break
         if css_fn:
-            screen = Gdk.Screen.get_default()
-            css_provider = Gtk.CssProvider()
-            css_provider.load_from_path(css_fn)
-            context = Gtk.StyleContext()
-            context.add_provider_for_screen(screen, css_provider,
-                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
-            logger.debug('loading custom styling : %s', css_fn)
+            self.apply_css(css_fn)
+        else:
+            css_fn = os.environ['HOME'] + "/.config/yumex-dnf/yumex.css"
+            logger.debug('looking for %s', css_fn)
+            if os.path.exists(css_fn):
+                self.apply_css(css_fn)
+
 
     def on_window_state(self, widget, event):
         # save window current maximized state
