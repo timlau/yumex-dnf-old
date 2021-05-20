@@ -266,6 +266,8 @@ class YumexConf(config.BaseConfig):
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
 
+    theme = config.Option("yumex.theme")
+
     color_install = config.Option('#8BE8FD') 
     color_update = config.Option('#FF79C6') 
     color_downgrade = config.Option('#50FA7B')
@@ -309,6 +311,11 @@ class SessionConf(config.BaseConfig):
     # enabled repositories for this session
     enabled_repos = config.ListOption([])
     clean_instonly = config.BoolOption(False)
+    color_install = config.Option('#ffffff') 
+    color_update = config.Option('#ffffff') 
+    color_downgrade = config.Option('#ffffff')
+    color_normal = config.Option('#ffffff') 
+    color_obsolete = config.Option('#ffffff') 
 
 
 class Config(object):

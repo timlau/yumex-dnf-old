@@ -25,10 +25,11 @@ import os.path
 import shutil
 import subprocess
 import sys
+import re
 
 from gi.repository import Gio, Gtk, Gdk
 
-from yumex.misc import _, ngettext, CONFIG
+from yumex.misc import Config, _, ngettext, CONFIG
 import yumex.const as const
 import yumex.misc as misc
 import yumex.dnf_backend
@@ -240,11 +241,39 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
             logger.debug('loading custom styling : %s', css_fn)
 
+    def load_colors(self, theme_fn):
+        color_table = {}
+        colors = 'color_install', 'color_update', 'color_downgrade', 'color_normal', 'color_obsolete'
+        regex = re.compile(r'@define-color\s*(.*)\s(.*)\s?;')
+        with open(theme_fn, 'r') as reader:
+            lines = reader.readlines()
+        for line in lines:
+            if line.startswith("@define-color"):
+                match = regex.search(line)
+                if len(match.groups()) == 2:
+                    color_table[match.group(1)] = match.group(2)
+        logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
+        for color in colors:
+            if color in color_table:
+                setattr(CONFIG.session,color,color_table[color])
+                logger.debug(f'  --> updated color : {color} to: {color_table[color]}')
+
+    def load_theme(self):
+        theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
+        logger.debug('looking for %s', theme_fn)
+        if os.path.exists(theme_fn):
+            self.apply_css(theme_fn)
+            self.load_colors(theme_fn)
+            
 
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
+        # Use Dark Theme always
+        gtk_settings = Gtk.Settings.get_default()
+        gtk_settings.set_property("gtk-application-prefer-dark-theme",True)
         css_fn = None
-        theme = Gtk.Settings.get_default().props.gtk_theme_name
+        theme = gtk_settings.props.gtk_theme_name
+        logger.debug(f'current theme : {theme}')
         css_postfix = '%s/apps/yumex.css' % theme
         for css_prefix in [os.path.expanduser('~/.themes'),
                            '/usr/share/themes']:
@@ -256,11 +285,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         if css_fn:
             self.apply_css(css_fn)
         else:
-            css_fn = os.environ['HOME'] + "/.config/yumex-dnf/yumex.css"
-            logger.debug('looking for %s', css_fn)
-            if os.path.exists(css_fn):
-                self.apply_css(css_fn)
-
+            self.load_theme()
 
     def on_window_state(self, widget, event):
         # save window current maximized state
@@ -507,11 +532,6 @@ class Window(BaseWindow):
         self.main_paned = self.get_ui('main_paned')
         self.main_paned.set_position(CONFIG.conf.info_paned)
         self.main_paned.set_wide_handle(True) # use wide separator bar (off)
-
-        # Get the theme default TreeView text color
-        color_normal = misc.get_style_color(self.package_view)
-        CONFIG.conf.color_normal = misc.color_to_hex(color_normal)
-        logger.debug('theme color : %s' % misc.color_to_hex(color_normal))
 
         # infobar
         self.infobar = widgets.InfoProgressBar(self.ui)

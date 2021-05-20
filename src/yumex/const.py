@@ -37,10 +37,12 @@ if BIN_PATH in ["/usr/bin", "/bin"]:
     DATA_DIR = '/usr/share/yumex-dnf'
     PIX_DIR = DATA_DIR + "/gfx"
     MISC_DIR = DATA_DIR
+    THEME_DIR = DATA_DIR + "/themes"
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
+    THEME_DIR = DATA_DIR + "/../misc/themes"
 
 HOME_DIR = os.environ['HOME']
 AUTOSTART_DIR = HOME_DIR + '/.config/autostart'

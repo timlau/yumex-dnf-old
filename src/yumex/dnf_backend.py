@@ -127,15 +127,15 @@ class DnfPackage(yumex.backend.Package):
     @property
     def color(self):
         """Package color to show in package view."""
-        color = CONFIG.conf.color_normal
+        color = CONFIG.session.color_normal
         if self.action == 'u':
-            color = CONFIG.conf.color_update
+            color = CONFIG.session.color_update
         elif self.action == 'o':
-            color = CONFIG.conf.color_obsolete
+            color = CONFIG.session.color_obsolete
         elif self.action == 'do':
-            color = CONFIG.conf.color_downgrade
+            color = CONFIG.session.color_downgrade
         elif self.action == 'r':
-            color = CONFIG.conf.color_install
+            color = CONFIG.session.color_install
         rgba = Gdk.RGBA()
         rgba.parse(color)
         return rgba
@@ -222,7 +222,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             name = yumex.misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
-        #logger.debug('on_RPMProgress : [%s]', package)
+        # logger.debug('on_RPMProgress : [%s]', package)
         action_msg = const.RPM_ACTIONS.get(action,None)
         if action_msg:
             self.frontend.infobar.info_sub( action_msg % name)
