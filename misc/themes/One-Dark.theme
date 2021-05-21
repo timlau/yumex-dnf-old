@@ -1,98 +1,98 @@
 /*
 *  Yum Extender styling (GTK3 CSS)
+*  Based on the One-Dark theme
 */
 
 /*Package Type Colors */
 
-@define-color color_install #8BE8FD;
-@define-color color_update #FF79C6;
-@define-color color_downgrade #50FA7B;
-@define-color color_normal #FFB86C;
-@define-color color_obsolete #FFB86C;
+@define-color color_install #56b6c2;
+@define-color color_update #e06c75;
+@define-color color_downgrade #98c379;
+@define-color color_normal #d19a66;
+@define-color color_obsolete #e06c75;
 
 /* UI colors */
 
-@define-color bg_color #21252b;
-@define-color bg_color_02 #44475A;
-@define-color bg_color_03 #6272A4;
-@define-color bg_color_04 #282A36;
-@define-color bg_color_05 #566388;
-@define-color fg_color #F8F8F2;
-@define-color fg_color_02 #FFB86C;
-@define-color fg_color_03 #F1FA8C;
-@define-color fg_color_04 #FF79C6;
+@define-color bg_shade_01 #282c34;
+@define-color bg_shade_02 #323842;
+@define-color bg_shade_03 #404859;
+@define-color bg_shade_04 #5c6370;
+@define-color fg_color #abb2bf;
+@define-color fg_color_02 #d19a66;
+@define-color fg_color_03 #e6c07b;
+@define-color fg_color_04 #98c379;
 
 /* generic vindow & dialogs */
 window, dialog { 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color;
   
 }
 
 /* generic headerbar & buttons */
 headerbar { 
-  background-color: @bg_color;
+  background-color: @bg_shade_01;
   color: @fg_color;
   
 }
 
 /* generic treeview & textview */
 treeview, text { 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color;
 }
 
 /* Generic button */
 button { 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color;
 }
 
 button:hover {
   color: @fg_color;
-  background: @bg_color_02;
+  background: @bg_shade_02;
 }
 
 
 /* Headerbar stack selector*/
 
 #header_left stackswitcher button{ 
-  background-color: @bg_color_02;
+  background-color: @bg_shade_02;
   color: @fg_color;
 }
 
 #header_left stackswitcher button:checked{ 
-  background-color: @bg_color_03;
+  background-color: @bg_shade_03;
   color: @fg_color_02;
   font-weight: bold;
 }
 
 #header_left stackswitcher button:hover { 
-  background: @bg_color_03;
+  background: @bg_shade_03;
 }
 
 #header_left *:selected { 
-  background-color: @bg_color_02;
+  background-color: @bg_shade_02;
   color: @fg_color_02;
   border-style: none;
 }
 
 
 #header_right button { 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color;
   border-style: none;
 }
 
 #header_right button:hover { 
-  background: @bg_color_02;
+  background: @bg_shade_02;
   color: @fg_color;
   border-style: none;
 }
 
 /* Info view w. progressbar */
 .infobar box{
-  background: @bg_color_04;
+  background: @bg_shade_04;
 }
 
 .infobar label{
@@ -101,26 +101,24 @@ button:hover {
 
 /* separator between vies & info */
 paned separator{
-  background: @bg_color_02;
+  background: @bg_shade_02;
 }
 
 /* info type selector */
 #info_selector row {
-  color: @fg_color;
-  background: @bg_color;
+  color: @bg_shade_03;
+  background: @bg_shade_01;
 }
 
 #info_selector  row:hover {
   color: @fg_color;
-  background: @bg_color_02;
 }
 
 #info_selector  row.activatable:selected {
   color: @fg_color;
-  background: @bg_color_05;
   border-left-style: solid;
   border-left-width: 3;
-  border-left-color: @fg_color_04;
+  border-left-color: @fg_color;
 }
 
 /* Preferences Dialog */
@@ -129,23 +127,23 @@ paned separator{
 }
 
 .preferences { 
-  background: @bg_color_04;
+  background: @bg_shade_04;
 }
 
 /* Package category selector */
 #package_sidebar toolbar{
-  background: @bg_color;
+  background: @bg_shade_01;
 }
 
 #package_sidebar list{ 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color_04;
   font-style: italic;
 }
 
 #package_sidebar  row.activatable:selected {
   color: @fg_color;
-  background: @bg_color_05;
+  background: @bg_shade_03;
   border-left-style: solid;
   border-left-width: 3;
   border-left-color: @fg_color_04;
@@ -153,41 +151,41 @@ paned separator{
 
 #package_sidebar  row.activatable:hover {
   color: @fg_color;
-  background: @bg_color_02;
+  background: @bg_shade_02;
 }
 
 /* Package View */
 #pkg_view { 
-  background: @bg_color;
+  background: @bg_shade_01;
   color: @fg_color;
 }
 
 #pkg_view *:selected{ 
-  background: @bg_color_05;
+  background: @bg_shade_03;
   color: @fg_color;
 }
 
 #pkg_view *:hover{ 
-  background: @bg_color_02;
+  background: @bg_shade_02;
   color: @fg_color;
 }
 
 /* Package View Column Headers */
 #pkg_view button {
   color: @fg_color;
-  background: @bg_color_04;
-  border-bottom-color: @bg_color_03;
+  background: @bg_shade_03;
+  border-bottom-color: @bg_shade_03;
   border-bottom-width: 2px
 }
 
 /* Package View Checkboxes */
 #pkg_view check {
-  background: @bg_color_02;
+  background: @bg_shade_02;
   color: @fg_color_04;
 }
 
 #pkg_view check:checked {
-  background: @bg_color_03;
+  background: @bg_shade_03;
   color: @fg_color;
   border-width: 0px;
 }
@@ -195,38 +193,38 @@ paned separator{
 /* Search bar */
 .search {
   color: @fg_color;
-  background: @bg_color;
+  background: @bg_shade_01;
 }
 
 .search box{
-  background: @bg_color_04;
+  background: @bg_shade_04;
 }
 
 .search button{
-  background: @bg_color_04;
+  background: @bg_shade_04;
   border-width: 0px;
 }
 
 .search button:hover {
   color: @fg_color;
-  background: @bg_color_02;
+  background: @bg_shade_02;
 }
 
 /* Popup Background (popover, tooltips) */
 .background popover,tooltip {
   color: @fg_color;
-  background: @bg_color_04;
+  background: @bg_shade_04;
 }
 
 /* Popup Menu Checkboxes & Radioboxes */
 .popup check, radio {
-  background: @bg_color_02;
+  background: @bg_shade_02;
   color: @fg_color_04;
 }
 
 /* Popup Menu Checkboxes & Radioboxes (Checked)*/
 .popup check:checked, radio:checked {
-  background: @bg_color_03;
+  background: @bg_shade_03;
   color: @fg_color;
   border-width: 0px;
 }

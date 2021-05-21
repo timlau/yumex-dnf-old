@@ -1,0 +1,232 @@
+/*
+*  Yum Extender styling (GTK3 CSS)
+*/
+
+/*Package Type Colors */
+
+@define-color color_install #8BE8FD;
+@define-color color_update #FF79C6;
+@define-color color_downgrade #50FA7B;
+@define-color color_normal #FFB86C;
+@define-color color_obsolete #FFB86C;
+
+/* UI colors */
+
+@define-color bg_shade_01 #21252b;
+@define-color bg_shade_02 #282A36;
+@define-color bg_shade_03 #44475A;
+@define-color bg_shade_04 #566388;
+@define-color bg_shade_05 #6272A4;
+@define-color fg_color #F8F8F2;
+@define-color fg_color_02 #FFB86C;
+@define-color fg_color_03 #F1FA8C;
+@define-color fg_color_04 #FF79C6;
+
+/* generic vindow & dialogs */
+window, dialog { 
+  background: @bg_shade_01;
+  color: @fg_color;
+  
+}
+
+/* generic headerbar & buttons */
+headerbar { 
+  background-color: @bg_shade_01;
+  color: @fg_color;
+  
+}
+
+/* generic treeview & textview */
+treeview, text { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+/* Generic button */
+button { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+button:hover {
+  color: @fg_color;
+  background: @bg_shade_03;
+}
+
+
+/* Headerbar stack selector*/
+
+#header_left stackswitcher button{ 
+  background-color: @bg_shade_03;
+  color: @fg_color;
+}
+
+#header_left stackswitcher button:checked{ 
+  background-color: @bg_shade_05;
+  color: @fg_color_02;
+  font-weight: bold;
+}
+
+#header_left stackswitcher button:hover { 
+  background: @bg_shade_05;
+}
+
+#header_left *:selected { 
+  background-color: @bg_shade_03;
+  color: @fg_color_02;
+  border-style: none;
+}
+
+
+#header_right button { 
+  background: @bg_shade_01;
+  color: @fg_color;
+  border-style: none;
+}
+
+#header_right button:hover { 
+  background: @bg_shade_03;
+  color: @fg_color;
+  border-style: none;
+}
+
+/* Info view w. progressbar */
+.infobar box{
+  background: @bg_shade_02;
+}
+
+.infobar label{
+  color: @fg_color_03;
+}
+
+/* separator between vies & info */
+paned separator{
+  background: @bg_shade_03;
+}
+
+/* info type selector */
+#info_selector row {
+  color: @bg_shade_05;
+  background: @bg_shade_01;
+}
+
+#info_selector  row:hover {
+  color: @fg_color;
+}
+
+#info_selector  row.activatable:selected {
+  color: @fg_color;
+  background: @bg_shade_02;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: @fg_color_04;
+}
+
+/* Preferences Dialog */
+.preferences label{ 
+  color: @fg_color_02;
+}
+
+.preferences { 
+  background: @bg_shade_02;
+}
+
+/* Package category selector */
+#package_sidebar toolbar{
+  background: @bg_shade_01;
+}
+
+#package_sidebar list{ 
+  background: @bg_shade_01;
+  color: @fg_color_04;
+  font-style: italic;
+}
+
+#package_sidebar  row.activatable:selected {
+  color: @fg_color;
+  background: @bg_shade_04;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: @fg_color_04;
+}
+
+#package_sidebar  row.activatable:hover {
+  color: @fg_color;
+  background: @bg_shade_03;
+}
+
+/* Package View */
+#pkg_view { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+#pkg_view *:selected{ 
+  background: @bg_shade_04;
+  color: @fg_color;
+}
+
+#pkg_view *:hover{ 
+  background: @bg_shade_03;
+  color: @fg_color;
+}
+
+/* Package View Column Headers */
+#pkg_view button {
+  color: @fg_color;
+  background: @bg_shade_02;
+  border-bottom-color: @bg_shade_05;
+  border-bottom-width: 2px
+}
+
+/* Package View Checkboxes */
+#pkg_view check {
+  background: @bg_shade_03;
+  color: @fg_color_04;
+}
+
+#pkg_view check:checked {
+  background: @bg_shade_05;
+  color: @fg_color;
+  border-width: 0px;
+}
+
+/* Search bar */
+.search {
+  color: @fg_color;
+  background: @bg_shade_01;
+}
+
+.search box{
+  background: @bg_shade_02;
+}
+
+.search button{
+  background: @bg_shade_02;
+  border-width: 0px;
+}
+
+.search button:hover {
+  color: @fg_color;
+  background: @bg_shade_03;
+}
+
+/* Popup Background (popover, tooltips) */
+.background popover,tooltip {
+  color: @fg_color;
+  background: @bg_shade_02;
+}
+
+/* Popup Menu Checkboxes & Radioboxes */
+.popup check, radio {
+  background: @bg_shade_03;
+  color: @fg_color_04;
+}
+
+/* Popup Menu Checkboxes & Radioboxes (Checked)*/
+.popup check:checked, radio:checked {
+  background: @bg_shade_05;
+  color: @fg_color;
+  border-width: 0px;
+}
+

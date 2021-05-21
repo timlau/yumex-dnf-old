@@ -266,7 +266,7 @@ class YumexConf(config.BaseConfig):
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
 
-    theme = config.Option("yumex.theme")
+    theme = config.Option("Dracula.theme")
 
     color_install = config.Option('#8BE8FD') 
     color_update = config.Option('#FF79C6') 
