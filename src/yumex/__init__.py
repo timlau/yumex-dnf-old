@@ -244,7 +244,11 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     def load_colors(self, theme_fn):
         color_table = {}
         colors = 'color_install', 'color_update', 'color_downgrade', 'color_normal', 'color_obsolete'
-        regex = re.compile(r'@define-color\s*(.*)\s(.*)\s?;')
+        regex = re.compile(r'@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;')
+        if misc.check_dark_theme():
+            backup_color = '#ffffff'
+        else:
+            backup_color = '#000000'
         with open(theme_fn, 'r') as reader:
             lines = reader.readlines()
         for line in lines:
@@ -252,11 +256,20 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 match = regex.search(line)
                 if len(match.groups()) == 2:
                     color_table[match.group(1)] = match.group(2)
+                    logger.debug(f' {match.group(1)} = {match.group(2)}')
         logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
         for color in colors:
             if color in color_table:
-                setattr(CONFIG.session,color,color_table[color])
-                logger.debug(f'  --> updated color : {color} to: {color_table[color]}')
+                color_value = color_table[color]
+                if color_value.startswith('@'): # lookup macro color
+                    key = color_value[1:] # dump the @
+                    if key in color_table:
+                        color_value = color_table[key]
+                    else:
+                        logger.info(f'Unknown Color alias : {color_value} default to {backup_color}')
+                        color_value = backup_color
+                setattr(CONFIG.session,color, color_value)
+                logger.debug(f'  --> updated color : {color} to: {color_value}')
 
     def load_theme(self):
         theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
@@ -268,9 +281,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
-        # Use Dark Theme always
+        # Use Dark Theme 
         gtk_settings = Gtk.Settings.get_default()
-        gtk_settings.set_property("gtk-application-prefer-dark-theme",True)
+        gtk_settings.set_property("gtk-application-prefer-dark-theme",CONFIG.conf.use_dark)
         css_fn = None
         theme = gtk_settings.props.gtk_theme_name
         logger.debug(f'current theme : {theme}')

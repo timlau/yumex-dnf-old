@@ -1,0 +1,223 @@
+/*
+*  Yum Extender styling (GTK3 CSS)
+*  Based on the One-Dark theme
+*/
+
+/*Package Type Colors */
+
+@define-color color_install #7cc6bf;
+@define-color color_update #1c6b9f;
+@define-color color_downgrade #98c379;
+@define-color color_normal #ff4c98;
+@define-color color_obsolete #299f1c;
+
+/* UI colors */
+
+@define-color bg_shade_01 #010807;
+@define-color bg_shade_02 #005d26;
+@define-color bg_shade_03 #027c3a;
+@define-color bg_shade_04 #1c9f50;
+@define-color fg_color #e6f5ea;
+@define-color fg_color_02 #9f1c6b;
+@define-color fg_color_03 #299f1c;
+@define-color fg_color_04 #1c9f92;
+
+/* generic vindow & dialogs */
+window, dialog { 
+  background: @bg_shade_01;
+  color: @fg_color;
+  
+}
+
+/* generic headerbar & buttons */
+headerbar { 
+  background-color: @bg_shade_01;
+  color: @fg_color;
+  
+}
+
+/* generic treeview & textview */
+treeview, text { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+/* Generic button */
+button { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+button:hover {
+  color: @fg_color;
+  background: @bg_shade_02;
+}
+
+
+/* Headerbar stack selector*/
+
+#header_left stackswitcher button{ 
+  background-color: @bg_shade_02;
+  color: @fg_color;
+}
+
+#header_left stackswitcher button:checked{ 
+  background-color: @bg_shade_03;
+  color: @fg_color_04;
+  font-weight: bold;
+}
+
+#header_left stackswitcher button:hover { 
+  background: @bg_shade_03;
+}
+
+#header_right button { 
+  color: @fg_color;
+  border-style: none;
+}
+
+#header_right button:hover { 
+  background: @bg_shade_02;
+  color: @fg_color;
+  border-style: none;
+}
+
+/* Info view w. progressbar */
+.infobar box{
+  background: @bg_shade_01;
+}
+
+.infobar label{
+  color: @fg_color_03;
+}
+
+/* separator between vies & info */
+paned separator{
+  background: @bg_shade_02;
+}
+
+/* info type selector */
+#info_selector row {
+  color: @bg_shade_03;
+  background: @bg_shade_01;
+}
+
+#info_selector  row:hover {
+  color: @fg_color;
+}
+
+#info_selector  row.activatable:selected {
+  color: @fg_color;
+  border-left-style: solid;
+  border-left-width: 3;
+  border-left-color: @fg_color_02;
+}
+
+/* Preferences Dialog */
+.preferences label{ 
+  color: @fg_color_02;
+}
+
+.preferences { 
+  background: @bg_shade_04;
+}
+
+/* Package category selector */
+#package_sidebar toolbar{
+  background: @bg_shade_01;
+}
+
+#package_sidebar list{ 
+  background: @bg_shade_01;
+  color: @fg_color_04;
+  font-style: italic;
+}
+
+#package_sidebar  row.activatable:selected {
+  color: @fg_color;
+  background: @bg_shade_03;
+  border-left-style: solid;
+  border-left-width: 3;
+  border-left-color: @fg_color_02;
+}
+
+#package_sidebar  row.activatable:hover {
+  color: @fg_color;
+  background: @bg_shade_02;
+}
+
+/* Package View */
+#pkg_view { 
+  background: @bg_shade_01;
+  color: @fg_color;
+}
+
+#pkg_view *:selected{ 
+  background: @bg_shade_03;
+  color: @fg_color;
+}
+
+#pkg_view *:hover{ 
+  background: @bg_shade_02;
+  color: @fg_color;
+}
+
+/* Package View Column Headers */
+#pkg_view button {
+  color: @fg_color;
+  background: @bg_shade_03;
+  border-bottom-color: @bg_shade_03;
+  border-bottom-width: 2px
+}
+
+/* Package View Checkboxes */
+#pkg_view check {
+  background: @bg_shade_02;
+  color: @fg_color_04;
+}
+
+#pkg_view check:checked {
+  background: @bg_shade_03;
+  color: @fg_color;
+  border-width: 0px;
+}
+
+/* Search bar */
+.search {
+  color: @fg_color;
+  background: @bg_shade_01;
+}
+
+.search box{
+  background: @bg_shade_04;
+}
+
+.search button{
+  background: @bg_shade_04;
+  border-width: 0px;
+}
+
+.search button:hover {
+  color: @fg_color;
+  background: @bg_shade_02;
+}
+
+/* Popup Background (popover, tooltips) */
+.background popover,tooltip {
+  color: @fg_color;
+  background: @bg_shade_04;
+}
+
+/* Popup Menu Checkboxes & Radioboxes */
+.popup check, radio {
+  background: @bg_shade_02;
+  color: @fg_color_04;
+}
+
+/* Popup Menu Checkboxes & Radioboxes (Checked)*/
+.popup check:checked, radio:checked {
+  background: @bg_shade_03;
+  color: @fg_color;
+  border-width: 0px;
+}
+

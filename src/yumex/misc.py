@@ -265,8 +265,8 @@ class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
-
-    theme = config.Option("Dracula.theme")
+    theme = config.Option("System-Dark.theme")
+    use_dark = config.BoolOption(False)
 
     color_install = config.Option('#8BE8FD') 
     color_update = config.Option('#FF79C6') 
