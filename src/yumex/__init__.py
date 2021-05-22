@@ -27,7 +27,7 @@ import subprocess
 import sys
 import re
 
-from gi.repository import Gio, Gtk, Gdk
+from gi.repository import Gio, Gtk, Gdk, GLib
 
 from yumex.misc import Config, _, ngettext, CONFIG
 import yumex.const as const
@@ -235,7 +235,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         if css_fn:
             screen = Gdk.Screen.get_default()
             css_provider = Gtk.CssProvider()
-            css_provider.load_from_path(css_fn)
+            try:
+                css_provider.load_from_path(css_fn)
+            except GLib.Error as e:
+                logger.error(f"Error in theme: {e} ")
             context = Gtk.StyleContext()
             context.add_provider_for_screen(screen, css_provider,
                                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
@@ -256,7 +259,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 match = regex.search(line)
                 if len(match.groups()) == 2:
                     color_table[match.group(1)] = match.group(2)
-                    logger.debug(f' {match.group(1)} = {match.group(2)}')
+                    logger.debug(f' --> Color:  {match.group(1)} = {match.group(2)}')
         logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
         for color in colors:
             if color in color_table:

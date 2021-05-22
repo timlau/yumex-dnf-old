@@ -52,10 +52,8 @@ class AboutDialog(Gtk.AboutDialog):
 class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
-    COLORS = ['color_install', 'color_update', 'color_normal',
-              'color_obsolete', 'color_downgrade']
     FLAGS = ['autostart', 'clean_unused', 'newest_only',
-             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
+             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark'
              ]
 
     def __init__(self, base):
@@ -103,11 +101,6 @@ class Preferences:
         # cleanup installonly handler
         widget = self.base.ui.get_object('pref_clean_instonly')
         widget.connect('notify::active', self.on_clean_instonly)
-        # set colors states
-        for name in Preferences.COLORS:
-            rgba = yumex.misc.get_color(getattr(CONFIG.conf, name))
-            widget = self.base.ui.get_object(name)
-            widget.set_rgba(rgba)
         # Set value states
         for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
@@ -148,14 +141,6 @@ class Preferences:
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
-        # handle color options
-        for name in Preferences.COLORS:
-            widget = self.base.ui.get_object(name)
-            rgba = widget.get_rgba()
-            color = yumex.misc.color_to_hex(rgba)
-            if color != getattr(CONFIG.conf, name):  # changed ??
-                setattr(CONFIG.conf, name, color)
-                changed = True
         # handle value options
         for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
