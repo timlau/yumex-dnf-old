@@ -5,109 +5,109 @@
 
 /*Package Type Colors */
 
-@define-color color_install #56b6c2;
-@define-color color_update #e06c75;
-@define-color color_downgrade #98c379;
-@define-color color_normal #d19a66;
-@define-color color_obsolete #e06c75;
+@define-color color_install     #56b6c2;
+@define-color color_update      #e06c75;
+@define-color color_downgrade   #98c379;
+@define-color color_normal      #d19a66;
+@define-color color_obsolete    #e06c75;
 
 /* UI colors */
 
-@define-color bg_shade_01 #282c34;
-@define-color bg_shade_02 #323842;
-@define-color bg_shade_03 #404859;
-@define-color bg_shade_04 #5c6370;
-@define-color fg_color #abb2bf;
-@define-color fg_color_02 #d19a66;
-@define-color fg_color_03 #e6c07b;
-@define-color fg_color_04 #98c379;
+@define-color bg_color          #282c34;
+@define-color primary_dark      #323842;
+@define-color primary           #404859;
+@define-color primary_light     #5c6370;
+@define-color text_color        #abb2bf;
+@define-color other_infobar     #d19a66;
+@define-color other_search      #e6c07b;
+@define-color secondary         #98c379;
 
 /* generic vindow & dialog */
 #yumex_main, #yumex_transaction, #yumex_error { 
-  background: @bg_shade_01;
-  color: @fg_color;
+  background: @bg_color;
+  color: @text_color;
   
 }
 
 /* Transaction & error dialog buttons */
 #yumex_transaction button, #yumex_error button{ 
-  background: @bg_shade_03;
-  color: @fg_color;
+  background: @primary;
+  color: @text_color;
 }
 
 /* Info box w. progressbar */
 #yumex_infobar box{
-  background: @bg_shade_02;
+  background: @primary_dark;
   border-style: solid;
   border-width: 2px; 
-  border-color: @bg_shade_03;
+  border-color: @primary;
   border-radius: 2px;
 }
 
 #yumex_infobar label{
-  color: @fg_color_03;
+  color: @other_infobar;
 }
 
 #yumex_infobar spinner{
-  color: @bg_shade_04;
-  background: @bg_shade_02;
+  color: @primary_light;
+  background: @primary_dark;
 }
 
 /* separator between vies & info */
 paned separator{
-  background: @bg_shade_03;
+  background: @primary;
 }
 
 #yumex_infobox text {
-  background: @bg_shade_01;
-  color: @fg_color;
+  background: @bg_color;
+  color: @text_color;
 }
 
 #yumex_infobox .frame {
   border-style: none;  
   border-left-style: solid;
   border-left-width: 2px;
-  border-left-color: @bg_shade_03;  
+  border-left-color: @primary;  
 }
 
 /* info type selector */
 #info_selector row {
-  color: @bg_shade_05;
-  background: @bg_shade_01;
+  color: @primary_lighter;
+  background: @bg_color;
 }
 
 #info_selector  row:hover {
-  color: @fg_color;
+  color: @text_color;
 }
 
 #info_selector  row.activatable:selected {
-  color: @fg_color;
-  background: @bg_shade_02;
+  color: @text_color;
+  background: @primary;
   border-left-style: solid;
   border-left-width: 4px;
-  border-left-color: @fg_color_04;
+  border-left-color: @secondary;
   border-radius: 2px;
 }
 
 /* Views */
 .yumex_views treeview{ 
-  background: @bg_shade_01;
-  color: @fg_color;
+  background: @bg_color;
+  color: @text_color;
 }
 
 /* Package category selector */
 #package_sidebar toolbar{
-  background: @bg_shade_02;
+  background: @primary_dark;
 }
 
 #package_sidebar button{
-  color: @fg_color;
-  background: @bg_shade_02;
+  color: @text_color;
+  background: @primary_dark;
 }
 
 #package_sidebar list{ 
-  background: @bg_shade_01;
-  color: @fg_color_04;
+  background: @bg_color;
+  color: @text_color;
 }
 
 #package_sidebar  row.activatable{
@@ -115,56 +115,56 @@ paned separator{
 }
 
 #package_sidebar  row.activatable:selected {
-  color: @fg_color;
-  background: @bg_shade_04;
+  color: @text_color;
+  background: @primary;
   border: none; 
   border-left-style: solid;
   border-left-width: 3px;
-  border-left-color: @fg_color_04;
+  border-left-color: @secondary;
   border-radius: 2px;
   /*padding-left: 10px;*/
 
 }
 
 #package_sidebar  row.activatable:hover {
-  color: @fg_color;
-  background: @bg_shade_03;
+  color: @text_color;
+  background: @primary;
 }
 
 /* Package View */
 
 .yumex_views treeview:selected{ 
-  background: @bg_shade_04;
-  color: @fg_color;
+  background: @primary_light;
+  color: @text_color;
 }
 
 .yumex_views treeview:hover{ 
-  background: @bg_shade_03;
-  color: @fg_color;
+  background: @primary;
+  color: @text_color;
 }
 
 /* Package View Column Headers */
 .yumex_views header button {
-  color: @fg_color;
-  background: @bg_shade_02;
+  color: @text_color;
+  background: @primary_dark;
   border: none;
-  border-bottom-color: @bg_shade_05;
+  border-bottom-color: @primary_lighter;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-left-color: @bg_shade_05;
+  border-left-color: @primary_lighter;
   border-left-width: 1px;
   border-left-style: dotted;
 }
 
 /* Package View Checkboxes */
 .yumex_views check {
-  background: @bg_shade_03;
-  color: @fg_color_04;
+  background: @primary;
+  color: @secondary;
 }
 
 .yumex_views check:checked {
-  background: @bg_shade_05;
-  color: @fg_color;
+  background: @primary_lighter;
+  color: @text_color;
   border-width: 0px;
 }
 
@@ -172,43 +172,43 @@ paned separator{
   border-style: none;
   border-left-style: solid;
   border-left-width: 2px;
-  border-left-color: @bg_shade_03;  
+  border-left-color: @primary;  
 }
 
 /* Search bar */
 
 /* Search Entry */
 #yumex_search entry.search{
-  color: @fg_color_02;
-  background: @bg_shade_01;
+  color: @other_search;
+  background: @bg_color;
   border: none;
-  border: 1px solid @fg_color;
+  border: 1px solid @text_color;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
-  caret-color: @fg_color_02; /* cursor color */
+  caret-color: @other_search; /* cursor color */
   
 }
 
 #yumex_search entry.search image{
-  color: @fg_color_02;
-  background: @bg_shade_01;
+  color: @other_search;
+  background: @bg_color;
 }
 
 #yumex_search box{
-  background: @bg_shade_02;
+  background: @primary_dark;
   border: none;
   outline-style: none;
 }
 
 #yumex_search button {
-  color: @fg_color;
-  background: @bg_shade_03;
+  color: @text_color;
+  background: @primary;
   border: none;
   box-shadow: none;
 }
 
 #yumex_search button:hover {
-  color: @fg_color;
-  background: @bg_shade_04;
+  color: @text_color;
+  background: @primary_light;
 }

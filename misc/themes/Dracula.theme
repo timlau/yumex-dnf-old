@@ -12,27 +12,27 @@
 
 /* UI colors */
 
-@define-color black             #21252b;
+@define-color bg_color          #21252b;
 @define-color primary_dark      #282A36;
 @define-color primary           #44475A;
 @define-color primary_light     #566388;
 @define-color primary_lighter   #6272A4;
-@define-color white             #F8F8F2;
-@define-color other_orange      #FFB86C;
-@define-color other_yellow      #F1FA8C;
+@define-color text_color        #F8F8F2;
+@define-color other_search      #FFB86C;
+@define-color other_infobar     #F1FA8C;
 @define-color secondary         #FF79C6;
 
 /* generic vindow & dialog */
 #yumex_main, #yumex_transaction, #yumex_error { 
-  background: @black;
-  color: @white;
+  background: @bg_color;
+  color: @text_color;
   
 }
 
 /* Transaction & error dialog buttons */
 #yumex_transaction button, #yumex_error button{ 
   background: @primary;
-  color: @white;
+  color: @text_color;
 }
 
 /* Info box w. progressbar */
@@ -45,7 +45,7 @@
 }
 
 #yumex_infobar label{
-  color: @other_yellow;
+  color: @other_infobar;
 }
 
 #yumex_infobar spinner{
@@ -59,8 +59,8 @@ paned separator{
 }
 
 #yumex_infobox text {
-  background: @black;
-  color: @white;
+  background: @bg_color;
+  color: @text_color;
 }
 
 #yumex_infobox .frame {
@@ -73,15 +73,15 @@ paned separator{
 /* info type selector */
 #info_selector row {
   color: @primary_lighter;
-  background: @black;
+  background: @bg_color;
 }
 
 #info_selector  row:hover {
-  color: @white;
+  color: @text_color;
 }
 
 #info_selector  row.activatable:selected {
-  color: @white;
+  color: @text_color;
   background: @primary;
   border-left-style: solid;
   border-left-width: 4px;
@@ -91,8 +91,8 @@ paned separator{
 
 /* Views */
 .yumex_views treeview{ 
-  background: @black;
-  color: @white;
+  background: @bg_color;
+  color: @text_color;
 }
 
 /* Package category selector */
@@ -101,13 +101,13 @@ paned separator{
 }
 
 #package_sidebar button{
-  color: @white;
+  color: @text_color;
   background: @primary_dark;
 }
 
 #package_sidebar list{ 
-  background: @black;
-  color: @white;
+  background: @bg_color;
+  color: @text_color;
 }
 
 #package_sidebar  row.activatable{
@@ -115,7 +115,7 @@ paned separator{
 }
 
 #package_sidebar  row.activatable:selected {
-  color: @white;
+  color: @text_color;
   background: @primary;
   border: none; 
   border-left-style: solid;
@@ -127,7 +127,7 @@ paned separator{
 }
 
 #package_sidebar  row.activatable:hover {
-  color: @white;
+  color: @text_color;
   background: @primary;
 }
 
@@ -135,17 +135,17 @@ paned separator{
 
 .yumex_views treeview:selected{ 
   background: @primary_light;
-  color: @white;
+  color: @text_color;
 }
 
 .yumex_views treeview:hover{ 
   background: @primary;
-  color: @white;
+  color: @text_color;
 }
 
 /* Package View Column Headers */
 .yumex_views header button {
-  color: @white;
+  color: @text_color;
   background: @primary_dark;
   border: none;
   border-bottom-color: @primary_lighter;
@@ -164,7 +164,7 @@ paned separator{
 
 .yumex_views check:checked {
   background: @primary_lighter;
-  color: @white;
+  color: @text_color;
   border-width: 0px;
 }
 
@@ -179,20 +179,20 @@ paned separator{
 
 /* Search Entry */
 #yumex_search entry.search{
-  color: @other_orange;
-  background: @black;
+  color: @other_search;
+  background: @bg_color;
   border: none;
-  border: 1px solid @white;
+  border: 1px solid @text_color;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
-  caret-color: @other_orange; /* cursor color */
+  caret-color: @other_search; /* cursor color */
   
 }
 
 #yumex_search entry.search image{
-  color: @other_orange;
-  background: @black;
+  color: @other_search;
+  background: @bg_color;
 }
 
 #yumex_search box{
@@ -202,13 +202,13 @@ paned separator{
 }
 
 #yumex_search button {
-  color: @white;
+  color: @text_color;
   background: @primary;
   border: none;
   box-shadow: none;
 }
 
 #yumex_search button:hover {
-  color: @white;
+  color: @text_color;
   background: @primary_light;
 }
