@@ -4,6 +4,9 @@ Yum Extender (yumex-dnf)
 This repository contains a complete rewrite of Yum Extender in python3, Gtk3 and using the dnf-daemon dbus API for
 packaging actions
 
+**May 2021 : yumex-dnf is now back in development**
+Group/History support is read-only for now, as dnfdaemon support for history/groups is broken 
+
 
 How to build & install test rpms
 =================================
