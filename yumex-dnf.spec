@@ -15,6 +15,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel
+BuildRequires: make
 
 Requires: python3-dnfdaemon >= 0.3.10
 Requires: python3-gobject >= 3.10
