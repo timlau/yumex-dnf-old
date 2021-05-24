@@ -1,7 +1,3 @@
-23-03-2017: yumex-dnf is no longer under active development
-============================================================
-
-
 Yum Extender (yumex-dnf)
 =========================
 
@@ -40,23 +36,15 @@ make test-inst
 ```
 
 
-Fedora Repository
-=======================
-yumex-dnf is available in the Fedora repositories for f22, f23 & Rawhide
-
-Use this to install it.
-```
-sudo dnf install yumex-dnf
-```
-
 Fedora Copr Repository
 =======================
-yumex-dnf & dnddaemon development packages is available in a [fedora Copr repository](https://copr.fedoraproject.org/coprs/timlau/yumex-dnf/) for f22, f23 & Rawhide
+yumex-dnf development packages is available in a [fedora Copr repository](https://copr.fedoraproject.org/coprs/timlau/yumex-dnf/) for  f34 & Rawhide
 
 
 Use this to enable it.
 ```
 sudo dnf copr enable timlau/yumex-dnf
+sudo dnf install yumex-dnf
 ```
 
 Contributing
