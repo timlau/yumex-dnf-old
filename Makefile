@@ -126,7 +126,11 @@ test-inst:
 test-reinst:
 	@$(MAKE) test-release
 	sudo dnf reinstall $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
-	
+
+test-copr:
+	@$(MAKE) test-release
+	copr-cli build yumex-dnf $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+
 	
 transifex-setup:
 	tx init
@@ -156,5 +160,6 @@ status-run:
 
 .PHONY: all archive install clean build
 .PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
-.PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog	
+.PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
+.PHONY: test-copr	
 	
