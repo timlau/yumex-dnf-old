@@ -24,7 +24,7 @@ Requirements
 dnf install python3 python3-gobject 
 ```
 
-[dnf-deamon](https://github.com/timlau/dnf-daemon) python3 bindings must also be installed.
+[dnf-daemon](https://github.com/timlau/dnf-daemon) python3 bindings must also be installed.
 
 ```
 dnf install python3-dnfdaemon
