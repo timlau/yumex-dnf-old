@@ -44,6 +44,7 @@ ngettext = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
+
 class QueueEmptyError(Exception):
 
     def __init__(self):
@@ -268,11 +269,11 @@ class YumexConf(config.BaseConfig):
     theme = config.Option("System-Dark.theme")
     use_dark = config.BoolOption(False)
 
-    color_install = config.Option('#8BE8FD') 
-    color_update = config.Option('#FF79C6') 
+    color_install = config.Option('#8BE8FD')
+    color_update = config.Option('#FF79C6')
     color_downgrade = config.Option('#50FA7B')
-    color_normal = config.Option('#D3DAE3') 
-    color_obsolete = config.Option('#FFB86C') 
+    color_normal = config.Option('#D3DAE3')
+    color_obsolete = config.Option('#FFB86C')
 
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)
@@ -285,8 +286,8 @@ class YumexConf(config.BaseConfig):
     hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
     search_default = config.CaselessSelectionOption(
-                            default='prefix',
-                            allowed=('prefix', 'keyword', 'fields', 'key'))
+        default='prefix',
+        allowed=('prefix', 'keyword', 'fields', 'key'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)
@@ -311,11 +312,11 @@ class SessionConf(config.BaseConfig):
     # enabled repositories for this session
     enabled_repos = config.ListOption([])
     clean_instonly = config.BoolOption(False)
-    color_install = config.Option('#ffffff') 
-    color_update = config.Option('#ffffff') 
+    color_install = config.Option('#ffffff')
+    color_update = config.Option('#ffffff')
     color_downgrade = config.Option('#ffffff')
-    color_normal = config.Option('#ffffff') 
-    color_obsolete = config.Option('#ffffff') 
+    color_normal = config.Option('#ffffff')
+    color_obsolete = config.Option('#ffffff')
 
 
 class Config(object):

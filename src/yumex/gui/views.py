@@ -864,6 +864,7 @@ class QueueView(Gtk.TreeView):
 
 class HistoryView(Gtk.TreeView):
     """ History View Class"""
+
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
@@ -944,6 +945,7 @@ class HistoryView(Gtk.TreeView):
 
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
+
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
@@ -1032,6 +1034,7 @@ class RepoView(SelectionView):
     """
     This class controls the repo TreeView
     """
+
     def __init__(self):
         SelectionView.__init__(self)
         self.headers = [_('Repository'), _('Filename')]

@@ -18,6 +18,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+from yumex import YumexApplication
 import sys
 import traceback
 import subprocess
@@ -35,7 +36,6 @@ if here != '/usr/bin':
     print("set PYTHONPATH to %s" % here)
 
 
-from yumex import YumexApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = YumexApplication()

@@ -75,11 +75,12 @@ class Preferences:
             need_reset = self.set_settings()
         return need_reset
 
-    def get_themes(self):        
+    def get_themes(self):
         # Get Themes
         pattern = os.path.normpath(os.path.join(const.THEME_DIR, '*.theme'))
         theme_files = glob.glob(pattern)
-        theme_names = [os.path.basename(theme).split('.')[0] for theme in theme_files]
+        theme_names = [os.path.basename(theme).split('.')[0]
+                       for theme in theme_files]
         widget = self.base.ui.get_object('pref_theme')
         widget.remove_all()
         default = CONFIG.conf.theme.split(".")[0]
@@ -88,7 +89,7 @@ class Preferences:
         for theme in sorted(theme_names):
             widget.append_text(theme)
             if theme == default:
-                ndx=i
+                ndx = i
             i += 1
         widget.set_active(ndx)
 
@@ -113,7 +114,6 @@ class Preferences:
             self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
         # Get Themes
         self.get_themes()
-        
 
     def on_clean_instonly(self, *args):
         '''Handler for clean_instonly switch'''
@@ -164,9 +164,9 @@ class Preferences:
         default = CONFIG.conf.theme.split(".")[0]
         theme = widget.get_active_text()
         if theme != default:
-            CONFIG.conf.theme = f'{theme}.theme' 
+            CONFIG.conf.theme = f'{theme}.theme'
             self.base.load_custom_styling()
-            changed = True                
+            changed = True
         if changed:
             CONFIG.write()
         return need_reset

@@ -152,7 +152,7 @@ RPM_ACTIONS = {
     'obsolete': _("Obsoleting: %s"),
     'downgrade': _("Downgrading: %s"),
     'verify': _("Verifying: %s"),
-    'scriptlet' : _("Running scriptlet for: %s")
+    'scriptlet': _("Running scriptlet for: %s")
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",

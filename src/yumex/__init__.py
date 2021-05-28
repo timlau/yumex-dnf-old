@@ -110,6 +110,7 @@ class BaseYumex:
         if self._root_locked is False:
             logger.debug('Lock the DNF root daemon')
             locked, msg = self._root_backend.setup()
+            errmsg = ""
             if locked:
                 self._root_locked = True
                 if self._check_cache_expired('system'):
@@ -127,7 +128,7 @@ class BaseYumex:
                         'Yum Extender will exit')
                 self.error_dialog.show(errmsg)
                 # close down and exit yum extender
-                #self.status.SetWorking(False)  # reset working state
+                # self.status.SetWorking(False)  # reset working state
                 #self.status.SetYumexIsRunning(self.pid, False)
                 sys.exit(1)
         return self._root_backend
@@ -172,7 +173,7 @@ class BaseYumex:
                 self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
-        #self.status.SetWorking(False)  # reset working state
+        # self.status.SetWorking(False)  # reset working state
         #self.status.SetYumexIsRunning(self.pid, False)
         sys.exit(1)
 
@@ -259,20 +260,23 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 match = regex.search(line)
                 if len(match.groups()) == 2:
                     color_table[match.group(1)] = match.group(2)
-                    logger.debug(f' --> Color:  {match.group(1)} = {match.group(2)}')
+                    logger.debug(
+                        f' --> Color:  {match.group(1)} = {match.group(2)}')
         logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
         for color in colors:
             if color in color_table:
                 color_value = color_table[color]
-                if color_value.startswith('@'): # lookup macro color
-                    key = color_value[1:] # dump the @
+                if color_value.startswith('@'):  # lookup macro color
+                    key = color_value[1:]  # dump the @
                     if key in color_table:
                         color_value = color_table[key]
                     else:
-                        logger.info(f'Unknown Color alias : {color_value} default to {backup_color}')
+                        logger.info(
+                            f'Unknown Color alias : {color_value} default to {backup_color}')
                         color_value = backup_color
-                setattr(CONFIG.session,color, color_value)
-                logger.debug(f'  --> updated color : {color} to: {color_value}')
+                setattr(CONFIG.session, color, color_value)
+                logger.debug(
+                    f'  --> updated color : {color} to: {color_value}')
 
     def load_theme(self):
         theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
@@ -280,13 +284,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         if os.path.exists(theme_fn):
             self.apply_css(theme_fn)
             self.load_colors(theme_fn)
-            
 
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
-        # Use Dark Theme 
+        # Use Dark Theme
         gtk_settings = Gtk.Settings.get_default()
-        gtk_settings.set_property("gtk-application-prefer-dark-theme",CONFIG.conf.use_dark)
+        gtk_settings.set_property(
+            "gtk-application-prefer-dark-theme", CONFIG.conf.use_dark)
         css_fn = None
         theme = gtk_settings.props.gtk_theme_name
         logger.debug(f'current theme : {theme}')
@@ -306,7 +310,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     def on_window_state(self, widget, event):
         # save window current maximized state
         self.cur_maximized = event.new_window_state & \
-                             Gdk.WindowState.MAXIMIZED != 0
+            Gdk.WindowState.MAXIMIZED != 0
 
     def on_window_changed(self, widget, data):
         size = widget.get_size()
@@ -547,7 +551,7 @@ class Window(BaseWindow):
         # Setup info
         self.main_paned = self.get_ui('main_paned')
         self.main_paned.set_position(CONFIG.conf.info_paned)
-        self.main_paned.set_wide_handle(True) # use wide separator bar (off)
+        self.main_paned.set_wide_handle(True)  # use wide separator bar (off)
 
         # infobar
         self.infobar = widgets.InfoProgressBar(self.ui)
@@ -749,6 +753,7 @@ class Window(BaseWindow):
 
     def _run_actions_installmode(self, args, quit_app):
         action = None
+        package = None
         if args.install:
             action = 'install'
             package = args.install
@@ -893,6 +898,7 @@ class Window(BaseWindow):
         :param package: package to work on
         :param always_yes: ask the user or default to yes/ok to all questions
         """
+        exit_msg = ""
         if action == 'install':
             self.infobar.info(_('Installing package: %s') % package)
             exit_msg = _('%s was installed successfully') % package
@@ -977,13 +983,13 @@ class Window(BaseWindow):
             self.error_dialog.show(
                 ngettext('Error in building transaction',
                          'Errors in building transaction', len(e.msgs)) +
-                    '\n'.join(e.msgs))
+                '\n'.join(e.msgs))
             self._reset_on_cancel()
         except misc.TransactionSolveError as e:
             self.error_dialog.show(
-                    ngettext('Error in search for dependencies',
-                             'Errors in search for dependencies', len(e.msgs)) +
-                    '\n'.join(e.msgs))
+                ngettext('Error in search for dependencies',
+                         'Errors in search for dependencies', len(e.msgs)) +
+                '\n'.join(e.msgs))
             self._reset_on_error()
 
 ###############################################################################
@@ -1131,7 +1137,7 @@ class Window(BaseWindow):
                 pkgs.extend(obs_pkgs)
             else:
                 pkgs = self.backend.get_packages(data)
-            #self.status.SetUpdateCount(len(pkgs))
+            # self.status.SetUpdateCount(len(pkgs))
         self.info.set_package(None)
         self.infobar.info(_('Adding packages to view'))
         self.package_view.populate(pkgs)

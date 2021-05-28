@@ -305,6 +305,7 @@ class PositiveIntOption(IntOption):
     """An option representing a positive integer value, where 0 can
     have a special representation.
     """
+
     def __init__(self, default=None, range_min=0, range_max=None,
                  names_of_0=None):
         super(PositiveIntOption, self).__init__(default, range_min, range_max)
@@ -436,6 +437,7 @@ class SelectionOption(Option):
     """Handles string values where only specific values are
     allowed.
     """
+
     def __init__(self, default=None, allowed=(), mapper={}):
         super(SelectionOption, self).__init__(default)
         self._allowed = allowed
@@ -468,6 +470,7 @@ class CaselessSelectionOption(SelectionOption):
     """Mainly for compatibility with :class:`BoolOption`, works like
     :class:`SelectionOption` but lowers input case.
     """
+
     def parse(self, s):
         """Parse a string for specific values.
 
@@ -610,6 +613,7 @@ class BaseConfig(object):
             if value is not None:
                 setattr(self, name, value)
 
+    @classmethod
     def optionobj(cls, name, exceptions=True):
         """Return the :class:`Option` instance for the given name.
 
@@ -633,6 +637,7 @@ class BaseConfig(object):
             return None
     optionobj = classmethod(optionobj)
 
+    @classmethod
     def isoption(cls, name):
         """Return True if the given name refers to a defined option.
 

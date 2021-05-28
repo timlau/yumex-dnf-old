@@ -600,7 +600,7 @@ class PackageInfo(PackageDetails):
         head += ("%14s " % _("Issued")) + ": %(updated)s\n"
         head = head % upd_info
 
-        #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
+        # if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
         #    head += "    Updated : %s" % upd_info['updated']
 
         self.write(head)
@@ -621,14 +621,14 @@ class PackageInfo(PackageDetails):
                     self.write(bug_msg)
                     header = " "
 
-        ## Add our CVE references
-        #if upd_info['references']:
-            #cves = [r for r in upd_info['references']
-                    #if r and r['type'] == 'cve']
-            #if len(cves):
+        # Add our CVE references
+        # if upd_info['references']:
+            # cves = [r for r in upd_info['references']
+                    # if r and r['type'] == 'cve']
+            # if len(cves):
                 #cvelist = ""
                 #header = "CVE"
-                #for cve in cves:
+                # for cve in cves:
                     #cvelist += "%14s : %s\n" % (header, cve['id'])
                     #header = " "
                 #head += cvelist[:-1].rstrip() + '\n\n'

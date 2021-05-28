@@ -18,6 +18,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+from yumex.updater import UpdateApplication
 import sys
 import traceback
 import subprocess
@@ -34,7 +35,6 @@ if here != '/usr/bin':
     sys.path[0] = here
     print("set PYTHONPATH to %s" % here)
 
-from yumex.updater import UpdateApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = UpdateApplication()

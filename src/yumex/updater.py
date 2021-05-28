@@ -23,7 +23,7 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-from _signal import SIGINT, SIGTERM, SIGHUP
+from signal import SIGINT, SIGTERM, SIGHUP
 
 import logging
 import os
@@ -158,7 +158,7 @@ class _Updater:
                     logger.debug('notification opened : # updates = %d',
                                  update_count)
                     notify = _Notification(_('New Updates'),
-                    # Translators: %d is a number of available updates
+                                           # Translators: %d is a number of available updates
                                            ngettext('%d available update',
                                                     '%d available updates',
                                                     update_count)
