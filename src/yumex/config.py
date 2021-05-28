@@ -635,7 +635,6 @@ class BaseConfig(object):
             raise KeyError
         else:
             return None
-    optionobj = classmethod(optionobj)
 
     @classmethod
     def isoption(cls, name):
@@ -646,7 +645,6 @@ class BaseConfig(object):
         :return: whether *name* specifies a defined option
         """
         return cls.optionobj(name, exceptions=False) is not None
-    isoption = classmethod(isoption)
 
     def iterkeys(self):
         """Yield the names of all defined options in the instance."""
