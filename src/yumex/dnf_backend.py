@@ -176,11 +176,11 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                          self.running_api_version)
         else:
             raise dnfdaemon.client.APIVersionError(
-                                   _('dnfdaemon api version : %d'
-                                     "\ndon't match"
-                                     '\nneeded api version : %d') %
-                                   (self.running_api_version,
-                                    const.NEEDED_DAEMON_API))
+                _('dnfdaemon api version : %d'
+                  "\ndon't match"
+                  '\nneeded api version : %d') %
+                (self.running_api_version,
+                 const.NEEDED_DAEMON_API))
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
@@ -202,11 +202,11 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
             self.frontend.infobar.info(_('Applying changes to the system'))
-            self.frontend.infobar.hide_sublabel()
+            self.frontend.infobar.info_sub('')
         elif event == 'verify':
             self.frontend.infobar.show_progress(True)
             self.frontend.infobar.info(_('Verify changes on the system'))
-            #self.frontend.infobar.hide_sublabel()
+            self.frontend.infobar.info_sub('')
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)
@@ -223,9 +223,9 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         else:  # this is just a pkg name (cleanup)
             name = package
         # logger.debug('on_RPMProgress : [%s]', package)
-        action_msg = const.RPM_ACTIONS.get(action,None)
+        action_msg = const.RPM_ACTIONS.get(action, None)
         if action_msg:
-            self.frontend.infobar.info_sub( action_msg % name)
+            self.frontend.infobar.info_sub(action_msg % name)
         else:
             logger.info("RPM Progress: Undefinded action {}".format(action))
         if ts_current > 0 and ts_current <= ts_total:
@@ -268,7 +268,8 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
         else:
-            logger.debug('Download Error : %s - %s (status : %d )', name, msg, status)
+            logger.debug('Download Error : %s - %s (status : %d )',
+                         name, msg, status)
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
@@ -304,7 +305,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        #self._update_config_options()
+        # self._update_config_options()
         self.cache.reset()  # Reset the cache
 
     def _update_config_options(self):
