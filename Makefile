@@ -129,7 +129,7 @@ test-reinst:
 
 test-copr:
 	@$(MAKE) test-release
-	copr-cli build yumex-dnf $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	copr-cli build yumex-dnf $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 	
 transifex-setup:
