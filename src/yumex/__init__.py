@@ -397,9 +397,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
 class Window(BaseWindow):
 
-    def __init__(self, app, gnome=True, install_mode=False):
+    def __init__(self, app, use_headerbar=True, install_mode=False):
         super(Window, self).__init__(app)
-        self.gnome = gnome
+        self.use_headerbar = use_headerbar
         self.install_mode = install_mode
         # load custom styling from current theme
         self.load_custom_styling()
@@ -500,7 +500,7 @@ class Window(BaseWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
-        if self.gnome:  # Gnome, headerbar in titlebar
+        if self.use_headerbar:  # Gnome, headerbar in titlebar
             hb = self.get_ui('headerbar')
             rb = self.get_ui('right_header')
             lb = self.get_ui('left_header')
@@ -1205,7 +1205,7 @@ class YumexApplication(Gtk.Application):
 
     def on_activate(self, app):
         if not self.running:
-            self.window = Window(self, gnome=CONFIG.conf.headerbar,
+            self.window = Window(self, use_headerbar=CONFIG.conf.headerbar,
                                  install_mode=self.install_mode)
             app.add_window(self.window)
             self.running = True
