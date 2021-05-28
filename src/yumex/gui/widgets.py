@@ -42,6 +42,7 @@ class InfoProgressBar:
 
     def __init__(self, ui):
         self.ui = ui
+        self._is_visible = False
         self.infobar = ui.get_object("info_revealer")  # infobar revealer
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
@@ -49,10 +50,19 @@ class InfoProgressBar:
         self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
+        ''' Show or hide the info bar'''
+        if show == self._is_visible:  # check if infobar already is in the wanted state
+            return
         self.infobar.set_reveal_child(show)
         if show:
             self.infobar.show()
             self.spinner.start()
+            self.progress.show()
+            self.label.show()
+            self.sublabel.show()
+            self.label.set_text("")
+            self.sublabel.set_text("")
+            self._is_visible = True
         else:
             self.spinner.stop()
             self.infobar.hide()
@@ -60,51 +70,32 @@ class InfoProgressBar:
             self.sublabel.hide()
             self.progress.hide()
             self.progress.set_show_text(False)
-
-    def show_progress(self, state):
-        if state:
-            self.show_label()
-        else:
-            self._show_infobar(False)
+            self._is_visible = False
 
     def hide(self):
         self._show_infobar(False)
 
-    def hide_sublabel(self):
-        self.sublabel.hide()
-
-    def show_label(self, msg=""):
+    def message(self, msg):
+        self._show_infobar(True)
         self.label.set_text(msg)
-        self.label.show()
 
-    def show_sublabel(self, msg=""):
+    def message_sub(self, msg):
+        self._show_infobar(True)
         self.sublabel.set_text(msg)
-        self.sublabel.show()
 
-    def show_all(self):
-        self.show_label()
-        self.show_sublabel()
-        self.progress.show()
-
-    def info(self, msg):
-        self._show_infobar(True)
-        self.show_label(msg)
-
-    def info_sub(self, msg):
-        self._show_infobar(True)
-        self.show_sublabel(msg)
+    def check_info(self):
+        if self.label.get_text() == "":
+            self.message(_("Getting Package Metadata"))
 
     def set_progress(self, frac, label=None):
         if frac >= 0.0 and frac <= 1.0:
             self._show_infobar()
-            self.progress.show()
             self.progress.set_fraction(frac)
             # make sure that the main label is shown, else the progress
             # looks bad. this normally happens when changlog or filelist info
             # is needed for a package and it will trigger the yum daemon to
             # download the need metadata.
-            if not self.label.get_property('visible'):
-                self.info(_("Getting Package Metadata"))
+            self.check_info()
 
 
 class SearchBar(GObject.GObject):

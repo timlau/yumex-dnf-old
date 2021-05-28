@@ -107,7 +107,7 @@ class Preferences:
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
         # get the repositories
-        self.base.infobar.info(_('Fetching repository information'))
+        self.base.infobar.message(_('Fetching repository information'))
         self.repos = self.base.backend.get_repositories()
         self.base.infobar.hide()
         self.repo_view.populate(self.repos)

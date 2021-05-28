@@ -87,7 +87,7 @@ class BaseYumex:
     def reset_cache(self):
         logger.debug('Refresh system cache')
         self.set_working(True, True)
-        self.infobar.info(_('Refreshing Repository Metadata'))
+        self.infobar.message(_('Refreshing Repository Metadata'))
         rc = self._root_backend.ExpireCache()
         self.set_working(False)
         if rc:
@@ -571,7 +571,7 @@ class Window(BaseWindow):
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
 
     def _setup_arch(self):
-        self.infobar.info(_('Downloading Repository Metadata'))
+        self.infobar.message(_('Downloading Repository Metadata'))
         # setup the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
@@ -701,7 +701,7 @@ class Window(BaseWindow):
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True)
-        self.infobar.info(_("Reloading package information..."))
+        self.infobar.message(_("Reloading package information..."))
         self.release_root_backend()
         self.backend.reload()
         # clear the package queue
@@ -825,9 +825,9 @@ class Window(BaseWindow):
             raise misc.QueueEmptyError
         self.content.select_page('actions')
         self._populate_transaction()
-        self.infobar.info(_('Searching for dependencies'))
+        self.infobar.message(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
-        self.infobar.info(_('Dependencies resolved'))
+        self.infobar.message(_('Dependencies resolved'))
         if not rc:
             raise misc.TransactionSolveError(result)
         return result
@@ -841,7 +841,7 @@ class Window(BaseWindow):
 
     def _run_transaction(self):
         """Run the current transaction."""
-        self.infobar.info(_('Applying changes to the system'))
+        self.infobar.message(_('Applying changes to the system'))
         self.set_working(True, True)
         rc, result = self.backend.RunTransaction()
         # This can happen more than once (more gpg keys to be
@@ -898,24 +898,24 @@ class Window(BaseWindow):
         """
         exit_msg = ""
         if action == 'install':
-            self.infobar.info(_('Installing package: %s') % package)
+            self.infobar.message(_('Installing package: %s') % package)
             exit_msg = _('%s was installed successfully') % package
-            self.infobar.info_sub(package)
+            self.infobar.message_sub(package)
             txmbrs = self.backend.Install(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'remove':
-            self.infobar.info(_('Removing package: %s') % package)
+            self.infobar.message(_('Removing package: %s') % package)
             exit_msg = _('%s was removed successfully') % package
-            self.infobar.info_sub(package)
+            self.infobar.message_sub(package)
             txmbrs = self.backend.Remove(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'update':
-            self.infobar.info(_('Updating all available updates'))
+            self.infobar.message(_('Updating all available updates'))
             exit_msg = _('Available updates was applied successfully')
             txmbrs = self.backend.Update('*')
-        self.infobar.info(_('Searching for dependencies'))
+        self.infobar.message(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
-        self.infobar.info(_('Dependencies resolved'))
+        self.infobar.message(_('Dependencies resolved'))
         if rc:
             self.transaction_result.populate(result, '')
             if not always_yes:
@@ -923,7 +923,7 @@ class Window(BaseWindow):
             else:
                 ok = True
             if ok:  # Ok pressed
-                self.infobar.info(_('Applying changes to the system'))
+                self.infobar.message(_('Applying changes to the system'))
                 self.backend.RunTransaction()
                 self.release_root_backend()
                 self.hide()
@@ -948,7 +948,7 @@ class Window(BaseWindow):
         - run the transaction
         """
         self.set_working(True, True)
-        self.infobar.info(_('Preparing system for applying changes'))
+        self.infobar.message(_('Preparing system for applying changes'))
         try:
             if from_queue:
                 result = self._build_from_queue()
@@ -1119,7 +1119,7 @@ class Window(BaseWindow):
 
     def on_filter_changed(self, widget, data):
         """Handle changes in package filter."""
-        self.infobar.info(const.PACKAGE_LOAD_MSG[data])
+        self.infobar.message(const.PACKAGE_LOAD_MSG[data])
         self.set_working(True, True)
         if self.last_search:  # we are searching
             pkgs = self._filter_search_pkgs(data)
@@ -1137,7 +1137,7 @@ class Window(BaseWindow):
                 pkgs = self.backend.get_packages(data)
             # self.status.SetUpdateCount(len(pkgs))
         self.info.set_package(None)
-        self.infobar.info(_('Adding packages to view'))
+        self.infobar.message(_('Adding packages to view'))
         self.package_view.populate(pkgs)
         self.set_working(False)
         self.infobar.hide()

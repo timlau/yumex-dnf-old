@@ -186,27 +186,27 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         if event == 'start-run':
             self.frontend.infobar.show_progress(True)
         elif event == 'download':
-            self.frontend.infobar.info(_('Downloading packages'))
+            self.frontend.infobar.message(_('Downloading packages'))
         elif event == 'pkg-to-download':
             self._dnl_packages = data
         elif event == 'signature-check':
             # self.frontend.infobar.show_progress(False)
             self.frontend.infobar.set_progress(0.0)
-            self.frontend.infobar.info(_('Checking package signatures'))
+            self.frontend.infobar.message(_('Checking package signatures'))
             self.frontend.infobar.set_progress(1.0)
-            self.frontend.infobar.info_sub('')
+            self.frontend.infobar.message_sub('')
         elif event == 'run-test-transaction':
-            # self.frontend.infobar.info(_('Testing Package Transactions')) #
+            # self.frontend.infobar.message(_('Testing Package Transactions')) #
             # User don't care
             pass
         elif event == 'run-transaction':
             self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_('Applying changes to the system'))
-            self.frontend.infobar.info_sub('')
+            self.frontend.infobar.message(_('Applying changes to the system'))
+            self.frontend.infobar.message_sub('')
         elif event == 'verify':
             self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_('Verify changes on the system'))
-            self.frontend.infobar.info_sub('')
+            self.frontend.infobar.message(_('Verify changes on the system'))
+            self.frontend.infobar.message_sub('')
         # elif event == '':
         elif event == 'fail':
             self.frontend.infobar.show_progress(False)
@@ -225,7 +225,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         # logger.debug('on_RPMProgress : [%s]', package)
         action_msg = const.RPM_ACTIONS.get(action, None)
         if action_msg:
-            self.frontend.infobar.info_sub(action_msg % name)
+            self.frontend.infobar.message_sub(action_msg % name)
         else:
             logger.info("RPM Progress: Undefinded action {}".format(action))
         if ts_current > 0 and ts_current <= ts_total:
@@ -244,7 +244,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self._files_to_download = num_files
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
-        self.frontend.infobar.info_sub(
+        self.frontend.infobar.message_sub(
             # Translators: %d will be replaced with the number of files
             # to download; %s will be replaced with the preformatted
             # number of bytes to download + the prefix (k, M, etc.)
@@ -276,7 +276,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         values = (name, frac)
         logger.debug('on_RepoMetaDataProgress (root): %s', repr(values))
         if frac == 0.0:
-            self.frontend.infobar.info_sub(name)
+            self.frontend.infobar.message_sub(name)
         else:
             self.frontend.infobar.set_progress(frac)
 
