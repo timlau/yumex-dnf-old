@@ -18,15 +18,18 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from yumex import YumexApplication
-import sys
-import traceback
-import subprocess
-import signal
+""" Main launcher 
+    isort:skip_file
+"""
+import gi  # isort:skip
+gi.require_version('Gtk', '3.0')  # isort:skip
+gi.require_version('Notify', '0.7')  # isort:skip
 
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Notify', '0.7')
+from yumex import YumexApplication
+import signal
+import subprocess
+import traceback
+import sys
 
 
 here = sys.path[0]

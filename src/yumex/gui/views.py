@@ -18,17 +18,16 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-import os
 import logging
-
+import os
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
-
-from yumex import const
-from yumex.misc import _, ngettext, CONFIG, doGtkEvents, TimeFunction
 import yumex.misc as misc
+from yumex.misc import _, ngettext, CONFIG, doGtkEvents, TimeFunction
+from yumex import const
+
 
 logger = logging.getLogger('yumex.gui.views')
 

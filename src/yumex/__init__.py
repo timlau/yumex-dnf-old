@@ -18,6 +18,14 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
+import yumex.gui.widgets as widgets
+import yumex.gui.views as views
+import yumex.gui.dialogs as dialogs
+import yumex.dnf_backend
+import yumex.misc as misc
+import yumex.const as const
+from yumex.misc import Config, _, ngettext, CONFIG
+from gi.repository import Gio, Gtk, Gdk, GLib
 import argparse
 import datetime
 import logging
@@ -26,16 +34,6 @@ import shutil
 import subprocess
 import sys
 import re
-
-from gi.repository import Gio, Gtk, Gdk, GLib
-
-from yumex.misc import Config, _, ngettext, CONFIG
-import yumex.const as const
-import yumex.misc as misc
-import yumex.dnf_backend
-import yumex.gui.dialogs as dialogs
-import yumex.gui.views as views
-import yumex.gui.widgets as widgets
 
 
 logger = logging.getLogger('yumex')

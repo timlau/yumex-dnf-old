@@ -18,6 +18,9 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
+import yumex.config as config
+import dnfdaemon.client
+from gi.repository import Gtk, Gdk, Notify
 import time
 import configparser
 import gettext
@@ -28,11 +31,6 @@ import re
 import subprocess
 import sys
 
-from gi.repository import Gtk, Gdk, Notify
-
-import dnfdaemon.client
-
-import yumex.config as config
 
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')

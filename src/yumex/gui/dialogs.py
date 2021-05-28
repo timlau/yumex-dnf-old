@@ -19,18 +19,17 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-import logging
-import os
-import shutil
-import glob
-
-from gi.repository import Gtk
-from gi.repository import GObject
-
 from yumex import const
 import yumex.gui.views
 import yumex.misc
 from yumex.misc import _, CONFIG
+from gi.repository import GObject
+from gi.repository import Gtk
+import glob
+import shutil
+import os
+import logging
+
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
@@ -108,7 +107,9 @@ class Preferences:
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
         # get the repositories
+        self.base.infobar.info(_('Fetching repository information'))
         self.repos = self.base.backend.get_repositories()
+        self.base.infobar.hide()
         self.repo_view.populate(self.repos)
         if CONFIG.conf.repo_saved:
             self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
