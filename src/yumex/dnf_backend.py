@@ -82,7 +82,7 @@ class DnfPackage(yumex.backend.Package):
         """RPM filename of a package."""
         # the full path for at localinstall is stored in repoid
         if self.action == 'li':
-            return self.repoid
+            return self.repository
         else:
             return "%s-%s.%s.%s.rpm" % (self.name, self.version,
                                         self.release, self.arch)
@@ -228,7 +228,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             self.frontend.infobar.message_sub(action_msg % name)
         else:
             logger.info("RPM Progress: Undefinded action {}".format(action))
-        if ts_current > 0 and ts_current <= ts_total:
+        if 0 < ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
 
@@ -239,8 +239,6 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
 
     def on_DownloadStart(self, num_files, num_bytes):
         """Starting a new parallel download batch."""
-        #values =  (num_files, num_bytes)
-        #print('on_DownloadStart : %s' % (repr(values)))
         self._files_to_download = num_files
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
@@ -255,15 +253,11 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         """Progress for a single element in the batch."""
-        #values =  (name, frac, total_frac, total_files)
-        #print('on_DownloadProgress : %s' % (repr(values)))
         num = '( %d/%d )' % (self._files_downloaded, self._files_to_download)
         self.frontend.infobar.set_progress(total_frac, label=num)
 
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single element ended."""
-        #values =  (name, status, msg)
-        #print('on_DownloadEnd : %s' % (repr(values)))
         if status == -1 or status == 2:  # download OK or already exists
             logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
@@ -328,7 +322,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     def to_pkg_tuple(self, pkg_id):
         """Get package nevra & repoid from an package pkg_id"""
         (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        return (n, e, v, r, a, repo_id)
+        return n, e, v, r, a, repo_id
 
     def _make_pkg_object(self, pkgs, flt):
         """Get a list Package objects from a list of pkg_ids & attrs.
@@ -449,6 +443,8 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         :param search_attrs: package attrs to search in
         :param keys: keys to search for
         :param match_all: match all keys
+        :param newest_only:
+        :param tags:
         """
         attrs = ['summary', 'size', 'action']
         pkgs = self.Search(search_attrs, keys, attrs, match_all,

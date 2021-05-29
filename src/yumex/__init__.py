@@ -125,9 +125,6 @@ class BaseYumex:
                         'DNF is locked by another process.\n\n'
                         'Yum Extender will exit')
                 self.error_dialog.show(errmsg)
-                # close down and exit yum extender
-                # self.status.SetWorking(False)  # reset working state
-                #self.status.SetYumexIsRunning(self.pid, False)
                 sys.exit(1)
         return self._root_backend
 
@@ -171,8 +168,6 @@ class BaseYumex:
                 self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
-        # self.status.SetWorking(False)  # reset working state
-        #self.status.SetYumexIsRunning(self.pid, False)
         sys.exit(1)
 
     def _parse_error(self, value):
@@ -204,6 +199,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.ui.add_from_file(const.DATA_DIR + "/yumex.ui")
         except:
             raise
+            # noinspection PyUnreachableCode
             dialogs.show_information(
                 self, 'GtkBuilder ui file not found : ' +
                 const.DATA_DIR + '/yumex.ui')
@@ -222,6 +218,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         else:
             return True
 
+    # noinspection PyUnusedLocal
     def on_delete_event(self, *args):
         if self.is_working:
             self.iconify()
@@ -305,6 +302,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         else:
             self.load_theme()
 
+    # noinspection PyUnusedLocal
     def on_window_state(self, widget, event):
         # save window current maximized state
         self.cur_maximized = event.new_window_state & \
@@ -459,9 +457,9 @@ class Window(BaseWindow):
 ###############################################################################
 
     def rerun_installmode(self, args):
-        '''call when yumex gui is already running and is idle
+        """call when yumex gui is already running and is idle
         and second instance is excuted in installmode
-        '''
+        """
         self.get_ui('content_box').hide()
         WIDGETS_HIDE = ['left_buttons', 'right_buttons']
         for widget in WIDGETS_HIDE:
@@ -606,7 +604,6 @@ class Window(BaseWindow):
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.groups = views.GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
-        #hb.pack_start(self.groups, True, True, 0)
         # sw.add(hb)
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
@@ -1147,7 +1144,7 @@ class Window(BaseWindow):
             self.package_view.set_header_click(False)
 
     def on_queue_refresh(self, widget, total):
-        '''Handle content of the queue is changed.'''
+        """Handle content of the queue is changed."""
         if total > 0:
             self.apply_button.set_sensitive(True)
         else:

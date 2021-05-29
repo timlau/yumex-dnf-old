@@ -55,9 +55,9 @@ ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {
-    "x86_64": set(['x86_64', 'i686', 'i386', 'noarch']),
-    "i386": set(['i686', 'i386', 'noarch']),
-    "arm": set(['armv7hl', 'noarch'])
+    "x86_64": {'x86_64', 'i686', 'i386', 'noarch'},
+    "i386": {'i686', 'i386', 'noarch'},
+    "arm": {'armv7hl', 'noarch'}
 }
 
 # arch for this platform
@@ -66,7 +66,7 @@ if ARCH in ARCH_DICT:
 else:  # use x86_64 as fallback
     PLATFORM_ARCH = ARCH_DICT['x86_64']
 
-DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w\.]*): (.*)$')
+DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w.]*): (.*)$')
 
 # Constants
 

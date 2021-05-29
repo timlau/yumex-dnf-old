@@ -50,7 +50,7 @@ class InfoProgressBar:
         self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
-        ''' Show or hide the info bar'''
+        """ Show or hide the info bar"""
         if show == self._is_visible:  # check if infobar already is in the wanted state
             return
         self.infobar.set_reveal_child(show)
@@ -88,7 +88,7 @@ class InfoProgressBar:
             self.message(_("Getting Package Metadata"))
 
     def set_progress(self, frac, label=None):
-        if frac >= 0.0 and frac <= 1.0:
+        if 0.0 <= frac <= 1.0:
             self._show_infobar()
             self.progress.set_fraction(frac)
             # make sure that the main label is shown, else the progress
@@ -418,13 +418,13 @@ class PackageDetails(GObject.GObject):
                 self._url_handler(url)
 
     def on_mouse_motion(self, widget, event, data=None):
-        '''
+        """
         Mouse movement handler for TextView
 
         :param widget:
         :param event:
         :param data:
-        '''
+        """
         window = widget.get_window(Gtk.TextWindowType.WIDGET)
         # Get x,y pos for widget
         w, x, y, mask = window.get_pointer()
@@ -469,9 +469,9 @@ class PackageDetails(GObject.GObject):
 
 
 class PackageInfo(PackageDetails):
-    '''
+    """
     class for handling the Package Information view
-    '''
+    """
 
     def __init__(self, window, base):
         PackageDetails.__init__(self, window, self._url_handler)
@@ -487,21 +487,21 @@ class PackageInfo(PackageDetails):
         self.update()
 
     def set_package(self, pkg):
-        '''
+        """
         Set current active package to show information about in the
         Package Info view.
 
         :param pkg: package to set as active package
-        '''
+        """
         self.current_package = pkg
         self.win.set_working(True, True)
         self.update()
         self.win.set_working(False)
 
     def update(self):
-        '''
+        """
         update the information in the Package info view
-        '''
+        """
         self.clear()
         if self.current_package:
             if self.active_filter == 'desc':
@@ -587,7 +587,6 @@ class PackageInfo(PackageDetails):
         head += ("%14s " % _("Release")) + ": %(id)s\n"
         head += ("%14s " % _("Type")) + ": "
         head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
-        #head += ("%14s " % _("Status")) + ": %(status)s\n"
         head += ("%14s " % _("Issued")) + ": %(updated)s\n"
         head = head % upd_info
 
@@ -611,18 +610,6 @@ class PackageInfo(PackageDetails):
                     self.add_url(bug, url)
                     self.write(bug_msg)
                     header = " "
-
-        # Add our CVE references
-        # if upd_info['references']:
-            # cves = [r for r in upd_info['references']
-                    # if r and r['type'] == 'cve']
-            # if len(cves):
-                #cvelist = ""
-                #header = "CVE"
-                # for cve in cves:
-                    #cvelist += "%14s : %s\n" % (header, cve['id'])
-                    #header = " "
-                #head += cvelist[:-1].rstrip() + '\n\n'
 
         desc = upd_info['description']
         head += "\n%14s : %s\n" % (_("Description"),

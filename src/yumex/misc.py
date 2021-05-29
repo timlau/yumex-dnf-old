@@ -73,7 +73,7 @@ def dbus_dnfsystem(cmd):
 def to_pkg_tuple(pkg_id):
     """Find the real package nevre & repoid from an package pkg_id"""
     (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-    return (n, e, v, r, a, repo_id)
+    return n, e, v, r, a, repo_id
 
 
 def list_to_string(pkg_list, first_delimitier, delimiter):
@@ -119,12 +119,12 @@ def color_to_hex(color):
 def is_url(url):
     urls = re.findall(
         r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-        r'[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+        r'[!*(),]|%[0-9a-fA-F][0-9a-fA-F])+', url)
     return urls
 
 
 def format_block(block, indent):
-    ''' Format a block of text so they get the same indentation'''
+    """ Format a block of text so they get the same indentation"""
     spaces = " " * indent
     lines = str(block).split('\n')
     result = lines[0] + "\n"
@@ -144,9 +144,9 @@ def get_style_color(widget):
 
 
 def doGtkEvents():
-    '''
+    """
 
-    '''
+    """
     while Gtk.events_pending():      # process Gtk events
         Gtk.main_iteration()
 
@@ -225,7 +225,7 @@ def format_number(number, SI=0, space=' '):
     else:
         fmt = '%.0f%s%s'
 
-    return(fmt % (float(number or 0), space, symbols[depth]))
+    return fmt % (float(number or 0), space, symbols[depth])
 
 
 def notify(summary, body):
@@ -318,9 +318,9 @@ class SessionConf(config.BaseConfig):
 
 
 class Config(object):
-    '''
+    """
     Yum Extender Configuration class
-    '''
+    """
     WRITE_ALWAYS = ['autostart', 'update_interval',
                     'update_startup_delay', 'autocheck_updates',
                     'update_notify', 'update_showicon']

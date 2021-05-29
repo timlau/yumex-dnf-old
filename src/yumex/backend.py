@@ -25,14 +25,14 @@ logger = logging.getLogger('yumex.backend')
 
 
 class Package:
-    '''
+    """
     Base class for a package, must be implemented in a sub class
-    '''
+    """
 
     def __init__(self, backend):
         self.backend = backend
         self.name = None
-        # self.version = None
+        #self.version = None
         self.arch = None
         self.repository = None
         self.summary = None
@@ -45,34 +45,34 @@ class Package:
         self.selected = False
 
     def __str__(self):
-        '''
+        """
         Return a string representation of the package
-        '''
+        """
         return self.fullname
 
     @property
     def fullname(self):
-        '''
+        """
         fullname for the package :name-version.arch
-        '''
+        """
         return "%s-%s.%s" % (self.name, self.version, self.arch)
 
     def get_attribute(self, attr):
-        '''
+        """
         get attribute for the package
         :param attr:
-        '''
+        """
         if hasattr(self, attr):
             return getattr(self, attr)
         else:
             return self.do_get_atributes(attr)
 
     def do_get_atributes(self, attr):
-        '''
+        """
         get non local attributes for the package
         must be implemented in a sub class
         :param attr:
-        '''
+        """
         raise NotImplementedError()
 
     def exception_handler(self, e):
@@ -83,13 +83,13 @@ class Package:
 
 
 class Backend:
-    '''
+    """
     Base package manager handling class
     it contains a cache for Package based objects, so we don't have
     to get the twice from the package manager.
 
     must be implemented in a sub class
-    '''
+    """
 
     def __init__(self, frontend, filters=False):
         if filters:
@@ -112,17 +112,17 @@ class Backend:
         self.frontend.exception_handler(e)
 
     def get_packages(self, pkg_filter):
-        ''' Get a list of Package objects based on a filter
+        """ Get a list of Package objects based on a filter
         ('installed', 'available'...)
-        '''
+        """
         pkgs = self.cache._get_packages(pkg_filter)
         return pkgs
 
 
 class BaseFilter:
-    '''Used as base for filters, there can filter a list of packages
+    """Used as base for filters, there can filter a list of packages
     based on a different conditions
-    '''
+    """
 
     def __init__(self, name, active=False):
         self.name = name
@@ -132,7 +132,7 @@ class BaseFilter:
         if not self.active:
             return pkgs
 
-    def change(self):
+    def change(self, archs):
         pass
 
     def set_active(self, state):
@@ -140,9 +140,9 @@ class BaseFilter:
 
 
 class ArchFilter(BaseFilter):
-    '''
+    """
     Arch Filter to filter a list of packages by arch
-    '''
+    """
 
     def __init__(self, name, active=False):
         BaseFilter.__init__(self, name, active)
@@ -158,9 +158,9 @@ class ArchFilter(BaseFilter):
 
 
 class Filters:
-    '''
+    """
     Container to contain a number of filters based on the BaseFilter class
-    '''
+    """
 
     def __init__(self):
         self._filters = {}
@@ -176,9 +176,7 @@ class Filters:
     def run(self, pkgs):
         flt_pkgs = pkgs
         for name in self._filters:
-            #logger.debug('pre: %s : pkgs : %s' % (name,len(flt_pkgs)))
             flt_pkgs = self._filters[name].run(flt_pkgs)
-            #logger.debug('post: %s  pkgs : %s' % (name,len(flt_pkgs)))
         return flt_pkgs
 
     def get(self, name):
@@ -189,34 +187,34 @@ class Filters:
 
 
 class PackageCache:
-    '''
+    """
     Package cache to contain packages from backend,
     so we dont have get them more than once.
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         setup the cache
-        '''
+        """
         for flt in const.ACTIONS_FILTER.values():
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
 
     def reset(self):
-        '''
+        """
         reset the cache
-        '''
+        """
         for flt in const.ACTIONS_FILTER.values():
             setattr(self, flt, set())
         self._populated = []
         self._index = {}
 
     def _get_packages(self, pkg_filter):
-        '''
+        """
         get a list of packages from the cache
         @param pkg_filter: the type of packages to get
-        '''
+        """
         pkgs = list(getattr(self, str(pkg_filter)))
         return pkgs
 
@@ -224,8 +222,8 @@ class PackageCache:
         return str(pkg_filter) in self._populated
 
     def populate(self, pkg_filter, pkgs):
-        '''
-        '''
+        """
+        """
         self.find_packages(pkgs)
         self._populated.append(str(pkg_filter))
 
@@ -252,25 +250,25 @@ class PackageCache:
 
 
 class PackageCacheWithFilters(PackageCache):
-    ''' Package cache to contain packages from backend,
+    """ Package cache to contain packages from backend,
     so we dont have get them more than once.
     This version has filtering, so we can filter packages by fx. arch
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         setup the cache
-        '''
+        """
         PackageCache.__init__(self)
         self.filters = Filters()
         arch_flt = ArchFilter('arch')
         self.filters.add(arch_flt)
 
     def _get_packages(self, pkg_filter):
-        '''
+        """
         get a list of packages from the cache
         @param pkg_filter: the type of packages to get
-        '''
+        """
         pkgs = PackageCache._get_packages(self, str(pkg_filter))
         pkgs = self.filters.run(pkgs)
         return pkgs

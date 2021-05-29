@@ -83,18 +83,18 @@ class _Notification(GObject.GObject):
 
 
 class _UpdateTimestamp:
-    '''
+    """
     a persistent timestamp. e.g. for storing the last update check
-    '''
+    """
 
     def __init__(self, file_name=TIMESTAMP_FILE):
         self.__time_file = file_name
         self.__last_time = -1
 
     def get_last_time_diff(self):
-        '''
+        """
         returns time difference to last check in seconds >=0 or -1 on error
-        '''
+        """
         now = int(time.time())
         if self.__last_time == -1:
             try:

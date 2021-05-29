@@ -21,23 +21,22 @@
 """ Main launcher 
     isort:skip_file
 """
-import gi  # isort:skip
-gi.require_version('Gtk', '3.0')  # isort:skip
-gi.require_version('Notify', '0.7')  # isort:skip
-
-from yumex import YumexApplication
 import signal
 import subprocess
 import traceback
 import sys
+import gi  # isort:skip
 
+gi.require_version('Gtk', '3.0')  # isort:skip
+gi.require_version('Notify', '0.7')  # isort:skip
+
+from yumex import YumexApplication
 
 here = sys.path[0]
 if here != '/usr/bin':
     # git checkout
     sys.path[0] = here
     print("set PYTHONPATH to %s" % here)
-
 
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)

@@ -33,26 +33,27 @@ logger = logging.getLogger('yumex.gui.views')
 
 
 class SelectionView(Gtk.TreeView):
-    '''
+    """
     A Base view with an selection column
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         init the view
-        @param widget: the gtk TreeView widget
-        '''
+        """
         Gtk.TreeView.__init__(self)
         self.store = None
 
     def create_text_column_num(self, hdr, colno, resize=True, size=None,
                                markup=False):
-        '''
+        """
         Create a TreeViewColumn with data from a TreeStore column
         @param hdr: column header text
         @param colno: TreeStore column to get the data from
         @param resize: is resizable
-        '''
+        @param size:
+        @param markup:
+        """
         cell = Gtk.CellRendererText()
         if markup:
             column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
@@ -86,7 +87,6 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         if click_handler:
             column.set_clickable(True)
-            #column.connect('clicked', click_handler)
             label = Gtk.Label(label=hdr)
             label.show()
             column.set_widget(label)
@@ -101,11 +101,9 @@ class SelectionView(Gtk.TreeView):
 
     def create_selection_colunm(self, attr, click_handler=None,
                                 popup_handler=None, tooltip=None, icon=None):
-        '''Create an selection column, there get data via property function
+        """Create an selection column, there get data via property function
         and a key attr
-
-        @param attr: key attr for property funtion
-        '''
+        """
         # Setup a selection column using a object attribute
         cell1 = Gtk.CellRendererToggle()  # Selection
         cell1.set_property('activatable', True)
@@ -133,10 +131,12 @@ class SelectionView(Gtk.TreeView):
                 widget.set_tooltip_text(tooltip)
 
     def create_selection_column_num(self, num, data_func=None, tooltip=None):
-        '''
+        """
         Create an selection column, there get data an TreeStore Column
         @param num: TreeStore column to get data from
-        '''
+        @param data_func:
+        @param tooltip:
+        """
         # Setup a selection column using a column num
 
         column = Gtk.TreeViewColumn(None, None)
@@ -165,10 +165,9 @@ class SelectionView(Gtk.TreeView):
 
     def create_selection_text_column(self, hdr, select_func, text_attr,
                                      size=200):
-        '''
+        """
         Create an selection column, there get data an TreeStore Column
-        @param num: TreeStore column to get data from
-        '''
+        """
         # Setup a selection column using a column num
 
         column = Gtk.TreeViewColumn(hdr, None)
@@ -188,28 +187,28 @@ class SelectionView(Gtk.TreeView):
         return column
 
     def get_data_text(self, column, cell, model, iterator, prop):
-        '''property function to get string data from a object in
+        """property function to get string data from a object in
         the TreeStore based on an attributes key
-        '''
+        """
         obj = model.get_value(iterator, 0)
         if obj:
             cell.set_property('text', getattr(obj, prop))
             cell.set_property('foreground-rgba', obj.color)
 
     def get_data_bool(self, column, cell, model, iterator, prop):
-        '''Property function to get boolean data from a object in
+        """Property function to get boolean data from a object in
         the TreeStore based on an attributes key
-        '''
+        """
         obj = model.get_value(iterator, 0)
         cell.set_property("visible", True)
         if obj:
             cell.set_property("active", getattr(obj, prop))
 
     def on_toggled(self, widget, path):
-        '''
+        """
         selection togged handler
         overload in child class
-        '''
+        """
         pass
 
 
@@ -240,9 +239,9 @@ class PackageView(SelectionView):
             self._click_header_active = False
 
     def _setup_model(self):
-        '''
+        """
         Setup the model and view
-        '''
+        """
         store = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         self.set_model(store)
         if self.group_mode:
@@ -357,7 +356,6 @@ class PackageView(SelectionView):
         """Downgrade package right click menu handler"""
         if event.button == 1:  # Left Click
             logger.debug('downgrade to : %s ', str(do_pkg))
-            #pkg.action = 'do'
             pkg.queued = 'do'
             pkg.selected = True
             pkg.downgrade_po = do_pkg
@@ -398,9 +396,9 @@ class PackageView(SelectionView):
             self._last_selected = []
 
     def on_cursor_changed(self, widget):
-        '''
+        """
         a new group is selected in group view
-        '''
+        """
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
             if model is not None and iterator is not None:
@@ -412,9 +410,9 @@ class PackageView(SelectionView):
         self._click_header_state = ""
 
     def select_all(self):
-        '''
+        """
         Select all packages in the view
-        '''
+        """
         for el in self.store:
             obj = el[0]
             if not obj.queued == obj.action:
@@ -425,9 +423,9 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def deselect_all(self):
-        '''
+        """
         Deselect all packages in the view
-        '''
+        """
         for el in self.store:
             obj = el[0]
             if obj.queued == obj.action:
@@ -520,10 +518,10 @@ class PackageView(SelectionView):
         self.queueView.refresh()
 
     def togglePackage(self, obj):
-        '''
+        """
         Toggle the package queue status
         @param obj:
-        '''
+        """
         if obj.action == 'do' or obj.queued == 'do':
             self._toggle_downgrade(obj)
         else:
@@ -568,9 +566,9 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def install_all(self):
-        '''
+        """
         Select all packages in the view
-        '''
+        """
         for el in self.store:
             obj = el[0]
             if not obj.queued == obj.action and obj.action == 'i':
@@ -581,9 +579,9 @@ class PackageView(SelectionView):
         self.queue_draw()
 
     def remove_all(self):
-        '''
+        """
         Select all packages in the view
-        '''
+        """
         for el in self.store:
             obj = el[0]
             if not obj.queued == obj.action and obj.action == 'r':
@@ -595,16 +593,14 @@ class PackageView(SelectionView):
 
 
 class PackageQueue:
-    '''
+    """
     A Queue class to store selected packages/groups and the pending actions
-    '''
+    """
 
     def __init__(self):
         self.packages = {}
         self._setup_packages()
-        self.groups = {}
-        self.groups['i'] = {}
-        self.groups['r'] = {}
+        self.groups = {'i': {}, 'r': {}}
         self._name_arch_index = {}
 
     def _setup_packages(self):
@@ -615,9 +611,7 @@ class PackageQueue:
         del self.packages
         self.packages = {}
         self._setup_packages()
-        self.groups = {}
-        self.groups['i'] = {}
-        self.groups['r'] = {}
+        self.groups = {'i': {}, 'r': {}}
         self._name_arch_index = {}
 
     def get(self, action=None):
@@ -659,11 +653,11 @@ class PackageQueue:
         return na in self._name_arch_index
 
     def add_group(self, grp, action):
-        '''
+        """
 
         @param grp: Group object
         @param action:
-        '''
+        """
         logger.debug('add_group : %s - %s', grp.id, action)
         grps = self.groups[action]
         if grp.id not in grps:
@@ -671,11 +665,11 @@ class PackageQueue:
             grp.selected = True
 
     def remove_group(self, grp, action):
-        '''
+        """
 
         @param grp: Group object
         @param action:
-        '''
+        """
         logger.debug('removeGroup : %s - %s', grp.id, action)
         grps = self.groups[action]
         if grp.id in grps:
@@ -683,17 +677,17 @@ class PackageQueue:
             grp.selected = False
 
     def remove_all_groups(self):
-        '''
+        """
         remove all groups from queue
-        '''
+        """
         for action in ('i', 'r'):
             for grp in self.groups[action]:
                 self.remove_group(grp, action)
 
     def remove_groups(self, group_names):
-        '''
+        """
         remove groups from queue based on list of grp_ids
-        '''
+        """
         for action in ('i', 'r'):
             new_dict = {}
             grps = self.groups[action]
@@ -736,9 +730,9 @@ class QueueView(Gtk.TreeView):
         remove_menu.connect('activate', self.deleteSelected)
 
     def _setup_model(self):
-        '''
+        """
         Setup the model and view
-        '''
+        """
         model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING)
         self.set_model(model)
         cell1 = Gtk.CellRendererText()
@@ -773,21 +767,21 @@ class QueueView(Gtk.TreeView):
         self.refresh()
 
     def on_QueueView_button_press_event(self, treeview, event):
-        '''
+        """
         Mouse button clicked in package view handler
         :param treeview:
         :param event:
-        '''
+        """
         if event.button == 3:  # Right Click
             popup = self.queue_menu
             popup.popup(None, None, None, None, event.button, event.time)
             return True
 
     def filter_pkgs_from_list(self, rlist):
-        '''
+        """
         return packages in queue where str(pkg) is in a list
         @param rlist:
-        '''
+        """
         rclist = []
         for action in const.QUEUE_PACKAGE_TYPES:
             pkg_list = self.queue.packages[action]
@@ -920,9 +914,9 @@ class HistoryView(Gtk.TreeView):
         self.is_populated = True
 
     def on_cursor_changed(self, widget):
-        '''
+        """
         a new History element is selected in history view
-        '''
+        """
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
             if model is not None and iterator is not None:
@@ -1195,7 +1189,6 @@ class GroupView(Gtk.TreeView):
 
         category = Gtk.CellRendererText()
         column.pack_start(category, False)
-        #column.add_attribute(category, 'markup', 1)
         column.set_cell_data_func(category, self.get_data_text, 'name')
 
         self.append_column(column)
@@ -1203,9 +1196,9 @@ class GroupView(Gtk.TreeView):
         return model
 
     def get_data_text(self, column, cell, model, iterator, prop):
-        '''property function to get string data from a object in the
+        """property function to get string data from a object in the
         TreeStore based on  an attributes key
-        '''
+        """
         obj = model.get_value(iterator, 0)
         if obj:
             cell.set_property('text', getattr(obj, prop))
@@ -1234,9 +1227,9 @@ class GroupView(Gtk.TreeView):
         self.queueView.refresh()
 
     def on_cursor_changed(self, widget):
-        '''
+        """
         a new group is selected in group view
-        '''
+        """
         if widget.get_selection():
             (model, iterator) = widget.get_selection().get_selected()
             if model is not None and iterator is not None:
@@ -1253,7 +1246,6 @@ class GroupView(Gtk.TreeView):
         self._groups = data
         self.set_model(self.model)
         for cat, catgrps in data:
-            #print( cat, catgrps)
             # cat: [category_id, category_name, category_desc]
             (catid, name, desc) = cat
             obj = Group(catid, name, desc, False, True)
@@ -1310,10 +1302,10 @@ class GroupView(Gtk.TreeView):
             cell.set_property('visible', False)
 
     def _get_pix(self, fn):
-        '''
+        """
         Get a pix buffer from a file, resize it to 24 px, if needed
         @param fn:
-        '''
+        """
         imgsize = 24
         pix = GdkPixbuf.Pixbuf.new_from_file(fn)
         if pix.get_height() != imgsize or pix.get_width() != imgsize:

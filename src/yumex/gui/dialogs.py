@@ -117,7 +117,7 @@ class Preferences:
         self.get_themes()
 
     def on_clean_instonly(self, *args):
-        '''Handler for clean_instonly switch'''
+        """Handler for clean_instonly switch"""
         widget = self.base.ui.get_object('pref_clean_instonly')
         state = widget.get_active()
         postfix = 'installonly_limit'
@@ -224,10 +224,10 @@ class TransactionResult:
         self.store.clear()
 
     def setup_view(self, view):
-        '''
+        """
         Setup the TreeView
         @param view: the TreeView widget
-        '''
+        """
         model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
                               GObject.TYPE_STRING, GObject.TYPE_STRING,
                               GObject.TYPE_STRING)
@@ -240,13 +240,13 @@ class TransactionResult:
         return model
 
     def create_text_column(self, hdr, view, colno, size=None):
-        '''
+        """
         Create at TreeViewColumn
         @param hdr: column header text
         @param view: the TreeView widget
         @param colno: the TreeStore column containing data for the column
-        @param min_width: the min column view (optional)
-        '''
+        @param size: the min column view (optional)
+        """
         cell = Gtk.CellRendererText()  # Size Column
         column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
         column.set_resizable(True)
@@ -256,10 +256,11 @@ class TransactionResult:
         view.append_column(column)
 
     def populate(self, pkglist, dnl_size):
-        '''
+        """
         Populate the TreeView with data
         @param pkglist: list containing view data
-        '''
+        @param dnl_size:
+        """
         model = self.store
         self.store.clear()
         total_size = 0
@@ -307,7 +308,7 @@ def yes_no_dialog(window, msg, add_msg=None):
         dialog.set_transient_for(window)
     rc = dialog.run()
     dialog.destroy()
-    return(rc == Gtk.ResponseType.YES)
+    return rc == Gtk.ResponseType.YES
 
 
 def ask_for_gpg_import(window, values):

@@ -263,8 +263,8 @@ class UrlOption(Option):
         return url
 
     def _schemelist(self):
-        '''Return a user friendly list of the allowed schemes
-        '''
+        """Return a user friendly list of the allowed schemes
+        """
         if len(self.schemes) < 1:
             return 'empty'
         elif len(self.schemes) == 1:
@@ -578,8 +578,7 @@ class BaseConfig(object):
             option.setup(self, name)
 
     def __str__(self):
-        out = []
-        out.append('[%s]' % self._section)
+        out = ['[%s]' % self._section]
         for name, value in self.iteritems():
             out.append('%s: %r' % (name, value))
         return '\n'.join(out)
@@ -660,7 +659,7 @@ class BaseConfig(object):
         """
         # Use dir() so that we see inherited options too
         for name in self.iterkeys():
-            yield (name, getattr(self, name))
+            yield name, getattr(self, name)
 
     def write(self, fileobj, section=None, always=()):
         """Write out the configuration to a file-like object.
