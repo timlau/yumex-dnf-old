@@ -180,13 +180,12 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
-            self.frontend.infobar.show_progress(True)
+            pass
         elif event == 'download':
             self.frontend.infobar.message(_('Downloading packages'))
         elif event == 'pkg-to-download':
             self._dnl_packages = data
         elif event == 'signature-check':
-            # self.frontend.infobar.show_progress(False)
             self.frontend.infobar.set_progress(0.0)
             self.frontend.infobar.message(_('Checking package signatures'))
             self.frontend.infobar.set_progress(1.0)
@@ -196,18 +195,16 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             # User don't care
             pass
         elif event == 'run-transaction':
-            self.frontend.infobar.show_progress(True)
             self.frontend.infobar.message(_('Applying changes to the system'))
             self.frontend.infobar.message_sub('')
         elif event == 'verify':
-            self.frontend.infobar.show_progress(True)
             self.frontend.infobar.message(_('Verify changes on the system'))
             self.frontend.infobar.message_sub('')
         # elif event == '':
         elif event == 'fail':
-            self.frontend.infobar.show_progress(False)
+            self.frontend.infobar.hide()
         elif event == 'end-run':
-            self.frontend.infobar.show_progress(False)
+            self.frontend.infobar.hide()
         else:
             logger.debug('TransactionEvent : %s', event)
 
