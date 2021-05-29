@@ -32,14 +32,11 @@ class Package:
     def __init__(self, backend):
         self.backend = backend
         self.name = None
-        #self.version = None
         self.arch = None
         self.repository = None
         self.summary = None
-        # self.description = None
         self.size = None
         self.action = None
-        # self.color = 'black'
         self.queued = False
         self.recent = False
         self.selected = False

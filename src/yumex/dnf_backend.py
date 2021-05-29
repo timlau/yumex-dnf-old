@@ -43,8 +43,8 @@ class DnfPackage(yumex.backend.Package):
         (n, e, v, r, a, repo_id) = yumex.misc.to_pkg_tuple(self.pkg_id)
         self.name = n
         self.epoch = e
-        self.ver = v
-        self.rel = r
+        self.version = v
+        self.release = r
         self.arch = a
         self.repository = repo_id
         self.visible = True
@@ -55,6 +55,10 @@ class DnfPackage(yumex.backend.Package):
         self.sizeM = yumex.misc.format_number(size)
         # cache
         self._description = None
+        self.action = action
+        self.queued = False
+        self.recent = False
+        self.selected = False
 
     def __str__(self):
         """String representation of the package object."""
@@ -68,14 +72,6 @@ class DnfPackage(yumex.backend.Package):
     def get_attribute(self, attr):
         """Get a given attribute for a package."""
         return self.backend.GetAttribute(self.pkg_id, attr)
-
-    @property
-    def version(self):
-        return self.ver
-
-    @property
-    def release(self):
-        return self.rel
 
     @property
     def filename(self):
