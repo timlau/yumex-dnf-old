@@ -24,61 +24,6 @@ import yumex.const as const
 logger = logging.getLogger('yumex.backend')
 
 
-class Package:
-    """
-    Base class for a package, must be implemented in a sub class
-    """
-
-    def __init__(self, backend):
-        self.backend = backend
-        self.name = None
-        self.arch = None
-        self.repository = None
-        self.summary = None
-        self.size = None
-        self.action = None
-        self.queued = False
-        self.recent = False
-        self.selected = False
-
-    def __str__(self):
-        """
-        Return a string representation of the package
-        """
-        return self.fullname
-
-    @property
-    def fullname(self):
-        """
-        fullname for the package :name-version.arch
-        """
-        return "%s-%s.%s" % (self.name, self.version, self.arch)
-
-    def get_attribute(self, attr):
-        """
-        get attribute for the package
-        :param attr:
-        """
-        if hasattr(self, attr):
-            return getattr(self, attr)
-        else:
-            return self.do_get_atributes(attr)
-
-    def do_get_atributes(self, attr):
-        """
-        get non local attributes for the package
-        must be implemented in a sub class
-        :param attr:
-        """
-        raise NotImplementedError()
-
-    def exception_handler(self, e):
-        """
-        send exceptions to the frontend
-        """
-        self.backend.frontend.exception_handler(e)
-
-
 class Backend:
     """
     Base package manager handling class

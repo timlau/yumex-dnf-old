@@ -32,11 +32,11 @@ from yumex.misc import ExceptionHandler, TimeFunction, _, ngettext, CONFIG
 logger = logging.getLogger('yumex.yum_backend')
 
 
-class DnfPackage(yumex.backend.Package):
-    """Abstract package object for a package in the package system."""
+class DnfPackage:
+    """package object for a package in the package system."""
 
     def __init__(self, po_tuple, action, backend):
-        yumex.backend.Package.__init__(self, backend)
+        self.backend = backend
         (pkg_id, summary, size) = po_tuple
         self.pkg_id = pkg_id
         self.action = action
@@ -156,6 +156,11 @@ class DnfPackage(yumex.backend.Package):
         """Package is an update/replacement to another package."""
         return self.action == 'o' or self.action == 'u'
 
+    def exception_handler(self, e):
+        """
+        send exceptions to the frontend
+        """
+        self.backend.frontend.exception_handler(e)
 
 class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     """Backend to do all the dnf related actions """
