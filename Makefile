@@ -68,6 +68,7 @@ release-publish:
 	@git merge --no-ff release-${VERSION} -m "merge ${APPNAME}-${VERSION} release"
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
+	@git push origin
 	@$(MAKE) archive
 	@$(MAKE) rpm
 
