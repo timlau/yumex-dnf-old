@@ -1,3 +1,130 @@
+2021-06-04  Tim Lauridsen
+
+  * bumped version to 4.4.0
+  * add PyCharm project config
+  * Make ui tweaks
+
+2021-05-29  Tim Lauridsen
+
+  * Joined Package & DnfPackage, no need for an abstract class
+  * Code cleanup.
+  * Code cleanup. Lint fixes PEP8 fixes remove uncommented code
+
+2021-05-28  Tim Lauridsen
+
+  * cleanup Infobar & rename some methods
+  * import sorting can be a mess :-)
+  * Fixed Lint issues & code formatting
+
+2021-05-24  Tim Lauridsen
+
+  * disable group selection as group support is broken in dnfdaemon
+
+2021-05-23  Tim Lauridsen
+
+  * Update 2 theme and remove one (too ugly)
+
+2021-05-22  Tim Lauridsen
+
+  * Update One-Dark & Material-Green to changed CSS naming in .ui
+  * * UI cleanup * improve Dracula Theme * Remove color selection from pref. *
+  Add Dark mode switch to pref.
+  * Update copyright year & version to match spec
+  * * Added System (light + dark) there only set pkg list colors. * Add
+  Material-Green Theme * Added support for macro colors in themes
+
+2021-05-21  Tim Lauridsen
+
+  * Added new themes and support for selecting themes in preferences.
+
+2021-05-20  Tim Lauridsen
+
+  * Initial support for themes
+
+2021-05-17  Tim Lauridsen
+
+  * Transfix pull, *.po update
+
+2019-09-01  Tim Lauridsen
+
+  * better handling of RPM Progress events
+  * Fix colors to look better ona dark theme
+
+2016-11-18  Rafal Luzynski
+
+  * Internationalization: Plurals fixed  All occurrences of "P_" replaced with
+  "ngettext" which is correctly understood by gettext tools.  Also ngettext()
+  applied to few more messages where it seemed to be necessary to distinguish
+  between plural and singular.  At the same time, a reference to no longer
+  existing old_init.py removed from POTFILES.in.  Closes #139
+
+2016-08-29  Vaughan Agrez
+
+  * Release version should be 4.3.3
+
+2016-05-23  Christian Stadelmann
+
+  * Improve error message markup  Before this change, there was a space missing
+  after the first string and all packages were tried to print on one line.
+  * Fix pylint logging-not-lazy warnings  ID:logging-not-lazy Specify string
+  format arguments as logging function parameters  Reason: Performance, see
+  pylint documentation.
+  * deduplicate _fullname() function
+  * Remove old __future__ statements  In python 2.x, some features were
+  optional, which required us to mark them as required using __future__.
+  "absolute_import" and "print_function" are available by default from 3.0 on,
+  thus these statements are not required any more.
+  * resort imports  pylint: ID:wrong-import-order standard import […] comes
+  before […]  New order:  1. imports from python standard library [empty line]
+  2. imports from gi, hawkey, other system installed libraries [empty line] 3.
+  imports from dnfdaemon [empty line] 4. imports from yumex modules
+  * Fix pylint info simplifiable-if-statement  ID:simplifiable-if-statement The
+  if statement can be replaced with 'return bool(test)'
+  * Don't use built-in symbols as variables any more
+  * Fix more pylint warnings related to whitespace and line length  E271
+  multiple spaces after keyword E302 expected 2 blank lines, found 1 W292 no
+  newline at end of file limit line length to 80 characters
+  * Remove possible logging-related bugs
+  * Remove unnecessary imports
+  * Fix pylint: anomalous-backslash-in-string warnings 
+  ID:anomalous-backslash-in-string Anomalous backslash in string: […] String
+  constant might be missing an r prefix.
+  * Fix collection-related pylint warnings  E713 test for membership should be
+  'not in'
+  * Fix intendation-related pylint warnings  Fix some pylint warnings related
+  to indentation: E122 continuation line missing indentation or outdented E124
+  closing bracket does not match visual indentation E125 continuation line with
+  same indent as next logical line E127 continuation line over-indented for
+  visual indent E128 continuation line under-indented for visual indent E131
+  continuation line unaligned for hanging indent
+
+2016-05-19  Christian Stadelmann
+
+  * About Dialog: make window transient (#116)  Windows without parents are
+  discouraged. Before this change and with G_ENABLE_DIAGNOSTIC=1 you'll see the
+  warning Gtk-Message: GtkDialog mapped without a transient parent. This is
+  discouraged. when opening the AboutDialog.
+
+2016-05-18  Tim Lauridsen
+
+  * make the repo selection save work (#107)
+
+2016-05-16  Christian Stadelmann
+
+  * Set window header margin only on non-gnome platforms  Following the
+  discussion in #108 (and my own proposal) it looks like: 1. on gnome, header
+  margin breaks consistency with other applications 2. on non-gnome, header
+  margins are needed to ensure that window header and headerbox are not
+  touching each other
+
+2016-05-14  Christian Stadelmann
+
+  * Put Popover creation into glade (yumex.ui) file
+
+2016-05-13  Tim Lauridsen
+
+  * Only use a headerbar, when running gnome (#108)
+
 2016-04-29  Tim Lauridsen
 
   * Add python based ChangeLog generation without email addrs
