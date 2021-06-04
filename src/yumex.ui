@@ -753,44 +753,48 @@ start Yum Extender</property>
       <object class="GtkTextTag" id="description">
         <property name="name">description</property>
         <property name="foreground">#3584e4</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="font">Noto Sans</property>
+        <property name="family">Noto Sans</property>
+        <property name="size-points">12</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="changelog-header">
         <property name="name">changelog-header</property>
         <property name="foreground">#e01b24</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="font">Noto Sans</property>
+        <property name="family">Noto Sans</property>
+        <property name="weight">500</property>
+        <property name="size-points">14</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="changelog-header_dark">
         <property name="name">changelog-header_dark</property>
         <property name="foreground">#e01b24</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="font">Noto Sans</property>
+        <property name="family">Noto Sans</property>
+        <property name="weight">500</property>
+        <property name="size-points">14</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="changelog_dark">
         <property name="name">changelog_dark</property>
         <property name="foreground">#3584e4</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="font">Noto Sans </property>
+        <property name="family">Noto Sans</property>
+        <property name="stretch">semi-condensed</property>
+        <property name="size-points">14</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="changelog">
         <property name="name">changelog</property>
         <property name="foreground">#3584e4</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
+        <property name="font">Noto Sans</property>
+        <property name="family">Noto Sans</property>
+        <property name="stretch">semi-condensed</property>
         <property name="scale">0.90</property>
       </object>
     </child>
@@ -800,7 +804,7 @@ start Yum Extender</property>
         <property name="foreground">#3584e4</property>
         <property name="font">Normal</property>
         <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="size-points">11</property>
       </object>
     </child>
     <child type="tag">
@@ -809,16 +813,18 @@ start Yum Extender</property>
         <property name="foreground">#3584e4</property>
         <property name="font">Normal</property>
         <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="size-points">12</property>
+        <property name="scale">0</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="description_dark">
         <property name="name">description_dark</property>
         <property name="foreground">#3584e4</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="scale">0.90</property>
+        <property name="font">Noto Sans</property>
+        <property name="family">Noto Sans</property>
+        <property name="stretch">semi-condensed</property>
+        <property name="size-points">12</property>
       </object>
     </child>
   </object>
@@ -1099,6 +1105,9 @@ start Yum Extender</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Updates</property>
+                                        <attributes>
+                                          <attribute name="font-desc" value="Noto Sans Condensed 12"/>
+                                        </attributes>
                                       </object>
                                     </child>
                                   </object>
@@ -1116,6 +1125,9 @@ start Yum Extender</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Installed</property>
+                                        <attributes>
+                                          <attribute name="font-desc" value="Noto Sans Condensed 12"/>
+                                        </attributes>
                                       </object>
                                     </child>
                                   </object>
@@ -1133,6 +1145,9 @@ start Yum Extender</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Available</property>
+                                        <attributes>
+                                          <attribute name="font-desc" value="Noto Sans Condensed 12"/>
+                                        </attributes>
                                       </object>
                                     </child>
                                   </object>
@@ -1150,6 +1165,9 @@ start Yum Extender</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">All</property>
+                                        <attributes>
+                                          <attribute name="font-desc" value="Noto Sans Condensed 12"/>
+                                        </attributes>
                                       </object>
                                     </child>
                                   </object>

@@ -23,6 +23,7 @@ Requires: python3-pyxdg
 Requires: python3-dbus
 Requires: python3-cairo
 Requires: libnotify
+Requires: google-noto-sans-fonts
 
 %description
 Graphical package tool for maintain packages on the system

@@ -61,6 +61,8 @@ paned separator{
 #yumex_infobox text {
   background: @bg_color;
   color: @text_color;
+  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 #yumex_infobox .frame {
@@ -78,6 +80,7 @@ paned separator{
 
 #info_selector  row:hover {
   color: @text_color;
+  transition: all 200ms ease-in 100ms;
 }
 
 #info_selector  row.activatable:selected {
@@ -87,6 +90,8 @@ paned separator{
   border-left-width: 4px;
   border-left-color: @secondary;
   border-radius: 2px;
+  transition: all 200ms ease-in 100ms;
+
 }
 
 /* Views */
@@ -123,12 +128,14 @@ paned separator{
   border-left-color: @secondary;
   border-radius: 2px;
   /*padding-left: 10px;*/
+  transition: all 200ms ease-in 100ms;
 
 }
 
 #package_sidebar  row.activatable:hover {
   color: @text_color;
   background: @primary;
+  transition: all 200ms ease-in 100ms;
 }
 
 /* Package View */
@@ -211,4 +218,5 @@ paned separator{
 #yumex_search button:hover {
   color: @text_color;
   background: @primary_light;
+  transition: all 200ms ease-in 100ms;
 }

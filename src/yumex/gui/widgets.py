@@ -593,7 +593,7 @@ class PackageInfo(PackageDetails):
         # if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
         #    head += "    Updated : %s" % upd_info['updated']
 
-        self.write(head)
+        self.write(head, 'filelist')
         head = ""
 
         # Add our bugzilla references
@@ -606,16 +606,16 @@ class PackageInfo(PackageDetails):
                 for bz in bzs:
                     (typ, bug, title, url) = bz
                     bug_msg = '- %s' % title
-                    self.write("%14s : " % header, newline=False)
+                    self.write("%14s : " % header, 'filelist', newline=False)
                     self.add_url(bug, url)
-                    self.write(bug_msg)
+                    self.write(bug_msg, 'filelist')
                     header = " "
 
         desc = upd_info['description']
         head += "\n%14s : %s\n" % (_("Description"),
                                    yumex.misc.format_block(desc, 17))
         head += "\n"
-        self.write(head)
+        self.write(head, 'filelist')
 
     def _show_changelog(self):
         self.base.set_working(True, False)
@@ -649,7 +649,7 @@ class PackageInfo(PackageDetails):
         filelist = self.current_package.filelist
         if filelist:
             for fname in sorted(filelist):
-                self.write(fname)
+                self.write(fname, 'filelist')
         else:
             self.write(_("No filelist information is available"))
         self.base.set_working(False, False)
@@ -659,10 +659,10 @@ class PackageInfo(PackageDetails):
         reqs = self.current_package.requirements
         if reqs:
             for key in reqs:
-                self.write(key)
+                self.write(key, 'filelist')
                 for pkg_id in reqs[key]:
                     pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
-                    self.write(' --> {}'.format(pkg))
+                    self.write(' --> {}'.format(pkg), 'filelist')
         self.base.set_working(False, False)
 
 
