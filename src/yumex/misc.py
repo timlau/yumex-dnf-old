@@ -17,14 +17,12 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from __future__ import absolute_import
 
-import time
-
-from gi.repository import Gtk, Gdk, Notify
-
-import configparser
+import yumex.config as config
 import dnfdaemon.client
+from gi.repository import Gtk, Gdk, Notify
+import time
+import configparser
 import gettext
 import locale
 import logging
@@ -32,7 +30,7 @@ import os.path
 import re
 import subprocess
 import sys
-import yumex.config as config
+
 
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')
@@ -40,7 +38,7 @@ locale.bindtextdomain('yumex-dnf', LOCALE_DIR)
 gettext.bindtextdomain('yumex-dnf', LOCALE_DIR)
 gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
-P_ = gettext.ngettext
+ngettext = gettext.ngettext
 
 logger = logging.getLogger('yumex.misc')
 
@@ -75,14 +73,21 @@ def dbus_dnfsystem(cmd):
 def to_pkg_tuple(pkg_id):
     """Find the real package nevre & repoid from an package pkg_id"""
     (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-    return (n, e, v, r, a, repo_id)
+    return n, e, v, r, a, repo_id
 
 
-def id2fullname(pkg_id):
+def list_to_string(pkg_list, first_delimitier, delimiter):
+    """Creates a multiline string from a list of packages"""
+    string = first_delimitier
+    for pkg_name in pkg_list:
+        string = string + pkg_name + delimiter
+    return string
+
+
+def pkg_id_to_full_name(pkg_id):
     (n, e, v, r, a, repo_id) = to_pkg_tuple(pkg_id)
     if e and e != '0':
-        return "%s-%s:%s-%s.%s" %\
-               (n, e, v, r, a)
+        return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
     else:
         return "%s-%s-%s.%s" % (n, v, r, a)
 
@@ -113,22 +118,19 @@ def color_to_hex(color):
 
 def is_url(url):
     urls = re.findall(
-        '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-        '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-    if urls:
-        return True
-    else:
-        return False
+        r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
+        r'[!*(),]|%[0-9a-fA-F][0-9a-fA-F])+', url)
+    return urls
 
 
 def format_block(block, indent):
-        ''' Format a block of text so they get the same indentation'''
-        spaces = " " * indent
-        lines = str(block).split('\n')
-        result = lines[0] + "\n"
-        for line in lines[1:]:
-            result += spaces + line + '\n'
-        return result
+    """ Format a block of text so they get the same indentation"""
+    spaces = " " * indent
+    lines = str(block).split('\n')
+    result = lines[0] + "\n"
+    for line in lines[1:]:
+        result += spaces + line + '\n'
+    return result
 
 
 def get_style_color(widget):
@@ -142,9 +144,9 @@ def get_style_color(widget):
 
 
 def doGtkEvents():
-    '''
+    """
 
-    '''
+    """
     while Gtk.events_pending():      # process Gtk events
         Gtk.main_iteration()
 
@@ -175,7 +177,7 @@ def TimeFunction(func):
         rc = func(*args, **kwargs)
         t_end = time.time()
         name = func.__name__
-        logger.debug("%s took %.2f sec" % (name, t_end - t_start))
+        logger.debug("%s took %.2f sec", name, t_end - t_start)
         return rc
 
     newFunc.__name__ = func.__name__
@@ -223,7 +225,7 @@ def format_number(number, SI=0, space=' '):
     else:
         fmt = '%.0f%s%s'
 
-    return(fmt % (float(number or 0), space, symbols[depth]))
+    return fmt % (float(number or 0), space, symbols[depth])
 
 
 def notify(summary, body):
@@ -241,8 +243,8 @@ def check_dark_theme():
 
 
 def logger_setup(logroot='yumex',
-                  logfmt='%(asctime)s: %(message)s',
-                  loglvl=logging.INFO):
+                 logfmt='%(asctime)s: %(message)s',
+                 loglvl=logging.INFO):
     """Setup Python logging."""
     logger = logging.getLogger(logroot)
     logger.setLevel(loglvl)
@@ -262,16 +264,14 @@ class YumexConf(config.BaseConfig):
     """ Yum Extender Config Setting"""
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
+    theme = config.Option("System-Dark.theme")
+    use_dark = config.BoolOption(False)
 
-    color_install = config.Option('#4E9A06')
-    color_update = config.Option('#CC0000')
-    color_downgrade = config.Option('#C17D11')
-    color_normal = config.Option('#000000')
-
-    if check_dark_theme():
-        color_obsolete = config.Option('#3481A4')
-    else:
-        color_obsolete = config.Option('#3465A4')
+    color_install = config.Option('#8BE8FD')
+    color_update = config.Option('#FF79C6')
+    color_downgrade = config.Option('#50FA7B')
+    color_normal = config.Option('#D3DAE3')
+    color_obsolete = config.Option('#FFB86C')
 
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)
@@ -284,8 +284,8 @@ class YumexConf(config.BaseConfig):
     hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
     search_default = config.CaselessSelectionOption(
-                            default='prefix',
-                            allowed=('prefix', 'keyword', 'fields', 'key'))
+        default='prefix',
+        allowed=('prefix', 'keyword', 'fields', 'key'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)
@@ -310,12 +310,17 @@ class SessionConf(config.BaseConfig):
     # enabled repositories for this session
     enabled_repos = config.ListOption([])
     clean_instonly = config.BoolOption(False)
+    color_install = config.Option('#ffffff')
+    color_update = config.Option('#ffffff')
+    color_downgrade = config.Option('#ffffff')
+    color_normal = config.Option('#ffffff')
+    color_obsolete = config.Option('#ffffff')
 
 
 class Config(object):
-    '''
+    """
     Yum Extender Configuration class
-    '''
+    """
     WRITE_ALWAYS = ['autostart', 'update_interval',
                     'update_startup_delay', 'autocheck_updates',
                     'update_notify', 'update_showicon']
@@ -324,7 +329,7 @@ class Config(object):
         object.__init__(self)
         self.conf_dir = os.environ['HOME'] + "/.config/yumex-dnf"
         if not os.path.isdir(self.conf_dir):
-            logger.info("creating config directory : %s" % self.conf_dir)
+            logger.info("creating config directory : %s", self.conf_dir)
             os.makedirs(self.conf_dir, 0o700)
         self.conf_file = self.conf_dir + "/yumex.conf"
         self.parser = configparser.ConfigParser()
@@ -335,7 +340,7 @@ class Config(object):
     def read(self):
         first_read = False
         if not os.path.exists(self.conf_file):
-            logger.info("creating default config file : %s" % self.conf_file)
+            logger.info("creating default config file : %s", self.conf_file)
             first_read = True
         else:
             self.parser.read_file(open(self.conf_file, "r"))

@@ -18,19 +18,16 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
-from gi.repository import Pango
-from yumex.misc import _
-
-import os
 import os.path
 import re
 import subprocess
 import sys
+
 import hawkey
 
-VERSION = "4.3.2"
+from yumex.misc import _
+
+VERSION = "4.4.0"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 
@@ -40,10 +37,12 @@ if BIN_PATH in ["/usr/bin", "/bin"]:
     DATA_DIR = '/usr/share/yumex-dnf'
     PIX_DIR = DATA_DIR + "/gfx"
     MISC_DIR = DATA_DIR
+    THEME_DIR = DATA_DIR + "/themes"
 else:
     DATA_DIR = BIN_PATH
     PIX_DIR = DATA_DIR + "/../gfx"
     MISC_DIR = DATA_DIR + "/../misc"
+    THEME_DIR = DATA_DIR + "/../misc/themes"
 
 HOME_DIR = os.environ['HOME']
 AUTOSTART_DIR = HOME_DIR + '/.config/autostart'
@@ -56,9 +55,9 @@ ARCH = subprocess.check_output(
     '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {
-    "x86_64": set(['x86_64', 'i686', 'i386', 'noarch']),
-    "i386": set(['i686', 'i386', 'noarch']),
-    "armhfp": set(['armv7hl', 'noarch'])
+    "x86_64": {'x86_64', 'i686', 'i386', 'noarch'},
+    "i386": {'i686', 'i386', 'noarch'},
+    "arm": {'armv7hl', 'noarch'}
 }
 
 # arch for this platform
@@ -67,13 +66,7 @@ if ARCH in ARCH_DICT:
 else:  # use x86_64 as fallback
     PLATFORM_ARCH = ARCH_DICT['x86_64']
 
-DBUS_ERR_RE = re.compile('.*GDBus.Error:([\w\.]*): (.*)$')
-
-ICON_TRAY_ERROR = PIX_DIR + '/tray-error.png'
-ICON_TRAY_NO_UPDATES = PIX_DIR + '/tray-no-updates.png'
-ICON_TRAY_UPDATES = PIX_DIR + '/tray-updates.png'
-ICON_TRAY_WORKING = PIX_DIR + '/tray-working.png'
-ICON_TRAY_INFO = PIX_DIR + '/tray-info.png'
+DBUS_ERR_RE = re.compile(r'.*GDBus.Error:([\w.]*): (.*)$')
 
 # Constants
 
@@ -90,18 +83,6 @@ ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
 FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
                   'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri',
                   'localinstall': 'li', 'updates_all': 'u'}
-
-
-PACKAGE_COLORS = {
-    'i': 'black',
-    'u': 'red',
-    'r': 'darkgreen',
-    'o': 'blue',
-    'ri': 'red',
-    'do': 'goldenrod',
-    'li': 'black'
-
-}
 
 BACKEND_ACTIONS = {'update': 'u', 'install': 'i', 'remove': 'r',
                    'obsolete': 'o', 'downgrade': 'do'}
@@ -163,6 +144,7 @@ TRANSACTION_RESULT_TYPES = {
 
 RPM_ACTIONS = {
     'update': _("Updating: %s"),
+    'updated': _("Updated: %s"),
     'install': _("Installing: %s"),
     'reinstall': _("Reinstalling: %s"),
     'cleanup': _("Cleanup: %s"),
@@ -170,6 +152,7 @@ RPM_ACTIONS = {
     'obsolete': _("Obsoleting: %s"),
     'downgrade': _("Downgrading: %s"),
     'verify': _("Verifying: %s"),
+    'scriptlet': _("Running scriptlet for: %s")
 }
 
 WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
@@ -179,8 +162,8 @@ FEDORA_REPOS = ['fedora', 'updates', 'updates-testing', 'rawhide']
 
 
 ADVISORY_TYPES = {
-hawkey.ADVISORY_BUGFIX: _('Bugfix'),
-hawkey.ADVISORY_UNKNOWN: _('New Package'),
-hawkey.ADVISORY_SECURITY: _('Security'),
-hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
+    hawkey.ADVISORY_BUGFIX: _('Bugfix'),
+    hawkey.ADVISORY_UNKNOWN: _('New Package'),
+    hawkey.ADVISORY_SECURITY: _('Security'),
+    hawkey.ADVISORY_ENHANCEMENT: _('Enhancement')
 }

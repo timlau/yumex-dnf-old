@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Jose G. Jimenez S. <josegjimenez@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 18:49+0100\n"
-"PO-Revision-Date: 2015-12-02 17:49+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
+"PO-Revision-Date: 2017-09-20 01:03+0000\n"
+"Last-Translator: Jose G. Jimenez S. <josegjimenez@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/timlau/yumex/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +20,11 @@ msgstr ""
 
 #: ../src/yumex/__init__.py:112 ../src/yumex/old_init.py:137
 msgid "Refreshing Repository Metadata"
-msgstr ""
+msgstr "Refrescando repositorio de metadatos"
 
 #: ../src/yumex/__init__.py:119 ../src/yumex/old_init.py:144
 msgid "Could not refresh the DNF cache (root)"
-msgstr ""
+msgstr "No se pudo actualizar la caché DNF (root)"
 
 #: ../src/yumex/__init__.py:124 ../src/yumex/old_init.py:149
 msgid ""

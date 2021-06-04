@@ -2,17 +2,17 @@
 Yum Extender FAQ
 ================
 
-Generel
+Main
 =============
 
-What does the package colors mean
+What do the package colors mean
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * **red** is an available update
 * **green** is an installed package
 * **blue** is an obsoleting package (a package replacing one/more packages)
 * **black** is an available package in a repository.
 
-This is the default colors, they can be configured in the preferences.
+These are default colors, they can be configured in the preferences.
 
 How to select all updates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,10 +23,10 @@ Click on the **+** in the header column to select/deselect all updates
 Configuration
 =============
 
-How do it setup yumex, to not ask for password on start
+How do I setup yumex to not ask for a password on start
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-run the follow as root, to create a PolicyKit rule to run DnfSystem dbus commands without asking for password
+Run the following command as root to create a PolicyKit rule to run DnfSystem dbus commands without asking for password
 
 ::
 
@@ -88,10 +88,5 @@ Now you will be able to see Tracebacks and debug information in the 2 windows
 You can open an issue here_ for any problem found
 
 .. _here: https://github.com/timlau/yumex-dnf/issues
-
-
-
-
-
 
 

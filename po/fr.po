@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# dominique bribanick <chepioq@gmail.com>, 2014-2015
+# dominique bribanick <chepioq@gmail.com>, 2014-2016
+# Marcel Bariou <zeus@brasnah.fr>, 2016
 # Tim Lauridsen <tla@rasmil.dk>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-02 18:49+0100\n"
-"PO-Revision-Date: 2015-12-02 17:49+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
+"PO-Revision-Date: 2017-09-23 19:38+0000\n"
+"Last-Translator: dominique bribanick <chepioq@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/timlau/yumex/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +43,7 @@ msgstr "DNF est verrouillé par un autre processus\n\nYum Extender va s'arrêter
 
 #: ../src/yumex/__init__.py:623
 msgid "Reloading package information..."
-msgstr ""
+msgstr "Rechargement des informations de paquet"
 
 #: ../src/yumex/__init__.py:746 ../src/yumex/__init__.py:829
 #: ../src/yumex/old_init.py:266 ../src/yumex/old_init.py:1047
@@ -81,7 +82,7 @@ msgstr "Installation du paquet : %s"
 #: ../src/yumex/__init__.py:815
 #, python-format
 msgid "%s was installed successfully"
-msgstr ""
+msgstr "%s a été installé correctement"
 
 #: ../src/yumex/__init__.py:820 ../src/yumex/old_init.py:259
 #, python-format
@@ -91,7 +92,7 @@ msgstr "Suppression du paquet : %s"
 #: ../src/yumex/__init__.py:821
 #, python-format
 msgid "%s was removed successfully"
-msgstr ""
+msgstr "%s a été retiré correctement"
 
 #: ../src/yumex/__init__.py:826 ../src/yumex/old_init.py:264
 msgid "Updating all available updates"
@@ -99,7 +100,7 @@ msgstr "Effectuer toutes les mises à jour disponibles"
 
 #: ../src/yumex/__init__.py:827
 msgid "Available updates was applied successfully"
-msgstr ""
+msgstr "Les mises à jour disponibles ont été appliquées correctement"
 
 #: ../src/yumex/__init__.py:846 ../src/yumex/__init__.py:896
 #: ../src/yumex/old_init.py:286 ../src/yumex/old_init.py:1149
@@ -136,7 +137,7 @@ msgid ""
 "dnfdaemon api version : %d\n"
 "don't match\n"
 "needed api version : %d"
-msgstr ""
+msgstr "l'API dnfdaemon version : %d\nne correspond pas\nà la version attendue de l'API : %d"
 
 #: ../src/yumex/dnf_backend.py:191
 msgid "Downloading packages"
@@ -153,7 +154,7 @@ msgstr "Vérification des modifications apportées au système"
 #: ../src/yumex/dnf_backend.py:246
 #, python-format
 msgid "Downloading %d files (%sB)..."
-msgstr ""
+msgstr "Téléchargement de %d fichiers (%sB)..."
 
 #: ../src/yumex/const.py:129
 msgid "Getting installed packages"
@@ -236,7 +237,7 @@ msgstr "Installation : %s"
 #: ../src/yumex/const.py:167
 #, python-format
 msgid "Reinstalling: %s"
-msgstr ""
+msgstr "Ré-installation: %s"
 
 #: ../src/yumex/const.py:168
 #, python-format
@@ -288,7 +289,7 @@ msgid ""
 "\n"
 "\n"
 "Yum Extender will close"
-msgstr ""
+msgstr "\n\nL'extension YUM, YUMEX, fermera"
 
 #: ../src/yumex/old_init.py:1307
 msgid "Error in starting notification icon"
@@ -305,11 +306,11 @@ msgstr "Erreur lors du démarrage de l'icône de notification"
 #. timeout 10s
 #: ../src/yumex/updater.py:68
 msgid "Not Now"
-msgstr ""
+msgstr "Pas maintenant"
 
 #: ../src/yumex/updater.py:70
 msgid "Show Updates"
-msgstr ""
+msgstr "Afficher les mises à jour"
 
 #: ../src/yumex/updater.py:165
 msgid "New Updates"
@@ -482,31 +483,31 @@ msgstr "Pas d'information disponible sur la liste de fichiers"
 
 #: ../src/yumex/gui/widgets.py:771
 msgid "Newest only"
-msgstr ""
+msgstr "Seulement les plus récents"
 
 #: ../src/yumex/gui/widgets.py:772
 msgid "Erase unused requirements"
-msgstr ""
+msgstr "Supprimer les exigences non nécessaires"
 
 #: ../src/yumex/gui/widgets.py:774
 msgid "Cleanup old instonly packages "
-msgstr ""
+msgstr "Nettoyer les seules installations des anciens paquetages"
 
 #: ../src/yumex/gui/widgets.py:776
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #: ../src/yumex/gui/widgets.py:778
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: ../src/yumex/gui/widgets.py:779
 msgid "Documentation"
-msgstr ""
+msgstr "Documentation "
 
 #: ../src/yumex/gui/widgets.py:780
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: ../src/yumex/gui/widgets.py:782 ../src/yumex.ui.h:1
 msgid "Preferences"
@@ -514,7 +515,7 @@ msgstr "Préférences"
 
 #: ../src/yumex/gui/widgets.py:783
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: ../misc/yumex-dnf-local.desktop.in.h:1
 msgid "Yumex Package Installer"
@@ -649,7 +650,7 @@ msgstr "Sélectionner les mises à jour au démarrage"
 msgid ""
 "The interval in hour, when the DNF cache will be expired and updated (0 = "
 "disabled)"
-msgstr ""
+msgstr "Laps de temps, en heures, au bout duquel le cache de dnf est périmé et remis à jour (0= non validé)"
 
 #: ../src/yumex.ui.h:22
 msgid "Cache expire interval (hours)"
@@ -657,19 +658,19 @@ msgstr "Délai de péremption du cache (en heures)"
 
 #: ../src/yumex.ui.h:23
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: ../src/yumex.ui.h:24
 msgid "Default: Cleanup Old Installonly packages"
-msgstr ""
+msgstr "Par défaut : nettoyer les seules installations des anciens paquetages"
 
 #: ../src/yumex.ui.h:25
 msgid "Number of installonly packages to keep"
-msgstr ""
+msgstr "Nombre de paquets installés seuls à garder"
 
 #: ../src/yumex.ui.h:26
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: ../src/yumex.ui.h:27
 msgid "Settings"
@@ -677,11 +678,11 @@ msgstr "Configurations"
 
 #: ../src/yumex.ui.h:28
 msgid "Autostart the Yum Extender update checker at user login"
-msgstr ""
+msgstr "Démarrage automatique de la vérification des mises à jour à l'ouverture de session"
 
 #: ../src/yumex.ui.h:29
 msgid "Start update checker at user login"
-msgstr ""
+msgstr "Démarrez la vérification des mises à jour à l'ouverture de session"
 
 #: ../src/yumex.ui.h:30
 msgid "How often the update checker will run"
@@ -693,7 +694,7 @@ msgstr "Intervalle de vérification des mise à jour (minutes)"
 
 #: ../src/yumex.ui.h:32
 msgid "Update Checker"
-msgstr ""
+msgstr "Vérification des mises à jour"
 
 #: ../src/yumex.ui.h:33
 msgid "Color for installed packages"
@@ -744,7 +745,7 @@ msgstr "étiquette"
 
 #: ../src/yumex.ui.h:46
 msgid "Show available updates"
-msgstr ""
+msgstr "Afficher les mises à jour disponibles"
 
 #: ../src/yumex.ui.h:47
 msgid "Updates"
@@ -752,7 +753,7 @@ msgstr "Mises à jour"
 
 #: ../src/yumex.ui.h:48
 msgid "Show installed packages"
-msgstr ""
+msgstr "Afficher les paquets installés"
 
 #: ../src/yumex.ui.h:49
 msgid "Installed"
@@ -760,7 +761,7 @@ msgstr "Installés"
 
 #: ../src/yumex.ui.h:50
 msgid "Show available packages"
-msgstr ""
+msgstr "Afficher les paquets disponibles"
 
 #: ../src/yumex.ui.h:51
 msgid "Available"
@@ -768,7 +769,7 @@ msgstr "Disponibles"
 
 #: ../src/yumex.ui.h:52
 msgid "Show all packages"
-msgstr ""
+msgstr "Afficher tous les paquets"
 
 #: ../src/yumex.ui.h:53
 msgid "All"
@@ -808,11 +809,11 @@ msgstr "Dépendances du paquet"
 
 #: ../src/yumex.ui.h:63
 msgid "Search (show/hide)"
-msgstr ""
+msgstr "Rechercher (afficher / masquer)"
 
 #: ../src/yumex.ui.h:64
 msgid "Apply pending actions"
-msgstr ""
+msgstr "Appliquer les actions en attente"
 
 #: ../src/yumex.ui.h:65
 msgid "Prefix"
@@ -820,7 +821,7 @@ msgstr "Préfixe"
 
 #: ../src/yumex.ui.h:66
 msgid "Package names starting with search key"
-msgstr ""
+msgstr "Nom du paquet commençant par la clé recherchée"
 
 #: ../src/yumex.ui.h:67
 msgid "Keyword"
@@ -828,7 +829,7 @@ msgstr "Mot-clé"
 
 #: ../src/yumex.ui.h:68
 msgid "Package names containing search key"
-msgstr ""
+msgstr "Nom du paquet contenant la clé recherchée"
 
 #: ../src/yumex.ui.h:69
 msgid "Fields"
@@ -836,19 +837,19 @@ msgstr "Champs"
 
 #: ../src/yumex.ui.h:70
 msgid "Specified package fields containing search keys."
-msgstr ""
+msgstr "Champ du paquet contenant la clé recherchée"
 
 #: ../src/yumex.ui.h:72
 msgid "Package name"
-msgstr ""
+msgstr "Nom du paquet"
 
 #: ../src/yumex.ui.h:74
 msgid "Package summary"
-msgstr ""
+msgstr "Résumé du paquet"
 
 #: ../src/yumex.ui.h:76
 msgid "Package description"
-msgstr ""
+msgstr "Description du paquet"
 
 #: ../src/yumex.ui.h:77
 msgid "Package actions to perform"

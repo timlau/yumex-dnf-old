@@ -18,33 +18,33 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
+import logging
 
-from yumex.misc import ExceptionHandler, TimeFunction, _, CONFIG
 from gi.repository import Gdk
 
 import dnfdaemon.client
-import logging
+
 import yumex.backend
 import yumex.misc
 import yumex.const as const
+from yumex.misc import ExceptionHandler, TimeFunction, _, ngettext, CONFIG
 
 logger = logging.getLogger('yumex.yum_backend')
 
 
-class DnfPackage(yumex.backend.Package):
-    """Abstract package object for a package in the package system."""
+class DnfPackage:
+    """package object for a package in the package system."""
 
     def __init__(self, po_tuple, action, backend):
-        yumex.backend.Package.__init__(self, backend)
+        self.backend = backend
         (pkg_id, summary, size) = po_tuple
         self.pkg_id = pkg_id
         self.action = action
         (n, e, v, r, a, repo_id) = yumex.misc.to_pkg_tuple(self.pkg_id)
         self.name = n
         self.epoch = e
-        self.ver = v
-        self.rel = r
+        self.version = v
+        self.release = r
         self.arch = a
         self.repository = repo_id
         self.visible = True
@@ -55,6 +55,10 @@ class DnfPackage(yumex.backend.Package):
         self.sizeM = yumex.misc.format_number(size)
         # cache
         self._description = None
+        self.action = action
+        self.queued = False
+        self.recent = False
+        self.selected = False
 
     def __str__(self):
         """String representation of the package object."""
@@ -62,7 +66,7 @@ class DnfPackage(yumex.backend.Package):
 
     @property
     def fullname(self):
-        return yumex.misc.id2fullname(self.pkg_id)
+        return yumex.misc.pkg_id_to_full_name(self.pkg_id)
 
     @ExceptionHandler
     def get_attribute(self, attr):
@@ -70,19 +74,11 @@ class DnfPackage(yumex.backend.Package):
         return self.backend.GetAttribute(self.pkg_id, attr)
 
     @property
-    def version(self):
-        return self.ver
-
-    @property
-    def release(self):
-        return self.rel
-
-    @property
     def filename(self):
         """RPM filename of a package."""
         # the full path for at localinstall is stored in repoid
         if self.action == 'li':
-            return self.repoid
+            return self.repository
         else:
             return "%s-%s.%s.%s.rpm" % (self.name, self.version,
                                         self.release, self.arch)
@@ -127,15 +123,15 @@ class DnfPackage(yumex.backend.Package):
     @property
     def color(self):
         """Package color to show in package view."""
-        color = CONFIG.conf.color_normal
+        color = CONFIG.session.color_normal
         if self.action == 'u':
-            color = CONFIG.conf.color_update
+            color = CONFIG.session.color_update
         elif self.action == 'o':
-            color = CONFIG.conf.color_obsolete
+            color = CONFIG.session.color_obsolete
         elif self.action == 'do':
-            color = CONFIG.conf.color_downgrade
+            color = CONFIG.session.color_downgrade
         elif self.action == 'r':
-            color = CONFIG.conf.color_install
+            color = CONFIG.session.color_install
         rgba = Gdk.RGBA()
         rgba.parse(color)
         return rgba
@@ -153,16 +149,18 @@ class DnfPackage(yumex.backend.Package):
     @property
     @ExceptionHandler
     def requirements(self):
-        return  self.get_attribute('requires')
+        return self.get_attribute('requires')
 
     @property
     def is_update(self):
         """Package is an update/replacement to another package."""
-        if self.action == 'o' or self.action == 'u':
-            return True
-        else:
-            return False
+        return self.action == 'o' or self.action == 'u'
 
+    def exception_handler(self, e):
+        """
+        send exceptions to the frontend
+        """
+        self.backend.frontend.exception_handler(e)
 
 class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     """Backend to do all the dnf related actions """
@@ -175,100 +173,102 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         self._files_to_download = 0
         self._files_downloaded = 0
         if self.running_api_version == const.NEEDED_DAEMON_API:
-            logger.debug('dnfdaemon api version (%d)', self.running_api_version)
+            logger.debug('dnfdaemon api version (%d)',
+                         self.running_api_version)
         else:
             raise dnfdaemon.client.APIVersionError(
-                                   _('dnfdaemon api version : %d'
-                                     "\ndon't match"
-                                     '\nneeded api version : %d') %
-                                   (self.running_api_version,
-                                   const.NEEDED_DAEMON_API))
+                _('dnfdaemon api version : %d'
+                  "\ndon't match"
+                  '\nneeded api version : %d') %
+                (self.running_api_version,
+                 const.NEEDED_DAEMON_API))
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
-            self.frontend.infobar.show_progress(True)
+            pass
         elif event == 'download':
-            self.frontend.infobar.info(_('Downloading packages'))
+            self.frontend.infobar.message(_('Downloading packages'))
         elif event == 'pkg-to-download':
             self._dnl_packages = data
         elif event == 'signature-check':
-            # self.frontend.infobar.show_progress(False)
             self.frontend.infobar.set_progress(0.0)
-            self.frontend.infobar.info(_('Checking package signatures'))
+            self.frontend.infobar.message(_('Checking package signatures'))
             self.frontend.infobar.set_progress(1.0)
-            self.frontend.infobar.info_sub('')
+            self.frontend.infobar.message_sub('')
         elif event == 'run-test-transaction':
-            # self.frontend.infobar.info(_('Testing Package Transactions')) #
+            # self.frontend.infobar.message(_('Testing Package Transactions')) #
             # User don't care
             pass
         elif event == 'run-transaction':
-            self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_('Applying changes to the system'))
-            self.frontend.infobar.hide_sublabel()
+            self.frontend.infobar.message(_('Applying changes to the system'))
+            self.frontend.infobar.message_sub('')
         elif event == 'verify':
-            self.frontend.infobar.show_progress(True)
-            self.frontend.infobar.info(_('Verify changes on the system'))
-            #self.frontend.infobar.hide_sublabel()
+            self.frontend.infobar.message(_('Verify changes on the system'))
+            self.frontend.infobar.message_sub('')
         # elif event == '':
         elif event == 'fail':
-            self.frontend.infobar.show_progress(False)
+            self.frontend.infobar.hide()
         elif event == 'end-run':
-            self.frontend.infobar.show_progress(False)
+            self.frontend.infobar.hide()
         else:
-            logger.debug('TransactionEvent : %s' % event)
+            logger.debug('TransactionEvent : %s', event)
 
     def on_RPMProgress(self, package, action, te_current,
                        te_total, ts_current, ts_total):
         num = ' ( %i/%i )' % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
-            name = self._fullname(package)
+            name = yumex.misc.pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
-        logger.debug('on_RPMProgress : [%s]' % package)
-        self.frontend.infobar.info_sub(const.RPM_ACTIONS[action] % name)
-        if ts_current > 0 and ts_current <= ts_total:
+        # logger.debug('on_RPMProgress : [%s]', package)
+        action_msg = const.RPM_ACTIONS.get(action, None)
+        if action_msg:
+            self.frontend.infobar.message_sub(action_msg % name)
+        else:
+            logger.info("RPM Progress: Undefinded action {}".format(action))
+        if 0 < ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
 
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
         values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
         self._gpg_confirm = values
-        logger.debug('received signal : GPGImport%s' % (repr(values)))
+        logger.debug('received signal : GPGImport %s', repr(values))
 
     def on_DownloadStart(self, num_files, num_bytes):
         """Starting a new parallel download batch."""
-        #values =  (num_files, num_bytes)
-        #print('on_DownloadStart : %s' % (repr(values)))
         self._files_to_download = num_files
         self._files_downloaded = 0
         self.frontend.infobar.set_progress(0.0)
-        self.frontend.infobar.info_sub(
-            _('Downloading %d files (%sB)...') %
+        self.frontend.infobar.message_sub(
+            # Translators: %d will be replaced with the number of files
+            # to download; %s will be replaced with the preformatted
+            # number of bytes to download + the prefix (k, M, etc.)
+            # Note that 'B' for 'bytes' is already here, it must be preserved.
+            ngettext('Downloading %d file (%sB)...',
+                     'Downloading %d files (%sB)...', num_files) %
             (num_files, yumex.misc.format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         """Progress for a single element in the batch."""
-        #values =  (name, frac, total_frac, total_files)
-        #print('on_DownloadProgress : %s' % (repr(values)))
         num = '( %d/%d )' % (self._files_downloaded, self._files_to_download)
         self.frontend.infobar.set_progress(total_frac, label=num)
 
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single element ended."""
-        #values =  (name, status, msg)
-        #print('on_DownloadEnd : %s' % (repr(values)))
         if status == -1 or status == 2:  # download OK or already exists
-            logger.debug('Downloaded : %s' % name)
+            logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
         else:
-            logger.debug('Download Error : %s - %s' % (name, msg))
+            logger.debug('Download Error : %s - %s (status : %d )',
+                         name, msg, status)
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
         values = (name, frac)
-        logger.debug('on_RepoMetaDataProgress (root): %s' % (repr(values)))
+        logger.debug('on_RepoMetaDataProgress (root): %s', repr(values))
         if frac == 0.0:
-            self.frontend.infobar.info_sub(name)
+            self.frontend.infobar.message_sub(name)
         else:
             self.frontend.infobar.set_progress(frac)
 
@@ -297,7 +297,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         # time.sleep(5)
         self.Lock()  # Load & Lock the daemon
         self.SetWatchdogState(False)
-        #self._update_config_options()
+        # self._update_config_options()
         self.cache.reset()  # Reset the cache
 
     def _update_config_options(self):
@@ -313,14 +313,14 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         logger.debug('clean_requirements_on_remove = %s',
                      CONFIG.session.clean_unused)
         if CONFIG.session.enabled_repos:
-            logger.debug('root: Setting repos : %s' %
+            logger.debug('root: Setting repos : %s',
                          CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
 
     def to_pkg_tuple(self, pkg_id):
         """Get package nevra & repoid from an package pkg_id"""
         (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        return (n, e, v, r, a, repo_id)
+        return n, e, v, r, a, repo_id
 
     def _make_pkg_object(self, pkgs, flt):
         """Get a list Package objects from a list of pkg_ids & attrs.
@@ -441,6 +441,8 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         :param search_attrs: package attrs to search in
         :param keys: keys to search for
         :param match_all: match all keys
+        :param newest_only:
+        :param tags:
         """
         attrs = ['summary', 'size', 'action']
         pkgs = self.Search(search_attrs, keys, attrs, match_all,
@@ -463,11 +465,3 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
         attrs = ['summary', 'size', 'action']
         pkgs = self.GetGroupPackages(grp_id, grp_flt, attrs)
         return self._make_pkg_object_with_attr(pkgs)
-
-    def _fullname(self, pkg_id):
-        """ Package fullname from a pkg_id """
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return '%s-%s:%s-%s.%s (%s)' % (n, e, v, r, a, repo_id)
-        else:
-            return '%s-%s-%s.%s (%s)' % (n, v, r, a, repo_id)

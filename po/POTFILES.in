@@ -6,7 +6,6 @@ src/yumex/backend.py
 src/yumex/dnf_backend.py
 src/yumex/misc.py
 src/yumex/const.py
-src/yumex/old_init.py
 src/yumex/updater.py
 src/yumex/gui/views.py
 src/yumex/gui/__init__.py

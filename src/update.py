@@ -18,10 +18,12 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+from yumex.updater import UpdateApplication
 import sys
 import traceback
 import subprocess
 import signal
+
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Notify', '0.7')
@@ -33,7 +35,6 @@ if here != '/usr/bin':
     sys.path[0] = here
     print("set PYTHONPATH to %s" % here)
 
-from yumex.updater import UpdateApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = UpdateApplication()
@@ -52,6 +53,5 @@ except Exception as e:
             '/usr/bin/dbus-send --system --print-reply '
             '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
             shell=True)
-    except:
-        pass
-sys.exit(1)
+    finally:
+        sys.exit(1)

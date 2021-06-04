@@ -17,12 +17,15 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from __future__ import absolute_import
 
-from gi.repository import Gio, Gtk, Gdk
-
-from yumex.misc import _, CONFIG
-
+import yumex.gui.widgets as widgets
+import yumex.gui.views as views
+import yumex.gui.dialogs as dialogs
+import yumex.dnf_backend
+import yumex.misc as misc
+import yumex.const as const
+from yumex.misc import Config, _, ngettext, CONFIG
+from gi.repository import Gio, Gtk, Gdk, GLib
 import argparse
 import datetime
 import logging
@@ -30,13 +33,7 @@ import os.path
 import shutil
 import subprocess
 import sys
-
-import yumex.const as const
-import yumex.misc as misc
-import yumex.dnf_backend
-import yumex.gui.dialogs as dialogs
-import yumex.gui.views as views
-import yumex.gui.widgets as widgets
+import re
 
 
 logger = logging.getLogger('yumex')
@@ -64,18 +61,12 @@ class BaseYumex:
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.session_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
         elif cache_type == 'system':
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.system_refresh, time_fmt)
             period = now - last_refresh
-            if period > refresh_period:
-                return True
-            else:
-                return False
+            return period > refresh_period
 
     def _set_cache_refreshed(self, cache_type):
         time_fmt = '%Y-%m-%d %H:%M'
@@ -96,7 +87,7 @@ class BaseYumex:
     def reset_cache(self):
         logger.debug('Refresh system cache')
         self.set_working(True, True)
-        self.infobar.info(_('Refreshing Repository Metadata'))
+        self.infobar.message(_('Refreshing Repository Metadata'))
         rc = self._root_backend.ExpireCache()
         self.set_working(False)
         if rc:
@@ -117,6 +108,7 @@ class BaseYumex:
         if self._root_locked is False:
             logger.debug('Lock the DNF root daemon')
             locked, msg = self._root_backend.setup()
+            errmsg = ""
             if locked:
                 self._root_locked = True
                 if self._check_cache_expired('system'):
@@ -132,15 +124,12 @@ class BaseYumex:
                     errmsg = _(
                         'DNF is locked by another process.\n\n'
                         'Yum Extender will exit')
-                dialogs.show_information(self, errmsg)
-                # close down and exit yum extender
-                #self.status.SetWorking(False)  # reset working state
-                #self.status.SetYumexIsRunning(self.pid, False)
+                self.error_dialog.show(errmsg)
                 sys.exit(1)
         return self._root_backend
 
     @misc.ExceptionHandler
-    def release_root_backend(self, quit=False):
+    def release_root_backend(self, quit_dnfdaemon=False):
         """Release the current root backend, if it is setup and locked."""
         if self._root_backend is None:
             return
@@ -148,7 +137,7 @@ class BaseYumex:
             logger.debug('Unlock the DNF root daemon')
             self._root_backend.Unlock()
             self._root_locked = False
-        if quit:
+        if quit_dnfdaemon:
             logger.debug('Exit the DNF root daemon')
             self._root_backend.Exit()
 
@@ -162,24 +151,23 @@ class BaseYumex:
         err, errmsg = self._parse_error(msg)
         logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
         if err == 'LockedError':
-            errmsg = 'DNF is locked by another process.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF is locked by another process.\n' \
+                '\nYum Extender will exit'
             close = False
         elif err == 'NoReply':
-            errmsg = 'DNF D-Bus backend is not responding.\n'
-            '\nYum Extender will exit'
+            errmsg = 'DNF D-Bus backend is not responding.\n' \
+                '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
-        dialogs.show_information(self, errmsg)
+        self.error_dialog.show(errmsg)
+
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
-        #self.status.SetWorking(False)  # reset working state
-        #self.status.SetYumexIsRunning(self.pid, False)
         sys.exit(1)
 
     def _parse_error(self, value):
@@ -200,6 +188,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                                        title='Yum Extender - Powered by DNF',
                                        application=app)
         BaseYumex.__init__(self)
+        self.get_style_context().add_class("yumex-dnf-window")
         self.app = app
         self.connect('delete_event', self.on_delete_event)
         icon = Gtk.IconTheme.get_default().load_icon('yumex-dnf', 128, 0)
@@ -210,12 +199,14 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.ui.add_from_file(const.DATA_DIR + "/yumex.ui")
         except:
             raise
+            # noinspection PyUnreachableCode
             dialogs.show_information(
                 self, 'GtkBuilder ui file not found : ' +
                 const.DATA_DIR + '/yumex.ui')
             sys.exit()
         # transaction result dialog
         self.transaction_result = dialogs.TransactionResult(self)
+        self.error_dialog = dialogs.ErrorDialog(self)
 
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)
@@ -227,6 +218,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         else:
             return True
 
+    # noinspection PyUnusedLocal
     def on_delete_event(self, *args):
         if self.is_working:
             self.iconify()
@@ -234,10 +226,69 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         else:
             self.app.quit()
 
+    def apply_css(self, css_fn):
+        """apply a css for custom styling"""
+        if css_fn:
+            screen = Gdk.Screen.get_default()
+            css_provider = Gtk.CssProvider()
+            try:
+                css_provider.load_from_path(css_fn)
+            except GLib.Error as e:
+                logger.error(f"Error in theme: {e} ")
+            context = Gtk.StyleContext()
+            context.add_provider_for_screen(screen, css_provider,
+                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
+            logger.debug('loading custom styling : %s', css_fn)
+
+    def load_colors(self, theme_fn):
+        color_table = {}
+        colors = 'color_install', 'color_update', 'color_downgrade', 'color_normal', 'color_obsolete'
+        regex = re.compile(r'@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;')
+        if misc.check_dark_theme():
+            backup_color = '#ffffff'
+        else:
+            backup_color = '#000000'
+        with open(theme_fn, 'r') as reader:
+            lines = reader.readlines()
+        for line in lines:
+            if line.startswith("@define-color"):
+                match = regex.search(line)
+                if len(match.groups()) == 2:
+                    color_table[match.group(1)] = match.group(2)
+                    logger.debug(
+                        f' --> Color:  {match.group(1)} = {match.group(2)}')
+        logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
+        for color in colors:
+            if color in color_table:
+                color_value = color_table[color]
+                if color_value.startswith('@'):  # lookup macro color
+                    key = color_value[1:]  # dump the @
+                    if key in color_table:
+                        color_value = color_table[key]
+                    else:
+                        logger.info(
+                            f'Unknown Color alias : {color_value} default to {backup_color}')
+                        color_value = backup_color
+                setattr(CONFIG.session, color, color_value)
+                logger.debug(
+                    f'  --> updated color : {color} to: {color_value}')
+
+    def load_theme(self):
+        theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
+        logger.debug('looking for %s', theme_fn)
+        if os.path.exists(theme_fn):
+            self.apply_css(theme_fn)
+            self.load_colors(theme_fn)
+
     def load_custom_styling(self):
         """Load custom .css styling from current theme."""
+        # Use Dark Theme
+        gtk_settings = Gtk.Settings.get_default()
+        gtk_settings.set_property(
+            "gtk-application-prefer-dark-theme", CONFIG.conf.use_dark)
         css_fn = None
-        theme = Gtk.Settings.get_default().props.gtk_theme_name
+        theme = gtk_settings.props.gtk_theme_name
+        logger.debug(f'current theme : {theme}')
         css_postfix = '%s/apps/yumex.css' % theme
         for css_prefix in [os.path.expanduser('~/.themes'),
                            '/usr/share/themes']:
@@ -247,22 +298,24 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 css_fn = fn
                 break
         if css_fn:
-            screen = Gdk.Screen.get_default()
-            css_provider = Gtk.CssProvider()
-            css_provider.load_from_path(css_fn)
-            context = Gtk.StyleContext()
-            context.add_provider_for_screen(screen, css_provider,
-                                    Gtk.STYLE_PROVIDER_PRIORITY_USER)
-            logger.debug('loading custom styling : %s', css_fn)
+            self.apply_css(css_fn)
+        else:
+            self.load_theme()
 
+    # noinspection PyUnusedLocal
     def on_window_state(self, widget, event):
         # save window current maximized state
         self.cur_maximized = event.new_window_state & \
-                             Gdk.WindowState.MAXIMIZED != 0
+            Gdk.WindowState.MAXIMIZED != 0
 
     def on_window_changed(self, widget, data):
-        self.cur_height = data.height
-        self.cur_width = data.width
+        size = widget.get_size()
+        if isinstance(size, tuple):
+            self.cur_height = size[1]
+            self.cur_width = size[0]
+        else:
+            self.cur_height = size.height
+            self.cur_width = size.width
 
     def exception_handler(self, e):
         """Called if exception occours in methods with the
@@ -285,15 +338,15 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             close = False
         elif err == 'NoReply':
             errmsg = 'DNF Dbus backend is not responding \n'\
-            '\nYum Extender will exit'
+                     '\nYum Extender will exit'
             close = False
         if errmsg == '':
             errmsg = msg
-        dialogs.show_information(self, errmsg)
+        self.error_dialog.show(errmsg)
         # try to exit the backends, ignore errors
         if close:
             try:
-                self.release_root_backend(quit=True)
+                self.release_root_backend(quit_dnfdaemon=True)
             except:
                 pass
         Gtk.main_quit()
@@ -320,10 +373,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_buttons', 'right_buttons',
-                               'package_sidebar', 'center_buttons']
+        WIDGETS_INSENSITIVE = ['left_header', 'right_header',
+                               'package_sidebar']
         for widget in WIDGETS_INSENSITIVE:
-                        self.ui.get_object(widget).set_sensitive(state)
+            self.ui.get_object(widget).set_sensitive(state)
 
     def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window."""
@@ -342,9 +395,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
 class Window(BaseWindow):
 
-    def __init__(self, app, gnome=True, install_mode=False):
+    def __init__(self, app, use_headerbar=True, install_mode=False):
         super(Window, self).__init__(app)
-        self.gnome = gnome
+        self.use_headerbar = use_headerbar
         self.install_mode = install_mode
         # load custom styling from current theme
         self.load_custom_styling()
@@ -404,9 +457,9 @@ class Window(BaseWindow):
 ###############################################################################
 
     def rerun_installmode(self, args):
-        '''call when yumex gui is already running and is idle
+        """call when yumex gui is already running and is idle
         and second instance is excuted in installmode
-        '''
+        """
         self.get_ui('content_box').hide()
         WIDGETS_HIDE = ['left_buttons', 'right_buttons']
         for widget in WIDGETS_HIDE:
@@ -445,14 +498,29 @@ class Window(BaseWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
-        if self.gnome:  # Gnome, headerbar in titlebar
-            self.set_titlebar(self.get_ui('headerbar'))
+        if self.use_headerbar:  # Gnome, headerbar in titlebar
+            hb = self.get_ui('headerbar')
+            rb = self.get_ui('right_header')
+            lb = self.get_ui('left_header')
+            hb.set_custom_title(lb)
+            hb.pack_end(rb)
+            self.set_titlebar(hb)
             self._headerbar.set_show_close_button(True)
         else:
-            box.pack_start(self.get_ui('headerbar'), False, True, 0)
-            self._headerbar.set_show_close_button(False)
-            self._headerbar.set_title("")
-            self._headerbar.set_subtitle("")
+            hb = self.get_ui('headerbox')
+            rb = self.get_ui('right_header')
+            rb.set_margin_top(3)
+            rb.set_margin_bottom(3)
+            rb.set_margin_start(3)
+            rb.set_margin_end(3)
+            lb = self.get_ui('left_header')
+            lb.set_margin_top(3)
+            lb.set_margin_bottom(3)
+            lb.set_margin_start(3)
+            lb.set_margin_end(3)
+            hb.set_center_widget(lb)
+            hb.pack_end(rb, False, True, 0)
+            box.pack_start(hb, False, True, 0)
         box.pack_start(self.get_ui('main_box'), False, True, 0)
         # Setup search
         self.search_bar = widgets.SearchBar(self)
@@ -468,6 +536,8 @@ class Window(BaseWindow):
         CONFIG.session.clean_instonly = CONFIG.conf.clean_instonly
         CONFIG.session.newest_only = CONFIG.conf.newest_only
         CONFIG.session.clean_unused = CONFIG.conf.clean_unused
+        if CONFIG.conf.repo_saved:
+            CONFIG.session.enabled_repos = CONFIG.conf.repo_enabled
         # setup the package/queue/history views
         self._setup_action_page()
         self._setup_package_page()
@@ -477,11 +547,7 @@ class Window(BaseWindow):
         # Setup info
         self.main_paned = self.get_ui('main_paned')
         self.main_paned.set_position(CONFIG.conf.info_paned)
-
-        # Get the theme default TreeView text color
-        color_normal = misc.get_style_color(self.package_view)
-        CONFIG.conf.color_normal = misc.color_to_hex(color_normal)
-        logger.debug('theme color : %s' % misc.color_to_hex(color_normal))
+        self.main_paned.set_wide_handle(True)  # use wide separator bar (off)
 
         # infobar
         self.infobar = widgets.InfoProgressBar(self.ui)
@@ -503,7 +569,7 @@ class Window(BaseWindow):
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
 
     def _setup_arch(self):
-        self.infobar.info(_('Downloading Repository Metadata'))
+        self.infobar.message(_('Downloading Repository Metadata'))
         # setup the arch filter
         self.arch_filter = self.backend.get_filter('arch')
         self.arch_filter.set_active(True)
@@ -538,7 +604,6 @@ class Window(BaseWindow):
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
         self.groups = views.GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
-        #hb.pack_start(self.groups, True, True, 0)
         # sw.add(hb)
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
@@ -557,6 +622,9 @@ class Window(BaseWindow):
         right_sw.add(self.history_view.pkg_view)
         # setup history buttons
         undo = self.get_ui('history_undo')
+        # FIXME: History undo is broken in dnfdaemon, because of changes in private API
+        # so disable the botton
+        undo.set_sensitive(False)
         undo.connect('clicked', self.on_history_undo)
 
 ###############################################################################
@@ -630,7 +698,7 @@ class Window(BaseWindow):
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True)
-        self.infobar.info(_("Reloading package information..."))
+        self.infobar.message(_("Reloading package information..."))
         self.release_root_backend()
         self.backend.reload()
         # clear the package queue
@@ -680,6 +748,7 @@ class Window(BaseWindow):
 
     def _run_actions_installmode(self, args, quit_app):
         action = None
+        package = None
         if args.install:
             action = 'install'
             package = args.install
@@ -740,8 +809,8 @@ class Window(BaseWindow):
         protected = []
         for action, pkgs in trans:
             if action == 'remove':
-                for id, size, replaces in pkgs:
-                    (n, e, v, r, a, repo_id) = str(id).split(',')
+                for pkgid, size, replaces in pkgs:
+                    (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                     if n in CONFIG.conf.protected:
                         protected.append(n)
         return protected
@@ -753,9 +822,9 @@ class Window(BaseWindow):
             raise misc.QueueEmptyError
         self.content.select_page('actions')
         self._populate_transaction()
-        self.infobar.info(_('Searching for dependencies'))
+        self.infobar.message(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
-        self.infobar.info(_('Dependencies resolved'))
+        self.infobar.message(_('Dependencies resolved'))
         if not rc:
             raise misc.TransactionSolveError(result)
         return result
@@ -769,7 +838,7 @@ class Window(BaseWindow):
 
     def _run_transaction(self):
         """Run the current transaction."""
-        self.infobar.info(_('Applying changes to the system'))
+        self.infobar.message(_('Applying changes to the system'))
         self.set_working(True, True)
         rc, result = self.backend.RunTransaction()
         # This can happen more than once (more gpg keys to be
@@ -795,19 +864,23 @@ class Window(BaseWindow):
             else:  # error in signature verification
                 dialogs.show_information(
                     self, _('Error checking package signatures\n'),
-                             '\n'.join(result))
+                    '\n'.join(result))
                 break
 
         if rc == 4:  # Download errors
             dialogs.show_information(
-                self, _('Downloading error(s)\n'),
-                         '\n'.join(result))
+                self,
+                ngettext('Downloading error\n',
+                         'Downloading errors\n', len(result)),
+                '\n'.join(result))
             self._reset_on_cancel()
             return
         elif rc != 0:  # other transaction errors
             dialogs.show_information(
-                self, _('Error in transaction\n'),
-                         '\n'.join(result))
+                self,
+                ngettext('Error in transaction\n',
+                         'Errors in transaction\n', len(result)),
+                '\n'.join(result))
         self._reset()
         return
 
@@ -820,25 +893,26 @@ class Window(BaseWindow):
         :param package: package to work on
         :param always_yes: ask the user or default to yes/ok to all questions
         """
+        exit_msg = ""
         if action == 'install':
-            self.infobar.info(_('Installing package: %s') % package)
+            self.infobar.message(_('Installing package: %s') % package)
             exit_msg = _('%s was installed successfully') % package
-            self.infobar.info_sub(package)
+            self.infobar.message_sub(package)
             txmbrs = self.backend.Install(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'remove':
-            self.infobar.info(_('Removing package: %s') % package)
+            self.infobar.message(_('Removing package: %s') % package)
             exit_msg = _('%s was removed successfully') % package
-            self.infobar.info_sub(package)
+            self.infobar.message_sub(package)
             txmbrs = self.backend.Remove(package)
             logger.debug('txmbrs: %s' % str(txmbrs))
         elif action == 'update':
-            self.infobar.info(_('Updating all available updates'))
+            self.infobar.message(_('Updating all available updates'))
             exit_msg = _('Available updates was applied successfully')
             txmbrs = self.backend.Update('*')
-        self.infobar.info(_('Searching for dependencies'))
+        self.infobar.message(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
-        self.infobar.info(_('Dependencies resolved'))
+        self.infobar.message(_('Dependencies resolved'))
         if rc:
             self.transaction_result.populate(result, '')
             if not always_yes:
@@ -846,17 +920,19 @@ class Window(BaseWindow):
             else:
                 ok = True
             if ok:  # Ok pressed
-                self.infobar.info(_('Applying changes to the system'))
+                self.infobar.message(_('Applying changes to the system'))
                 self.backend.RunTransaction()
                 self.release_root_backend()
                 self.hide()
                 misc.notify('Yum Extender', exit_msg)
         else:
             dialogs.show_information(
-                self, _('Error(s) in search for dependencies'),
-                        '\n'.join(result))
+                self,
+                ngettext('Error in search for dependencies',
+                         'Errors in search for dependencies', len(result)),
+                '\n'.join(result))
         if app_quit:
-            self.release_root_backend(quit=True)
+            self.release_root_backend(quit_dnfdaemon=True)
             self.app.quit()
 
     @misc.ExceptionHandler
@@ -869,7 +945,7 @@ class Window(BaseWindow):
         - run the transaction
         """
         self.set_working(True, True)
-        self.infobar.info(_('Preparing system for applying changes'))
+        self.infobar.message(_('Preparing system for applying changes'))
         try:
             if from_queue:
                 result = self._build_from_queue()
@@ -879,9 +955,10 @@ class Window(BaseWindow):
             # check for protected packages
             check = self._check_protected(result)
             if check:
-                dialogs.show_information(
-                self, _("Can't remove protected package(s)"),
-                        '\n'.join(check))
+                self.error_dialog.show(
+                    ngettext("Can't remove protected package:",
+                             "Can't remove protected packages:", len(check)) +
+                    misc.list_to_string(check, "\n ", ",\n "))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog
@@ -896,15 +973,18 @@ class Window(BaseWindow):
             self.set_working(False)
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
-        except misc.TransactionBuildError as e:  # Error in building transaction
-            dialogs.show_information(
-                self, _('Error(s) in building transaction'),
-                        '\n'.join(e.msgs))
+        except misc.TransactionBuildError as e:
+            # Error in building transaction
+            self.error_dialog.show(
+                ngettext('Error in building transaction',
+                         'Errors in building transaction', len(e.msgs)) +
+                '\n'.join(e.msgs))
             self._reset_on_cancel()
         except misc.TransactionSolveError as e:
-            dialogs.show_information(
-                    self, _('Error(s) in search for dependencies'),
-                            '\n'.join(e.msgs))
+            self.error_dialog.show(
+                ngettext('Error in search for dependencies',
+                         'Errors in search for dependencies', len(e.msgs)) +
+                '\n'.join(e.msgs))
             self._reset_on_error()
 
 ###############################################################################
@@ -964,11 +1044,6 @@ class Window(BaseWindow):
                     event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
                 if self.active_page == 'packages':
                     self.pkg_filter.set_active('all')
-            # Select All on Ctrl + A
-            if (event.keyval == Gdk.KEY_a and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.package_view.on_section_header_clicked(None)
 
     def on_mainmenu(self, widget, action, data):
         """Handle mainmenu actions"""
@@ -980,7 +1055,7 @@ class Window(BaseWindow):
             if self.can_close():
                 self.app.quit()
         elif action == 'about':
-            dialog = dialogs.AboutDialog()
+            dialog = dialogs.AboutDialog(self)
             dialog.run()
             dialog.destroy()
         elif action == 'docs':
@@ -1008,11 +1083,9 @@ class Window(BaseWindow):
         """Handle content page is changed."""
         if page == 'packages':
             self._search_toggle.set_sensitive(True)
-            self.extra_filters.set_sensitive(True)
             self.search_bar.show()
             self.info.show()
         else:
-            self.extra_filters.set_sensitive(False)
             self._search_toggle.set_sensitive(False)
             self.search_bar.hide()
             self.info.show(False)
@@ -1043,7 +1116,7 @@ class Window(BaseWindow):
 
     def on_filter_changed(self, widget, data):
         """Handle changes in package filter."""
-        self.infobar.info(const.PACKAGE_LOAD_MSG[data])
+        self.infobar.message(const.PACKAGE_LOAD_MSG[data])
         self.set_working(True, True)
         if self.last_search:  # we are searching
             pkgs = self._filter_search_pkgs(data)
@@ -1059,9 +1132,9 @@ class Window(BaseWindow):
                 pkgs.extend(obs_pkgs)
             else:
                 pkgs = self.backend.get_packages(data)
-            #self.status.SetUpdateCount(len(pkgs))
+            # self.status.SetUpdateCount(len(pkgs))
         self.info.set_package(None)
-        self.infobar.info(_('Adding packages to view'))
+        self.infobar.message(_('Adding packages to view'))
         self.package_view.populate(pkgs)
         self.set_working(False)
         self.infobar.hide()
@@ -1071,7 +1144,7 @@ class Window(BaseWindow):
             self.package_view.set_header_click(False)
 
     def on_queue_refresh(self, widget, total):
-        '''Handle content of the queue is changed.'''
+        """Handle content of the queue is changed."""
         if total > 0:
             self.apply_button.set_sensitive(True)
         else:
@@ -1099,7 +1172,7 @@ class Window(BaseWindow):
         logger.debug('History Undo : %s', tid)
         rc, messages = self.backend.HistoryUndo(tid)
         if rc:
-            self.process_actions(from_queue=False)
+            self._process_actions(from_queue=False)
         else:
             msg = "Can't undo history transaction :\n%s" % \
                   ("\n".join(messages))
@@ -1113,9 +1186,10 @@ class YumexApplication(Gtk.Application):
     """Main application."""
 
     def __init__(self):
-        Gtk.Application.__init__(self,
-                    application_id="dk.yumex.yumex-ui",
-                    flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gtk.Application.__init__(
+            self,
+            application_id="dk.yumex.yumex-ui",
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
 
         self.connect("activate", self.on_activate)
         self.connect("command-line", self.on_command_line)
@@ -1128,7 +1202,7 @@ class YumexApplication(Gtk.Application):
 
     def on_activate(self, app):
         if not self.running:
-            self.window = Window(self, gnome=CONFIG.conf.headerbar,
+            self.window = Window(self, use_headerbar=CONFIG.conf.headerbar,
                                  install_mode=self.install_mode)
             app.add_window(self.window)
             self.running = True
@@ -1143,8 +1217,10 @@ class YumexApplication(Gtk.Application):
         parser.add_argument('-d', '--debug', action='store_true')
         parser.add_argument(
             '-y', '--yes', action='store_true',
-             help='Answer yes/ok to all questions')
-        parser.add_argument('--exit', action='store_true',
+            help='Answer yes/ok to all questions')
+        parser.add_argument(
+            '--exit',
+            action='store_true',
             help='tell dnfdaemon dbus services used by yumex to exit')
         parser.add_argument(
             '-I', '--install', type=str, metavar='PACKAGE',
@@ -1177,7 +1253,7 @@ class YumexApplication(Gtk.Application):
                 if self.window.can_close():
                     self.quit()
                 else:
-                    self.logger.info("Application is busy")
+                    logger.info("Application is busy")
             if self.current_args.install or self.current_args.remove or \
                self.current_args.updateall:
                 self.install_mode = True
@@ -1193,7 +1269,7 @@ class YumexApplication(Gtk.Application):
                 CONFIG.conf.win_width = self.window.cur_width
                 CONFIG.conf.win_height = self.window.cur_height
                 CONFIG.conf.win_maximized = False
-            self.window.release_root_backend(quit=True)
+            self.window.release_root_backend(quit_dnfdaemon=True)
         logger.info('Saving config on exit')
         CONFIG.write()
         return 0

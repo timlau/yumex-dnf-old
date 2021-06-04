@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
+import os
+from os.path import join, basename, split
 from distutils.core import setup
 from distutils.util import convert_path
 from distutils.command.build_scripts import build_scripts
 from distutils import log
 
-import os
-from os.path import join, basename, split
 
 RENAME_SCRIPTS = {'main.py': 'yumex-dnf',
                   'update.py': 'yumex-dnf-updatechecker'}
@@ -25,7 +25,7 @@ class BuildScripts(build_scripts):
                     os.rename(outfile, newfile)
 
 setup(name="yumex-dnf",
-      version="4.3.2",
+      version="4.3.3",
       description="Graphical package management tool",
       long_description="",
       author="Tim Lauridsen",

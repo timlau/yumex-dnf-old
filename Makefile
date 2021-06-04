@@ -40,7 +40,7 @@ clean: $(CLEAN_TARGETS)
 	
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject perl-TimeDate gettext intltool transifex-client
+	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -50,12 +50,11 @@ archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 	
-# needs perl-TimeDate for git2cl
 changelog:
-	@git log --pretty --numstat --summary | tools/git2cl > ChangeLog
+	$(PYTHON) tools/git2cl.py
 	
 upload: 
-	@scp ~/rpmbuild/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
+	@scp $(BUILDDIR)/SOURCES/${APPNAME}-${VERSION}.tar.gz yum-extender.org:public_html/dnl/yumex/source/.
 	
 release-branch:
 	@git branch -m ${GIT_MASTER} release-${VERSION}
@@ -73,6 +72,9 @@ release-publish:
 	@$(MAKE) rpm
 
 release-cleanup:	
+	@git checkout develop
+	@git merge --no-ff release-${VERSION} -m "merge ${APPNAME}-${VERSION} release"
+	@git push origin
 	@git branch -D release-${VERSION}
 
 test-cleanup:	
@@ -93,7 +95,7 @@ test-release:
 	@cat ${APPNAME}.spec | sed  -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
 	# Make Changelog
-	@git log --pretty --numstat --summary | ./tools/git2cl > ChangeLog
+	$(PYTHON) tools/git2cl.py
 	@git commit -a -m "updated ChangeLog"
 	# Make archive
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
@@ -110,21 +112,25 @@ test-builds:
 	@$(MAKE) test-release
 	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
 	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
-	@scp ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
-	@scp ~/rpmbuild/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
 
 test-upd:
 	@$(MAKE) test-release
-	sudo dnf update ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf update $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 
 test-inst:
 	@$(MAKE) test-release
-	sudo dnf install ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+	sudo dnf install $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
 	
 test-reinst:
 	@$(MAKE) test-release
-	sudo dnf reinstall ~/rpmbuild/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
-	
+	sudo dnf reinstall $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}-${NEW_REL}*.rpm
+
+test-copr:
+	@$(MAKE) test-release
+	copr-cli build yumex-dnf $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+
 	
 transifex-setup:
 	tx init
@@ -154,5 +160,6 @@ status-run:
 
 .PHONY: all archive install clean build
 .PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
-.PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog	
+.PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
+.PHONY: test-copr	
 	

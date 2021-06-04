@@ -17,24 +17,20 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from __future__ import absolute_import
+
+import datetime
+import logging
+import subprocess
+import urllib.parse
 
 from gi.repository import Gtk, Gio, GLib
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
-from yumex.misc import _, CONFIG
-
-import datetime
 import hawkey
-import logging
-import re
-import subprocess
-import urllib.parse
 
-
+from yumex.misc import _, CONFIG
 import yumex.const as const
-import yumex.gui.views
 import yumex.misc
 
 logger = logging.getLogger('yumex.gui.widget')
@@ -46,84 +42,70 @@ class InfoProgressBar:
 
     def __init__(self, ui):
         self.ui = ui
-        self.infobar = ui.get_object("infobar")  # infobar revealer
-        frame = ui.get_object("info_frame")
-        new_bg = Gdk.RGBA()
-        if yumex.misc.check_dark_theme():
-            new_bg.parse("rgb(0,0,0)")
-        else:
-            new_bg.parse("rgb(255,255,255)")
-        frame.override_background_color(Gtk.StateFlags.NORMAL, new_bg)
+        self._is_visible = False
+        self.infobar = ui.get_object("info_revealer")  # infobar revealer
         self.label = ui.get_object("infobar_label")
         self.sublabel = ui.get_object("infobar_sublabel")
         self.progress = ui.get_object("infobar_progress")
+        self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
+        """ Show or hide the info bar"""
+        if show == self._is_visible:  # check if infobar already is in the wanted state
+            return
         self.infobar.set_reveal_child(show)
-
-    def show_progress(self, state):
-        if state:
-            self.show_label()
+        if show:
+            self.infobar.show()
+            self.spinner.start()
+            self.progress.show()
+            self.label.show()
+            self.sublabel.show()
+            self.label.set_text("")
+            self.sublabel.set_text("")
+            self._is_visible = True
         else:
-            self.hide()
+            self.spinner.stop()
+            self.infobar.hide()
+            self.label.hide()
+            self.sublabel.hide()
+            self.progress.hide()
+            self.progress.set_show_text(False)
+            self._is_visible = False
 
     def hide(self):
-        self.label.hide()
-        self.sublabel.hide()
-        self.progress.hide()
         self._show_infobar(False)
-        self.progress.set_text("")
-        #self.progress.set_show_text (False)
 
-    def hide_sublabel(self):
-        self.sublabel.hide()
-
-    def show_label(self):
-        self.label.show()
-        self.label.set_text("")
-
-    def show_sublabel(self):
-        self.sublabel.show()
-        self.sublabel.set_text("")
-
-    def show_all(self):
-        self.show_label()
-        self.show_sublabel()
-        self.progress.show()
-
-    def info(self, msg):
+    def message(self, msg):
         self._show_infobar(True)
-        self.show_label()
         self.label.set_text(msg)
 
-    def info_sub(self, msg):
+    def message_sub(self, msg):
         self._show_infobar(True)
-        self.show_sublabel()
         self.sublabel.set_text(msg)
 
+    def check_info(self):
+        if self.label.get_text() == "":
+            self.message(_("Getting Package Metadata"))
+
     def set_progress(self, frac, label=None):
-        if label:
-            self.progress.set_text(label)
-        if frac >= 0.0 and frac <= 1.0:
-            self.infobar.show()
-            self.progress.show()
+        if 0.0 <= frac <= 1.0:
+            self._show_infobar()
             self.progress.set_fraction(frac)
-            # make sure that the main label is shown, else the progres
-            # looks bad. this is normally happen when changlog
-            # or filelist info is needed for at package
-            # and it will trigger the yum daemon to download the need metadata.
-            if not self.label.get_property('visible'):
-                self.info(_("Getting Package Metadata"))
+            # make sure that the main label is shown, else the progress
+            # looks bad. this normally happens when changlog or filelist info
+            # is needed for a package and it will trigger the yum daemon to
+            # download the need metadata.
+            self.check_info()
 
 
 class SearchBar(GObject.GObject):
     """Handling the search UI."""
 
     __gsignals__ = {'search': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_STRING,
-                                     GObject.TYPE_STRING,
-                                     GObject.TYPE_PYOBJECT,))
+                               None,
+                               (GObject.TYPE_STRING,
+                                GObject.TYPE_STRING,
+                                GObject.TYPE_PYOBJECT,))
                     }
 
     FIELDS = ['name', 'summary', 'description']
@@ -166,11 +148,7 @@ class SearchBar(GObject.GObject):
                 wid.set_active(True)
             wid.connect('toggled', self.on_type_changed, key)
         # setup search option popover
-        self.opt_popover = Gtk.Popover.new(self._options_button)
-        self.opt_popover.set_size_request(50, 100)
-        self.opt_popover.set_position(Gtk.PositionType.BOTTOM)
-        opt_grid = self.win.get_ui('sch_opt_grid')
-        self.opt_popover.add(opt_grid)
+        self.opt_popover = self.win.get_ui('sch_opt_popover')
 
     def show_spinner(self, state=True):
         """Set is spinner in searchbar is running."""
@@ -270,9 +248,8 @@ class FilterSidebar(GObject.GObject):
     """Sidebar selector widget. """
 
     __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                        None,
+                                        (GObject.TYPE_STRING,))}
 
     INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
 
@@ -334,9 +311,9 @@ class Content(GObject.GObject):
     """Handling the content pages"""
 
     __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+                                     None,
+                                     (GObject.TYPE_STRING,)
+                                     )}
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
@@ -387,6 +364,7 @@ class PackageDetails(GObject.GObject):
         self.url_tags = []
         self.underlined_url = False
         self.url_list = {}
+        self._listbox.select_row(self.win.get_ui('list_desc'))
 
     def show(self, show=True):
         if show:
@@ -440,32 +418,36 @@ class PackageDetails(GObject.GObject):
                 self._url_handler(url)
 
     def on_mouse_motion(self, widget, event, data=None):
-        '''
+        """
         Mouse movement handler for TextView
 
         :param widget:
         :param event:
         :param data:
-        '''
+        """
         window = widget.get_window(Gtk.TextWindowType.WIDGET)
         # Get x,y pos for widget
         w, x, y, mask = window.get_pointer()
         # convert coords to TextBuffer coords
         x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
         # Get the tags on current pointer location
-        tags = widget.get_iter_at_location(x, y).get_tags()
-        # Remove underline and hand mouse pointer
-        if self.underlined_url:
-            self.underlined_url.set_property("underline", Pango.Underline.NONE)
-            widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
-            self.underlined_url = None
-        for tag in tags:
-            if tag in self.url_tags:
-                # underline the tags and change mouse pointer to hand
-                tag.set_property("underline", Pango.Underline.SINGLE)
-                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor(Gdk.CursorType.HAND2))
-                self.underlined_url = tag
+        itr = widget.get_iter_at_location(x, y)
+        if isinstance(itr, tuple):
+            itr = itr[1]
+            tags = itr.get_tags()
+            # Remove underline and hand mouse pointer
+            if self.underlined_url:
+                self.underlined_url.set_property("underline",
+                                                 Pango.Underline.NONE)
+                widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(None)
+                self.underlined_url = None
+            for tag in tags:
+                if tag in self.url_tags:
+                    # underline the tags and change mouse pointer to hand
+                    tag.set_property("underline", Pango.Underline.SINGLE)
+                    widget.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+                        Gdk.Cursor(Gdk.CursorType.HAND2))
+                    self.underlined_url = tag
         return False
 
     def add_url(self, text, url, newline=False):
@@ -475,10 +457,10 @@ class PackageDetails(GObject.GObject):
         if not tag:
             if yumex.misc.check_dark_theme():
                 tag = self._buffer.create_tag(text,
-                                             foreground="#4C4CFF")
+                                              foreground="#ff7800")
             else:
                 tag = self._buffer.create_tag(text,
-                                             foreground="blue")
+                                              foreground="#ff7800")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -487,9 +469,9 @@ class PackageDetails(GObject.GObject):
 
 
 class PackageInfo(PackageDetails):
-    '''
+    """
     class for handling the Package Information view
-    '''
+    """
 
     def __init__(self, window, base):
         PackageDetails.__init__(self, window, self._url_handler)
@@ -505,19 +487,21 @@ class PackageInfo(PackageDetails):
         self.update()
 
     def set_package(self, pkg):
-        '''
+        """
         Set current active package to show information about in the
         Package Info view.
 
         :param pkg: package to set as active package
-        '''
+        """
         self.current_package = pkg
+        self.win.set_working(True, True)
         self.update()
+        self.win.set_working(False)
 
     def update(self):
-        '''
+        """
         update the information in the Package info view
-        '''
+        """
         self.clear()
         if self.current_package:
             if self.active_filter == 'desc':
@@ -534,21 +518,13 @@ class PackageInfo(PackageDetails):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                logger.error("Package info not found: ", self.active_filter)
+                logger.error("Package info not found: %s", self.active_filter)
         self.goto_top()
-
-    def _is_url(self, url):
-        urls = re.findall(
-            '^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-            '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
-        if urls:
-            return True
-        else:
-            return False
 
     def _url_handler(self, url):
         logger.debug('URL activated: ' + url)
-        if self._is_url(url):  # just to be sure and prevent shell injection
+        # just to be sure and prevent shell injection
+        if yumex.misc.is_url(url):
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
@@ -569,7 +545,7 @@ class PackageInfo(PackageDetails):
         tags = self.current_package.pkgtags
         if tags:
             self.write(_("Tags: %s\n") %
-                            ", ".join(tags), "changelog-header")
+                       ", ".join(tags), "changelog-header")
         desc = self.current_package.description
         self.write(desc)
         self.write('\n')
@@ -599,7 +575,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No update information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nFedora Updates:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
                 self.add_url(url, url, newline=True)
@@ -611,14 +587,13 @@ class PackageInfo(PackageDetails):
         head += ("%14s " % _("Release")) + ": %(id)s\n"
         head += ("%14s " % _("Type")) + ": "
         head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
-        #head += ("%14s " % _("Status")) + ": %(status)s\n"
         head += ("%14s " % _("Issued")) + ": %(updated)s\n"
         head = head % upd_info
 
-        #if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
+        # if upd_info['updated'] and upd_info['updated'] != upd_info['issued']:
         #    head += "    Updated : %s" % upd_info['updated']
 
-        self.write(head)
+        self.write(head, 'filelist')
         head = ""
 
         # Add our bugzilla references
@@ -631,28 +606,16 @@ class PackageInfo(PackageDetails):
                 for bz in bzs:
                     (typ, bug, title, url) = bz
                     bug_msg = '- %s' % title
-                    self.write("%14s : " % header, newline=False)
+                    self.write("%14s : " % header, 'filelist', newline=False)
                     self.add_url(bug, url)
-                    self.write(bug_msg)
+                    self.write(bug_msg, 'filelist')
                     header = " "
-
-        ## Add our CVE references
-        #if upd_info['references']:
-            #cves = [r for r in upd_info['references']
-                    #if r and r['type'] == 'cve']
-            #if len(cves):
-                #cvelist = ""
-                #header = "CVE"
-                #for cve in cves:
-                    #cvelist += "%14s : %s\n" % (header, cve['id'])
-                    #header = " "
-                #head += cvelist[:-1].rstrip() + '\n\n'
 
         desc = upd_info['description']
         head += "\n%14s : %s\n" % (_("Description"),
                                    yumex.misc.format_block(desc, 17))
         head += "\n"
-        self.write(head)
+        self.write(head, 'filelist')
 
     def _show_changelog(self):
         self.base.set_working(True, False)
@@ -674,7 +637,7 @@ class PackageInfo(PackageDetails):
             self.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
                 self.write(_("\nOnline Changelog:"), "changelog-header",
-                                newline=True)
+                           newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"
                 self.add_url(url, url, newline=True)
@@ -686,7 +649,7 @@ class PackageInfo(PackageDetails):
         filelist = self.current_package.filelist
         if filelist:
             for fname in sorted(filelist):
-                self.write(fname)
+                self.write(fname, 'filelist')
         else:
             self.write(_("No filelist information is available"))
         self.base.set_working(False, False)
@@ -694,11 +657,12 @@ class PackageInfo(PackageDetails):
     def _show_requirements(self):
         self.base.set_working(True, False)
         reqs = self.current_package.requirements
-        for key in reqs:
-            self.write(key)
-            for pkg_id in reqs[key]:
-                pkg = yumex.misc.id2fullname(pkg_id)
-                self.write(' --> {}'.format(pkg))
+        if reqs:
+            for key in reqs:
+                self.write(key, 'filelist')
+                for pkg_id in reqs[key]:
+                    pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
+                    self.write(' --> {}'.format(pkg), 'filelist')
         self.base.set_working(False, False)
 
 
@@ -752,9 +716,9 @@ class MainMenu(Gio.Menu):
 
 class ExtraFilters(GObject.GObject):
     __gsignals__ = {'changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,
-                                      GObject.TYPE_PYOBJECT,))
+                                None,
+                                (GObject.TYPE_STRING,
+                                 GObject.TYPE_PYOBJECT,))
                     }
 
     def __init__(self, win):
@@ -764,10 +728,7 @@ class ExtraFilters(GObject.GObject):
         self.current_archs = None
         self._button = self.win.get_ui('button_more_filters')
         self._button.connect('clicked', self._on_button)
-        self._popover = Gtk.Popover.new(self._button)
-        self._popover.set_position(Gtk.PositionType.BOTTOM)
-        grid = self.win.get_ui('grid_more_filters')
-        self._popover.add(grid)
+        self._popover = self.win.get_ui('more_filters_popover')
         self._arch_box = self.win.get_ui('box_archs')
         self._setup_archs()
         self.newest_only = self.win.get_ui('cb_newest_only')
@@ -776,9 +737,6 @@ class ExtraFilters(GObject.GObject):
 
     def popup(self):
         self._on_button(self._button)
-
-    def set_sensitive(self, state):
-        self._button.set_sensitive(state)
 
     def _on_button(self, button):
         self._popover.show_all()

@@ -19,43 +19,41 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from __future__ import absolute_import
-
-from gi.repository import Gtk
-from gi.repository import GObject
 from yumex import const
-from yumex.misc import _, CONFIG
-
-import logging
-import os
-import shutil
 import yumex.gui.views
 import yumex.misc
+from yumex.misc import _, CONFIG
+from gi.repository import GObject
+from gi.repository import Gtk
+import glob
+import shutil
+import os
+import logging
+
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
 
 class AboutDialog(Gtk.AboutDialog):
 
-    def __init__(self):
+    def __init__(self, parent):
         Gtk.AboutDialog.__init__(self)
         self.props.program_name = 'Yum Extender (dnf)'
         self.props.version = const.VERSION
         self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
         self.props.license_type = Gtk.License.GPL_2_0
-        self.props.copyright = '(C) 2015 Tim Lauridsen'
+        self.props.copyright = '(C) 2021 Tim Lauridsen'
         self.props.website = 'https://github.com/timlau/yumex-dnf'
         self.props.logo_icon_name = 'yumex-dnf'
+        self.set_transient_for(parent)
 
 
 class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
-    COLORS = ['color_install', 'color_update', 'color_normal',
-                     'color_obsolete', 'color_downgrade']
     FLAGS = ['autostart', 'clean_unused', 'newest_only',
-             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly'
-            ]
+             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark'
+             ]
 
     def __init__(self, base):
         self.base = base
@@ -76,31 +74,50 @@ class Preferences:
             need_reset = self.set_settings()
         return need_reset
 
+    def get_themes(self):
+        # Get Themes
+        pattern = os.path.normpath(os.path.join(const.THEME_DIR, '*.theme'))
+        theme_files = glob.glob(pattern)
+        theme_names = [os.path.basename(theme).split('.')[0]
+                       for theme in theme_files]
+        widget = self.base.ui.get_object('pref_theme')
+        widget.remove_all()
+        default = CONFIG.conf.theme.split(".")[0]
+        i = 0
+        ndx = 0
+        for theme in sorted(theme_names):
+            widget.append_text(theme)
+            if theme == default:
+                ndx = i
+            i += 1
+        widget.set_active(ndx)
+
     def get_settings(self):
         # set boolean states
         for option in Preferences.FLAGS:
-            logger.debug("%s : %s " % (option, getattr(CONFIG.conf, option)))
+            logger.debug("%s : %s ", option, getattr(CONFIG.conf, option))
             widget = self.base.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler
         widget = self.base.ui.get_object('pref_clean_instonly')
         widget.connect('notify::active', self.on_clean_instonly)
-        # set colors states
-        for name in Preferences.COLORS:
-            rgba = yumex.misc.get_color(getattr(CONFIG.conf, name))
-            widget = self.base.ui.get_object(name)
-            widget.set_rgba(rgba)
         # Set value states
         for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
         # get the repositories
+        self.base.infobar.message(_('Fetching repository information'))
         self.repos = self.base.backend.get_repositories()
+        self.base.infobar.hide()
         self.repo_view.populate(self.repos)
+        if CONFIG.conf.repo_saved:
+            self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
+        # Get Themes
+        self.get_themes()
 
     def on_clean_instonly(self, *args):
-        '''Handler for clean_instonly switch'''
+        """Handler for clean_instonly switch"""
         widget = self.base.ui.get_object('pref_clean_instonly')
         state = widget.get_active()
         postfix = 'installonly_limit'
@@ -125,14 +142,6 @@ class Preferences:
                 setattr(CONFIG.conf, option, state)
                 changed = True
                 self.handle_setting(option, state)
-        # handle color options
-        for name in Preferences.COLORS:
-            widget = self.base.ui.get_object(name)
-            rgba = widget.get_rgba()
-            color = yumex.misc.color_to_hex(rgba)
-            if color != getattr(CONFIG.conf, name):  # changed ??
-                setattr(CONFIG.conf, name, color)
-                changed = True
         # handle value options
         for name in Preferences.VALUES:
             widget = self.base.ui.get_object('pref_' + name)
@@ -151,6 +160,14 @@ class Preferences:
             if CONFIG.conf.repo_saved:
                 CONFIG.conf.repo_enabled = repo_now
                 changed = True
+        # Themes
+        widget = self.base.ui.get_object('pref_theme')
+        default = CONFIG.conf.theme.split(".")[0]
+        theme = widget.get_active_text()
+        if theme != default:
+            CONFIG.conf.theme = f'{theme}.theme'
+            self.base.load_custom_styling()
+            changed = True
         if changed:
             CONFIG.write()
         return need_reset
@@ -166,6 +183,26 @@ class Preferences:
             else:  # remove the autostart file
                 if os.path.exists(const.USER_DESKTOP_FILE):
                     os.unlink(const.USER_DESKTOP_FILE)
+
+
+class ErrorDialog:
+
+    def __init__(self, base):
+        self.base = base
+        self.dialog = self.base.ui.get_object("error_dialog")
+        self.dialog.set_transient_for(base)
+        self._buffer = self.base.ui.get_object('error_buffer')
+
+    def show(self, txt):
+        self._set_text(txt)
+        self.dialog.show_all()
+        rc = self.dialog.run()
+        self.dialog.hide()
+        self._buffer.set_text('')
+        return rc == 1
+
+    def _set_text(self, txt):
+        self._buffer.set_text(txt)
 
 
 class TransactionResult:
@@ -186,19 +223,11 @@ class TransactionResult:
     def clear(self):
         self.store.clear()
 
-    def _fullname(self, pkg_id):
-        ''' Package fullname  '''
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        if e and e != '0':
-            return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
-        else:
-            return "%s-%s-%s.%s" % (n, v, r, a)
-
     def setup_view(self, view):
-        '''
+        """
         Setup the TreeView
         @param view: the TreeView widget
-        '''
+        """
         model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
                               GObject.TYPE_STRING, GObject.TYPE_STRING,
                               GObject.TYPE_STRING)
@@ -211,13 +240,13 @@ class TransactionResult:
         return model
 
     def create_text_column(self, hdr, view, colno, size=None):
-        '''
+        """
         Create at TreeViewColumn
         @param hdr: column header text
         @param view: the TreeView widget
         @param colno: the TreeStore column containing data for the column
-        @param min_width: the min column view (optional)
-        '''
+        @param size: the min column view (optional)
+        """
         cell = Gtk.CellRendererText()  # Size Column
         column = Gtk.TreeViewColumn(hdr, cell, markup=colno)
         column.set_resizable(True)
@@ -227,21 +256,22 @@ class TransactionResult:
         view.append_column(column)
 
     def populate(self, pkglist, dnl_size):
-        '''
+        """
         Populate the TreeView with data
         @param pkglist: list containing view data
-        '''
+        @param dnl_size:
+        """
         model = self.store
         self.store.clear()
         total_size = 0
         for sub, lvl1 in pkglist:
             label = "<b>%s</b>" % const.TRANSACTION_RESULT_TYPES[sub]
             level1 = model.append(None, [label, "", "", "", ""])
-            for id, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id) = str(id).split(',')
+            for pkgid, size, replaces in lvl1:
+                (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
-                    yumex.misc.format_number(size)])
+                             yumex.misc.format_number(size)])
                 # packages there need to be downloaded
                 if sub in ['install', 'update', 'install-deps',
                            'update-deps', 'obsoletes']:
@@ -249,7 +279,7 @@ class TransactionResult:
                 for r in replaces:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
                     model.append(level2, [_("<b>replacing</b> {}").format(n),
-                                           a, "%s.%s" % (v, r), repo_id,
+                                          a, "%s.%s" % (v, r), repo_id,
                                           yumex.misc.format_number(size)])
         self.base.ui.get_object("result_size").set_text(
             yumex.misc.format_number(total_size))
@@ -278,7 +308,7 @@ def yes_no_dialog(window, msg, add_msg=None):
         dialog.set_transient_for(window)
     rc = dialog.run()
     dialog.destroy()
-    return(rc == Gtk.ResponseType.YES)
+    return rc == Gtk.ResponseType.YES
 
 
 def ask_for_gpg_import(window, values):
@@ -289,8 +319,8 @@ def ask_for_gpg_import(window, values):
              ' Key        : 0x%s:\n'
              ' Userid     : "%s"\n'
              ' From       : %s') %
-          (pkg_name, hexkeyid, userid,
-           keyurl.replace("file://", "")))
+           (pkg_name, hexkeyid, userid,
+            keyurl.replace("file://", "")))
 
     dialog = Gtk.MessageDialog(
         window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)

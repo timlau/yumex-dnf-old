@@ -18,14 +18,19 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import sys
-import traceback
-import subprocess
+""" Main launcher 
+    isort:skip_file
+"""
 import signal
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Notify', '0.7')
+import subprocess
+import traceback
+import sys
+import gi  # isort:skip
 
+gi.require_version('Gtk', '3.0')  # isort:skip
+gi.require_version('Notify', '0.7')  # isort:skip
+
+from yumex import YumexApplication
 
 here = sys.path[0]
 if here != '/usr/bin':
@@ -33,8 +38,6 @@ if here != '/usr/bin':
     sys.path[0] = here
     print("set PYTHONPATH to %s" % here)
 
-
-from yumex import YumexApplication
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = YumexApplication()

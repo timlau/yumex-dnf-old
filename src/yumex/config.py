@@ -21,7 +21,6 @@ It is modified to work in Python 3
 """
 
 from urllib.parse import urlparse
-
 import copy
 import glob
 import re
@@ -36,7 +35,7 @@ def read_in_items_from_dot_dir(thisglob, line_as_list=True):
     results = []
     for fname in glob.glob(thisglob):
         for line in open(fname):
-            if re.match('\s*(#|$)', line):
+            if re.match(r'\s*(#|$)', line):
                 continue
             line = line.rstrip()  # no more trailing \n's
             line = line.lstrip()  # be nice
@@ -264,15 +263,15 @@ class UrlOption(Option):
         return url
 
     def _schemelist(self):
-        '''Return a user friendly list of the allowed schemes
-        '''
+        """Return a user friendly list of the allowed schemes
+        """
         if len(self.schemes) < 1:
             return 'empty'
         elif len(self.schemes) == 1:
             return self.schemes[0]
         else:
             return '%s or %s' % (', '.join(self.schemes[:-1]),
-                   self.schemes[-1])
+                                 self.schemes[-1])
 
 
 class IntOption(Option):
@@ -306,6 +305,7 @@ class PositiveIntOption(IntOption):
     """An option representing a positive integer value, where 0 can
     have a special representation.
     """
+
     def __init__(self, default=None, range_min=0, range_max=None,
                  names_of_0=None):
         super(PositiveIntOption, self).__init__(default, range_min, range_max)
@@ -437,6 +437,7 @@ class SelectionOption(Option):
     """Handles string values where only specific values are
     allowed.
     """
+
     def __init__(self, default=None, allowed=(), mapper={}):
         super(SelectionOption, self).__init__(default)
         self._allowed = allowed
@@ -469,6 +470,7 @@ class CaselessSelectionOption(SelectionOption):
     """Mainly for compatibility with :class:`BoolOption`, works like
     :class:`SelectionOption` but lowers input case.
     """
+
     def parse(self, s):
         """Parse a string for specific values.
 
@@ -576,8 +578,7 @@ class BaseConfig(object):
             option.setup(self, name)
 
     def __str__(self):
-        out = []
-        out.append('[%s]' % self._section)
+        out = ['[%s]' % self._section]
         for name, value in self.iteritems():
             out.append('%s: %r' % (name, value))
         return '\n'.join(out)
@@ -611,6 +612,7 @@ class BaseConfig(object):
             if value is not None:
                 setattr(self, name, value)
 
+    @classmethod
     def optionobj(cls, name, exceptions=True):
         """Return the :class:`Option` instance for the given name.
 
@@ -632,8 +634,8 @@ class BaseConfig(object):
             raise KeyError
         else:
             return None
-    optionobj = classmethod(optionobj)
 
+    @classmethod
     def isoption(cls, name):
         """Return True if the given name refers to a defined option.
 
@@ -642,7 +644,6 @@ class BaseConfig(object):
         :return: whether *name* specifies a defined option
         """
         return cls.optionobj(name, exceptions=False) is not None
-    isoption = classmethod(isoption)
 
     def iterkeys(self):
         """Yield the names of all defined options in the instance."""
@@ -658,7 +659,7 @@ class BaseConfig(object):
         """
         # Use dir() so that we see inherited options too
         for name in self.iterkeys():
-            yield (name, getattr(self, name))
+            yield name, getattr(self, name)
 
     def write(self, fileobj, section=None, always=()):
         """Write out the configuration to a file-like object.
