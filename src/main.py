@@ -21,15 +21,17 @@
 """ Main launcher 
     isort:skip_file
 """
-from yumex import YumexApplication
 import signal
 import subprocess
 import traceback
 import sys
-import gi  # isort:skip
 
+import gi  # isort:skip
 gi.require_version('Gtk', '3.0')  # isort:skip
 gi.require_version('Notify', '0.7')  # isort:skip
+
+from yumex import YumexApplication
+
 
 
 here = sys.path[0]
