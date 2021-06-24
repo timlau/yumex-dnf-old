@@ -162,6 +162,7 @@ class DnfPackage:
         """
         self.backend.frontend.exception_handler(e)
 
+
 class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
     """Backend to do all the dnf related actions """
 

@@ -58,6 +58,7 @@ class InfoProgressBar:
             self.infobar.show()
             self.spinner.start()
             self.progress.show()
+            self.progress.set_show_text(False)
             self.label.show()
             self.sublabel.show()
             self.label.set_text("")
