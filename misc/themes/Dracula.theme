@@ -222,7 +222,7 @@ paned separator{
 }
 
 progress {
-    min-height: 10px;
+    min-height: 8px;
     color: @secondary;
     background: @secondary;
 }
