@@ -24,11 +24,6 @@ import traceback
 import subprocess
 import signal
 
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Notify', '0.7')
-
-
 here = sys.path[0]
 if here != '/usr/bin':
     # git checkout

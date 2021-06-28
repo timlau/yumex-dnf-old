@@ -18,10 +18,6 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-import yumex.config as config
-import dnfdaemon.client
-from gi.repository import Gtk, Gdk, Notify
-import time
 import configparser
 import gettext
 import locale
@@ -30,7 +26,12 @@ import os.path
 import re
 import subprocess
 import sys
+import time
 
+import dnfdaemon.client
+from gi.repository import Gdk, Gtk, Notify
+
+import yumex.config as config
 
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')
@@ -170,7 +171,7 @@ def ExceptionHandler(func):
 
 def TimeFunction(func):
     """
-    This decorator catch yum exceptions and send fatal signal to frontend
+    This decorator show the execution time of a function in the debug log
     """
     def newFunc(*args, **kwargs):
         t_start = time.time()

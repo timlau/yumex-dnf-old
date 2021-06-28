@@ -18,23 +18,27 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-import yumex.gui.widgets as widgets
-import yumex.gui.views as views
-import yumex.gui.dialogs as dialogs
-import yumex.dnf_backend
-import yumex.misc as misc
-import yumex.const as const
-from yumex.misc import Config, _, ngettext, CONFIG
-from gi.repository import Gio, Gtk, Gdk, GLib
+import gi  # isort:skip
+gi.require_version('Gtk', '3.0')  # isort:skip
+gi.require_version('Notify', '0.7')  # isort:skip
+from gi.repository import Gdk, Gio, GLib, Gtk
+
 import argparse
 import datetime
 import logging
 import os.path
+import re
 import shutil
 import subprocess
 import sys
-import re
 
+import yumex.const as const
+import yumex.dnf_backend
+import yumex.gui.dialogs as dialogs
+import yumex.gui.views as views
+import yumex.gui.widgets as widgets
+import yumex.misc as misc
+from yumex.misc import CONFIG, Config, _, ngettext
 
 logger = logging.getLogger('yumex')
 

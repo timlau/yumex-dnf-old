@@ -20,14 +20,14 @@
 
 import logging
 
+import dnfdaemon.client
 from gi.repository import Gdk
 
-import dnfdaemon.client
-
-import yumex.backend
-import yumex.misc
 import yumex.const as const
-from yumex.misc import ExceptionHandler, TimeFunction, _, ngettext, CONFIG
+from yumex.backend import Backend
+from yumex.misc import (CONFIG, ExceptionHandler, TimeFunction, _,
+                        format_number, ngettext, pkg_id_to_full_name,
+                        to_pkg_tuple)
 
 logger = logging.getLogger('yumex.yum_backend')
 
@@ -40,7 +40,7 @@ class DnfPackage:
         (pkg_id, summary, size) = po_tuple
         self.pkg_id = pkg_id
         self.action = action
-        (n, e, v, r, a, repo_id) = yumex.misc.to_pkg_tuple(self.pkg_id)
+        (n, e, v, r, a, repo_id) = to_pkg_tuple(self.pkg_id)
         self.name = n
         self.epoch = e
         self.version = v
@@ -52,7 +52,7 @@ class DnfPackage:
         self.downgrade_po = None
         self.summary = summary
         self.size = size
-        self.sizeM = yumex.misc.format_number(size)
+        self.sizeM = format_number(size)
         # cache
         self._description = None
         self.action = action
@@ -66,7 +66,7 @@ class DnfPackage:
 
     @property
     def fullname(self):
-        return yumex.misc.pkg_id_to_full_name(self.pkg_id)
+        return pkg_id_to_full_name(self.pkg_id)
 
     @ExceptionHandler
     def get_attribute(self, attr):
@@ -163,11 +163,11 @@ class DnfPackage:
         self.backend.frontend.exception_handler(e)
 
 
-class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
+class DnfRootBackend(Backend, dnfdaemon.client.Client):
     """Backend to do all the dnf related actions """
 
     def __init__(self, frontend):
-        yumex.backend.Backend.__init__(self, frontend, filters=True)
+        Backend.__init__(self, frontend, filters=True)
         dnfdaemon.client.Client.__init__(self)
         self._gpg_confirm = None
         self.dnl_progress = None
@@ -218,7 +218,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                        te_total, ts_current, ts_total):
         num = ' ( %i/%i )' % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
-            name = yumex.misc.pkg_id_to_full_name(package)
+            name = pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
             name = package
         # logger.debug('on_RPMProgress : [%s]', package)
@@ -248,7 +248,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
             # Note that 'B' for 'bytes' is already here, it must be preserved.
             ngettext('Downloading %d file (%sB)...',
                      'Downloading %d files (%sB)...', num_files) %
-            (num_files, yumex.misc.format_number(num_bytes)))
+            (num_files, format_number(num_bytes)))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         """Progress for a single element in the batch."""
@@ -396,7 +396,7 @@ class DnfRootBackend(yumex.backend.Backend, dnfdaemon.client.Client):
                     pkg_flt = 'updates'
                 pkgs = self._make_pkg_object(po_list, pkg_flt)
                 self.cache.populate(pkg_flt, pkgs)
-            result.extend(yumex.backend.Backend.get_packages(self, pkg_flt))
+            result.extend(Backend.get_packages(self, pkg_flt))
         return result
 
     @ExceptionHandler

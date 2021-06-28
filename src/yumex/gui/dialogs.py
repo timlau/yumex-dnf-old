@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #    Yum Exteder (yumex) - A graphic package management tool
 #    Copyright (C) 2013 -2014 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
 #
@@ -19,17 +18,16 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-from yumex import const
-import yumex.gui.views
-import yumex.misc
-from yumex.misc import _, CONFIG
-from gi.repository import GObject
-from gi.repository import Gtk
 import glob
-import shutil
-import os
 import logging
+import os
+import shutil
 
+from gi.repository import GObject, Gtk
+from yumex import const
+from yumex.misc import CONFIG, _, format_number
+
+from .views import RepoView
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
@@ -59,7 +57,7 @@ class Preferences:
         self.base = base
         self.dialog = self.base.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
-        self.repo_view = yumex.gui.views.RepoView()
+        self.repo_view = RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
         self.repos = []
@@ -271,7 +269,7 @@ class TransactionResult:
                 (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
                     level1, [n, a, "%s.%s" % (v, r), repo_id,
-                             yumex.misc.format_number(size)])
+                             format_number(size)])
                 # packages there need to be downloaded
                 if sub in ['install', 'update', 'install-deps',
                            'update-deps', 'obsoletes']:
@@ -280,9 +278,9 @@ class TransactionResult:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
                     model.append(level2, [_("<b>replacing</b> {}").format(n),
                                           a, "%s.%s" % (v, r), repo_id,
-                                          yumex.misc.format_number(size)])
+                                          format_number(size)])
         self.base.ui.get_object("result_size").set_text(
-            yumex.misc.format_number(total_size))
+            format_number(total_size))
         self.view.expand_all()
 
 

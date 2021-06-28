@@ -1,10 +1,3 @@
-"""
-    Anything needed to provide update notifications for users by a headless
-    background process.
-
-    This module is intended to be called by instantiating UpdateApplication
-    from src/yumex/update.py.
-"""
 # -*- coding: iso-8859-1 -*-
 #    Yum Exteder (yumex) - A GUI for yum
 #    Copyright (C) 2015 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
@@ -23,6 +16,14 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+"""
+    Anything needed to provide update notifications for users by a headless
+    background process.
+
+    This module is intended to be called by instantiating UpdateApplication
+    from src/yumex/update.py.
+"""
+
 from signal import SIGINT, SIGTERM, SIGHUP
 
 import logging
@@ -30,7 +31,11 @@ import os
 import sys
 import time
 
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Notify', '0.7')
 from gi.repository import Gio, Notify, GObject, GLib
+
 from xdg import BaseDirectory
 
 import dnfdaemon.client

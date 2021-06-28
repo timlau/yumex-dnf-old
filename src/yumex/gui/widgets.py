@@ -23,15 +23,11 @@ import logging
 import subprocess
 import urllib.parse
 
-from gi.repository import Gtk, Gio, GLib
-from gi.repository import Gdk
-from gi.repository import GObject
-from gi.repository import Pango
 import hawkey
-
-from yumex.misc import _, CONFIG
 import yumex.const as const
-import yumex.misc
+from gi.repository import Gdk, Gio, GLib, GObject, Gtk, Pango
+from yumex.misc import (CONFIG, _, check_dark_theme, format_block, is_url,
+                        pkg_id_to_full_name)
 
 logger = logging.getLogger('yumex.gui.widget')
 G_TRUE = GLib.Variant.new_boolean(True)
@@ -382,7 +378,7 @@ class PackageDetails(GObject.GObject):
 
     def get_style(self, tag_name):
         if tag_name in PackageDetails.DEFAULT_STYLES and \
-           yumex.misc.check_dark_theme():
+           check_dark_theme():
             tag_name += '_dark'
         style = self._tags.lookup(tag_name)
         return style
@@ -456,7 +452,7 @@ class PackageDetails(GObject.GObject):
         # Try to see if we already got the current url as a tag
         tag = self._tags.lookup(text)
         if not tag:
-            if yumex.misc.check_dark_theme():
+            if check_dark_theme():
                 tag = self._buffer.create_tag(text,
                                               foreground="#ff7800")
             else:
@@ -525,7 +521,7 @@ class PackageInfo(PackageDetails):
     def _url_handler(self, url):
         logger.debug('URL activated: ' + url)
         # just to be sure and prevent shell injection
-        if yumex.misc.is_url(url):
+        if is_url(url):
             rc = subprocess.call("xdg-open '%s'" % url, shell=True)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
@@ -614,7 +610,7 @@ class PackageInfo(PackageDetails):
 
         desc = upd_info['description']
         head += "\n%14s : %s\n" % (_("Description"),
-                                   yumex.misc.format_block(desc, 17))
+                                   format_block(desc, 17))
         head += "\n"
         self.write(head, 'filelist')
 
@@ -662,7 +658,7 @@ class PackageInfo(PackageDetails):
             for key in reqs:
                 self.write(key, 'filelist')
                 for pkg_id in reqs[key]:
-                    pkg = yumex.misc.pkg_id_to_full_name(pkg_id)
+                    pkg = pkg_id_to_full_name(pkg_id)
                     self.write(' --> {}'.format(pkg), 'filelist')
         self.base.set_working(False, False)
 

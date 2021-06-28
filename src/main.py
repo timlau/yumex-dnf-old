@@ -18,21 +18,18 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-""" Main launcher 
-    isort:skip_file
-"""
-import signal
-import subprocess
-import traceback
-import sys
-
+""" Main launcher """
 import gi  # isort:skip
 gi.require_version('Gtk', '3.0')  # isort:skip
 gi.require_version('Notify', '0.7')  # isort:skip
+from gi.repository import Gtk # isort:skip
+
+import signal
+import subprocess
+import sys
+import traceback
 
 from yumex import YumexApplication
-
-
 
 here = sys.path[0]
 if here != '/usr/bin':

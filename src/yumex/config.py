@@ -20,10 +20,10 @@ The Option/BaseConfig classes is taken from config.py from the yum project
 It is modified to work in Python 3
 """
 
-from urllib.parse import urlparse
 import copy
 import glob
 import re
+from urllib.parse import urlparse
 
 
 def read_in_items_from_dot_dir(thisglob, line_as_list=True):
