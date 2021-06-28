@@ -1,6 +1,0 @@
-{
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportGeneralTypeIssues": "none"
-    },
-    "python.linting.enabled": true
-}
