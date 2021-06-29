@@ -221,8 +221,12 @@ paned separator{
   transition: all 200ms ease-in 100ms;
 }
 
-progress {
-    min-height: 8px;
-    color: @secondary;
-    background: @secondary;
+progressbar > trough  {
+  min-height: 6px;
+  background-color: @primary_light;
+}
+
+progressbar > trough > progress {
+  min-height: 8px;
+  background-color: @secondary;
 }
