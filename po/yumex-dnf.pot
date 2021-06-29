@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 12:27+0200\n"
+"POT-Creation-Date: 2021-06-29 14:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -346,24 +346,26 @@ msgid "Package"
 msgstr ""
 
 #: ../src/yumex/gui/views.py:269
-msgid "Ver."
+msgid "Version"
 msgstr ""
 
 #: ../src/yumex/gui/views.py:270
 msgid "Arch."
 msgstr ""
 
-#: ../src/yumex/gui/views.py:271 ../src/yumex/gui/views.py:741
+#: ../src/yumex/gui/views.py:271 ../src/yumex/gui/dialogs.py:237
+msgid "Size"
+msgstr ""
+
+#: ../src/yumex/gui/views.py:272 ../src/yumex/gui/views.py:741
 #: ../src/yumex.ui.h:73
 msgid "Summary"
 msgstr ""
 
-#: ../src/yumex/gui/views.py:272
-msgid "Repo."
-msgstr ""
-
-#: ../src/yumex/gui/views.py:273 ../src/yumex/gui/dialogs.py:237
-msgid "Size"
+#. Setup reponame & repofile column's
+#: ../src/yumex/gui/views.py:273 ../src/yumex/gui/views.py:1030
+#: ../src/yumex/gui/views.py:1077 ../src/yumex/gui/dialogs.py:236
+msgid "Repository"
 msgstr ""
 
 #: ../src/yumex/gui/views.py:322
@@ -438,12 +440,6 @@ msgstr ""
 
 #: ../src/yumex/gui/views.py:949
 msgid "History Packages"
-msgstr ""
-
-#. Setup reponame & repofile column's
-#: ../src/yumex/gui/views.py:1030 ../src/yumex/gui/views.py:1077
-#: ../src/yumex/gui/dialogs.py:236
-msgid "Repository"
 msgstr ""
 
 #: ../src/yumex/gui/views.py:1030
