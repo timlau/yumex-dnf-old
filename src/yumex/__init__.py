@@ -21,7 +21,7 @@
 import gi  # isort:skip
 gi.require_version('Gtk', '3.0')  # isort:skip
 gi.require_version('Notify', '0.7')  # isort:skip
-from gi.repository import Gdk, Gio, GLib, Gtk
+from gi.repository import Gdk, Gio, GLib, Gtk  # isort:skip
 
 import argparse
 import datetime

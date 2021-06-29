@@ -19,10 +19,11 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 """ Main launcher """
+# We need this for else is Gtk 4.0 selected by default
 import gi  # isort:skip
 gi.require_version('Gtk', '3.0')  # isort:skip
 gi.require_version('Notify', '0.7')  # isort:skip
-from gi.repository import Gtk # isort:skip
+from gi.repository import Gtk  # type: ignore isort:skip
 
 import signal
 import subprocess
