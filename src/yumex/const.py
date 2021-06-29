@@ -119,7 +119,7 @@ HISTORY_OLD_STATES = ['Updated', 'Downgraded', 'Obsoleted']
 HISTORY_UPDATE_STATES = ['Update', 'Downgrade', 'Updated', 'Downgraded']
 
 HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update',
-                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase',
+                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Removed',
                       'Dep-Install']
 
 HISTORY_STATE_LABLES = {
@@ -128,6 +128,7 @@ HISTORY_STATE_LABLES = {
     'Obsoleting': _('Obsoleting packages'),
     'Obsoleted': _('Obsoleted packages'),
     'Erase': _('Erased packages'),
+    'Removed': _('Removed packages'),
     'Install': _('Installed packages'),
     'True-Install': _('Installed packages'),
     'Dep-Install': _('Installed for dependencies'),
