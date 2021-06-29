@@ -32,6 +32,8 @@ import shutil
 import subprocess
 import sys
 
+from pathlib import Path
+
 import yumex.const as const
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
@@ -758,7 +760,14 @@ class Window(BaseWindow):
         package = None
         if args.install:
             action = 'install'
-            package = args.install
+            if '.rpm' in args.install:  # this is an .rpm file
+                path = Path(args.install)
+                path = path.expanduser()
+                path = path.resolve()
+                logger.debug(f'Install (rpm): {path}')
+                package = path.as_posix()
+            else:
+                package = args.install
         elif args.remove:
             action = 'remove'
             package = args.remove
