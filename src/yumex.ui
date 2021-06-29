@@ -1894,7 +1894,7 @@ start Yum Extender</property>
           <object class="GtkImage" id="image2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="icon-name">media-playback-start</property>
+            <property name="icon-name">system-software-install-symbolic</property>
           </object>
         </child>
       </object>
