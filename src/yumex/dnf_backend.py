@@ -397,6 +397,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
                 pkgs = self._make_pkg_object(po_list, pkg_flt)
                 self.cache.populate(pkg_flt, pkgs)
             result.extend(Backend.get_packages(self, pkg_flt))
+        logger.debug(f' number of packages = {len(result)}')
         return result
 
     @ExceptionHandler
