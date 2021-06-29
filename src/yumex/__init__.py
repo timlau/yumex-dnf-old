@@ -378,7 +378,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def _disable_buttons(self, state):
         WIDGETS_INSENSITIVE = ['left_header', 'right_header',
-                               'package_sidebar']
+                               'package_sidebar', 'content_box']
         for widget in WIDGETS_INSENSITIVE:
             self.ui.get_object(widget).set_sensitive(state)
 
@@ -712,9 +712,11 @@ class Window(BaseWindow):
         self.last_search = None
         self.search_bar.reset()
         # reset groups
-        self._grps = self.backend.get_groups()
-        self.groups.populate(self._grps)
-        self.group_package_view.populate([])
+        self._grps = None
+        self._load_groups
+        # reset history
+        self.history_view.reset()
+        self._load_history()
         self.set_working(False)
         # show updates
         self.content.select_page('packages')
@@ -726,6 +728,7 @@ class Window(BaseWindow):
             logger.debug('getting group and categories')
             self._grps = self.backend.get_groups()
             self.groups.populate(self._grps)
+            self.group_package_view.populate([])
 
     def _load_history(self):
         """Load history and populate view."""
