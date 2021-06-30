@@ -60,6 +60,9 @@ class Preferences:
         self.repo_view = RepoView()
         widget = self.base.ui.get_object('repo_sw')
         widget.add(self.repo_view)
+        self.repo_box = self.base.ui.get_object("box_repos")
+        # track when repo page is active in stack
+        self.repo_box.connect("map", self.on_repo_page_active)
         self.repos = []
 
     def run(self):
@@ -71,6 +74,21 @@ class Preferences:
         if rc == 1:
             need_reset = self.set_settings()
         return need_reset
+
+    def on_repo_page_active(self, widget, *args):
+        """ Callback for ::map event there is called when repo page is active"""
+        if not self.repos:
+            self._load_repositories()
+
+    def _load_repositories(self):
+        """ Lazy load repositories """
+        # get the repositories
+        self.base.infobar.message(_('Fetching repository information'))
+        self.repos = self.base.backend.get_repositories()
+        self.base.infobar.hide()
+        self.repo_view.populate(self.repos)
+        if CONFIG.conf.repo_saved:
+            self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
 
     def get_themes(self):
         # Get Themes
@@ -104,13 +122,6 @@ class Preferences:
             widget = self.base.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
-        # get the repositories
-        self.base.infobar.message(_('Fetching repository information'))
-        self.repos = self.base.backend.get_repositories()
-        self.base.infobar.hide()
-        self.repo_view.populate(self.repos)
-        if CONFIG.conf.repo_saved:
-            self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
         # Get Themes
         self.get_themes()
 
@@ -147,17 +158,18 @@ class Preferences:
             if value != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, value)
                 changed = True
-        # handle repos
-        repo_before = CONFIG.session.enabled_repos
-        repo_now = self.repo_view.get_selected()
-        # repo selection changed
-        if repo_now != repo_before:
-            CONFIG.session.enabled_repos = repo_now     # set the new selection
-            # we need to reset the gui
-            need_reset = True
-            if CONFIG.conf.repo_saved:
-                CONFIG.conf.repo_enabled = repo_now
-                changed = True
+        # handle repos, if the repositories has been loaded
+        if self.repos:
+            repo_before = CONFIG.session.enabled_repos
+            repo_now = self.repo_view.get_selected()
+            # repo selection changed
+            if repo_now != repo_before:
+                CONFIG.session.enabled_repos = repo_now     # set the new selection
+                # we need to reset the gui
+                need_reset = True
+                if CONFIG.conf.repo_saved:
+                    CONFIG.conf.repo_enabled = repo_now
+                    changed = True
         # Themes
         widget = self.base.ui.get_object('pref_theme')
         default = CONFIG.conf.theme.split(".")[0]
