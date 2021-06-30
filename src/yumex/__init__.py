@@ -636,6 +636,12 @@ class Window(BaseWindow):
 ###############################################################################
 # Helpers
 ###############################################################################
+    def _show_shortcuts(self):
+        builder = Gtk.Builder.new_from_file(const.DATA_DIR + '/shortcuts.ui')
+        shortcuts = builder.get_object('yumex-shortcuts')
+        shortcuts.set_default_size(1000, 600)
+        shortcuts.set_transient_for(self)
+        shortcuts.present()
 
     def _open_url(self, url):
         """Open URL in default browser."""
@@ -1015,59 +1021,48 @@ class Window(BaseWindow):
 # Callback handlers
 ###############################################################################
     def on_key_press(self, widget, event):
-        modifiers = Gtk.accelerator_get_default_mod_mask()
-        event_and_modifiers = (event.state & modifiers)
+        shortcut = Gtk.accelerator_get_label(event.keyval, event.state)
+        logger.debug(f'keyboard shotcut : {shortcut}')
 
-        if event_and_modifiers != 0:
-            # Open search bar on Ctrl + S
-            if (event.keyval == Gdk.KEY_f and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.search_bar.toggle()
-            # Switch to packages page on Alt + 1
-            if (event.keyval == Gdk.KEY_1 and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self._switch_to('packages')
-            # Switch to groups page on Alt + 2
-            if (event.keyval == Gdk.KEY_2 and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self._switch_to('groups')
-            # Switch to history page on Alt + 3
-            if (event.keyval == Gdk.KEY_3 and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self._switch_to('history')
-            # Switch to queue page on Alt + 4
-            if (event.keyval == Gdk.KEY_4 and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self._switch_to('actions')
-            # Apply pending actiond on Alt + A
-            if (event.keyval == Gdk.KEY_a and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self._process_actions()
-            # Apply pending actiond on Alt + X
-            if (event.keyval == Gdk.KEY_x and
-                    event_and_modifiers == Gdk.ModifierType.MOD1_MASK):
-                self.extra_filters.popup()
-            # Filter = 'updates' on Ctrl + 1
-            if (event.keyval == Gdk.KEY_1 and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.pkg_filter.set_active('updates')
-            # Filter = 'installed' on Ctrl + 2
-            if (event.keyval == Gdk.KEY_2 and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.pkg_filter.set_active('installed')
-            # Filter = 'available' on Ctrl + 3
-            if (event.keyval == Gdk.KEY_3 and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.pkg_filter.set_active('available')
-            # Filter = 'all' on Ctrl + 4
-            if (event.keyval == Gdk.KEY_4 and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                if self.active_page == 'packages':
-                    self.pkg_filter.set_active('all')
+        if shortcut in ('Ctrl+F', 'Shift+Ctrl+F'):
+            if self.active_page == 'packages':
+                self.search_bar.toggle()
+        elif shortcut in ('Alt+1'):
+            self._switch_to('packages')
+        elif shortcut in ('Alt+2'):
+            self._switch_to('groups')
+        elif shortcut in ('Alt+3'):
+            self._switch_to('history')
+        elif shortcut in ('Alt+4'):
+            self._switch_to('actions')
+        elif shortcut in ('Alt+A'):
+            self._process_actions()
+        elif shortcut in ('Alt+X'):
+            self.extra_filters.popup()
+        elif shortcut in ('Ctrl+1'):
+            if self.active_page == 'packages':
+                self.pkg_filter.set_active('updates')
+        elif shortcut in ('Ctrl+2'):
+            if self.active_page == 'packages':
+                self.pkg_filter.set_active('installed')
+        elif shortcut in ('Ctrl+3'):
+            if self.active_page == 'packages':
+                self.pkg_filter.set_active('available')
+        elif shortcut in ('Ctrl+4'):
+            if self.active_page == 'packages':
+                self.pkg_filter.set_active('all')
+        elif shortcut in ('Ctrl+Alt+1'):
+            if self.active_page == 'packages':
+                self.info.set_active('desc')
+        elif shortcut in ('Ctrl+Alt+2'):
+            if self.active_page == 'packages':
+                self.info.set_active('updinfo')
+        elif shortcut in ('Ctrl+Alt+3'):
+            if self.active_page == 'packages':
+                self.info.set_active('files')
+        elif shortcut in ('Ctrl+Alt+4'):
+            if self.active_page == 'packages':
+                self.info.set_active('deps')
 
     def on_mainmenu(self, widget, action, data):
         """Handle mainmenu actions"""
@@ -1086,6 +1081,8 @@ class Window(BaseWindow):
             self._open_url('http://yumex-dnf.readthedocs.org/en/latest/')
         elif action == 'reload':
             self.reset_cache()
+        elif action == 'shortcuts':
+            self._show_shortcuts()
 
     def on_extra_filters(self, widget, data, para):
         """Handle the Extra Filters"""

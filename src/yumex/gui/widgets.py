@@ -363,6 +363,11 @@ class PackageDetails(GObject.GObject):
         self.url_list = {}
         self._listbox.select_row(self.win.get_ui('list_desc'))
 
+    def set_active(self, key):
+        """Set the active item based on key."""
+        if key in ('desc', 'updinfo', 'files', 'deps'):
+            self._listbox.select_row(self.win.get_ui(f'list_{key}'))
+
     def show(self, show=True):
         if show:
             self.widget.show_all()
@@ -679,6 +684,7 @@ class MainMenu(Gio.Menu):
                                                    self)
         help_menu = Gio.Menu()
         self._add_menu(help_menu, _("About"), 'about')
+        # self._add_menu(help_menu, _("Shortcuts"), 'shortcuts')
         self._add_menu(help_menu, _("Documentation"), 'docs')
         self.append_section(_("Help"), help_menu)
         gen_menu = Gio.Menu()
