@@ -1165,8 +1165,7 @@ class GroupView(Gtk.TreeView):
         column = Gtk.TreeViewColumn(None, None)
         # Selection checkbox
         selection = Gtk.CellRendererToggle()    # Selection
-        # FIXME: Group install/remove is broken in dnfdaemon
-        selection.set_property('activatable', False)
+        selection.set_property('activatable', True)
         column.pack_start(selection, False)
         column.set_cell_data_func(selection, self.set_checkbox)
         selection.connect("toggled", self.on_toggled)

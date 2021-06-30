@@ -781,7 +781,7 @@ class Window(BaseWindow):
     def _populate_transaction(self):
         self.backend.ClearTransaction()
         errors = 0
-        error_msgs = set()
+        error_msgs = []
         for action in const.QUEUE_PACKAGE_TYPES:
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
@@ -789,7 +789,7 @@ class Window(BaseWindow):
                     logger.debug('adding: %s %s' %
                                  (const.QUEUE_PACKAGE_TYPES[action],
                                   pkg.pkg_id))
-                    rc, trans = self.backend.AddTransaction(
+                    rc, msgs = self.backend.AddTransaction(
                         pkg.pkg_id,
                         const.QUEUE_PACKAGE_TYPES[action])
                     if not rc:
@@ -801,7 +801,7 @@ class Window(BaseWindow):
                     logger.debug('adding: %s %s' %
                                  (const.QUEUE_PACKAGE_TYPES[action],
                                   pkg.pkg_id))
-                    rc, trans = self.backend.AddTransaction(
+                    rc, msgs = self.backend.AddTransaction(
                         pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
                     if not rc:
                         logger.debug('result: %s: %s' % (rc, pkg))
@@ -810,13 +810,19 @@ class Window(BaseWindow):
                                        (const.QUEUE_PACKAGE_TYPES[action], pkg))
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
-                rc, trans = self.backend.GroupInstall(grp_id)
+                rc, msgs = self.backend.GroupInstall(grp_id)
+                logger.debug(f'GroupInstall : {grp_id} {rc=} {msgs=}')
             else:
-                rc, trans = self.backend.GroupRemove(grp_id)
+                rc, msgs = self.backend.GroupRemove(grp_id)
             if not rc:
                 errors += 1
-                error_msgs.add('group : %s : %s ' % (action, grp_id))
-        logger.debug(' add transaction errors : %d', errors)
+                if action == 'i':
+                    error_msgs.append(f'\ngroup install : {grp_id} ')
+                    error_msgs.extend(msgs)
+                else:
+                    error_msgs.append(f'\ngroup remove : {grp_id} ')
+                    error_msgs.extend(msgs)
+
         if errors > 0:
             raise misc.TransactionBuildError(error_msgs)
 
@@ -848,6 +854,7 @@ class Window(BaseWindow):
     def _get_transaction(self):
         """Get current transaction."""
         rc, result = self.backend.GetTransaction()
+        logger.debug(f'GetTransaction : {rc=}')
         if not rc:
             raise misc.TransactionSolveError(result)
         return result
@@ -857,6 +864,7 @@ class Window(BaseWindow):
         self.infobar.message(_('Applying changes to the system'))
         self.set_working(True, True)
         rc, result = self.backend.RunTransaction()
+        logger.debug(f'RunTransaction : {rc=}')
         # This can happen more than once (more gpg keys to be
         # imported)
         while rc == 1:
@@ -992,14 +1000,14 @@ class Window(BaseWindow):
         except misc.TransactionBuildError as e:
             # Error in building transaction
             self.error_dialog.show(
-                ngettext('Error in building transaction',
-                         'Errors in building transaction', len(e.msgs)) +
+                ngettext('Error in building transaction\n',
+                         'Errors in building transaction\n', len(e.msgs)) +
                 '\n'.join(e.msgs))
             self._reset_on_cancel()
         except misc.TransactionSolveError as e:
             self.error_dialog.show(
-                ngettext('Error in search for dependencies',
-                         'Errors in search for dependencies', len(e.msgs)) +
+                ngettext('Error in search for dependencies\n',
+                         'Errors in search for dependencies\n', len(e.msgs)) +
                 '\n'.join(e.msgs))
             self._reset_on_error()
 
