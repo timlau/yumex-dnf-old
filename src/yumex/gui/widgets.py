@@ -682,16 +682,16 @@ class MainMenu(Gio.Menu):
         self._button.connect('clicked', self._on_button)
         self._popover = Gtk.Popover.new_from_model(self._button,
                                                    self)
-        help_menu = Gio.Menu()
-        self._add_menu(help_menu, _("About"), 'about')
-        self._add_menu(help_menu, _("Keyboard Shortcuts"), 'shortcuts')
-        self._add_menu(help_menu, _("Documentation"), 'docs')
-        self.append_section(_("Help"), help_menu)
         gen_menu = Gio.Menu()
         self._add_menu(gen_menu, _("Preferences"), 'pref')
         self._add_menu(gen_menu, _("Refresh Metadata"), 'reload')
         self._add_menu(gen_menu, _("Quit"), 'quit')
         self.append_section(None, gen_menu)
+        help_menu = Gio.Menu()
+        self._add_menu(help_menu, _("About"), 'about')
+        self._add_menu(help_menu, _("Keyboard Shortcuts"), 'shortcuts')
+        self._add_menu(help_menu, _("Documentation"), 'docs')
+        self.append_section(_("Help"), help_menu)
 
     def _add_menu(self, menu, label, name):
         # menu
