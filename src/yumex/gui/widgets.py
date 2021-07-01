@@ -686,7 +686,7 @@ class MainMenu(Gio.Menu):
         self._add_menu(gen_menu, _("Preferences"), 'pref')
         self._add_menu(gen_menu, _("Refresh Metadata"), 'reload')
         self._add_menu(gen_menu, _("Quit"), 'quit')
-        self.append_section(None, gen_menu)
+        self.append_section(_('Main Menu'), gen_menu)
         help_menu = Gio.Menu()
         self._add_menu(help_menu, _("About"), 'about')
         self._add_menu(help_menu, _("Keyboard Shortcuts"), 'shortcuts')
