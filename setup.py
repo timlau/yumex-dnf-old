@@ -25,7 +25,7 @@ class BuildScripts(build_scripts):
                     os.rename(outfile, newfile)
 
 setup(name="yumex-dnf",
-      version="4.3.3",
+      version="4.4.0",
       description="Graphical package management tool",
       long_description="",
       author="Tim Lauridsen",
@@ -34,7 +34,7 @@ setup(name="yumex-dnf",
       packages=['yumex', 'yumex.gui'],
       package_dir={'': 'src'},
       scripts=['src/main.py', 'src/update.py'],
-      data_files=[('', ['src/yumex.ui'])],
+      data_files=[('', ['src/yumex.ui', 'src/shortcuts.ui'])],
       cmdclass={
         'build_scripts': BuildScripts,
       })
