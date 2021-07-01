@@ -279,14 +279,11 @@ class PackageView(SelectionView):
         return store
 
     def _on_key_press(self, widget, event):
-        modifiers = Gtk.accelerator_get_default_mod_mask()
-        event_and_modifiers = (event.state & modifiers)
+        shortcut = Gtk.accelerator_get_label(event.keyval, event.state)
+        logger.debug(f'keyboard shotcut : {shortcut}')
 
-        if event_and_modifiers != 0:
-            # Select All on Ctrl + A
-            if (event.keyval == Gdk.KEY_a and
-                    event_and_modifiers == Gdk.ModifierType.CONTROL_MASK):
-                self.on_section_header_clicked(widget)
+        if shortcut in ('Ctrl+S'):
+            self.on_section_header_clicked(widget)
 
     def on_section_header_button(self, button, event):
         if event.button == 3:  # Right click
