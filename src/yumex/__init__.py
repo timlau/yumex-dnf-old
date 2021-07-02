@@ -438,6 +438,8 @@ class Window(BaseWindow):
             self._setup_arch()
             # setup default selections
             self.pkg_filter.set_active('updates')
+            if CONFIG.conf.auto_select_updates:
+                self.package_view.on_section_header_clicked(None)
 
     def legacy_cleanup(self):
         """ Cleanup yumex-dnf 4.1.X leftovers"""
