@@ -173,6 +173,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         self.dnl_progress = None
         self._files_to_download = 0
         self._files_downloaded = 0
+        self._current_download = None
         if self.running_api_version == const.NEEDED_DAEMON_API:
             logger.debug('dnfdaemon api version (%d)',
                          self.running_api_version)
@@ -254,6 +255,10 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         """Progress for a single element in the batch."""
         num = '( %d/%d )' % (self._files_downloaded, self._files_to_download)
         self.frontend.infobar.set_progress(total_frac, label=num)
+        if name != self._current_download:
+            self._current_download = name
+            self.frontend.infobar.message_sub(
+                f'{name} - ({self._files_downloaded}/{self._files_to_download})')
 
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single element ended."""

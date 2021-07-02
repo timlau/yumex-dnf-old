@@ -56,7 +56,7 @@ class ProgressSplash:
         pix.set_from_file(pix_file)
         self.label = self.base.ui.get_object("work_label")
         self.sublabel = self.base.ui.get_object("work_sublabel")
-        self.win.set_transient_for(base)
+        self.win.set_transient_for(self.base)
 
     def show(self):
         self.win.show()

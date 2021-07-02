@@ -2101,13 +2101,16 @@ start Yum Extender</property>
   <object class="GtkWindow" id="win_working">
     <property name="can-focus">False</property>
     <property name="opacity">0.90</property>
-    <property name="type">popup</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
     <property name="destroy-with-parent">True</property>
-    <property name="type-hint">notification</property>
+    <property name="type-hint">splashscreen</property>
     <property name="skip-pager-hint">True</property>
+    <property name="accept-focus">False</property>
+    <property name="focus-on-map">False</property>
     <property name="decorated">False</property>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkOverlay" id="work_overlay">
         <property name="visible">True</property>
