@@ -440,6 +440,8 @@ class Window(BaseWindow):
             self.pkg_filter.set_active('updates')
             if CONFIG.conf.auto_select_updates:
                 self.package_view.on_section_header_clicked(None)
+            if CONFIG.conf.search_visible:
+                self.search_bar.toggle()
 
     def legacy_cleanup(self):
         """ Cleanup yumex-dnf 4.1.X leftovers"""

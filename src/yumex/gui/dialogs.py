@@ -50,7 +50,7 @@ class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
     FLAGS = ['autostart', 'clean_unused', 'newest_only',
-             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark'
+             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark', 'search_visible'
              ]
 
     def __init__(self, base):

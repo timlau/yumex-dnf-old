@@ -298,6 +298,7 @@ class YumexConf(config.BaseConfig):
     archs = config.KeyListOption([])
     protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
     clean_instonly = config.BoolOption(True)
+    search_visible = config.BoolOption(False)
     installonly_limit = config.PositiveIntOption(3, range_min=2,
                                                  names_of_0=["0", "<off>"])
 
