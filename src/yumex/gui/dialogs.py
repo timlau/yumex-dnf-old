@@ -46,6 +46,31 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_transient_for(parent)
 
 
+class ProgressSplash:
+
+    def __init__(self, base):
+        self.base = base
+        self.win = self.base.ui.get_object("win_working")
+        pix = self.base.ui.get_object("work_pix")
+        pix_file = f'{const.PIX_DIR}/progress.gif'
+        pix.set_from_file(pix_file)
+        self.label = self.base.ui.get_object("work_label")
+        self.sublabel = self.base.ui.get_object("work_sublabel")
+        self.win.set_transient_for(base)
+
+    def show(self):
+        self.win.show()
+
+    def hide(self):
+        self.win.hide()
+
+    def set_label(self, text):
+        self.label.set_text(text)
+
+    def set_sublabel(self, text):
+        self.sublabel.set_text(text)
+
+
 class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
@@ -83,10 +108,12 @@ class Preferences:
     def _load_repositories(self):
         """ Lazy load repositories """
         # get the repositories
+        self.base.set_working(True, splash=True)
         self.base.infobar.message(_('Fetching repository information'))
         self.repos = self.base.backend.get_repositories()
         self.base.infobar.hide()
         self.repo_view.populate(self.repos)
+        self.base.set_working(False, splash=True)
         if CONFIG.conf.repo_saved:
             self.repo_view.select_by_keys(CONFIG.session.enabled_repos)
 

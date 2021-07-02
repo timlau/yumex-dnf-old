@@ -92,10 +92,10 @@ class BaseYumex:
     @misc.ExceptionHandler
     def reset_cache(self):
         logger.debug('Refresh system cache')
-        self.set_working(True, True)
+        self.set_working(True, True, splash=True)
         self.infobar.message(_('Refreshing Repository Metadata'))
         rc = self._root_backend.ExpireCache()
-        self.set_working(False)
+        self.set_working(False, splash=True)
         if rc:
             self._set_cache_refreshed('system')
         else:
@@ -358,7 +358,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         Gtk.main_quit()
         sys.exit(1)
 
-    def set_working(self, state, insensitive=True):
+    def set_working(self, state, insensitive=True, splash=False):
         """Set the working state.
 
         - show/hide the progress spinner
@@ -370,11 +370,15 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.is_working = state
         if state:
             self._set_busy_cursor(insensitive)
+            if splash:
+                self.working_splash.show()
             if insensitive:
                 self._disable_buttons(False)
         else:
             self.infobar.hide()
             self._set_normal_cursor()
+            if splash:
+                self.working_splash.hide()
             if insensitive:
                 self._disable_buttons(True)
 
@@ -492,7 +496,7 @@ class Window(BaseWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         box.pack_start(self.get_ui('main_box'), False, True, 0)
-        self.infobar = widgets.InfoProgressBar(self.ui)
+        self.infobar = widgets.InfoProgressBar(self.ui, self)
         self.show_all()
 
     def _setup_gui(self):
@@ -560,7 +564,7 @@ class Window(BaseWindow):
         self.main_paned.set_wide_handle(True)  # use wide separator bar (off)
 
         # infobar
-        self.infobar = widgets.InfoProgressBar(self.ui)
+        self.infobar = widgets.InfoProgressBar(self.ui, self)
         self.infobar.hide()
 
         # preferences dialog
@@ -577,6 +581,9 @@ class Window(BaseWindow):
         self.app.set_accels_for_action('win.quit', ['<Ctrl>Q'])
         self.app.set_accels_for_action('win.docs', ['F1'])
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
+
+        self.working_splash = dialogs.ProgressSplash(self)
+
 
     def _setup_arch(self):
         self.infobar.message(_('Downloading Repository Metadata'))
@@ -698,22 +705,22 @@ class Window(BaseWindow):
 
     def _reset_on_cancel(self):
         """Reset gui on user cancel"""
-        self.set_working(True)
+        self.set_working(True, splash=True)
         self.infobar.hide()
-        self.set_working(False)
+        self.set_working(False, splash=True)
 
     def _reset_on_error(self):
         """Reset gui on transaction errors."""
-        self.set_working(True)
+        self.set_working(True, splash=True)
         self.infobar.hide()
         self.release_root_backend()
         self.backend.reload()
-        self.set_working(False)
+        self.set_working(False, splash=True)
 
     @misc.ExceptionHandler
     def _reset(self):
         """Reset the gui on transaction completion."""
-        self.set_working(True)
+        self.set_working(True, splash=True)
         self.infobar.message(_("Reloading package information..."))
         self.release_root_backend()
         self.backend.reload()
@@ -729,7 +736,7 @@ class Window(BaseWindow):
         # reset history
         self.history_view.reset()
         self._load_history()
-        self.set_working(False)
+        self.set_working(False, splash=True)
         # show updates
         self.content.select_page('packages')
         self.pkg_filter.set_active('updates')
@@ -872,7 +879,7 @@ class Window(BaseWindow):
     def _run_transaction(self):
         """Run the current transaction."""
         self.infobar.message(_('Applying changes to the system'))
-        self.set_working(True, True)
+        self.set_working(True, True, splash=True)
         rc, result = self.backend.RunTransaction()
         logger.debug(f'RunTransaction : {rc=}')
         # This can happen more than once (more gpg keys to be

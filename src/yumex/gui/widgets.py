@@ -36,7 +36,8 @@ G_FALSE = GLib.Variant.new_boolean(False)
 
 class InfoProgressBar:
 
-    def __init__(self, ui):
+    def __init__(self, ui, base):
+        self.base = base
         self.ui = ui
         self._is_visible = False
         self.infobar = ui.get_object("info_revealer")  # infobar revealer
@@ -75,10 +76,15 @@ class InfoProgressBar:
     def message(self, msg):
         self._show_infobar(True)
         self.label.set_text(msg)
+        if hasattr(self.base, 'working_splash'):
+            self.base.working_splash.set_label(msg)
+            self.base.working_splash.set_sublabel("")
 
     def message_sub(self, msg):
         self._show_infobar(True)
         self.sublabel.set_text(msg)
+        if hasattr(self.base, 'working_splash'):
+            self.base.working_splash.set_sublabel(msg)
 
     def check_info(self):
         if self.label.get_text() == "":

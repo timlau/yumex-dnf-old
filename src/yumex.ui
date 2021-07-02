@@ -2098,4 +2098,81 @@ start Yum Extender</property>
       <class name="yumex_views"/>
     </style>
   </object>
+  <object class="GtkWindow" id="win_working">
+    <property name="can-focus">False</property>
+    <property name="opacity">0.90</property>
+    <property name="type">popup</property>
+    <property name="modal">True</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="destroy-with-parent">True</property>
+    <property name="type-hint">notification</property>
+    <property name="skip-pager-hint">True</property>
+    <property name="decorated">False</property>
+    <child>
+      <object class="GtkOverlay" id="work_overlay">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkImage" id="work_pix">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">../gfx/progress.gif</property>
+            <property name="icon_size">6</property>
+          </object>
+          <packing>
+            <property name="index">-1</property>
+          </packing>
+        </child>
+        <child type="overlay">
+          <object class="GtkBox">
+            <property name="name">work_top_overlay</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="opacity">0.90</property>
+            <property name="valign">end</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-bottom">20</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="work_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">end</property>
+                <property name="label" translatable="yes">Working ...</property>
+                <attributes>
+                  <attribute name="font-desc" value="Noto Sans Condensed 16"/>
+                  <attribute name="foreground" value="#ffffa3a34848"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="work_sublabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">end</property>
+                <property name="label" translatable="yes">Working ...</property>
+                <attributes>
+                  <attribute name="font-desc" value="Noto Sans Extra-Condensed 12"/>
+                  <attribute name="foreground" value="#e6e661610000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
