@@ -301,7 +301,6 @@ class PackageView(SelectionView):
                 self.set_cursor(path, col, 0)
                 iterator = self.store.get_iter(path)
                 pkg = self.store.get_value(iterator, 0)
-                print("rc pkg:", str(pkg))
                 # Only open popup menu for installed packages
                 if not pkg.installed or pkg.queued:
                     return
@@ -322,7 +321,6 @@ class PackageView(SelectionView):
         # Show downgrade menu only if there is any avaliable downgrades
         do_pkgs = pkg.downgrades
         if do_pkgs:
-            print(do_pkgs)
             popup_sub = Gtk.Menu()
             for do_pkg in do_pkgs:
                 mi = Gtk.MenuItem(str(do_pkg))

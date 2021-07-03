@@ -94,7 +94,6 @@ class Preferences:
         self.get_settings()
         self.dialog.show_all()
         rc = self.dialog.run()
-        print(f'{rc=}')
         self.dialog.hide()
         need_reset = False
         if rc == Gtk.ResponseType.OK:
