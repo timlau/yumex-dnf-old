@@ -41,7 +41,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
         self.props.license_type = Gtk.License.GPL_2_0
         self.props.copyright = '(C) 2021 Tim Lauridsen'
-        self.props.website = 'https://github.com/timlau/yumex-dnf'
+        self.props.website = 'https://www.yumex.dk'
         self.props.logo_icon_name = 'yumex-dnf'
         self.set_transient_for(parent)
 
