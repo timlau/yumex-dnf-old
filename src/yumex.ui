@@ -41,11 +41,12 @@
             <property name="margin-bottom">6</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="pref_ok">
-                <property name="label" translatable="yes">OK</property>
+              <object class="GtkButton" id="pref_cancel">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -54,11 +55,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="pref_cancel">
-                <property name="label" translatable="yes">Cancel</property>
+              <object class="GtkButton" id="pref_ok">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -627,8 +629,8 @@ start Yum Extender</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">pref_ok</action-widget>
-      <action-widget response="0">pref_cancel</action-widget>
+      <action-widget response="-6">pref_cancel</action-widget>
+      <action-widget response="-5">pref_ok</action-widget>
     </action-widgets>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="prefheaderbar">
@@ -662,8 +664,8 @@ start Yum Extender</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">pref_ok</action-widget>
-      <action-widget response="0">pref_cancel</action-widget>
+      <action-widget response="-6">pref_cancel</action-widget>
+      <action-widget response="-5">pref_ok</action-widget>
     </action-widgets>
     <style>
       <class name="preferences"/>
@@ -698,10 +700,11 @@ start Yum Extender</property>
             </child>
             <child>
               <object class="GtkButton" id="error_ok">
-                <property name="label" translatable="yes">OK</property>
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -759,7 +762,7 @@ start Yum Extender</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">error_ok</action-widget>
+      <action-widget response="-7">error_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkHeaderBar" id="headerbar">
@@ -1983,10 +1986,11 @@ start Yum Extender</property>
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="result_cancel">
-                <property name="label" translatable="yes">Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1996,10 +2000,11 @@ start Yum Extender</property>
             </child>
             <child>
               <object class="GtkButton" id="result_ok">
-                <property name="label" translatable="yes">OK</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -2091,8 +2096,8 @@ start Yum Extender</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">result_cancel</action-widget>
-      <action-widget response="1">result_ok</action-widget>
+      <action-widget response="-6">result_cancel</action-widget>
+      <action-widget response="-5">result_ok</action-widget>
     </action-widgets>
     <style>
       <class name="yumex_views"/>

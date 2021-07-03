@@ -94,9 +94,10 @@ class Preferences:
         self.get_settings()
         self.dialog.show_all()
         rc = self.dialog.run()
+        print(f'{rc=}')
         self.dialog.hide()
         need_reset = False
-        if rc == 1:
+        if rc == Gtk.ResponseType.OK:
             need_reset = self.set_settings()
         return need_reset
 
@@ -236,7 +237,7 @@ class ErrorDialog:
         rc = self.dialog.run()
         self.dialog.hide()
         self._buffer.set_text('')
-        return rc == 1
+        return rc == Gtk.ResponseType.CLOSE
 
     def _set_text(self, txt):
         self._buffer.set_text(txt)
@@ -255,7 +256,7 @@ class TransactionResult:
         self.dialog.show_all()
         rc = self.dialog.run()
         self.dialog.hide()
-        return rc == 1
+        return rc == Gtk.ResponseType.OK
 
     def clear(self):
         self.store.clear()
