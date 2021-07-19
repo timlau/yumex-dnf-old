@@ -47,6 +47,9 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
+                <style>
+                  <class name="btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -61,6 +64,9 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
+                <style>
+                  <class name="btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -178,6 +184,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <style>
+                  <class name="pref__theme"/>
+                </style>
               </object>
               <packing>
                 <property name="name">pref_colors</property>
@@ -317,6 +326,9 @@ Yum Extender is started</property>
                 <child>
                   <placeholder/>
                 </child>
+                <style>
+                  <class name="pref__settings"/>
+                </style>
               </object>
               <packing>
                 <property name="name">pref_ui</property>
@@ -401,6 +413,9 @@ Yum Extender is started</property>
                 <child>
                   <placeholder/>
                 </child>
+                <style>
+                  <class name="pref__update"/>
+                </style>
               </object>
               <packing>
                 <property name="name">pref_update</property>
@@ -524,6 +539,9 @@ active when Yum Extender starts</property>
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="pref__dnf"/>
+                </style>
               </object>
               <packing>
                 <property name="name">pref_dnf</property>
@@ -612,6 +630,9 @@ start Yum Extender</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="pref__repos"/>
+                </style>
               </object>
               <packing>
                 <property name="name">pref_repos</property>
@@ -619,6 +640,9 @@ start Yum Extender</property>
                 <property name="position">4</property>
               </packing>
             </child>
+            <style>
+              <class name="pref__stack"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -649,6 +673,9 @@ start Yum Extender</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="stack">pref_stack</property>
+                <style>
+                  <class name="switcher"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -661,6 +688,9 @@ start Yum Extender</property>
         <child>
           <placeholder/>
         </child>
+        <style>
+          <class name="pref__header"/>
+        </style>
       </object>
     </child>
     <action-widgets>
@@ -668,7 +698,8 @@ start Yum Extender</property>
       <action-widget response="-5">pref_ok</action-widget>
     </action-widgets>
     <style>
-      <class name="preferences"/>
+      <class name="pref"/>
+      <class name="dialog"/>
     </style>
   </object>
   <object class="GtkMenu" id="arch_menu">
@@ -705,6 +736,9 @@ start Yum Extender</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
+                <style>
+                  <class name="btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -743,6 +777,9 @@ start Yum Extender</property>
                     <property name="cursor-visible">False</property>
                     <property name="buffer">error_buffer</property>
                     <property name="monospace">True</property>
+                    <style>
+                      <class name="error__text"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -764,6 +801,10 @@ start Yum Extender</property>
     <action-widgets>
       <action-widget response="-7">error_ok</action-widget>
     </action-widgets>
+    <style>
+      <class name="dialog"/>
+      <class name="error"/>
+    </style>
   </object>
   <object class="GtkHeaderBar" id="headerbar">
     <property name="visible">True</property>
@@ -778,6 +819,9 @@ start Yum Extender</property>
     <child>
       <placeholder/>
     </child>
+    <style>
+      <class name="header"/>
+    </style>
   </object>
   <object class="GtkBox" id="headerbox">
     <property name="visible">True</property>
@@ -785,6 +829,9 @@ start Yum Extender</property>
     <child>
       <placeholder/>
     </child>
+    <style>
+      <class name="header"/>
+    </style>
   </object>
   <object class="GtkTextTagTable" id="info_tags">
     <child type="tag">
@@ -893,7 +940,7 @@ start Yum Extender</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
                 <style>
-                  <class name="search"/>
+                  <class name="search__entry"/>
                 </style>
               </object>
               <packing>
@@ -916,6 +963,9 @@ start Yum Extender</property>
                     <property name="icon-name">preferences-other-symbolic</property>
                   </object>
                 </child>
+                <style>
+                  <class name="search__btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -927,6 +977,9 @@ start Yum Extender</property>
               <object class="GtkSpinner" id="search_spinner">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <style>
+                  <class name="search__spinner"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -937,6 +990,9 @@ start Yum Extender</property>
             </child>
           </object>
         </child>
+        <style>
+          <class name="search"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -975,6 +1031,9 @@ start Yum Extender</property>
                     <attributes>
                       <attribute name="font-desc" value="Noto Sans Bold Condensed 12"/>
                     </attributes>
+                    <style>
+                      <class name="info__label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -992,6 +1051,9 @@ start Yum Extender</property>
                     <property name="margin-start">10</property>
                     <property name="margin-end">5</property>
                     <property name="active">True</property>
+                    <style>
+                      <class name="info__spinner"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -1010,6 +1072,9 @@ start Yum Extender</property>
                     <attributes>
                       <attribute name="font-desc" value="Noto Sans Extra-Condensed 12"/>
                     </attributes>
+                    <style>
+                      <class name="info__sublabel"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1028,6 +1093,9 @@ start Yum Extender</property>
                     <property name="margin-right">10</property>
                     <property name="margin-start">10</property>
                     <property name="margin-end">10</property>
+                    <style>
+                      <class name="info__progress"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -1055,6 +1123,9 @@ start Yum Extender</property>
             </child>
           </object>
         </child>
+        <style>
+          <class name="info"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -1108,12 +1179,18 @@ start Yum Extender</property>
                                     <property name="tooltip-text" translatable="yes">More filtering options</property>
                                     <property name="use-underline">True</property>
                                     <property name="icon-name">view-list-symbolic</property>
+                                    <style>
+                                      <class name="sidebar__btn"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
+                                <style>
+                                  <class name="sidebar__filters"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1148,6 +1225,9 @@ start Yum Extender</property>
                                         </attributes>
                                       </object>
                                     </child>
+                                    <style>
+                                      <class name="sidebar__item"/>
+                                    </style>
                                   </object>
                                 </child>
                                 <child>
@@ -1188,6 +1268,9 @@ start Yum Extender</property>
                                         </attributes>
                                       </object>
                                     </child>
+                                    <style>
+                                      <class name="sidebar__item"/>
+                                    </style>
                                   </object>
                                 </child>
                                 <child>
@@ -1218,7 +1301,7 @@ start Yum Extender</property>
                               </packing>
                             </child>
                             <style>
-                              <class name="leftsidebar"/>
+                              <class name="sidebar"/>
                             </style>
                           </object>
                           <packing>
@@ -1256,6 +1339,9 @@ start Yum Extender</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="packages"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="name">packages</property>
@@ -1319,6 +1405,9 @@ start Yum Extender</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="groups"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="name">groups</property>
@@ -1410,6 +1499,9 @@ start Yum Extender</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="history"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="name">history</property>
@@ -1441,6 +1533,9 @@ start Yum Extender</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="queue"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="name">actions</property>
@@ -1449,7 +1544,7 @@ start Yum Extender</property>
                   </packing>
                 </child>
                 <style>
-                  <class name=".main_content"/>
+                  <class name="content__stack"/>
                 </style>
               </object>
               <packing>
@@ -1496,6 +1591,9 @@ start Yum Extender</property>
                                 <property name="icon_size">2</property>
                               </object>
                             </child>
+                            <style>
+                              <class name="pkginfo__item"/>
+                            </style>
                           </object>
                         </child>
                         <child>
@@ -1515,6 +1613,9 @@ start Yum Extender</property>
                                 <property name="icon_size">2</property>
                               </object>
                             </child>
+                            <style>
+                              <class name="pkginfo_item"/>
+                            </style>
                           </object>
                         </child>
                         <child>
@@ -1534,6 +1635,9 @@ start Yum Extender</property>
                                 <property name="icon_size">2</property>
                               </object>
                             </child>
+                            <style>
+                              <class name="pkginfo__item"/>
+                            </style>
                           </object>
                         </child>
                         <child>
@@ -1553,8 +1657,14 @@ start Yum Extender</property>
                                 <property name="icon_size">2</property>
                               </object>
                             </child>
+                            <style>
+                              <class name="pkginfo__item"/>
+                            </style>
                           </object>
                         </child>
+                        <style>
+                          <class name="info__list"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1589,6 +1699,9 @@ start Yum Extender</property>
                         <property name="buffer">info_buffer</property>
                         <property name="accepts-tab">False</property>
                         <property name="monospace">True</property>
+                        <style>
+                          <class name="info__text"/>
+                        </style>
                       </object>
                     </child>
                   </object>
@@ -1598,12 +1711,18 @@ start Yum Extender</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="info"/>
+                </style>
               </object>
               <packing>
                 <property name="resize">False</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
+            <style>
+              <class name="content__sep"/>
+            </style>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1611,6 +1730,9 @@ start Yum Extender</property>
             <property name="position">1</property>
           </packing>
         </child>
+        <style>
+          <class name="content"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -1618,6 +1740,9 @@ start Yum Extender</property>
         <property name="position">2</property>
       </packing>
     </child>
+    <style>
+      <class name="main"/>
+    </style>
   </object>
   <object class="GtkBox" id="left_header">
     <property name="name">header_left</property>
@@ -1630,6 +1755,10 @@ start Yum Extender</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="stack">main_stack</property>
+        <style>
+          <class name="header__switcher"/>
+          <class name="switcher"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -1738,6 +1867,9 @@ start Yum Extender</property>
         </style>
       </object>
     </child>
+    <style>
+      <class name="sidebar__filtermenu"/>
+    </style>
   </object>
   <object class="GtkPopover" id="sch_opt_popover">
     <property name="name">SearchPopup</property>
@@ -1884,6 +2016,9 @@ start Yum Extender</property>
         </style>
       </object>
     </child>
+    <style>
+      <class name="search__options"/>
+    </style>
   </object>
   <object class="GtkMenu" id="queue_menu">
     <property name="visible">True</property>
@@ -1915,6 +2050,9 @@ start Yum Extender</property>
             <property name="icon-name">edit-find-symbolic</property>
           </object>
         </child>
+        <style>
+          <class name="header__btn"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -1952,6 +2090,9 @@ start Yum Extender</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="icon-name">open-menu-symbolic</property>
+            <style>
+              <class name="header__btn"/>
+            </style>
           </object>
         </child>
       </object>
@@ -1991,6 +2132,9 @@ start Yum Extender</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
+                <style>
+                  <class name="btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -2005,6 +2149,9 @@ start Yum Extender</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
+                <style>
+                  <class name="btn"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -2040,6 +2187,9 @@ start Yum Extender</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection3"/>
                     </child>
+                    <style>
+                      <class name="transaction__view"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -2059,6 +2209,9 @@ start Yum Extender</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Size:</property>
+                    <style>
+                      <class name="transaction__label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2072,6 +2225,9 @@ start Yum Extender</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
+                    <style>
+                      <class name="transaction__size"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2100,7 +2256,8 @@ start Yum Extender</property>
       <action-widget response="-5">result_ok</action-widget>
     </action-widgets>
     <style>
-      <class name="yumex_views"/>
+      <class name="transaction"/>
+      <class name="dialog"/>
     </style>
   </object>
   <object class="GtkWindow" id="win_working">
@@ -2126,6 +2283,9 @@ start Yum Extender</property>
             <property name="can-focus">False</property>
             <property name="pixbuf">../gfx/progress.gif</property>
             <property name="icon_size">6</property>
+            <style>
+              <class name="working__img"/>
+            </style>
           </object>
           <packing>
             <property name="index">-1</property>
@@ -2153,6 +2313,9 @@ start Yum Extender</property>
                   <attribute name="font-desc" value="Noto Sans Condensed 16"/>
                   <attribute name="foreground" value="#ffffa3a34848"/>
                 </attributes>
+                <style>
+                  <class name="working__label"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -2171,6 +2334,9 @@ start Yum Extender</property>
                   <attribute name="font-desc" value="Noto Sans Extra-Condensed 12"/>
                   <attribute name="foreground" value="#e6e661610000"/>
                 </attributes>
+                <style>
+                  <class name="working__sublabel"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -2182,5 +2348,8 @@ start Yum Extender</property>
         </child>
       </object>
     </child>
+    <style>
+      <class name="working"/>
+    </style>
   </object>
 </interface>
