@@ -535,7 +535,7 @@ class Window(BaseWindow):
             hb.set_center_widget(lb)
             hb.pack_end(rb, False, True, 0)
             box.pack_start(hb, False, True, 0)
-        box.pack_start(self.get_ui('main_box'), False, True, 0)
+        box.pack_start(self.get_ui('main_overlay'), False, True, 0)
         # Setup search
         self.search_bar = widgets.SearchBar(self)
         self.search_bar.connect('search', self.on_search)
