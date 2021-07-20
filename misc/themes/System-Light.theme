@@ -38,6 +38,7 @@
     border-radius: 8px;
     padding: 10px;
     margin: 5px 10px;
+    box-shadow: 2px 2px 4px 4px rgba(0,0,0,.25);
   }
   
   /* Package filter selector */
