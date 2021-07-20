@@ -24,10 +24,44 @@
 @define-color Material_Grey           #EEEEEE;
 @define-color Material_BlueGrey       #B0BEC5;
 
-
 /*Package Type Colors */
 @define-color color_install         @Material_Indigo;
 @define-color color_update          @Material_Pink;
 @define-color color_downgrade       @Material_Lime;
 @define-color color_normal          @Material_Orange;
 @define-color color_obsolete        @Material_Green;
+
+.info {
+  background-color: @theme_bg_color ;
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px 10px;
+}
+
+/* Package filter selector */
+
+.pkgfilter {
+  padding-top: 10px;
+}
+
+.pkgfilter__list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.pkgfilter__item {
+  padding-left: 0.5em;
+}
+
+/* Package Info Selector */
+
+.pkginfo__list {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.pkginfo__item {
+  padding: 0px 5px 0px 5px;
+}

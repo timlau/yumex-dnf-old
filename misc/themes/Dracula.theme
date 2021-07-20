@@ -23,47 +23,47 @@
 @define-color secondary         #FF79C6;
 
 /* generic vindow & dialog */
-.main, .transaction, .error { 
-  background: @bg_color;
+.main,
+.transaction,
+.error {
+  background-color: @bg_color;
   color: @text_color;
-  
 }
 
 /* Transaction & error dialog buttons */
-.btn { 
-  background: @primary;
+.btn {
+  background-color: @primary;
   color: @text_color;
 }
 
 /* Search bar */
 
 /* Search Entry */
-.search__entry.search{
+.search__entry.search {
   color: @other_search;
-  background: @bg_color;
+  background-color: @bg_color;
   padding: 5px;
   border: 1px solid @text_color;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
   caret-color: @other_search; /* cursor color */
-  
 }
 
-.search__entry.search image{
+.search__entry.search image {
   color: @other_search;
-  background: @bg_color;
+  background-color: @bg_color;
 }
 
-.search box{
-  background: @primary_dark;
+.search box {
+  background-color: @primary_dark;
   border: none;
   outline-style: none;
 }
 
 .search__btn {
   color: @text_color;
-  background: @primary;
+  background-color: @primary;
   border: none;
   box-shadow: none;
   transition: all 200ms ease-in;
@@ -71,14 +71,13 @@
 
 .search__btn:hover {
   color: @text_color;
-  background: @primary_light;
+  background-color: @primary_light;
 }
 
-
-/* Infobar styling */
+/* Infobar */
 
 .info {
-  background: @primary_dark;
+  background-color: @primary_dark;
   border: 2px solid @primary;
   border-radius: 8px;
   padding: 10px;
@@ -86,17 +85,17 @@
 }
 
 .info__label,
-.info__sublabel{
+.info__sublabel {
   color: @other_infobar;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
-.info__spinner{
+.info__spinner {
   color: @primary_light;
-  background: @primary_dark;
+  background-color: @primary_dark;
 }
 
-.info__progress > trough  {
+.info__progress > trough {
   min-height: 6px;
   background-color: @primary_light;
 }
@@ -106,108 +105,85 @@
   background-color: @secondary;
 }
 
+/* Paned */
 
-/* separator between vies & info */
-.content__sep separator{
-  background: @primary;
+.content__paned > separator {
+  background-color: @primary;
 }
 
+/* Package filter selector */
 
-/* Package category selector */
-
-.sidebar {
-  background: @bg_color;
+.pkgfilter {
+  background-color: @bg_color;
   padding-top: 10px;
   border-right: 2px solid @primary;
-
 }
-.sidebar toolbar{
-  background: @primary_dark;
+.pkgfilter toolbar {
+  background-color: @primary_dark;
 }
 
-.sidebar button{
+.pkgfilter button {
   color: @text_color;
-  background: @primary_dark;
+  background-color: @primary_dark;
 }
 
-.sidebar__list{ 
-  background: @bg_color;
+.pkgfilter__list {
+  background-color: @bg_color;
   color: @text_color;
+  margin-left: 10px;
 }
 
-.sidebar__item.activatable{
-  padding-left: 10px;
+.pkgfilter__item {
+  padding-left: 0.5em;
+  transition: all 200ms ease-in;
+  color: @primary_lighter;
+  background-color: @bg_color;
+  border-left: 5px solid @bg_color;
+  border-radius: 5px 0 0 5px;
 }
 
-.sidebar__item.activatable:selected {
+.pkgfilter__item:selected {
   color: @text_color;
-  background: @primary;
-  border: none; 
-  border-left-style: solid;
-  border-left-width: 3px;
+  background-color: @primary;
   border-left-color: @secondary;
-  border-radius: 2px;
-  /*padding-left: 10px;*/
-  transition: all 200ms ease-in 100ms;
-
 }
 
-.sidebar__item.activatable:hover {
-  color: @text_color;
-  background: @primary;
-  transition: all 200ms ease-in 100ms;
-}
-
-/* Package View */
-.packages treeview { 
-  background: @bg_color;
+.pkgfilter__item:hover {
   color: @text_color;
 }
 
-.packages treeview:selected{ 
-  background: @primary_light;
+/* content views (packages, group, history, queue) */
+
+.content__view treeview {
+  background-color: @bg_color;
   color: @text_color;
 }
 
-.packages treeview:hover{ 
-  background: @primary;
+.content__view treeview:selected {
+  background-color: @primary_light;
   color: @text_color;
 }
 
-/* Package View Column Headers */
-.packages header button {
+.content__view treeview:hover {
+  background-color: @primary;
   color: @text_color;
-  background: @primary_dark;
+}
+
+/* View Column Headers */
+.content__view header button {
+  color: @text_color;
+  background-color: @primary_dark;
   border: none;
-  border-bottom-color: @primary_lighter;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-left: none;
+  border-bottom: 1px solid @primary_lighter;
 }
 
 /* All headers, execpt the first one */
-.packages header button + button{
-  border-left-color: @primary_lighter;
-  border-left-width: 1px;
-  border-left-style: dotted;
+.content__view header button + button {
+  border-left: 1px dotted @primary_lighter;
 }
 
-/* Package View Checkboxes */
-/*FIXME: checkbox styling is not working correct*/
-.packages check {
-  background: @primary;
-  color: @secondary;  
-}
+/* Package Info Selector */
 
-.packages check:checked {
-  background: @primary_lighter;
-  color: @text_color;
-  border-width: 0px;
-}
-
-/* Package Info  */
-
-/* Selector */
 .pkginfo__select {
   background-color: @bg_color;
   border-right: 2px solid @primary;
@@ -215,30 +191,29 @@
 
 .pkginfo__list {
   background-color: @bg_color;
-  margin: 10px 5px; 
+  margin-left: 5px;
+  margin-top: 5px;
 }
-
 
 .pkginfo__item {
   color: @primary_lighter;
-  background: @bg_color;
+  background-color: @bg_color;
   transition: all 200ms ease-in 100ms;
+  border-left: 4px solid @bg_color;
+  border-radius: 2px 0 0 2px;
+  padding: 0px 5px 0px 5px;
 }
 
 .pkginfo__item:hover {
   color: @text_color;
 }
 
-.pkginfo__item.activatable:selected {
+.pkginfo__item:selected {
   color: @text_color;
-  background: @primary;
-  border-left-style: solid;
-  border-left-width: 4px;
+  background-color: @primary;
   border-left-color: @secondary;
-  border-radius: 2px;
 }
 
 .pkginfo__text text {
-  /* color: red; */
-  background-color: @bg_color; 
+  background-color: @bg_color;
 }

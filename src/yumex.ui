@@ -916,32 +916,6 @@ start Yum Extender</property>
   <object class="GtkTextBuffer" id="info_buffer">
     <property name="tag-table">info_tags</property>
   </object>
-  <object class="GtkBox" id="left_header">
-    <property name="name">header_left</property>
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="spacing">24</property>
-    <child>
-      <object class="GtkStackSwitcher" id="main_switcher">
-        <property name="name">main_switcher</property>
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="stack">main_stack</property>
-        <style>
-          <class name="header__switcher"/>
-          <class name="switcher"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <style>
-      <class name="header"/>
-    </style>
-  </object>
   <object class="GtkOverlay" id="main_overlay">
     <property name="width-request">800</property>
     <property name="height-request">800</property>
@@ -1042,8 +1016,9 @@ start Yum Extender</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="orientation">vertical</property>
-                <property name="position">600</property>
+                <property name="position">300</property>
                 <property name="position-set">True</property>
+                <property name="wide-handle">True</property>
                 <child>
                   <object class="GtkStack" id="main_stack">
                     <property name="visible">True</property>
@@ -1100,17 +1075,11 @@ start Yum Extender</property>
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="margin-right">5</property>
-                                    <property name="margin-end">5</property>
                                     <child>
                                       <object class="GtkListBoxRow" id="pkg_flt_row_updates">
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="tooltip-text" translatable="yes">Show available updates (Ctrl+1)</property>
-                                        <property name="margin-left">6</property>
-                                        <property name="margin-right">6</property>
-                                        <property name="margin-start">6</property>
-                                        <property name="margin-end">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label_updates">
                                             <property name="visible">True</property>
@@ -1123,7 +1092,7 @@ start Yum Extender</property>
                                           </object>
                                         </child>
                                         <style>
-                                          <class name="sidebar__item"/>
+                                          <class name="pkgfilter__item"/>
                                         </style>
                                       </object>
                                     </child>
@@ -1132,10 +1101,6 @@ start Yum Extender</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="tooltip-text" translatable="yes">Show installed packages (Ctrl+2)</property>
-                                        <property name="margin-left">6</property>
-                                        <property name="margin-right">6</property>
-                                        <property name="margin-start">6</property>
-                                        <property name="margin-end">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label_installed">
                                             <property name="visible">True</property>
@@ -1148,7 +1113,7 @@ start Yum Extender</property>
                                           </object>
                                         </child>
                                         <style>
-                                          <class name="sidebar__item"/>
+                                          <class name="pkgfilter__item"/>
                                         </style>
                                       </object>
                                     </child>
@@ -1157,10 +1122,6 @@ start Yum Extender</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="tooltip-text" translatable="yes">Show available packages (Ctrl+3)</property>
-                                        <property name="margin-left">6</property>
-                                        <property name="margin-right">6</property>
-                                        <property name="margin-start">6</property>
-                                        <property name="margin-end">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label_available">
                                             <property name="visible">True</property>
@@ -1173,7 +1134,7 @@ start Yum Extender</property>
                                           </object>
                                         </child>
                                         <style>
-                                          <class name="sidebar__item"/>
+                                          <class name="pkgfilter__item"/>
                                         </style>
                                       </object>
                                     </child>
@@ -1182,10 +1143,6 @@ start Yum Extender</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="tooltip-text" translatable="yes">Show all packages (Ctrl+4)</property>
-                                        <property name="margin-left">6</property>
-                                        <property name="margin-right">6</property>
-                                        <property name="margin-start">6</property>
-                                        <property name="margin-end">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label_all">
                                             <property name="visible">True</property>
@@ -1198,12 +1155,12 @@ start Yum Extender</property>
                                           </object>
                                         </child>
                                         <style>
-                                          <class name="sidebar__item"/>
+                                          <class name="pkgfilter__item"/>
                                         </style>
                                       </object>
                                     </child>
                                     <style>
-                                      <class name="sidebar__list"/>
+                                      <class name="pkgfilter__list"/>
                                     </style>
                                   </object>
                                   <packing>
@@ -1213,7 +1170,7 @@ start Yum Extender</property>
                                   </packing>
                                 </child>
                                 <style>
-                                  <class name="sidebar"/>
+                                  <class name="pkgfilter"/>
                                 </style>
                               </object>
                               <packing>
@@ -1235,7 +1192,7 @@ start Yum Extender</property>
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="packages__view"/>
+                                  <class name="content__view"/>
                                 </style>
                               </object>
                               <packing>
@@ -1272,6 +1229,7 @@ start Yum Extender</property>
                             <property name="can-focus">True</property>
                             <property name="position">300</property>
                             <property name="position-set">True</property>
+                            <property name="wide-handle">True</property>
                             <child>
                               <object class="GtkScrolledWindow" id="groups_sw">
                                 <property name="width-request">200</property>
@@ -1283,7 +1241,7 @@ start Yum Extender</property>
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="yumex_views"/>
+                                  <class name="content__view"/>
                                 </style>
                               </object>
                               <packing>
@@ -1302,7 +1260,7 @@ start Yum Extender</property>
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="yumex_views"/>
+                                  <class name="content__view"/>
                                 </style>
                               </object>
                               <packing>
@@ -1310,6 +1268,9 @@ start Yum Extender</property>
                                 <property name="shrink">False</property>
                               </packing>
                             </child>
+                            <style>
+                              <class name="content__paned"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -1339,6 +1300,7 @@ start Yum Extender</property>
                             <property name="can-focus">True</property>
                             <property name="position">250</property>
                             <property name="position-set">True</property>
+                            <property name="wide-handle">True</property>
                             <child>
                               <object class="GtkScrolledWindow" id="history_left_sw">
                                 <property name="width-request">200</property>
@@ -1350,7 +1312,7 @@ start Yum Extender</property>
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="yumex_views"/>
+                                  <class name="content__view"/>
                                 </style>
                               </object>
                               <packing>
@@ -1369,7 +1331,7 @@ start Yum Extender</property>
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="yumex_views"/>
+                                  <class name="content__view"/>
                                 </style>
                               </object>
                               <packing>
@@ -1377,6 +1339,9 @@ start Yum Extender</property>
                                 <property name="shrink">False</property>
                               </packing>
                             </child>
+                            <style>
+                              <class name="content__paned"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -1389,8 +1354,7 @@ start Yum Extender</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
-                            <property name="margin-right">6</property>
-                            <property name="margin-end">6</property>
+                            <property name="margin-end">10</property>
                             <property name="margin-top">6</property>
                             <property name="margin-bottom">6</property>
                             <child>
@@ -1438,7 +1402,7 @@ start Yum Extender</property>
                               <placeholder/>
                             </child>
                             <style>
-                              <class name="yumex_views"/>
+                              <class name="content__view"/>
                             </style>
                           </object>
                           <packing>
@@ -1637,7 +1601,7 @@ start Yum Extender</property>
                   </packing>
                 </child>
                 <style>
-                  <class name="content__sep"/>
+                  <class name="content__paned"/>
                 </style>
               </object>
               <packing>
@@ -1776,6 +1740,32 @@ start Yum Extender</property>
       </packing>
     </child>
   </object>
+  <object class="GtkBox" id="left_header">
+    <property name="name">header_left</property>
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="spacing">24</property>
+    <child>
+      <object class="GtkStackSwitcher" id="main_switcher">
+        <property name="name">main_switcher</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="stack">main_stack</property>
+        <style>
+          <class name="header__switcher"/>
+          <class name="switcher"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <style>
+      <class name="header"/>
+    </style>
+  </object>
   <object class="GtkPopover" id="more_filters_popover">
     <property name="name">PackageFilterPopup</property>
     <property name="can-focus">False</property>
@@ -1875,92 +1865,6 @@ start Yum Extender</property>
     </child>
     <style>
       <class name="sidebar__filtermenu"/>
-    </style>
-  </object>
-  <object class="GtkMenu" id="queue_menu">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="queue_remove_selected">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Remove Selected</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkBox" id="right_header">
-    <property name="name">header_right</property>
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="spacing">6</property>
-    <child>
-      <object class="GtkToggleButton" id="sch_togglebutton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Search (show/hide)</property>
-        <property name="halign">start</property>
-        <child>
-          <object class="GtkImage" id="image1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">edit-find-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="header__btn"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="button_run">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Apply pending actions</property>
-        <child>
-          <object class="GtkImage" id="image2">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">system-software-install-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="mainmenu_button">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <child>
-          <object class="GtkImage" id="image3">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">open-menu-symbolic</property>
-            <style>
-              <class name="header__btn"/>
-            </style>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <style>
-      <class name="header"/>
     </style>
   </object>
   <object class="GtkPopover" id="sch_opt_popover">
@@ -2110,6 +2014,92 @@ start Yum Extender</property>
     </child>
     <style>
       <class name="search__options"/>
+    </style>
+  </object>
+  <object class="GtkMenu" id="queue_menu">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="queue_remove_selected">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Remove Selected</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="right_header">
+    <property name="name">header_right</property>
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkToggleButton" id="sch_togglebutton">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Search (show/hide)</property>
+        <property name="halign">start</property>
+        <child>
+          <object class="GtkImage" id="image1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">edit-find-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="header__btn"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="button_run">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Apply pending actions</property>
+        <child>
+          <object class="GtkImage" id="image2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">system-software-install-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="mainmenu_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <child>
+          <object class="GtkImage" id="image3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">open-menu-symbolic</property>
+            <style>
+              <class name="header__btn"/>
+            </style>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <style>
+      <class name="header"/>
     </style>
   </object>
   <object class="GtkDialog" id="transaction-results">
