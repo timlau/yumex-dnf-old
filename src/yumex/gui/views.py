@@ -469,7 +469,7 @@ class PackageView(SelectionView):
             action = pkg.queued
             if action:
                 if action in ('u', 'i', 'o'):
-                    icon = 'emblem-downloads'
+                    icon = 'list-add-symbolic'
                 elif action == 'ri':
                     icon = 'gtk-refresh'
                 elif action == 'do':
