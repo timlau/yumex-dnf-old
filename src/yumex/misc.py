@@ -267,6 +267,7 @@ class YumexConf(config.BaseConfig):
     autostart = config.BoolOption(False)
     theme = config.Option("System-Dark.theme")
     use_dark = config.BoolOption(False)
+    show_splash = config.BoolOption(True)
 
     color_install = config.Option('#8BE8FD')
     color_update = config.Option('#FF79C6')

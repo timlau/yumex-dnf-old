@@ -370,14 +370,14 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.is_working = state
         if state:
             self._set_busy_cursor(insensitive)
-            if splash:
+            if splash and CONFIG.conf.show_splash:
                 self.working_splash.show()
             if insensitive:
                 self._disable_buttons(False)
         else:
             self.infobar.hide()
             self._set_normal_cursor()
-            if splash:
+            if splash and CONFIG.conf.show_splash:
                 self.working_splash.hide()
             if insensitive:
                 self._disable_buttons(True)
