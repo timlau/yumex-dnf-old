@@ -20,19 +20,18 @@
 
 /* Search bar */
 .search__entry.search {
-  color: #FFB86C;
+  color: #ffa348;
   background-color: #21252b;
-  padding: 5px;
   border: 1px solid #F8F8F2;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
-  caret-color: #FFB86C;
+  caret-color: #ffa348;
   /* cursor color */
 }
 
 .search__entry.search image {
-  color: #FFB86C;
+  color: #e66100;
   background-color: #21252b;
 }
 
@@ -66,9 +65,12 @@
   transition: all 500ms ease-in-out;
 }
 
-.info__label, .info__sublabel {
-  color: #F1FA8C;
-  font-family: "Noto Sans", sans-serif;
+.info__label {
+  color: #ffa348;
+}
+
+.info__sublabel {
+  color: #e66100;
 }
 
 .info__spinner {

@@ -1,3 +1,5 @@
+@import 'palette';
+
 /* generic vindow & dialog */
 .main,
 .transaction,
@@ -15,18 +17,18 @@
 /* Search bar */
 .search {
   &__entry.search {
-    color: $other_search;
+    color: $Gtk_orange_2;
     background-color: $bg_color;
-    padding: 5px;
+    // padding: 5px;
     border: 1px solid $text_color;
     border-radius: 5px;
     font-weight: normal;
     font-size: 120%;
-    caret-color: $other_search; /* cursor color */
+    caret-color: $Gtk_orange_2; /* cursor color */
   }
 
   &__entry.search image {
-    color: $other_search;
+    color: $Gtk_orange_4;
     background-color: $bg_color;
   }
 
@@ -61,10 +63,12 @@
               0 0 0 1440px rgba($bg_color, .5);
   transition: all 500ms ease-in-out;
 
-  &__label,
+  &__label {
+    color: $Gtk_orange_2;
+  }
+
   &__sublabel {
-    color: $other_infobar;
-    font-family: "Noto Sans", sans-serif;
+    color: $Gtk_orange_4;
   }
 
   &__spinner {
