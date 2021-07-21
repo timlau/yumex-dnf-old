@@ -1,0 +1,12 @@
+@import 'palette';
+
+$color_install:         $Material_Dark_Indigo;
+$color_update:          $Material_Dark_Pink;
+$color_downgrade:       $Material_Dark_Lime;
+$color_normal:          $Material_Dark_Orange;
+$color_obsolete:        $Material_Dark_Green;
+
+
+@import 'functions';
+@import 'colors';
+@import 'system_base';

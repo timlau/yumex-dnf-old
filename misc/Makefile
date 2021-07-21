@@ -13,6 +13,10 @@ build: clean
 	intltool-merge -d -u $(PODIR) $(APPNAME).desktop.in $(APPNAME).desktop
 	intltool-merge -d -u $(PODIR) $(APPNAME)-local.desktop.in $(APPNAME)-local.desktop
 	intltool-merge -x -u $(PODIR) $(APPNAME).appdata.xml.in $(APPNAME).appdata.xml
+	pysassc -t expanded scss/Dracula.scss themes/Dracula.theme
+	pysassc -t expanded scss/One-Dark.scss themes/One-Dark.theme
+	pysassc -t expanded scss/System-Dark.scss themes/System-Dark.theme
+	pysassc -t expanded scss/System-Light.scss themes/System-Light.theme
 
 install: build
 	install -d $(DESTDIR)$(DATADIR)/applications

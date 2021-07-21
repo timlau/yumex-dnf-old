@@ -16,6 +16,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel >= 3.8
 BuildRequires: make
+BuildRequires: python3-libsass
 
 Requires: python3-dnfdaemon >= 0.3.10
 Requires: python3-gobject >= 3.10

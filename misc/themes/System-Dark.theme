@@ -1,62 +1,33 @@
-/*
-*  Yum Extender styling (GTK3 CSS)
-*/
-
-/* Material Design Colors for light Background */
-
-@define-color Material_Red            #EF9A9A;
-@define-color Material_Pink           #F48FB1;
-@define-color Material_Purple         #CE93D8;
-@define-color Material_DeepPurple     #B39DDB;
-@define-color Material_Indigo         #9FA8DA;
-@define-color Material_Blue           #90CAF9;
-@define-color Material_LightBlue      #81D4FA;
-@define-color Material_Cyan           #80DEEA;
-@define-color Material_Teal           #80CBC4;
-@define-color Material_Green          #A5D6A7;
-@define-color Material_LightGreen     #C5E1A5;
-@define-color Material_Lime           #E6EE9C;
-@define-color Material_Yellow         #FFF59D;
-@define-color Material_Amber          #FFE082;
-@define-color Material_Orange         #FFCC80;
-@define-color Material_DeepOrange     #FFAB91;
-@define-color Material_Brown          #BCAAA4;
-@define-color Material_Grey           #EEEEEE;
-@define-color Material_BlueGrey       #B0BEC5;
-
 /*Package Type Colors */
-@define-color color_install         @Material_Indigo;
-@define-color color_update          @Material_Pink;
-@define-color color_downgrade       @Material_Lime;
-@define-color color_normal          @Material_Orange;
-@define-color color_obsolete        @Material_Green;
-
+@define-color color_install     #9FA8DA;
+@define-color color_update      #F48FB1;
+@define-color color_downgrade   #E6EE9C;
+@define-color color_normal      #FFCC80;
+@define-color color_obsolete    #A5D6A7;
 .info {
   background-color: @theme_bg_color;
-  border: 3px solid @primary;
+  border: 3px solid currentColor;
   border-radius: 10px;
   padding: 15px;
   margin: 10px 50px 50px 50px;
-  box-shadow: 0px 0px 20px -10px rgba(255,255,255, .15);
+  box-shadow: 0px 0px 20px -10px rgba(255, 255, 255, 0.15);
 }
 
 /* Package filter selector */
-
 .pkgfilter {
   padding-top: 10px;
 }
 
-.pkgfilter__list {
+.pkgfilter .pkgfilter__list {
   margin-left: 10px;
   margin-right: 10px;
 }
 
-.pkgfilter__item {
+.pkgfilter .pkgfilter__item {
   padding-left: 0.5em;
 }
 
 /* Package Info Selector */
-
 .pkginfo__list {
   margin-left: 5px;
   margin-right: 5px;

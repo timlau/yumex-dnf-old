@@ -40,7 +40,7 @@ clean: $(CLEAN_TARGETS)
 	
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client
+	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client python3-libsass
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz

@@ -1,0 +1,22 @@
+/*Package Type Colors */
+
+$color_install:     #56b6c2;
+$color_update:      #e06c75;
+$color_downgrade:   #98c379;
+$color_normal:      #d19a66;
+$color_obsolete:    #e06c75;
+
+/* UI colors */
+
+$bg_color:          #282c34;
+$primary_dark:      #323842;
+$primary:           #404859;
+$primary_light:     #5c6370;
+$primary_lighter:   #5c6370;
+$text_color:        #abb2bf;
+$other_infobar:     #d19a66;
+$other_search:      #e6c07b;
+$secondary:         #98c379;
+
+@import 'colors';
+@import 'base';

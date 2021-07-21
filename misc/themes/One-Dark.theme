@@ -1,220 +1,196 @@
-/*
-*  Yum Extender styling (GTK3 CSS)
-*  Based on the One-Dark theme
-*/
-
 /*Package Type Colors */
-
+/* UI colors */
+/*Package Type Colors */
 @define-color color_install     #56b6c2;
 @define-color color_update      #e06c75;
 @define-color color_downgrade   #98c379;
 @define-color color_normal      #d19a66;
 @define-color color_obsolete    #e06c75;
-
-/* UI colors */
-
-@define-color bg_color          #282c34;
-@define-color primary_dark      #323842;
-@define-color primary           #404859;
-@define-color primary_light     #5c6370;
-@define-color text_color        #abb2bf;
-@define-color other_infobar     #d19a66;
-@define-color other_search      #e6c07b;
-@define-color secondary         #98c379;
-
 /* generic vindow & dialog */
 .main,
 .transaction,
 .error {
-  background-color: @bg_color;
-  color: @text_color;
+  background-color: #282c34;
+  color: #abb2bf;
 }
 
 /* Transaction & error dialog buttons */
 .btn {
-  background-color: @primary;
-  color: @text_color;
+  background-color: #404859;
+  color: #abb2bf;
 }
 
 /* Search bar */
-
-/* Search Entry */
 .search__entry.search {
-  color: @other_search;
-  background-color: @bg_color;
+  color: #e6c07b;
+  background-color: #282c34;
   padding: 5px;
-  border: 1px solid @text_color;
+  border: 1px solid #abb2bf;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
-  caret-color: @other_search; /* cursor color */
+  caret-color: #e6c07b;
+  /* cursor color */
 }
 
 .search__entry.search image {
-  color: @other_search;
-  background-color: @bg_color;
+  color: #e6c07b;
+  background-color: #282c34;
 }
 
 .search box {
-  background-color: @primary_dark;
+  background-color: #323842;
   border: none;
   outline-style: none;
 }
 
 .search__btn {
-  color: @text_color;
-  background-color: @primary;
+  color: #abb2bf;
+  background-color: #404859;
   border: none;
   box-shadow: none;
   transition: all 200ms ease-in;
 }
 
 .search__btn:hover {
-  color: @text_color;
-  background-color: @primary_light;
+  color: #abb2bf;
+  background-color: #5c6370;
 }
 
 /* Infobar */
-
 .info {
-  background-color: @bg_color;
-  border: 3px solid @primary;
+  background-color: #282c34;
+  border: 3px solid #404859;
   border-radius: 10px;
   padding: 15px;
   margin: 10px 50px 50px 50px;
   box-shadow: 0px 0px 20px -10px rgba(255, 255, 255, 0.15);
 }
 
-.info__label,
-.info__sublabel {
-  color: @other_infobar;
+.info__label, .info__sublabel {
+  color: #d19a66;
   font-family: "Noto Sans", sans-serif;
 }
 
 .info__spinner {
-  color: @primary_light;
-  background-color: @primary_dark;
+  color: #5c6370;
+  background-color: #323842;
 }
 
 .info__progress > trough {
   min-height: 6px;
-  background-color: @primary_light;
+  background-color: #5c6370;
 }
 
 .info__progress > trough > progress {
   min-height: 8px;
-  background-color: @secondary;
+  background-color: #98c379;
 }
 
 /* Paned */
-
 .content__paned > separator {
-  background-color: @primary;
+  background-color: #404859;
 }
 
 /* Package filter selector */
-
 .pkgfilter {
-  background-color: @bg_color;
+  background-color: #282c34;
   padding-top: 10px;
-  border-right: 2px solid @primary;
+  border-right: 2px solid #404859;
 }
+
 .pkgfilter toolbar {
-  background-color: @primary_dark;
+  background-color: #323842;
 }
 
 .pkgfilter button {
-  color: @text_color;
-  background-color: @primary_dark;
+  color: #abb2bf;
+  background-color: #323842;
 }
 
 .pkgfilter__list {
-  background-color: @bg_color;
-  color: @text_color;
+  background-color: #282c34;
+  color: #abb2bf;
   margin-left: 10px;
 }
 
 .pkgfilter__item {
   padding-left: 0.5em;
   transition: all 200ms ease-in;
-  color: @primary_lighter;
-  background-color: @bg_color;
-  border-left: 5px solid @bg_color;
+  color: #5c6370;
+  background-color: #282c34;
+  border-left: 5px solid #282c34;
   border-radius: 5px 0 0 5px;
 }
 
 .pkgfilter__item:selected {
-  color: @text_color;
-  background-color: @primary;
-  border-left-color: @secondary;
+  color: #abb2bf;
+  background-color: #404859;
+  border-left-color: #98c379;
 }
 
 .pkgfilter__item:hover {
-  color: @text_color;
+  color: #abb2bf;
 }
 
 /* content views (packages, group, history, queue) */
-
 .content__view treeview {
-  background-color: @bg_color;
-  color: @text_color;
+  background-color: #282c34;
+  color: #abb2bf;
 }
 
 .content__view treeview:selected {
-  background-color: @primary_light;
-  color: @text_color;
+  background-color: #5c6370;
+  color: #abb2bf;
 }
 
 .content__view treeview:hover {
-  background-color: @primary;
-  color: @text_color;
+  background-color: #404859;
+  color: #abb2bf;
 }
 
-/* View Column Headers */
 .content__view header button {
-  color: @text_color;
-  background-color: @primary_dark;
+  color: #abb2bf;
+  background-color: #323842;
   border: none;
-  border-bottom: 1px solid @primary_lighter;
+  border-bottom: 1px solid #5c6370;
 }
 
-/* All headers, execpt the first one */
 .content__view header button + button {
-  border-left: 1px dotted @primary_lighter;
+  border-left: 1px dotted #5c6370;
 }
 
 /* Package Info Selector */
-
 .pkginfo__select {
-  background-color: @bg_color;
-  border-right: 2px solid @primary;
+  background-color: #282c34;
+  border-right: 2px solid #404859;
 }
 
 .pkginfo__list {
-  background-color: @bg_color;
+  background-color: #282c34;
   margin-left: 5px;
   margin-top: 5px;
 }
 
 .pkginfo__item {
-  color: @primary_lighter;
-  background-color: @bg_color;
+  color: #5c6370;
+  background-color: #282c34;
   transition: all 200ms ease-in 100ms;
-  border-left: 4px solid @bg_color;
+  border-left: 4px solid #282c34;
   border-radius: 2px 0 0 2px;
   padding: 0px 5px 0px 5px;
 }
 
 .pkginfo__item:hover {
-  color: @text_color;
+  color: #abb2bf;
 }
 
 .pkginfo__item:selected {
-  color: @text_color;
-  background-color: @primary;
-  border-left-color: @secondary;
+  color: #abb2bf;
+  background-color: #404859;
+  border-left-color: #98c379;
 }
 
 .pkginfo__text text {
-  background-color: @bg_color;
+  background-color: #282c34;
 }

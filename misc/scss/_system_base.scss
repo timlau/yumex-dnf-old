@@ -1,11 +1,5 @@
-/*Package Type Colors */
-@define-color color_install     #3F51B5;
-@define-color color_update      #E91E63;
-@define-color color_downgrade   #CDDC39;
-@define-color color_normal      #FF9800;
-@define-color color_obsolete    #4CAF50;
 .info {
-  background-color: @theme_bg_color;
+  background-color: gtkcolor(theme_bg_color);
   border: 3px solid currentColor;
   border-radius: 10px;
   padding: 15px;
@@ -16,18 +10,19 @@
 /* Package filter selector */
 .pkgfilter {
   padding-top: 10px;
-}
 
-.pkgfilter .pkgfilter__list {
-  margin-left: 10px;
-  margin-right: 10px;
-}
+  .pkgfilter__list {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-.pkgfilter .pkgfilter__item {
-  padding-left: 0.5em;
+  .pkgfilter__item {
+    padding-left: 0.5em;
+  }
 }
 
 /* Package Info Selector */
+
 .pkginfo__list {
   margin-left: 5px;
   margin-right: 5px;
