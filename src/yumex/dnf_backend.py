@@ -255,16 +255,14 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         """Progress for a single element in the batch."""
         num = '( %d/%d )' % (self._files_downloaded, self._files_to_download)
         self.frontend.infobar.set_progress(total_frac, label=num)
-        if name != self._current_download:
-            self._current_download = name
-            self.frontend.infobar.message_sub(
-                f'{name} - ({self._files_downloaded}/{self._files_to_download})')
 
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single element ended."""
         if status == -1 or status == 2:  # download OK or already exists
             logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
+            self.frontend.infobar.message_sub(
+                f'{name} - ({self._files_downloaded}/{self._files_to_download})')
         else:
             logger.debug('Download Error : %s - %s (status : %d )',
                          name, msg, status)
