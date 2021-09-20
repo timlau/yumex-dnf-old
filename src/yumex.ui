@@ -2302,7 +2302,6 @@ start Yum Extender</property>
           <object class="GtkImage" id="work_pix">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">../gfx/progress.gif</property>
             <property name="icon_size">6</property>
             <style>
               <class name="working__img"/>
