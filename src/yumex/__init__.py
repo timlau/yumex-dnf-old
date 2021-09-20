@@ -1035,43 +1035,43 @@ class Window(BaseWindow):
         shortcut = Gtk.accelerator_get_label(event.keyval, event.state)
         logger.debug(f'keyboard shotcut : {shortcut}')
 
-        if shortcut in ('Ctrl+F', 'Shift+Ctrl+F'):
+        if shortcut == 'Ctrl+F' or shortcut == 'Shift+Ctrl+F':
             if self.active_page == 'packages':
                 self.search_bar.toggle()
-        elif shortcut in ('Alt+1'):
+        elif shortcut == 'Alt+1':
             self._switch_to('packages')
-        elif shortcut in ('Alt+2'):
+        elif shortcut == 'Alt+2':
             self._switch_to('groups')
-        elif shortcut in ('Alt+3'):
+        elif shortcut == 'Alt+3':
             self._switch_to('history')
-        elif shortcut in ('Alt+4'):
+        elif shortcut ==  'Alt+4':
             self._switch_to('actions')
-        elif shortcut in ('Alt+A'):
+        elif shortcut == 'Alt+A':
             self._process_actions()
-        elif shortcut in ('Alt+X'):
+        elif shortcut == 'Alt+X':
             self.extra_filters.popup()
-        elif shortcut in ('Ctrl+1'):
+        elif shortcut == 'Ctrl+1':
             if self.active_page == 'packages':
                 self.pkg_filter.set_active('updates')
-        elif shortcut in ('Ctrl+2'):
+        elif shortcut == 'Ctrl+2':
             if self.active_page == 'packages':
                 self.pkg_filter.set_active('installed')
-        elif shortcut in ('Ctrl+3'):
+        elif shortcut == 'Ctrl+3':
             if self.active_page == 'packages':
                 self.pkg_filter.set_active('available')
-        elif shortcut in ('Ctrl+4'):
+        elif shortcut == 'Ctrl+4':
             if self.active_page == 'packages':
                 self.pkg_filter.set_active('all')
-        elif shortcut in ('Ctrl+Alt+1'):
+        elif shortcut == 'Ctrl+Alt+1':
             if self.active_page == 'packages':
                 self.info.set_active('desc')
-        elif shortcut in ('Ctrl+Alt+2'):
+        elif shortcut == 'Ctrl+Alt+2':
             if self.active_page == 'packages':
                 self.info.set_active('updinfo')
-        elif shortcut in ('Ctrl+Alt+3'):
+        elif shortcut == 'Ctrl+Alt+3':
             if self.active_page == 'packages':
                 self.info.set_active('files')
-        elif shortcut in ('Ctrl+Alt+4'):
+        elif shortcut == 'Ctrl+Alt+4':
             if self.active_page == 'packages':
                 self.info.set_active('deps')
 
