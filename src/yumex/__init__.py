@@ -67,11 +67,13 @@ class BaseYumex:
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.session_refresh, time_fmt)
             period = now - last_refresh
+            logger.debug(f'time since last cache refresh : {period}')
             return period > refresh_period
         elif cache_type == 'system':
             last_refresh = datetime.datetime.strptime(
                 CONFIG.conf.system_refresh, time_fmt)
             period = now - last_refresh
+            logger.debug(f'time since last cache refresh : {period}')
             return period > refresh_period
 
     def _set_cache_refreshed(self, cache_type):
@@ -118,6 +120,7 @@ class BaseYumex:
             if locked:
                 self._root_locked = True
                 if self._check_cache_expired('system'):
+                    logger.debug("cache is expired, reloading")
                     self.reset_cache()
             else:
                 logger.critical("can't get root backend lock")
