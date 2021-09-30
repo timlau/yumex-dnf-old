@@ -1154,7 +1154,6 @@ class Window(BaseWindow):
             pkgs = self._filter_search_pkgs(data)
         else:  # normal package filter
             self.current_filter = self.pkg_filter.current
-            pkgs = self.backend.get_packages(data)
             if data == 'updates':
                 if CONFIG.session.newest_only:
                     pkgs = self.backend.get_packages(data)
@@ -1164,7 +1163,6 @@ class Window(BaseWindow):
                 pkgs.extend(obs_pkgs)
             else:
                 pkgs = self.backend.get_packages(data)
-            # self.status.SetUpdateCount(len(pkgs))
         self.info.set_package(None)
         self.infobar.message(_('Adding packages to view'))
         self.package_view.populate(pkgs)
