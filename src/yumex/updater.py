@@ -75,7 +75,6 @@ class _Notification(GObject.GObject):
         self.__notification.add_action('show', _('Show Updates'),
                                        self.__callback)
         self.__notification.connect('closed', self.__on_closed)
-        self.__notification.connect('default', self.__on_default)
 
     def show(self):
         """Show the notification. This call does not block."""
@@ -86,9 +85,6 @@ class _Notification(GObject.GObject):
 
     def __on_closed(self, notification):
         self.emit('notify-action', 'closed')
-
-    def __on_default(self, notification):
-        self.emit('notify-action', 'default')
 
 class _UpdateTimestamp:
     """
@@ -190,13 +186,12 @@ class _Updater:
         if action == 'later':
             logger.debug('setting mute_count = 10')
             self.__mute_count = 10
-        elif action == 'show' or action == 'default':
+        elif action == 'show' or action == 'closed':
             logger.debug('Starting: %s', YUMEX_BIN)
             flags = Gio.AppInfoCreateFlags.NONE
             yumex_app = Gio.AppInfo.create_from_commandline(
                 YUMEX_BIN, YUMEX_BIN, flags)
             yumex_app.launch(None, None)
-        elif action == 'closed':
             # reset the last number of updates notified
             # so we will get a new notification at next check
             self.__last_num_updates = 0
