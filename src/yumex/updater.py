@@ -84,6 +84,8 @@ class _Notification(GObject.GObject):
         self.emit('notify-action', action)
 
     def __on_closed(self, notification):
+        reason = self.__notification.get_closed_reason()
+        logger.debug(f'closed reason: {reason}')
         self.emit('notify-action', 'closed')
 
 class _UpdateTimestamp:
