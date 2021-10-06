@@ -88,6 +88,7 @@ class _Notification(GObject.GObject):
         logger.debug(f'closed reason: {reason}')
         self.emit('notify-action', 'closed')
 
+
 class _UpdateTimestamp:
     """
     a persistent timestamp. e.g. for storing the last update check
@@ -136,7 +137,6 @@ class _Updater:
         self.__last_timestamp = 0
         self.__mute_count = 0
         self.__last_num_updates = 0
-        self.__later = False
 
         # dnfdaemon client setup
         try:
@@ -172,7 +172,6 @@ class _Updater:
                                            % update_count)
                     notify.connect('notify-action', self.__on_notify_action)
                     notify.show()
-                    self.__later = False
                     self.__last_num_updates = update_count
                 else:
                     logger.debug('skipping notification (same # of updates)')
@@ -190,14 +189,11 @@ class _Updater:
         if action == 'later':
             logger.debug('setting mute_count = 10')
             self.__mute_count = 10
-            self.__later = True
         elif action == 'show':
             self.start_yumex()
         elif action == 'closed':
             # reset the last number of updates notified
             # so we will get a new notification at next check
-            if not self.__later:
-                self.start_yumex()
             self.__last_num_updates = 0
 
     def start_yumex(self):
@@ -206,7 +202,7 @@ class _Updater:
         yumex_app = Gio.AppInfo.create_from_commandline(
             YUMEX_BIN, YUMEX_BIN, flags)
         yumex_app.launch(None, None)
-        
+
     def startup_init_update_timer(self):
         """ start the update timer with a delayed startup. """
         logger.debug('Starting delayed update timer')
