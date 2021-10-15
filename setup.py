@@ -34,7 +34,7 @@ setup(name="yumex-dnf",
       packages=['yumex', 'yumex.gui'],
       package_dir={'': 'src'},
       scripts=['src/main.py', 'src/update.py'],
-      data_files=[('ui', ['data/ui/yumex.ui', 'data/ui/shortcuts.ui'])],
+      data_files=[('ui', ['data/ui/*.ui'])],
       cmdclass={
         'build_scripts': BuildScripts,
       })
