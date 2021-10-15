@@ -21,7 +21,7 @@
 import logging
 
 from gi.repository import Gtk
-from yumex.common import CONFIG, _, format_number
+from yumex.common import _
 
 
 logger = logging.getLogger('yumex.gui.dialogs')

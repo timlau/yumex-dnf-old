@@ -19,16 +19,14 @@
 
 
 import logging
-import os
 
-import yumex.common as misc
-from gi.repository import Gdk, GdkPixbuf, GObject, Gtk
-from yumex import const
-from yumex.common import CONFIG, TimeFunction, _, doGtkEvents, ngettext
+from gi.repository import GObject, Gtk
+from yumex.common import TimeFunction, _, doGtkEvents
 
 from yumex.gui.views.selectionview import SelectionView
 
 logger = logging.getLogger('yumex.gui.views')
+
 
 class PackageView(SelectionView):
     __gsignals__ = {'pkg-changed': (GObject.SignalFlags.RUN_FIRST,

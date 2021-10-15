@@ -18,16 +18,12 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import gi  # isort:skip
-from gi.repository import Gdk, Gio, GLib, Gtk  # isort:skip
+from gi.repository import Gdk, Gtk  # isort:skip
 
-import argparse
-import datetime
 import logging
 import os.path
-import re
 import shutil
 import subprocess
-import sys
 
 from pathlib import Path
 
@@ -36,12 +32,10 @@ import yumex.gui.dialogs as dialogs
 import yumex.gui.widgets as widgets
 import yumex.common as misc
 
-from yumex.common import CONFIG, Config, _, ngettext
+from yumex.common import CONFIG, _, ngettext
 from yumex.gui.dialogs.preferences import Preferences
-from yumex.gui.dialogs.errordialog import ErrorDialog
 from yumex.gui.dialogs.aboutdialog import AboutDialog
 from yumex.gui.dialogs.progresssplash import ProgressSplash
-from yumex.gui.dialogs.transactionresult import TransactionResult
 
 from yumex.gui.views.packageview import PackageView
 from yumex.gui.views.queueview import QueueView

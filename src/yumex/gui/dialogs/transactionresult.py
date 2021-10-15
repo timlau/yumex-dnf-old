@@ -20,7 +20,7 @@
 from gi.repository import Gtk, GObject
 from yumex.common import load_ui
 from yumex import const
-from yumex.common import CONFIG, _, format_number
+from yumex.common import _, format_number
 
 
 class TransactionResult:

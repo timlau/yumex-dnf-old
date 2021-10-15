@@ -19,12 +19,10 @@
 
 
 import logging
-import os
 
-import yumex.common as misc
-from gi.repository import Gdk, GdkPixbuf, GObject, Gtk
+from gi.repository import GObject, Gtk
 from yumex import const
-from yumex.common import CONFIG, TimeFunction, _, doGtkEvents, ngettext
+from yumex.common import _, ngettext
 
 logger = logging.getLogger('yumex.gui.views')
 from yumex.gui.views.packagequeue import PackageQueue

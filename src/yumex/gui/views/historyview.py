@@ -19,7 +19,6 @@
 
 
 import logging
-import os
 
 from gi.repository import Gtk
 from yumex.common import _

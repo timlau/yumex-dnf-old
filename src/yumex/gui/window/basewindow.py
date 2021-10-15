@@ -18,29 +18,22 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import gi  # isort:skip
-from gi.repository import Gdk, Gio, GLib, Gtk  # isort:skip
+from gi.repository import Gdk, GLib, Gtk  # isort:skip
 
-import argparse
-import datetime
 import logging
 import os.path
 import re
-import shutil
-import subprocess
 import sys
-
-from pathlib import Path
 
 import yumex.common.const as const
 import yumex.gui.dialogs as dialogs
-import yumex.gui.widgets as widgets
 import yumex.common as misc
 
-from yumex.common import CONFIG, Config, _, ngettext
+from yumex.common import CONFIG
 from yumex.gui.dialogs.errordialog import ErrorDialog
 from yumex.gui.dialogs.transactionresult import TransactionResult
 
-from yumex.base.baseyumex import BaseYumex
+from yumex.base import BaseYumex
 
 logger = logging.getLogger('yumex')
 

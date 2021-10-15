@@ -19,15 +19,13 @@
 
 
 import logging
-import os
 
-import yumex.common as misc
-from gi.repository import Gdk, GdkPixbuf, GObject, Gtk
-from yumex import const
-from yumex.common import CONFIG, TimeFunction, _, doGtkEvents, ngettext
+from gi.repository import Gtk
+from yumex.common import _
 from yumex.gui.views.selectionview import SelectionView
 
 logger = logging.getLogger('yumex.gui.views')
+
 
 class RepoView(SelectionView):
     """

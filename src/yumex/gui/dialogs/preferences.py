@@ -3,9 +3,9 @@ import logging
 import os
 import shutil
 
-from gi.repository import GObject, Gtk
+from gi.repository import Gtk
 from yumex import const
-from yumex.common import CONFIG, _, format_number, load_ui
+from yumex.common import CONFIG, _, load_ui
 from yumex.gui.views.repoview import RepoView
 
 logger = logging.getLogger('yumex.gui.preffernces')
