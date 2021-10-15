@@ -6,8 +6,7 @@ import shutil
 from gi.repository import GObject, Gtk
 from yumex import const
 from yumex.misc import CONFIG, _, format_number, load_ui
-
-from .views import RepoView
+from yumex.gui.views import RepoView
 
 logger = logging.getLogger('yumex.gui.preffernces')
 

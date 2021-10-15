@@ -23,7 +23,6 @@ import logging
 from gi.repository import Gtk
 from yumex.misc import CONFIG, _, format_number
 
-from .views import RepoView
 
 logger = logging.getLogger('yumex.gui.dialogs')
 
