@@ -32,45 +32,6 @@ from .views import RepoView
 logger = logging.getLogger('yumex.gui.dialogs')
 
 
-class AboutDialog(Gtk.AboutDialog):
-
-    def __init__(self, parent):
-        Gtk.AboutDialog.__init__(self)
-        self.props.program_name = 'Yum Extender (dnf)'
-        self.props.version = const.VERSION
-        self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
-        self.props.license_type = Gtk.License.GPL_2_0
-        self.props.copyright = '(C) 2021 Tim Lauridsen'
-        self.props.website = 'https://www.yumex.dk'
-        self.props.logo_icon_name = 'yumex-dnf'
-        self.set_transient_for(parent)
-
-
-class ProgressSplash:
-
-    def __init__(self, base):
-        self.base = base
-        self.win = self.base.ui.get_object("win_working")
-        pix = self.base.ui.get_object("work_pix")
-        pix_file = f'{const.PIX_DIR}/progress.gif'
-        pix.set_from_file(pix_file)
-        self.label = self.base.ui.get_object("work_label")
-        self.sublabel = self.base.ui.get_object("work_sublabel")
-        self.win.set_transient_for(self.base)
-
-    def show(self):
-        self.win.show()
-
-    def hide(self):
-        self.win.hide()
-
-    def set_label(self, text):
-        self.label.set_text(text)
-
-    def set_sublabel(self, text):
-        self.sublabel.set_text(text)
-
-
 class TransactionResult:
 
     def __init__(self, base):

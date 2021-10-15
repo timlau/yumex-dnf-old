@@ -44,6 +44,7 @@ from yumex.misc import CONFIG, Config, _, ngettext
 from yumex.gui.preferences import Preferences
 from yumex.gui.errordialog import ErrorDialog
 from yumex.gui.aboutdialog import AboutDialog
+from yumex.gui.progresssplash import ProgressSplash
 
 logger = logging.getLogger('yumex')
 
@@ -588,7 +589,7 @@ class Window(BaseWindow):
         self.app.set_accels_for_action('win.docs', ['F1'])
         self.app.set_accels_for_action('win.pref', ['<Alt>Return'])
 
-        self.working_splash = dialogs.ProgressSplash(self)
+        self.working_splash = ProgressSplash(self)
 
 
     def _setup_arch(self):
