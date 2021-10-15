@@ -29,7 +29,6 @@ from pathlib import Path
 
 import yumex.common.const as const
 import yumex.gui.dialogs as dialogs
-import yumex.gui.widgets as widgets
 import yumex.common as misc
 
 from yumex.common import CONFIG, _, ngettext
@@ -41,6 +40,12 @@ from yumex.gui.views.packageview import PackageView
 from yumex.gui.views.queueview import QueueView
 from yumex.gui.views.historyview import HistoryView
 from yumex.gui.views.groupview import GroupView
+from yumex.gui.widgets.content import Content
+from yumex.gui.widgets.filters import ExtraFilters, Filters
+from yumex.gui.widgets.mainnenu import MainMenu
+from yumex.gui.widgets.packageinfo import PackageInfo
+from yumex.gui.widgets.progress import Progress
+from yumex.gui.widgets.searchbar import SearchBar
 
 from yumex.gui.window.basewindow import BaseWindow
 
@@ -140,7 +145,7 @@ class Window(BaseWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box)
         box.pack_start(self.get_ui('main_box'), False, True, 0)
-        self.infobar = widgets.InfoProgressBar(self.ui, self)
+        self.infobar = Progress(self.ui, self)
         self.show_all()
 
     def _setup_gui(self):
@@ -181,13 +186,13 @@ class Window(BaseWindow):
             box.pack_start(hb, False, True, 0)
         box.pack_start(self.get_ui('main_overlay'), False, True, 0)
         # Setup search
-        self.search_bar = widgets.SearchBar(self)
+        self.search_bar = SearchBar(self)
         self.search_bar.connect('search', self.on_search)
         # Setup package filters
-        self.pkg_filter = widgets.Filters(self)
+        self.pkg_filter = Filters(self)
         self.pkg_filter.connect('filter-changed', self.on_filter_changed)
         # Setup Content
-        self.content = widgets.Content(self)
+        self.content = Content(self)
         self.content.connect('page-changed', self.on_page_changed)
         self._search_toggle = self.get_ui('sch_togglebutton')
         # Setup Options
@@ -208,14 +213,14 @@ class Window(BaseWindow):
         self.main_paned.set_wide_handle(True)  # use wide separator bar (off)
 
         # infobar
-        self.infobar = widgets.InfoProgressBar(self.ui, self)
+        self.infobar = Progress(self.ui, self)
         self.infobar.hide()
 
         # preferences dialog
         self.preferences = Preferences(self)
 
         # main menu setup
-        self.main_menu = widgets.MainMenu(self)
+        self.main_menu = MainMenu(self)
         self.main_menu.connect('menu-changed', self.on_mainmenu)
         self.apply_button = self.get_ui('button_run')
         self.apply_button.connect('clicked', self.on_apply_changes)
@@ -252,8 +257,8 @@ class Window(BaseWindow):
         sw = self.get_ui('package_sw')
         sw.add(self.package_view)
         # setup info view
-        self.info = widgets.PackageInfo(self, self)
-        self.extra_filters = widgets.ExtraFilters(self)
+        self.info = PackageInfo(self, self)
+        self.extra_filters = ExtraFilters(self)
         self.extra_filters.connect('changed', self.on_extra_filters)
 
     def _setup_group_page(self):
