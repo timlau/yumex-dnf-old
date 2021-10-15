@@ -43,6 +43,7 @@ import yumex.misc as misc
 from yumex.misc import CONFIG, Config, _, ngettext
 from yumex.gui.preferences import Preferences
 from yumex.gui.errordialog import ErrorDialog
+from yumex.gui.aboutdialog import AboutDialog
 
 logger = logging.getLogger('yumex')
 
@@ -1090,7 +1091,7 @@ class Window(BaseWindow):
             if self.can_close():
                 self.app.quit()
         elif action == 'about':
-            dialog = dialogs.AboutDialog(self)
+            dialog = AboutDialog(self)
             dialog.run()
             dialog.destroy()
         elif action == 'docs':
