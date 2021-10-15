@@ -45,6 +45,7 @@ from yumex.gui.preferences import Preferences
 from yumex.gui.errordialog import ErrorDialog
 from yumex.gui.aboutdialog import AboutDialog
 from yumex.gui.progresssplash import ProgressSplash
+from yumex.gui.transactionresult import TransactionResult
 
 logger = logging.getLogger('yumex')
 
@@ -218,7 +219,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 const.DATA_DIR + '/yumex.ui')
             sys.exit()
         # transaction result dialog
-        self.transaction_result = dialogs.TransactionResult(self)
+        self.transaction_result = TransactionResult(self)
         self.error_dialog = ErrorDialog(self)
 
     def get_ui(self, widget_name):
