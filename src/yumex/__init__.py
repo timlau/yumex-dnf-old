@@ -39,7 +39,7 @@ from yumex.misc import CONFIG, Config, _, ngettext
 
 from yumex.gui.window import Window
 logger = logging.getLogger('yumex')
-
+  
 class YumexApplication(Gtk.Application):
     """Main application."""
 
