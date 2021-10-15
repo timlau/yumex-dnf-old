@@ -5,11 +5,12 @@ import shutil
 
 from gi.repository import GObject, Gtk
 from yumex import const
-from yumex.misc import CONFIG, _, format_number
+from yumex.misc import CONFIG, _, format_number, load_ui
 
 from .views import RepoView
 
 logger = logging.getLogger('yumex.gui.preffernces')
+
 
 class Preferences:
 
@@ -20,12 +21,13 @@ class Preferences:
 
     def __init__(self, base):
         self.base = base
-        self.dialog = self.base.ui.get_object("preferences")
+        self.ui = load_ui('preferences.ui')
+        self.dialog = self.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
         self.repo_view = RepoView()
-        widget = self.base.ui.get_object('repo_sw')
+        widget = self.ui.get_object('repo_sw')
         widget.add(self.repo_view)
-        self.repo_box = self.base.ui.get_object("box_repos")
+        self.repo_box = self.ui.get_object("box_repos")
         # track when repo page is active in stack
         self.repo_box.connect("map", self.on_repo_page_active)
         self.repos = []
@@ -63,7 +65,7 @@ class Preferences:
         theme_files = glob.glob(pattern)
         theme_names = [os.path.basename(theme).split('.')[0]
                        for theme in theme_files]
-        widget = self.base.ui.get_object('pref_theme')
+        widget = self.ui.get_object('pref_theme')
         widget.remove_all()
         default = CONFIG.conf.theme.split(".")[0]
         i = 0
@@ -79,14 +81,14 @@ class Preferences:
         # set boolean states
         for option in Preferences.FLAGS:
             logger.debug("%s : %s ", option, getattr(CONFIG.conf, option))
-            widget = self.base.ui.get_object('pref_' + option)
+            widget = self.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler
-        widget = self.base.ui.get_object('pref_clean_instonly')
+        widget = self.ui.get_object('pref_clean_instonly')
         widget.connect('notify::active', self.on_clean_instonly)
         # Set value states
         for name in Preferences.VALUES:
-            widget = self.base.ui.get_object('pref_' + name)
+            widget = self.ui.get_object('pref_' + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
         # Get Themes
@@ -94,7 +96,7 @@ class Preferences:
 
     def on_clean_instonly(self, *args):
         """Handler for clean_instonly switch"""
-        widget = self.base.ui.get_object('pref_clean_instonly')
+        widget = self.ui.get_object('pref_clean_instonly')
         state = widget.get_active()
         postfix = 'installonly_limit'
         self._set_sensitive(postfix, state)
@@ -103,16 +105,16 @@ class Preferences:
         for prefix in ['pref_', 'label_']:
             id_ = prefix + postfix
             if state:
-                self.base.ui.get_object(id_).set_sensitive(True)
+                self.ui.get_object(id_).set_sensitive(True)
             else:
-                self.base.ui.get_object(id_).set_sensitive(False)
+                self.ui.get_object(id_).set_sensitive(False)
 
     def set_settings(self):
         changed = False
         need_reset = False
         # handle boolean options
         for option in Preferences.FLAGS:
-            widget = self.base.ui.get_object('pref_' + option)
+            widget = self.ui.get_object('pref_' + option)
             state = widget.get_active()
             if state != getattr(CONFIG.conf, option):  # changed ??
                 setattr(CONFIG.conf, option, state)
@@ -120,7 +122,7 @@ class Preferences:
                 self.handle_setting(option, state)
         # handle value options
         for name in Preferences.VALUES:
-            widget = self.base.ui.get_object('pref_' + name)
+            widget = self.ui.get_object('pref_' + name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, value)
@@ -138,7 +140,7 @@ class Preferences:
                     CONFIG.conf.repo_enabled = repo_now
                     changed = True
         # Themes
-        widget = self.base.ui.get_object('pref_theme')
+        widget = self.ui.get_object('pref_theme')
         default = CONFIG.conf.theme.split(".")[0]
         theme = widget.get_active_text()
         if theme != default:
