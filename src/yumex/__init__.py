@@ -49,6 +49,7 @@ from yumex.gui.dialogs.transactionresult import TransactionResult
 
 from yumex.gui.views.packageview import PackageView
 from yumex.gui.views.queueview import QueueView
+from yumex.gui.views.historyview import HistoryView
 
 logger = logging.getLogger('yumex')
 
@@ -644,7 +645,7 @@ class Window(BaseWindow):
         """Setup the history page."""
         right_sw = self.get_ui('history_right_sw')
         left_sw = self.get_ui('history_left_sw')
-        self.history_view = views.HistoryView(self)
+        self.history_view = HistoryView(self)
         left_sw.add(self.history_view)
         right_sw.add(self.history_view.pkg_view)
         # setup history buttons
