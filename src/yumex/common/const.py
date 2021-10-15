@@ -25,7 +25,7 @@ import sys
 
 import hawkey
 
-from yumex.misc import _
+from yumex.common import _
 
 VERSION = "4.4.0"
 

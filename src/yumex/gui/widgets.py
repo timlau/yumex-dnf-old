@@ -24,9 +24,9 @@ import subprocess
 import urllib.parse
 
 import hawkey
-import yumex.const as const
+import yumex.common.const as const
 from gi.repository import Gdk, Gio, GLib, GObject, Gtk, Pango
-from yumex.misc import (CONFIG, _, check_dark_theme, format_block, is_url,
+from yumex.common import (CONFIG, _, check_dark_theme, format_block, is_url,
                         pkg_id_to_full_name)
 
 logger = logging.getLogger('yumex.gui.widget')

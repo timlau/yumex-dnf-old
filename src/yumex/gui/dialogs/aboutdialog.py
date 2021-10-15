@@ -20,6 +20,8 @@
 
 from gi.repository import  Gtk
 
+import yumex.common.const as const
+
 class AboutDialog(Gtk.AboutDialog):
 
     def __init__(self, parent):

@@ -18,7 +18,7 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from gi.repository import  Gtk
-from yumex.misc import load_ui
+from yumex.common import load_ui
 
 
 class ErrorDialog:

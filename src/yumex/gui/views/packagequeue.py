@@ -21,10 +21,10 @@
 import logging
 import os
 
-import yumex.misc as misc
+import yumex.common as misc
 from gi.repository import Gdk, GdkPixbuf, GObject, Gtk
 from yumex import const
-from yumex.misc import CONFIG, TimeFunction, _, doGtkEvents, ngettext
+from yumex.common import CONFIG, TimeFunction, _, doGtkEvents, ngettext
 
 logger = logging.getLogger('yumex.gui.views')
 

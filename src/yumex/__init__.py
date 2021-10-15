@@ -34,8 +34,8 @@ import sys
 
 from pathlib import Path
 
-import yumex.const as const
-from yumex.misc import CONFIG, Config, _, ngettext
+import yumex.common.const as const
+from yumex.common import CONFIG, Config, _, dbus_dnfsystem, ngettext, logger_setup
 
 from yumex.gui.window import Window
 logger = logging.getLogger('yumex')
@@ -93,13 +93,13 @@ class YumexApplication(Gtk.Application):
             # First run
             self.args = parser.parse_args(args.get_arguments()[1:])
             if self.args.exit:  # kill dnf daemon and quit
-                misc.dbus_dnfsystem('Exit')
+                dbus_dnfsystem('Exit')
                 sys.exit(0)
 
             if self.args.debug:
-                misc.logger_setup(loglvl=logging.DEBUG)
+                logger_setup(loglvl=logging.DEBUG)
             else:
-                misc.logger_setup()
+                logger_setup()
             if self.args.install or self.args.remove or self.args.updateall:
                 self.install_mode = True
         else:

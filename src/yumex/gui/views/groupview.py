@@ -21,8 +21,8 @@
 import logging
 import os
 
-from gi.repository import  Gtk, GObject
-from yumex.misc import _
+from gi.repository import  Gtk, GObject, GdkPixbuf
+from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.views')
 

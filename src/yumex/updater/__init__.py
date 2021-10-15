@@ -40,8 +40,8 @@ from xdg import BaseDirectory
 
 import dnfdaemon.client
 
-from yumex.misc import _, ngettext, CONFIG
-import yumex.misc as misc
+from yumex.common import _, ngettext, CONFIG
+import yumex.common as misc
 
 LOG_ROOT = 'yumex.updater'
 

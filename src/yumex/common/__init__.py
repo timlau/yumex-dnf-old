@@ -31,9 +31,6 @@ import time
 import dnfdaemon.client
 from gi.repository import Gdk, Gtk, Notify
 
-import yumex.config as config
-import yumex.const as const
-
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')
 locale.bindtextdomain('yumex-dnf', LOCALE_DIR)
@@ -42,7 +39,10 @@ gettext.textdomain('yumex-dnf')
 _ = gettext.gettext
 ngettext = gettext.ngettext
 
-logger = logging.getLogger('yumex.misc')
+import yumex.common.config as config
+import yumex.common.const as const
+
+logger = logging.getLogger('yumex.common')
 
 
 class QueueEmptyError(Exception):

@@ -22,7 +22,7 @@ import logging
 import os
 
 from gi.repository import Gtk
-from yumex.misc import _
+from yumex.common import _
 from yumex.gui.views.historypackageview import HistoryPackageView
 
 logger = logging.getLogger('yumex.gui.views')

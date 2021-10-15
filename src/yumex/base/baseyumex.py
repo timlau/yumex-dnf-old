@@ -26,12 +26,13 @@ import re
 import sys
 
 
-import yumex.const as const
-import yumex.misc as misc
+import yumex.common.const as const
+import yumex.common as misc
 
-from yumex.misc import CONFIG, Config, _, ngettext
+from yumex.common import CONFIG, Config, _, ngettext
 
 from yumex.backend.dnf import DnfRootBackend
+from yumex.gui.dialogs import show_information
 
 logger = logging.getLogger('yumex.base')
 
@@ -92,7 +93,7 @@ class BaseYumex:
         if rc:
             self._set_cache_refreshed('system')
         else:
-            dialogs.show_information(
+            show_information(
                 self, _('Could not refresh the DNF cache (root)'))
 
     @misc.ExceptionHandler

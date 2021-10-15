@@ -23,9 +23,9 @@ import logging
 import dnfdaemon.client
 from gi.repository import Gdk
 
-import yumex.const as const
+import yumex.common.const as const
 from yumex.backend import Backend
-from yumex.misc import (CONFIG, ExceptionHandler, TimeFunction, _,
+from yumex.common import (CONFIG, ExceptionHandler, TimeFunction, _,
                         format_number, ngettext, pkg_id_to_full_name,
                         to_pkg_tuple)
 

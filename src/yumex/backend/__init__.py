@@ -19,7 +19,7 @@
 
 import logging
 
-import yumex.const as const
+import yumex.common.const as const
 
 logger = logging.getLogger('yumex.backend')
 

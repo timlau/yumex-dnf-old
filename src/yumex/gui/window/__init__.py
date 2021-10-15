@@ -31,12 +31,12 @@ import sys
 
 from pathlib import Path
 
-import yumex.const as const
+import yumex.common.const as const
 import yumex.gui.dialogs as dialogs
 import yumex.gui.widgets as widgets
-import yumex.misc as misc
+import yumex.common as misc
 
-from yumex.misc import CONFIG, Config, _, ngettext
+from yumex.common import CONFIG, Config, _, ngettext
 from yumex.gui.dialogs.preferences import Preferences
 from yumex.gui.dialogs.errordialog import ErrorDialog
 from yumex.gui.dialogs.aboutdialog import AboutDialog
