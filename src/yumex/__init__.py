@@ -35,10 +35,11 @@ import sys
 from pathlib import Path
 
 import yumex.const as const
-import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
 import yumex.gui.widgets as widgets
 import yumex.misc as misc
+
+from yumex.backend.dnf import DnfRootBackend
 from yumex.misc import CONFIG, Config, _, ngettext
 from yumex.gui.dialogs.preferences import Preferences
 from yumex.gui.dialogs.errordialog import ErrorDialog
@@ -121,7 +122,7 @@ class BaseYumex:
         if it is not locked, then lock it
         """
         if self._root_backend is None:
-            self._root_backend = yumex.dnf_backend.DnfRootBackend(self)
+            self._root_backend = DnfRootBackend(self)
         if self._root_locked is False:
             logger.debug('Lock the DNF root daemon')
             locked, msg = self._root_backend.setup()
