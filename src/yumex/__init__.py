@@ -37,7 +37,6 @@ from pathlib import Path
 import yumex.const as const
 import yumex.dnf_backend
 import yumex.gui.dialogs as dialogs
-import yumex.gui.views as views
 import yumex.gui.widgets as widgets
 import yumex.misc as misc
 from yumex.misc import CONFIG, Config, _, ngettext
@@ -50,6 +49,7 @@ from yumex.gui.dialogs.transactionresult import TransactionResult
 from yumex.gui.views.packageview import PackageView
 from yumex.gui.views.queueview import QueueView
 from yumex.gui.views.historyview import HistoryView
+from yumex.gui.views.groupview import GroupView
 
 logger = logging.getLogger('yumex')
 
@@ -630,7 +630,7 @@ class Window(BaseWindow):
         sw = self.get_ui('groups_sw')
         hb = Gtk.Box()
         hb.set_direction(Gtk.Orientation.HORIZONTAL)
-        self.groups = views.GroupView(self.queue_view, self)
+        self.groups = GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
         # sw.add(hb)
         sw.add(self.groups)
