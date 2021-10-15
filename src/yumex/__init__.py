@@ -41,6 +41,7 @@ import yumex.gui.views as views
 import yumex.gui.widgets as widgets
 import yumex.misc as misc
 from yumex.misc import CONFIG, Config, _, ngettext
+from yumex.gui.preferences import Preferences
 
 logger = logging.getLogger('yumex')
 
@@ -571,7 +572,7 @@ class Window(BaseWindow):
         self.infobar.hide()
 
         # preferences dialog
-        self.preferences = dialogs.Preferences(self)
+        self.preferences = Preferences(self)
 
         # main menu setup
         self.main_menu = widgets.MainMenu(self)
