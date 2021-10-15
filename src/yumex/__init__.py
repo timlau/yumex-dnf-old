@@ -206,7 +206,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.ui = Gtk.Builder()
         self.ui.set_translation_domain('yumex-dnf')
         try:
-            self.ui.add_from_file(const.DATA_DIR + "/yumex.ui")
+            self.ui.add_from_file(const.UI_DIR + "/yumex.ui")
         except:
             raise
             # noinspection PyUnreachableCode
@@ -652,7 +652,7 @@ class Window(BaseWindow):
 # Helpers
 ###############################################################################
     def _show_shortcuts(self):
-        builder = Gtk.Builder.new_from_file(const.DATA_DIR + '/shortcuts.ui')
+        builder = Gtk.Builder.new_from_file(const.UI_DIR + '/shortcuts.ui')
         shortcuts = builder.get_object('yumex-shortcuts')
         shortcuts.set_default_size(1000, 600)
         shortcuts.set_transient_for(self)
