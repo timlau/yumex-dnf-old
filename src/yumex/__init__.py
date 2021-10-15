@@ -42,6 +42,7 @@ import yumex.gui.widgets as widgets
 import yumex.misc as misc
 from yumex.misc import CONFIG, Config, _, ngettext
 from yumex.gui.preferences import Preferences
+from yumex.gui.errordialog import ErrorDialog
 
 logger = logging.getLogger('yumex')
 
@@ -216,7 +217,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             sys.exit()
         # transaction result dialog
         self.transaction_result = dialogs.TransactionResult(self)
-        self.error_dialog = dialogs.ErrorDialog(self)
+        self.error_dialog = ErrorDialog(self)
 
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)

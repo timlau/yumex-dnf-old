@@ -32,6 +32,7 @@ import dnfdaemon.client
 from gi.repository import Gdk, Gtk, Notify
 
 import yumex.config as config
+import yumex.const as const
 
 LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')
@@ -69,6 +70,13 @@ def dbus_dnfsystem(cmd):
         '/usr/bin/dbus-send --system --print-reply '
         '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' % cmd,
         shell=True)
+
+
+def load_ui(ui_file):
+    ui = Gtk.Builder()
+    ui.set_translation_domain('yumex-dnf')
+    ui.add_from_file(os.path.join(const.UI_DIR, ui_file))
+    return ui
 
 
 def to_pkg_tuple(pkg_id):
