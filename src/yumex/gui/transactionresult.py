@@ -17,7 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 from yumex.misc import load_ui
 from yumex import const
 from yumex.misc import CONFIG, _, format_number

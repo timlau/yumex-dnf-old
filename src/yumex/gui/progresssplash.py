@@ -19,6 +19,7 @@
 
 from gi.repository import  Gtk
 from yumex.misc import load_ui
+import yumex.const as const
 
 class ProgressSplash:
 
