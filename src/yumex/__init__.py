@@ -47,6 +47,8 @@ from yumex.gui.dialogs.aboutdialog import AboutDialog
 from yumex.gui.dialogs.progresssplash import ProgressSplash
 from yumex.gui.dialogs.transactionresult import TransactionResult
 
+from yumex.gui.views.packageview import PackageView
+
 logger = logging.getLogger('yumex')
 
 
@@ -611,7 +613,7 @@ class Window(BaseWindow):
 
     def _setup_package_page(self):
         """Setup the package page."""
-        self.package_view = views.PackageView(self.queue_view)
+        self.package_view = PackageView(self.queue_view)
         self.package_view.connect(
             'pkg_changed', self.on_pkg_view_selection_changed)
         sw = self.get_ui('package_sw')
@@ -632,7 +634,7 @@ class Window(BaseWindow):
         # sw.add(hb)
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
-        self.group_package_view = views.PackageView(
+        self.group_package_view = PackageView(
             self.queue_view, group_mode=True)
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
