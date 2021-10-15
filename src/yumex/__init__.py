@@ -48,6 +48,7 @@ from yumex.gui.dialogs.progresssplash import ProgressSplash
 from yumex.gui.dialogs.transactionresult import TransactionResult
 
 from yumex.gui.views.packageview import PackageView
+from yumex.gui.views.queueview import QueueView
 
 logger = logging.getLogger('yumex')
 
@@ -594,7 +595,6 @@ class Window(BaseWindow):
 
         self.working_splash = ProgressSplash(self)
 
-
     def _setup_arch(self):
         self.infobar.message(_('Downloading Repository Metadata'))
         # setup the arch filter
@@ -605,7 +605,7 @@ class Window(BaseWindow):
     def _setup_action_page(self):
         """Setup Pending Action page."""
         queue_menu = self.get_ui('queue_menu')
-        self.queue_view = views.QueueView(queue_menu)
+        self.queue_view = QueueView(queue_menu)
         self.queue_view.connect('queue-refresh', self.on_queue_refresh)
         # Queue Page
         sw = self.get_ui('queue_sw')
@@ -1054,7 +1054,7 @@ class Window(BaseWindow):
             self._switch_to('groups')
         elif shortcut == 'Alt+3':
             self._switch_to('history')
-        elif shortcut ==  'Alt+4':
+        elif shortcut == 'Alt+4':
             self._switch_to('actions')
         elif shortcut == 'Alt+A':
             self._process_actions()
