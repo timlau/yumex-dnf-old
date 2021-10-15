@@ -13,6 +13,17 @@ RENAME_SCRIPTS = {'main.py': 'yumex-dnf',
                   'update.py': 'yumex-dnf-updatechecker'}
 UI_FILES = glob.glob("data/ui/*.ui")
 
+def get_modules():
+    # print(f'{paths=}')
+    modules = []
+    paths = glob.glob("src/*/")
+    modules +=  [".".join(path[:-1].split('/')[1:]) for path in paths if not '__' in path]
+    paths = glob.glob("src/*/*/")
+    modules +=  [".".join(path[:-1].split('/')[1:]) for path in paths if not '__' in path]
+    paths = glob.glob("src/*/*/*/")
+    modules +=  [".".join(path[:-1].split('/')[1:]) for path in paths if not '__' in path]
+    return modules
+
 class BuildScripts(build_scripts):
     def run(self):
         build_scripts.run(self)
@@ -33,7 +44,7 @@ setup(name="yumex-dnf",
       author="Tim Lauridsen",
       author_email="timlau@fedoraproject.org",
       url='http://yumex.dk',
-      packages=['yumex', 'yumex.gui'],
+      packages= get_modules(),
       package_dir={'': 'src'},
       scripts=['src/main.py', 'src/update.py'],
       data_files=[('ui', UI_FILES)],
