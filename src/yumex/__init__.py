@@ -41,11 +41,11 @@ import yumex.gui.views as views
 import yumex.gui.widgets as widgets
 import yumex.misc as misc
 from yumex.misc import CONFIG, Config, _, ngettext
-from yumex.gui.preferences import Preferences
-from yumex.gui.errordialog import ErrorDialog
-from yumex.gui.aboutdialog import AboutDialog
-from yumex.gui.progresssplash import ProgressSplash
-from yumex.gui.transactionresult import TransactionResult
+from yumex.gui.dialogs.preferences import Preferences
+from yumex.gui.dialogs.errordialog import ErrorDialog
+from yumex.gui.dialogs.aboutdialog import AboutDialog
+from yumex.gui.dialogs.progresssplash import ProgressSplash
+from yumex.gui.dialogs.transactionresult import TransactionResult
 
 logger = logging.getLogger('yumex')
 
