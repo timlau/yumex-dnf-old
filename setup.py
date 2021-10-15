@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import glob
 from os.path import join, basename, split
 from distutils.core import setup
 from distutils.util import convert_path
@@ -10,6 +11,7 @@ from distutils import log
 
 RENAME_SCRIPTS = {'main.py': 'yumex-dnf',
                   'update.py': 'yumex-dnf-updatechecker'}
+UI_FILES = glob.glob("data/ui/*.ui")
 
 class BuildScripts(build_scripts):
     def run(self):
@@ -34,7 +36,7 @@ setup(name="yumex-dnf",
       packages=['yumex', 'yumex.gui'],
       package_dir={'': 'src'},
       scripts=['src/main.py', 'src/update.py'],
-      data_files=[('ui', ['data/ui/*.ui'])],
+      data_files=[('ui', UI_FILES)],
       cmdclass={
         'build_scripts': BuildScripts,
       })
