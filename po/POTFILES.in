@@ -1,17 +1,44 @@
-src/update.py
 src/main.py
-src/yumex/config.py
+src/update.py
 src/yumex/__init__.py
-src/yumex/backend.py
-src/yumex/dnf_backend.py
-src/yumex/misc.py
-src/yumex/const.py
-src/yumex/updater.py
-src/yumex/gui/views.py
+src/yumex/backend/dnf.py
+src/yumex/backend/__init__.py
+src/yumex/base/__init__.py
+src/yumex/common/config.py
+src/yumex/common/const.py
+src/yumex/common/__init__.py
 src/yumex/gui/__init__.py
-src/yumex/gui/dialogs.py
-src/yumex/gui/widgets.py
-misc/yumex-dnf-local.desktop.in
+src/yumex/updater/__init__.py
+src/yumex/gui/dialogs/aboutdialog.py
+src/yumex/gui/dialogs/errordialog.py
+src/yumex/gui/dialogs/__init__.py
+src/yumex/gui/dialogs/preferences.py
+src/yumex/gui/dialogs/progresssplash.py
+src/yumex/gui/dialogs/transactionresult.py
+src/yumex/gui/views/groupview.py
+src/yumex/gui/views/historypackageview.py
+src/yumex/gui/views/historyview.py
+src/yumex/gui/views/__init__.py
+src/yumex/gui/views/packagequeue.py
+src/yumex/gui/views/packageview.py
+src/yumex/gui/views/queueview.py
+src/yumex/gui/views/repoview.py
+src/yumex/gui/views/selectionview.py
+src/yumex/gui/widgets/content.py
+src/yumex/gui/widgets/filters.py
+src/yumex/gui/widgets/__init__.py
+src/yumex/gui/widgets/mainnenu.py
+src/yumex/gui/widgets/packageinfo.py
+src/yumex/gui/widgets/progress.py
+src/yumex/gui/widgets/searchbar.py
+src/yumex/gui/window/basewindow.py
+src/yumex/gui/window/__init__.py
 misc/yumex-dnf.desktop.in
+misc/yumex-dnf-local.desktop.in
 misc/yumex-dnf.appdata.xml.in
-[type: gettext/glade]src/yumex.ui
+[type: gettext/glade]data/ui/errordialog.ui
+[type: gettext/glade]data/ui/preferences.ui
+[type: gettext/glade]data/ui/progresssplash.ui
+[type: gettext/glade]data/ui/shortcuts.ui
+[type: gettext/glade]data/ui/transactionresult.ui
+[type: gettext/glade]data/ui/yumex.ui
