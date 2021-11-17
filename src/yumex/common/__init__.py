@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import configparser
 import gettext
 import locale
@@ -46,30 +45,27 @@ logger = logging.getLogger('yumex.common')
 
 
 class QueueEmptyError(Exception):
-
     def __init__(self):
         super(QueueEmptyError, self).__init__()
 
 
 class TransactionBuildError(Exception):
-
     def __init__(self, msgs):
         super(TransactionBuildError, self).__init__()
         self.msgs = msgs
 
 
 class TransactionSolveError(Exception):
-
     def __init__(self, msgs):
         super(TransactionSolveError, self).__init__()
         self.msgs = msgs
 
 
 def dbus_dnfsystem(cmd):
-    subprocess.call(
-        '/usr/bin/dbus-send --system --print-reply '
-        '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' % cmd,
-        shell=True)
+    subprocess.call('/usr/bin/dbus-send --system --print-reply '
+                    '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' %
+                    cmd,
+                    shell=True)
 
 
 def load_ui(ui_file):
@@ -156,7 +152,7 @@ def doGtkEvents():
     """
 
     """
-    while Gtk.events_pending():      # process Gtk events
+    while Gtk.events_pending():  # process Gtk events
         Gtk.main_iteration()
 
 
@@ -171,6 +167,7 @@ def ExceptionHandler(func):
         except dnfdaemon.client.DaemonError as e:
             base = args[0]  # get current class
             base.exception_handler(e)
+
     newFunc.__name__ = func.__name__
     newFunc.__doc__ = func.__doc__
     newFunc.__dict__.update(func.__dict__)
@@ -197,15 +194,17 @@ def TimeFunction(func):
 
 def format_number(number, SI=0, space=' '):
     """Turn numbers into human-readable metric-like numbers"""
-    symbols = ['',  # (none)
-               'k',  # kilo
-               'M',  # mega
-               'G',  # giga
-               'T',  # tera
-               'P',  # peta
-               'E',  # exa
-               'Z',  # zetta
-               'Y']  # yotta
+    symbols = [
+        '',  # (none)
+        'k',  # kilo
+        'M',  # mega
+        'G',  # giga
+        'T',  # tera
+        'P',  # peta
+        'E',  # exa
+        'Z',  # zetta
+        'Y'
+    ]  # yotta
 
     if SI:
         step = 1000.0
@@ -293,9 +292,10 @@ class YumexConf(config.BaseConfig):
     # headerbar is default if running gnome
     hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
-    search_default = config.CaselessSelectionOption(
-        default='prefix',
-        allowed=('prefix', 'keyword', 'fields', 'key'))
+    search_default = config.CaselessSelectionOption(default='prefix',
+                                                    allowed=('prefix',
+                                                             'keyword',
+                                                             'fields', 'key'))
     search_fields = config.KeyListOption(['name', 'summary'])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)
@@ -308,7 +308,8 @@ class YumexConf(config.BaseConfig):
     protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
     clean_instonly = config.BoolOption(True)
     search_visible = config.BoolOption(False)
-    installonly_limit = config.PositiveIntOption(3, range_min=2,
+    installonly_limit = config.PositiveIntOption(3,
+                                                 range_min=2,
                                                  names_of_0=["0", "<off>"])
 
 
@@ -332,9 +333,10 @@ class Config(object):
     """
     Yum Extender Configuration class
     """
-    WRITE_ALWAYS = ['autostart', 'update_interval',
-                    'update_startup_delay', 'autocheck_updates',
-                    'update_notify', 'update_showicon']
+    WRITE_ALWAYS = [
+        'autostart', 'update_interval', 'update_startup_delay',
+        'autocheck_updates', 'update_notify', 'update_showicon'
+    ]
 
     def __init__(self):
         object.__init__(self)

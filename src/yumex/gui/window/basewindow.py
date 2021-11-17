@@ -39,7 +39,6 @@ logger = logging.getLogger('yumex')
 
 
 class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
-
     def __init__(self, app):
         Gtk.ApplicationWindow.__init__(self,
                                        title='Yum Extender - Powered by DNF',
@@ -58,8 +57,8 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             raise
             # noinspection PyUnreachableCode
             dialogs.show_information(
-                self, 'GtkBuilder ui file not found : ' +
-                const.DATA_DIR + '/yumex.ui')
+                self, 'GtkBuilder ui file not found : ' + const.DATA_DIR +
+                '/yumex.ui')
             sys.exit()
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
@@ -124,7 +123,8 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                         color_value = color_table[key]
                     else:
                         logger.info(
-                            f'Unknown Color alias : {color_value} default to {backup_color}')
+                            f'Unknown Color alias : {color_value} default to {backup_color}'
+                        )
                         color_value = backup_color
                 setattr(CONFIG.session, color, color_value)
                 logger.debug(
@@ -141,14 +141,15 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """Load custom .css styling from current theme."""
         # Use Dark Theme
         gtk_settings = Gtk.Settings.get_default()
-        gtk_settings.set_property(
-            "gtk-application-prefer-dark-theme", CONFIG.conf.use_dark)
+        gtk_settings.set_property("gtk-application-prefer-dark-theme",
+                                  CONFIG.conf.use_dark)
         css_fn = None
         theme = gtk_settings.props.gtk_theme_name
         logger.debug(f'current theme : {theme}')
         css_postfix = '%s/apps/yumex.css' % theme
-        for css_prefix in [os.path.expanduser('~/.themes'),
-                           '/usr/share/themes']:
+        for css_prefix in [
+                os.path.expanduser('~/.themes'), '/usr/share/themes'
+        ]:
             fn = os.path.join(css_prefix, css_postfix)
             logger.debug('looking for %s', fn)
             if os.path.exists(fn):
@@ -234,8 +235,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = ['left_header', 'right_header',
-                               'package_sidebar', 'content_box']
+        WIDGETS_INSENSITIVE = [
+            'left_header', 'right_header', 'package_sidebar', 'content_box'
+        ]
         for widget in WIDGETS_INSENSITIVE:
             self.ui.get_object(widget).set_sensitive(state)
 

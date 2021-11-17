@@ -12,8 +12,6 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-
-
 """
 The Option/BaseConfig classes is taken from config.py from the yum project
 (http://yum.baseurl.org )
@@ -57,7 +55,6 @@ class Option(object):
     Python descriptor foo (__get__ and __set__) is used to make option
     definition easy and concise.
     """
-
     def __init__(self, default=None, parse_default=False):
         self._setattrname()
         self.inherit = False
@@ -97,9 +94,8 @@ class Option(object):
                 value = self.parse(value)
             except ValueError as e:
                 # Add the field name onto the error
-                raise ValueError(
-                    'Error parsing "%s = %r": %s' % (self._optname,
-                                                     value, str(e)))
+                raise ValueError('Error parsing "%s = %r": %s' %
+                                 (self._optname, value, str(e)))
         setattr(obj, self._attrname, value)
 
     def setup(self, obj, name):
@@ -159,7 +155,6 @@ def Inherit(option_obj):
 
 class ListOption(Option):
     """An option containing a list of strings."""
-
     def __init__(self, default=None, parse_default=False):
         if default is None:
             default = []
@@ -199,7 +194,6 @@ class ListOption(Option):
 
 class KeyListOption(Option):
     """An option containing a list of strings."""
-
     def __init__(self, default=None, parse_default=False):
         if default is None:
             default = []
@@ -230,8 +224,9 @@ class UrlOption(Option):
     """This option handles lists of URLs with validation of the URL
     scheme.
     """
-
-    def __init__(self, default=None, schemes=('http', 'ftp', 'file', 'https'),
+    def __init__(self,
+                 default=None,
+                 schemes=('http', 'ftp', 'file', 'https'),
                  allow_none=False):
         super(UrlOption, self).__init__(default)
         self.schemes = schemes
@@ -257,8 +252,8 @@ class UrlOption(Option):
         # Check that scheme is valid
         (s, b, p, q, f, o) = urlparse(url)
         if s not in self.schemes:
-            raise ValueError(
-                'URL must be %s not "%s"' % (self._schemelist(), s))
+            raise ValueError('URL must be %s not "%s"' %
+                             (self._schemelist(), s))
 
         return url
 
@@ -270,13 +265,12 @@ class UrlOption(Option):
         elif len(self.schemes) == 1:
             return self.schemes[0]
         else:
-            return '%s or %s' % (', '.join(self.schemes[:-1]),
-                                 self.schemes[-1])
+            return '%s or %s' % (', '.join(
+                self.schemes[:-1]), self.schemes[-1])
 
 
 class IntOption(Option):
     """An option representing an integer value."""
-
     def __init__(self, default=None, range_min=None, range_max=None):
         super(IntOption, self).__init__(default)
         self._range_min = range_min
@@ -305,8 +299,10 @@ class PositiveIntOption(IntOption):
     """An option representing a positive integer value, where 0 can
     have a special representation.
     """
-
-    def __init__(self, default=None, range_min=0, range_max=None,
+    def __init__(self,
+                 default=None,
+                 range_min=0,
+                 range_max=None,
                  names_of_0=None):
         super(PositiveIntOption, self).__init__(default, range_min, range_max)
         self._names0 = names_of_0
@@ -384,7 +380,6 @@ class BoolOption(Option):
     """An option representing a boolean value.  The value can be one
     of 0, 1, yes, no, true, or false.
     """
-
     def parse(self, s):
         """Parse a string containing a boolean value.  1, yes, and
         true will evaluate to True; and 0, no, and false will evaluate
@@ -418,7 +413,6 @@ class BoolOption(Option):
 
 class FloatOption(Option):
     """An option representing a numeric float value."""
-
     def parse(self, s):
         """Parse a string containing a numeric float value.
 
@@ -437,7 +431,6 @@ class SelectionOption(Option):
     """Handles string values where only specific values are
     allowed.
     """
-
     def __init__(self, default=None, allowed=(), mapper={}):
         super(SelectionOption, self).__init__(default)
         self._allowed = allowed
@@ -470,7 +463,6 @@ class CaselessSelectionOption(SelectionOption):
     """Mainly for compatibility with :class:`BoolOption`, works like
     :class:`SelectionOption` but lowers input case.
     """
-
     def parse(self, s):
         """Parse a string for specific values.
 
@@ -534,7 +526,6 @@ class ThrottleOption(BytesOption):
     """An option representing a bandwidth throttle value. See
     :func:`parse` for acceptable input values.
     """
-
     def parse(self, s):
         """Get a throttle option. Input may either be a percentage or
         a "friendly bandwidth value" as accepted by the
@@ -569,7 +560,6 @@ class BaseConfig(object):
     """Base class for storing configuration definitions. Subclass when
     creating your own definitions.
     """
-
     def __init__(self):
         self._section = None
 

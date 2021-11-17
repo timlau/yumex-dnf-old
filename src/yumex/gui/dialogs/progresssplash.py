@@ -22,7 +22,6 @@ import yumex.common.const as const
 
 
 class ProgressSplash:
-
     def __init__(self, base):
         self.base = base
         self.ui = load_ui('progresssplash.ui')

@@ -17,20 +17,19 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import Gtk
 from yumex.common import _
 
-
 logger = logging.getLogger('yumex.gui.dialogs')
 
 
 def show_information(window, msg, add_msg=None):
-    dialog = Gtk.MessageDialog(
-        flags=0, message_type=Gtk.MessageType.INFO,
-        buttons=Gtk.ButtonsType.OK, text=msg)
+    dialog = Gtk.MessageDialog(flags=0,
+                               message_type=Gtk.MessageType.INFO,
+                               buttons=Gtk.ButtonsType.OK,
+                               text=msg)
     if add_msg:
         dialog.format_secondary_text(add_msg)
     if window:
@@ -40,9 +39,10 @@ def show_information(window, msg, add_msg=None):
 
 
 def yes_no_dialog(window, msg, add_msg=None):
-    dialog = Gtk.MessageDialog(
-        flags=0, message_type=Gtk.MessageType.INFO,
-        buttons=Gtk.ButtonsType.YES_NO, text=msg)
+    dialog = Gtk.MessageDialog(flags=0,
+                               message_type=Gtk.MessageType.INFO,
+                               buttons=Gtk.ButtonsType.YES_NO,
+                               text=msg)
     if add_msg:
         dialog.format_secondary_text(add_msg)
     if window:
@@ -60,11 +60,10 @@ def ask_for_gpg_import(window, values):
              ' Key        : 0x%s:\n'
              ' Userid     : "%s"\n'
              ' From       : %s') %
-           (pkg_name, hexkeyid, userid,
-            keyurl.replace("file://", "")))
+           (pkg_name, hexkeyid, userid, keyurl.replace("file://", "")))
 
-    dialog = Gtk.MessageDialog(
-        window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
+    dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.QUESTION,
+                               Gtk.ButtonsType.YES_NO, msg)
     rc = dialog.run()
     dialog.destroy()
     return rc == Gtk.ResponseType.YES

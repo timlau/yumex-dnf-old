@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 import dnfdaemon.client
@@ -26,15 +25,14 @@ from gi.repository import Gdk
 import yumex.common.const as const
 from yumex.backend import Backend
 from yumex.common import (CONFIG, ExceptionHandler, TimeFunction, _,
-                        format_number, ngettext, pkg_id_to_full_name,
-                        to_pkg_tuple)
+                          format_number, ngettext, pkg_id_to_full_name,
+                          to_pkg_tuple)
 
 logger = logging.getLogger('yumex.yum_backend')
 
 
 class DnfPackage:
     """package object for a package in the package system."""
-
     def __init__(self, po_tuple, action, backend):
         self.backend = backend
         (pkg_id, summary, size) = po_tuple
@@ -80,8 +78,8 @@ class DnfPackage:
         if self.action == 'li':
             return self.repository
         else:
-            return "%s-%s.%s.%s.rpm" % (self.name, self.version,
-                                        self.release, self.arch)
+            return "%s-%s.%s.%s.rpm" % (self.name, self.version, self.release,
+                                        self.arch)
 
     @property
     def fullver(self):
@@ -165,7 +163,6 @@ class DnfPackage:
 
 class DnfRootBackend(Backend, dnfdaemon.client.Client):
     """Backend to do all the dnf related actions """
-
     def __init__(self, frontend):
         Backend.__init__(self, frontend, filters=True)
         dnfdaemon.client.Client.__init__(self)
@@ -182,8 +179,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
                 _('dnfdaemon api version : %d'
                   "\ndon't match"
                   '\nneeded api version : %d') %
-                (self.running_api_version,
-                 const.NEEDED_DAEMON_API))
+                (self.running_api_version, const.NEEDED_DAEMON_API))
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
@@ -215,8 +211,8 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         else:
             logger.debug('TransactionEvent : %s', event)
 
-    def on_RPMProgress(self, package, action, te_current,
-                       te_total, ts_current, ts_total):
+    def on_RPMProgress(self, package, action, te_current, te_total, ts_current,
+                       ts_total):
         num = ' ( %i/%i )' % (ts_current, ts_total)
         if ',' in package:  # this is a pkg_id
             name = pkg_id_to_full_name(package)
@@ -262,10 +258,11 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             logger.debug('Downloaded : %s', name)
             self._files_downloaded += 1
             self.frontend.infobar.message_sub(
-                f'{name} - ({self._files_downloaded}/{self._files_to_download})')
+                f'{name} - ({self._files_downloaded}/{self._files_to_download})'
+            )
         else:
-            logger.debug('Download Error : %s - %s (status : %d )',
-                         name, msg, status)
+            logger.debug('Download Error : %s - %s (status : %d )', name, msg,
+                         status)
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
@@ -450,8 +447,8 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         :param tags:
         """
         attrs = ['summary', 'size', 'action']
-        pkgs = self.Search(search_attrs, keys, attrs, match_all,
-                           newest_only, tags)
+        pkgs = self.Search(search_attrs, keys, attrs, match_all, newest_only,
+                           tags)
         return self._make_pkg_object_with_attr(pkgs)
 
     @ExceptionHandler

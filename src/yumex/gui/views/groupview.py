@@ -17,11 +17,10 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 import os
 
-from gi.repository import  Gtk, GObject, GdkPixbuf
+from gi.repository import Gtk, GObject, GdkPixbuf
 from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.views')
@@ -29,7 +28,6 @@ logger = logging.getLogger('yumex.gui.views')
 
 class Group:
     """ Object to represent a dnf group/category """
-
     def __init__(self, grpid, grp_name, grp_desc, inst, is_category=False):
         self.id = grpid
         self.name = grp_name
@@ -40,9 +38,10 @@ class Group:
 
 
 class GroupView(Gtk.TreeView):
-    __gsignals__ = {'group-changed': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_STRING,))}
+    __gsignals__ = {
+        'group-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+    }
 
     def __init__(self, qview, base):
         Gtk.TreeView.__init__(self)
@@ -62,7 +61,7 @@ class GroupView(Gtk.TreeView):
         self.set_model(model)
         column = Gtk.TreeViewColumn(None, None)
         # Selection checkbox
-        selection = Gtk.CellRendererToggle()    # Selection
+        selection = Gtk.CellRendererToggle()  # Selection
         selection.set_property('activatable', True)
         column.pack_start(selection, False)
         column.set_cell_data_func(selection, self.set_checkbox)
@@ -70,7 +69,7 @@ class GroupView(Gtk.TreeView):
         self.append_column(column)
         column = Gtk.TreeViewColumn(None, None)
         # Queue Status (install/remove group)
-        state = Gtk.CellRendererPixbuf()    # Queue Status
+        state = Gtk.CellRendererPixbuf()  # Queue Status
         state.set_property('stock-size', 1)
         column.pack_start(state, False)
         column.set_cell_data_func(state, self.queue_pixbuf)
@@ -203,6 +202,5 @@ class GroupView(Gtk.TreeView):
         imgsize = 24
         pix = GdkPixbuf.Pixbuf.new_from_file(fn)
         if pix.get_height() != imgsize or pix.get_width() != imgsize:
-            pix = pix.scale_simple(imgsize, imgsize,
-                                   GdkPixbuf.INTERP_BILINEAR)
+            pix = pix.scale_simple(imgsize, imgsize, GdkPixbuf.INTERP_BILINEAR)
         return pix

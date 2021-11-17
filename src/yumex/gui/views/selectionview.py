@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 from gi.repository import Gtk
 from yumex.common import _
@@ -29,7 +28,6 @@ class SelectionView(Gtk.TreeView):
     """
     A Base view with an selection column
     """
-
     def __init__(self):
         """
         init the view
@@ -37,7 +35,11 @@ class SelectionView(Gtk.TreeView):
         Gtk.TreeView.__init__(self)
         self.store = None
 
-    def create_text_column_num(self, hdr, colno, resize=True, size=None,
+    def create_text_column_num(self,
+                               hdr,
+                               colno,
+                               resize=True,
+                               size=None,
                                markup=False):
         """
         Create a TreeViewColumn with data from a TreeStore column
@@ -59,8 +61,13 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_text_column(self, hdr, prop, size, sortcol=None,
-                           click_handler=None, tooltip=None):
+    def create_text_column(self,
+                           hdr,
+                           prop,
+                           size,
+                           sortcol=None,
+                           click_handler=None,
+                           tooltip=None):
         """
         Create a TreeViewColumn with text and set
         the sorting properties and add it to the view
@@ -92,8 +99,12 @@ class SelectionView(Gtk.TreeView):
 
         return column
 
-    def create_selection_colunm(self, attr, click_handler=None,
-                                popup_handler=None, tooltip=None, icon=None):
+    def create_selection_colunm(self,
+                                attr,
+                                click_handler=None,
+                                popup_handler=None,
+                                tooltip=None,
+                                icon=None):
         """Create an selection column, there get data via property function
         and a key attr
         """
@@ -156,7 +167,10 @@ class SelectionView(Gtk.TreeView):
 
         return column
 
-    def create_selection_text_column(self, hdr, select_func, text_attr,
+    def create_selection_text_column(self,
+                                     hdr,
+                                     select_func,
+                                     text_attr,
                                      size=200):
         """
         Create an selection column, there get data an TreeStore Column

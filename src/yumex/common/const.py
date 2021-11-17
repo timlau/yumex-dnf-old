@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import os.path
 import re
 import subprocess
@@ -52,9 +51,8 @@ USER_DESKTOP_FILE = AUTOSTART_DIR + '/yumex-dnf-updater.desktop'
 SYS_DESKTOP_FILE = MISC_DIR + "/yumex-dnf-updater.desktop"
 LEGACY_DESKTOP_FILE = AUTOSTART_DIR + "/yumex-dnf.desktop"
 
-
-ARCH = subprocess.check_output(
-    '/usr/bin/rpm --eval %_arch', shell=True).decode("utf-8")[:-1]
+ARCH = subprocess.check_output('/usr/bin/rpm --eval %_arch',
+                               shell=True).decode("utf-8")[:-1]
 
 ARCH_DICT = {
     "x86_64": {'x86_64', 'i686', 'i386', 'noarch'},
@@ -78,17 +76,34 @@ PAGE_QUEUE = 'queue'
 PAGE_HISTORY = 'history'
 PAGE_GROUPS = 'groups'
 
-ACTIONS_FILTER = {'u': 'updates', 'i': 'available',
-                  'r': 'installed', 'o': 'obsoletes',
-                  'do': 'downgrade', 'ri': 'reinstall', 'li': 'localinstall'}
+ACTIONS_FILTER = {
+    'u': 'updates',
+    'i': 'available',
+    'r': 'installed',
+    'o': 'obsoletes',
+    'do': 'downgrade',
+    'ri': 'reinstall',
+    'li': 'localinstall'
+}
 
-FILTER_ACTIONS = {'updates': 'u', 'available': 'i', 'installed': 'r',
-                  'obsoletes': 'o', 'downgrade': 'do', 'reinstall': 'ri',
-                  'localinstall': 'li', 'updates_all': 'u'}
+FILTER_ACTIONS = {
+    'updates': 'u',
+    'available': 'i',
+    'installed': 'r',
+    'obsoletes': 'o',
+    'downgrade': 'do',
+    'reinstall': 'ri',
+    'localinstall': 'li',
+    'updates_all': 'u'
+}
 
-BACKEND_ACTIONS = {'update': 'u', 'install': 'i', 'remove': 'r',
-                   'obsolete': 'o', 'downgrade': 'do'}
-
+BACKEND_ACTIONS = {
+    'update': 'u',
+    'install': 'i',
+    'remove': 'r',
+    'obsolete': 'o',
+    'downgrade': 'do'
+}
 
 QUEUE_PACKAGE_TYPES = {
     'i': 'install',
@@ -107,7 +122,6 @@ PKGINFO_FILTERS = ['desc', 'updinfo', 'changelog', 'files', 'deps']
 BUGZILLA_URL = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 FEDORA_PACKAGES_URL = 'https://apps.fedoraproject.org/packages/'
 
-
 PACKAGE_LOAD_MSG = {
     'installed': _('Getting installed packages'),
     'available': _('Getting available packages'),
@@ -120,9 +134,10 @@ HISTORY_OLD_STATES = ['Updated', 'Downgraded', 'Obsoleted']
 
 HISTORY_UPDATE_STATES = ['Update', 'Downgrade', 'Updated', 'Downgraded']
 
-HISTORY_SORT_ORDER = ['Install', 'True-Install', 'Reinstall', 'Update',
-                      'Downgrade', 'Obsoleting', 'Obsoleted', 'Erase', 'Removed',
-                      'Dep-Install']
+HISTORY_SORT_ORDER = [
+    'Install', 'True-Install', 'Reinstall', 'Update', 'Downgrade',
+    'Obsoleting', 'Obsoleted', 'Erase', 'Removed', 'Dep-Install'
+]
 
 HISTORY_STATE_LABLES = {
     'Update': _('Updated packages'),
@@ -134,8 +149,8 @@ HISTORY_STATE_LABLES = {
     'Install': _('Installed packages'),
     'True-Install': _('Installed packages'),
     'Dep-Install': _('Installed for dependencies'),
-    'Reinstall': _('Reinstalled packages')}
-
+    'Reinstall': _('Reinstalled packages')
+}
 
 TRANSACTION_RESULT_TYPES = {
     'install': _('Installing'),
@@ -159,11 +174,12 @@ RPM_ACTIONS = {
     'scriptlet': _("Running scriptlet for: %s")
 }
 
-WIDGETS_INSENSITIVE = ["header_menu", "header_filters",
-                       "header_search_options", "header_execute", "search"]
+WIDGETS_INSENSITIVE = [
+    "header_menu", "header_filters", "header_search_options", "header_execute",
+    "search"
+]
 
 FEDORA_REPOS = ['fedora', 'updates', 'updates-testing', 'rawhide']
-
 
 ADVISORY_TYPES = {
     hawkey.ADVISORY_BUGFIX: _('Bugfix'),

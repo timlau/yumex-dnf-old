@@ -22,7 +22,6 @@ from yumex.common import load_ui
 
 
 class ErrorDialog:
-
     def __init__(self, base):
         self.ui = load_ui('errordialog.ui')
         self.dialog = self.ui.get_object("error_dialog")

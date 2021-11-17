@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import Gtk
@@ -29,7 +28,6 @@ logger = logging.getLogger('yumex.gui.views')
 
 class HistoryView(Gtk.TreeView):
     """ History View Class"""
-
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()

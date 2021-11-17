@@ -16,7 +16,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 import yumex.common.const as const
@@ -32,7 +31,6 @@ class Backend:
 
     must be implemented in a sub class
     """
-
     def __init__(self, frontend, filters=False):
         if filters:
             self.cache = PackageCacheWithFilters()
@@ -65,7 +63,6 @@ class BaseFilter:
     """Used as base for filters, there can filter a list of packages
     based on a different conditions
     """
-
     def __init__(self, name, active=False):
         self.name = name
         self.active = active
@@ -85,7 +82,6 @@ class ArchFilter(BaseFilter):
     """
     Arch Filter to filter a list of packages by arch
     """
-
     def __init__(self, name, active=False):
         BaseFilter.__init__(self, name, active)
         self.archs = ['noarch', 'i686', 'x86_64']
@@ -103,7 +99,6 @@ class Filters:
     """
     Container to contain a number of filters based on the BaseFilter class
     """
-
     def __init__(self):
         self._filters = {}
 
@@ -133,7 +128,6 @@ class PackageCache:
     Package cache to contain packages from backend,
     so we dont have get them more than once.
     """
-
     def __init__(self):
         """
         setup the cache
@@ -196,7 +190,6 @@ class PackageCacheWithFilters(PackageCache):
     so we dont have get them more than once.
     This version has filtering, so we can filter packages by fx. arch
     """
-
     def __init__(self):
         """
         setup the cache

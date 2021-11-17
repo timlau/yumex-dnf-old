@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import Gtk
@@ -31,7 +30,6 @@ class RepoView(SelectionView):
     """
     This class controls the repo TreeView
     """
-
     def __init__(self):
         SelectionView.__init__(self)
         self.headers = [_('Repository'), _('Filename')]
@@ -65,13 +63,14 @@ class RepoView(SelectionView):
         self.set_model(store)
         # Setup Selection Column
         col = self.create_selection_column_num(
-            0, tooltip=_("Click here to switch between\n"
-                         " none/all/default selected"))
+            0,
+            tooltip=_("Click here to switch between\n"
+                      " none/all/default selected"))
         col.set_clickable(True)
         col.connect('clicked', self.on_section_header_clicked)
 
         # Setup resent column
-        cell2 = Gtk.CellRendererPixbuf()    # gpgcheck
+        cell2 = Gtk.CellRendererPixbuf()  # gpgcheck
         cell2.set_property('icon-name', 'dialog-password-symbolic')
         column2 = Gtk.TreeViewColumn("", cell2)
         column2.set_cell_data_func(cell2, self.new_pixbuf)

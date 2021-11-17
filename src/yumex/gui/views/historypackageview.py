@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import Gtk
@@ -29,7 +28,6 @@ logger = logging.getLogger('yumex.gui.views')
 
 class HistoryPackageView(Gtk.TreeView):
     """ History Package View Class"""
-
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
@@ -95,9 +93,9 @@ class HistoryPackageView(Gtk.TreeView):
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
                 num = len(states[state])
-                cat = self.model.append(
-                    None, ["<b>%s (%i)</b>" %
-                           (const.HISTORY_STATE_LABLES[state], num)])
+                cat = self.model.append(None, [
+                    "<b>%s (%i)</b>" % (const.HISTORY_STATE_LABLES[state], num)
+                ])
                 for pkg_list in states[state]:
                     pkg_id, st, is_inst = pkg_list[0]
                     if is_inst:

@@ -24,7 +24,6 @@ from yumex.common import _, format_number
 
 
 class TransactionResult:
-
     def __init__(self, base):
         self.base = base
         self.ui = load_ui('transactionresult.ui')
@@ -89,17 +88,22 @@ class TransactionResult:
             for pkgid, size, replaces in lvl1:
                 (n, e, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
-                    level1, [n, a, "%s.%s" % (v, r), repo_id,
-                             format_number(size)])
+                    level1,
+                    [n, a,
+                     "%s.%s" % (v, r), repo_id,
+                     format_number(size)])
                 # packages there need to be downloaded
-                if sub in ['install', 'update', 'install-deps',
-                           'update-deps', 'obsoletes']:
+                if sub in [
+                        'install', 'update', 'install-deps', 'update-deps',
+                        'obsoletes'
+                ]:
                     total_size += size
                 for r in replaces:
                     (n, e, v, r, a, repo_id) = str(r).split(',')
-                    model.append(level2, [_("<b>replacing</b> {}").format(n),
-                                          a, "%s.%s" % (v, r), repo_id,
-                                          format_number(size)])
-        self.ui.get_object("result_size").set_text(
-            format_number(total_size))
+                    model.append(level2, [
+                        _("<b>replacing</b> {}").format(n), a,
+                        "%s.%s" % (v, r), repo_id,
+                        format_number(size)
+                    ])
+        self.ui.get_object("result_size").set_text(format_number(total_size))
         self.view.expand_all()

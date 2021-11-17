@@ -14,9 +14,11 @@ logger = logging.getLogger('yumex.gui.preffernces')
 class Preferences:
 
     VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
-    FLAGS = ['autostart', 'clean_unused', 'newest_only',
-             'headerbar', 'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark', 'search_visible', 'show_splash'
-             ]
+    FLAGS = [
+        'autostart', 'clean_unused', 'newest_only', 'headerbar',
+        'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark',
+        'search_visible', 'show_splash'
+    ]
 
     def __init__(self, base):
         self.base = base
@@ -62,8 +64,9 @@ class Preferences:
         # Get Themes
         pattern = os.path.normpath(os.path.join(const.THEME_DIR, '*.theme'))
         theme_files = glob.glob(pattern)
-        theme_names = [os.path.basename(theme).split('.')[0]
-                       for theme in theme_files]
+        theme_names = [
+            os.path.basename(theme).split('.')[0] for theme in theme_files
+        ]
         widget = self.ui.get_object('pref_theme')
         widget.remove_all()
         default = CONFIG.conf.theme.split(".")[0]
@@ -132,7 +135,7 @@ class Preferences:
             repo_now = self.repo_view.get_selected()
             # repo selection changed
             if repo_now != repo_before:
-                CONFIG.session.enabled_repos = repo_now     # set the new selection
+                CONFIG.session.enabled_repos = repo_now  # set the new selection
                 # we need to reset the gui
                 need_reset = True
                 if CONFIG.conf.repo_saved:

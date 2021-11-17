@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 from gi.repository import GObject
 from yumex.common import _
@@ -28,10 +27,10 @@ logger = logging.getLogger('yumex.gui.widget')
 class Content(GObject.GObject):
     """Handling the content pages"""
 
-    __gsignals__ = {'page-changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,)
-                                     )}
+    __gsignals__ = {
+        'page-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+    }
 
     def __init__(self, win):
         GObject.GObject.__init__(self)

@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 #    Yum Exteder (yumex) - A graphic package management tool
 #    Copyright (C) 2013 -2021 Tim Lauridsen < timlau<AT>fedoraproject<DOT>org >
@@ -18,12 +17,12 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from gi.repository import  Gtk
+from gi.repository import Gtk
 
 import yumex.common.const as const
 
-class AboutDialog(Gtk.AboutDialog):
 
+class AboutDialog(Gtk.AboutDialog):
     def __init__(self, parent):
         Gtk.AboutDialog.__init__(self)
         self.props.program_name = 'Yum Extender (dnf)'

@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from yumex import const
@@ -30,7 +29,6 @@ class PackageQueue:
     """
     A Queue class to store selected packages/groups and the pending actions
     """
-
     def __init__(self):
         self.packages = {}
         self._setup_packages()

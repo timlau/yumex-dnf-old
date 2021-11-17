@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import datetime
 import logging
 import subprocess
@@ -33,14 +32,15 @@ logger = logging.getLogger('yumex.gui.widget')
 
 
 class PackageDetails(GObject.GObject):
-    __gsignals__ = {'info-changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,))
-                    }
+    __gsignals__ = {
+        'info-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+    }
 
     VALUES = {0: 'desc', 1: 'updinfo', 2: 'files', 3: 'deps'}
-    DEFAULT_STYLES = ['description', 'filelist', 'changelog',
-                      'changelog-header']
+    DEFAULT_STYLES = [
+        'description', 'filelist', 'changelog', 'changelog-header'
+    ]
 
     def __init__(self, win, url_handler=None):
         super(PackageDetails, self).__init__()
@@ -100,15 +100,15 @@ class PackageDetails(GObject.GObject):
             self._buffer.insert_with_tags(end, txt, style)
         else:
             self._buffer.insert(end, txt)
-        self._text.scroll_to_iter(self._buffer.get_end_iter(),
-                                  0.0, True, 0.0, 0.0)
+        self._text.scroll_to_iter(self._buffer.get_end_iter(), 0.0, True, 0.0,
+                                  0.0)
 
     def clear(self):
         self._buffer.set_text('')
 
     def goto_top(self):
-        self._text.scroll_to_iter(self._buffer.get_start_iter(),
-                                  0.0, False, 0.0, 0.0)
+        self._text.scroll_to_iter(self._buffer.get_start_iter(), 0.0, False,
+                                  0.0, 0.0)
 
     def on_url_event(self, tag, widget, event, iterator):
         """ Catch when the user clicks the URL """
@@ -156,11 +156,9 @@ class PackageDetails(GObject.GObject):
         tag = self._tags.lookup(text)
         if not tag:
             if check_dark_theme():
-                tag = self._buffer.create_tag(text,
-                                              foreground="#ff7800")
+                tag = self._buffer.create_tag(text, foreground="#ff7800")
             else:
-                tag = self._buffer.create_tag(text,
-                                              foreground="#ff7800")
+                tag = self._buffer.create_tag(text, foreground="#ff7800")
             tag.connect("event", self.on_url_event)
             self.url_tags.append(tag)
             self.url_list[text] = url
@@ -172,7 +170,6 @@ class PackageInfo(PackageDetails):
     """
     class for handling the Package Information view
     """
-
     def __init__(self, window, base):
         PackageDetails.__init__(self, window, self._url_handler)
         self.window = window
@@ -244,8 +241,7 @@ class PackageInfo(PackageDetails):
     def _show_description(self):
         tags = self.current_package.pkgtags
         if tags:
-            self.write(_("Tags: %s\n") %
-                       ", ".join(tags), "changelog-header")
+            self.write(_("Tags: %s\n") % ", ".join(tags), "changelog-header")
         desc = self.current_package.description
         self.write(desc)
         self.write('\n')
@@ -274,7 +270,8 @@ class PackageInfo(PackageDetails):
         else:
             self.write(_("No update information is available"))
             if self._is_fedora_pkg():
-                self.write(_("\nFedora Updates:"), "changelog-header",
+                self.write(_("\nFedora Updates:"),
+                           "changelog-header",
                            newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/updates"
@@ -298,8 +295,10 @@ class PackageInfo(PackageDetails):
 
         # Add our bugzilla references
         if upd_info['references']:
-            bzs = [r for r in upd_info['references']
-                   if r and r[0] == hawkey.REFERENCE_BUGZILLA]
+            bzs = [
+                r for r in upd_info['references']
+                if r and r[0] == hawkey.REFERENCE_BUGZILLA
+            ]
             if len(bzs):
                 self.write('\n')
                 header = "Bugzilla"
@@ -312,8 +311,7 @@ class PackageInfo(PackageDetails):
                     header = " "
 
         desc = upd_info['description']
-        head += "\n%14s : %s\n" % (_("Description"),
-                                   format_block(desc, 17))
+        head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
         head += "\n"
         self.write(head, 'filelist')
 
@@ -336,7 +334,8 @@ class PackageInfo(PackageDetails):
         else:
             self.write(_("No changelog information is available"))
             if self._is_fedora_pkg():
-                self.write(_("\nOnline Changelog:"), "changelog-header",
+                self.write(_("\nOnline Changelog:"),
+                           "changelog-header",
                            newline=True)
                 url = const.FEDORA_PACKAGES_URL + self._get_name_for_url() \
                                                 + "/changelog"

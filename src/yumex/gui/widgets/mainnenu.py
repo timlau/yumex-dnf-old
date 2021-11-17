@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 from gi.repository import Gio, GObject, Gtk, GLib
 from yumex.common import _
@@ -26,20 +25,22 @@ G_TRUE = GLib.Variant.new_boolean(True)
 G_FALSE = GLib.Variant.new_boolean(False)
 
 logger = logging.getLogger('yumex.gui.widget')
+
+
 class MainMenu(Gio.Menu):
-    __gsignals__ = {'menu-changed': (GObject.SignalFlags.RUN_FIRST,
-                                     None,
-                                     (GObject.TYPE_STRING,
-                                      GObject.TYPE_PYOBJECT,))
-                    }
+    __gsignals__ = {
+        'menu-changed': (GObject.SignalFlags.RUN_FIRST, None, (
+            GObject.TYPE_STRING,
+            GObject.TYPE_PYOBJECT,
+        ))
+    }
 
     def __init__(self, win):
         super(MainMenu, self).__init__()
         self.win = win
         self._button = self.win.get_ui('mainmenu_button')
         self._button.connect('clicked', self._on_button)
-        self._popover = Gtk.Popover.new_from_model(self._button,
-                                                   self)
+        self._popover = Gtk.Popover.new_from_model(self._button, self)
         gen_menu = Gio.Menu()
         self._add_menu(gen_menu, _("Preferences"), 'pref')
         self._add_menu(gen_menu, _("Refresh Metadata"), 'reload')
@@ -73,5 +74,3 @@ class MainMenu(Gio.Menu):
 
     def _on_button(self, button):
         self._popover.show_all()
-
-

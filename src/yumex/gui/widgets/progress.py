@@ -21,7 +21,6 @@ from yumex.common import _
 
 
 class Progress:
-
     def __init__(self, ui, base):
         self.base = base
         self.ui = ui

@@ -53,7 +53,6 @@ logger = logging.getLogger('yumex.gui.window')
 
 
 class Window(BaseWindow):
-
     def __init__(self, app, use_headerbar=True, install_mode=False):
         super(Window, self).__init__(app)
         self.use_headerbar = use_headerbar
@@ -65,8 +64,8 @@ class Window(BaseWindow):
         self.legacy_cleanup()
 
         # init vars
-        self.cur_height = 0         # current window height
-        self.cur_width = 0          # current windows width
+        self.cur_height = 0  # current window height
+        self.cur_width = 0  # current windows width
         self.cur_maximized = False
         self.last_search = None
         self.current_filter = None
@@ -78,7 +77,7 @@ class Window(BaseWindow):
             self.active_archs = CONFIG.conf.archs
         else:
             self.active_archs = list(const.PLATFORM_ARCH)
-        self._grps = None   # Group and Category cache
+        self._grps = None  # Group and Category cache
         self.active_page = 'packages'  # Active content page
         self.search_fields = CONFIG.conf.search_fields
 
@@ -108,8 +107,7 @@ class Window(BaseWindow):
             os.unlink(const.LEGACY_DESKTOP_FILE)
         if CONFIG.conf.autostart:
             if not os.path.exists(const.USER_DESKTOP_FILE):
-                logger.debug('create autostart: %s',
-                             const.USER_DESKTOP_FILE)
+                logger.debug('create autostart: %s', const.USER_DESKTOP_FILE)
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
         # key is renamed to keyword
         if CONFIG.conf.search_default == 'key':
@@ -252,8 +250,8 @@ class Window(BaseWindow):
     def _setup_package_page(self):
         """Setup the package page."""
         self.package_view = PackageView(self.queue_view)
-        self.package_view.connect(
-            'pkg_changed', self.on_pkg_view_selection_changed)
+        self.package_view.connect('pkg_changed',
+                                  self.on_pkg_view_selection_changed)
         sw = self.get_ui('package_sw')
         sw.add(self.package_view)
         # setup info view
@@ -272,8 +270,7 @@ class Window(BaseWindow):
         # sw.add(hb)
         sw.add(self.groups)
         sw = self.get_ui('group_pkg_sw')
-        self.group_package_view = PackageView(
-            self.queue_view, group_mode=True)
+        self.group_package_view = PackageView(self.queue_view, group_mode=True)
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
         sw.add(self.group_package_view)
@@ -295,6 +292,7 @@ class Window(BaseWindow):
 ###############################################################################
 # Helpers
 ###############################################################################
+
     def _show_shortcuts(self):
         builder = Gtk.Builder.new_from_file(const.UI_DIR + '/shortcuts.ui')
         shortcuts = builder.get_object('yumex-shortcuts')
@@ -330,8 +328,8 @@ class Window(BaseWindow):
         self.last_search = data
         self.set_working(True, True)
         newest_only = CONFIG.session.newest_only
-        self.last_search_pkgs = self.backend.search(
-            fields, data.split(' '), True, newest_only, True)
+        self.last_search_pkgs = self.backend.search(fields, data.split(' '),
+                                                    True, newest_only, True)
         self.info.set_package(None)
         self.set_working(False)
         self.pkg_filter.set_active('all')
@@ -340,7 +338,8 @@ class Window(BaseWindow):
         """Get filtered search results."""
         if flt == 'updates':  # get update only
             pkgs = [
-                po for po in self.last_search_pkgs if po.action in ('u', 'o')]
+                po for po in self.last_search_pkgs if po.action in ('u', 'o')
+            ]
             return pkgs
         elif flt == 'installed':  # get installed only
             pkgs = [po for po in self.last_search_pkgs if po.installed]
@@ -400,8 +399,7 @@ class Window(BaseWindow):
     def _load_history(self):
         """Load history and populate view."""
         if not self.history_view.is_populated:
-            result = self.backend.GetHistoryByDays(
-                0, CONFIG.conf.history_days)
+            result = self.backend.GetHistoryByDays(0, CONFIG.conf.history_days)
             self.history_view.populate(result)
 
     def _refresh(self):
@@ -440,8 +438,8 @@ class Window(BaseWindow):
             action = 'update'
             package = '*'
         if action:
-            self._process_actions_installmode(action, package,
-                                              args.yes, quit_app)
+            self._process_actions_installmode(action, package, args.yes,
+                                              quit_app)
 
     def _populate_transaction(self):
         self.backend.ClearTransaction()
@@ -451,28 +449,29 @@ class Window(BaseWindow):
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    logger.debug('adding: %s %s' %
-                                 (const.QUEUE_PACKAGE_TYPES[action],
-                                  pkg.pkg_id))
+                    logger.debug(
+                        'adding: %s %s' %
+                        (const.QUEUE_PACKAGE_TYPES[action], pkg.pkg_id))
                     rc, msgs = self.backend.AddTransaction(
-                        pkg.pkg_id,
-                        const.QUEUE_PACKAGE_TYPES[action])
+                        pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
                     if not rc:
                         logger.debug('result : %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs.add('%s : %s' %
-                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add(
+                            '%s : %s' %
+                            (const.QUEUE_PACKAGE_TYPES[action], pkg))
                 else:
-                    logger.debug('adding: %s %s' %
-                                 (const.QUEUE_PACKAGE_TYPES[action],
-                                  pkg.pkg_id))
+                    logger.debug(
+                        'adding: %s %s' %
+                        (const.QUEUE_PACKAGE_TYPES[action], pkg.pkg_id))
                     rc, msgs = self.backend.AddTransaction(
                         pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
                     if not rc:
                         logger.debug('result: %s: %s' % (rc, pkg))
                         errors += 1
-                        error_msgs.add('%s : %s' %
-                                       (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add(
+                            '%s : %s' %
+                            (const.QUEUE_PACKAGE_TYPES[action], pkg))
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, msgs = self.backend.GroupInstall(grp_id)
@@ -559,17 +558,15 @@ class Window(BaseWindow):
         if rc == 4:  # Download errors
             dialogs.show_information(
                 self,
-                ngettext('Downloading error\n',
-                         'Downloading errors\n', len(result)),
-                '\n'.join(result))
+                ngettext('Downloading error\n', 'Downloading errors\n',
+                         len(result)), '\n'.join(result))
             self._reset_on_cancel()
             return
         elif rc != 0:  # other transaction errors
             dialogs.show_information(
                 self,
-                ngettext('Error in transaction\n',
-                         'Errors in transaction\n', len(result)),
-                '\n'.join(result))
+                ngettext('Error in transaction\n', 'Errors in transaction\n',
+                         len(result)), '\n'.join(result))
         self._reset()
         return
 
@@ -676,9 +673,11 @@ class Window(BaseWindow):
                 '\n'.join(e.msgs))
             self._reset_on_error()
 
+
 ###############################################################################
 # Callback handlers
 ###############################################################################
+
     def on_key_press(self, widget, event):
         shortcut = Gtk.accelerator_get_label(event.keyval, event.state)
         logger.debug(f'keyboard shotcut : {shortcut}')
@@ -855,6 +854,6 @@ class Window(BaseWindow):
             msg = "Can't undo history transaction :\n%s" % \
                   ("\n".join(messages))
             logger.debug(msg)
-            dialogs.show_information(
-                self, _('Error in undo history transaction'),
-                "\n".join(messages))
+            dialogs.show_information(self,
+                                     _('Error in undo history transaction'),
+                                     "\n".join(messages))

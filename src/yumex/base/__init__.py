@@ -17,16 +17,14 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import datetime
 import logging
 import sys
 
-
 import yumex.common.const as const
 import yumex.common as misc
 
-from yumex.common import CONFIG,  _
+from yumex.common import CONFIG, _
 
 from yumex.backend.dnf import DnfRootBackend
 from yumex.gui.dialogs import show_information
@@ -35,7 +33,6 @@ logger = logging.getLogger('yumex.base')
 
 
 class BaseYumex:
-
     def __init__(self):
         self._root_backend = None
         self._root_locked = False
@@ -90,8 +87,7 @@ class BaseYumex:
         if rc:
             self._set_cache_refreshed('system')
         else:
-            show_information(
-                self, _('Could not refresh the DNF cache (root)'))
+            show_information(self, _('Could not refresh the DNF cache (root)'))
 
     @misc.ExceptionHandler
     def get_root_backend(self):
@@ -114,14 +110,12 @@ class BaseYumex:
             else:
                 logger.critical("can't get root backend lock")
                 if msg == 'not-authorized':  # user canceled the polkit dialog
-                    errmsg = _(
-                        'DNF root backend was not authorized.\n'
-                        'Yum Extender will exit')
+                    errmsg = _('DNF root backend was not authorized.\n'
+                               'Yum Extender will exit')
                 # DNF is locked by another process
                 elif msg == 'locked-by-other':
-                    errmsg = _(
-                        'DNF is locked by another process.\n\n'
-                        'Yum Extender will exit')
+                    errmsg = _('DNF is locked by another process.\n\n'
+                               'Yum Extender will exit')
                 self.error_dialog.show(errmsg)
                 sys.exit(1)
         return self._root_backend

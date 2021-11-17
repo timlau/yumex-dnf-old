@@ -29,12 +29,13 @@ G_FALSE = GLib.Variant.new_boolean(False)
 class SearchBar(GObject.GObject):
     """Handling the search UI."""
 
-    __gsignals__ = {'search': (GObject.SignalFlags.RUN_FIRST,
-                               None,
-                               (GObject.TYPE_STRING,
-                                GObject.TYPE_STRING,
-                                GObject.TYPE_PYOBJECT,))
-                    }
+    __gsignals__ = {
+        'search': (GObject.SignalFlags.RUN_FIRST, None, (
+            GObject.TYPE_STRING,
+            GObject.TYPE_STRING,
+            GObject.TYPE_PYOBJECT,
+        ))
+    }
 
     FIELDS = ['name', 'summary', 'description']
     TYPES = ['prefix', 'keyword', 'fields']
@@ -106,8 +107,7 @@ class SearchBar(GObject.GObject):
     def _set_focus(self):
         """Set focus on search entry and move cursor to end of text."""
         self._entry.grab_focus()
-        self._entry.emit(
-            'move-cursor', Gtk.MovementStep.BUFFER_ENDS, 1, False)
+        self._entry.emit('move-cursor', Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
     def on_options_button(self, widget):
         """Search Option button is toggled."""

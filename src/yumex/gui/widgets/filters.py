@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 import yumex.common.const as const
 from gi.repository import GObject, Gtk
@@ -27,11 +26,12 @@ logger = logging.getLogger('yumex.gui.widget')
 
 
 class ExtraFilters(GObject.GObject):
-    __gsignals__ = {'changed': (GObject.SignalFlags.RUN_FIRST,
-                                None,
-                                (GObject.TYPE_STRING,
-                                 GObject.TYPE_PYOBJECT,))
-                    }
+    __gsignals__ = {
+        'changed': (GObject.SignalFlags.RUN_FIRST, None, (
+            GObject.TYPE_STRING,
+            GObject.TYPE_PYOBJECT,
+        ))
+    }
 
     def __init__(self, win):
         super(ExtraFilters, self).__init__()
@@ -87,9 +87,10 @@ class ExtraFilters(GObject.GObject):
 class FilterSidebar(GObject.GObject):
     """Sidebar selector widget. """
 
-    __gsignals__ = {'sidebar-changed': (GObject.SignalFlags.RUN_FIRST,
-                                        None,
-                                        (GObject.TYPE_STRING,))}
+    __gsignals__ = {
+        'sidebar-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+    }
 
     INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
 
@@ -123,10 +124,10 @@ class FilterSidebar(GObject.GObject):
 class Filters(GObject.GObject):
     """Handling the package filter UI."""
 
-    __gsignals__ = {'filter-changed': (GObject.SignalFlags.RUN_FIRST,
-                                       None,
-                                       (GObject.TYPE_STRING,)
-                                       )}
+    __gsignals__ = {
+        'filter-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+    }
 
     FILTERS = ['updates', 'installed', 'available', 'all']
 

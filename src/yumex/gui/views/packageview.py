@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import GObject, Gtk
@@ -29,10 +28,10 @@ logger = logging.getLogger('yumex.gui.views')
 
 
 class PackageView(SelectionView):
-    __gsignals__ = {'pkg-changed': (GObject.SignalFlags.RUN_FIRST,
-                                    None,
-                                    (GObject.TYPE_PYOBJECT,))
-                    }
+    __gsignals__ = {
+        'pkg-changed':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_PYOBJECT, ))
+    }
 
     def __init__(self, qview, group_mode=False):
         self.logger = logging.getLogger('yumex.PackageView')
@@ -124,8 +123,8 @@ class PackageView(SelectionView):
                 if not pkg.installed or pkg.queued:
                     return
                 self.popup = self._get_package_popup(pkg, path)
-                self.popup.popup(None, None, None, None,
-                                 event.button, event.time)
+                self.popup.popup(None, None, None, None, event.button,
+                                 event.time)
                 return True
         else:
             return False
@@ -144,8 +143,8 @@ class PackageView(SelectionView):
             for do_pkg in do_pkgs:
                 mi = Gtk.MenuItem(str(do_pkg))
                 mi.set_use_underline(False)
-                mi.connect('button-press-event',
-                           self.on_package_downgrade, pkg, do_pkg)
+                mi.connect('button-press-event', self.on_package_downgrade,
+                           pkg, do_pkg)
                 popup_sub.add(mi)
             popup_sub.show_all()
             mi = Gtk.MenuItem(_("Downgrade Package"))

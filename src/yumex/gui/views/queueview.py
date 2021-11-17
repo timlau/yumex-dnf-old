@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
 import logging
 
 from gi.repository import GObject, Gtk
@@ -29,9 +28,10 @@ from yumex.gui.views.packagequeue import PackageQueue
 
 
 class QueueView(Gtk.TreeView):
-    __gsignals__ = {'queue-refresh': (GObject.SignalFlags.RUN_FIRST,
-                                      None,
-                                      (GObject.TYPE_INT,))}
+    __gsignals__ = {
+        'queue-refresh':
+        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_INT, ))
+    }
 
     def __init__(self, queue_menu):
         Gtk.TreeView.__init__(self)
@@ -108,38 +108,38 @@ class QueueView(Gtk.TreeView):
         """ Populate view with data from queue """
         self.store.clear()
         pkg_list = self.queue.packages['u'] + self.queue.packages['o']
-        label = "<b>%s</b>" % ngettext(
-            "Package to update", "Packages to update", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Package to update",
+                                       "Packages to update", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['i']
-        label = "<b>%s</b>" % ngettext(
-            "Package to install", "Packages to install", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Package to install",
+                                       "Packages to install", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['r']
-        label = "<b>%s</b>" % ngettext(
-            "Package to remove", "Packages to remove", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Package to remove",
+                                       "Packages to remove", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['ri']
-        label = "<b>%s</b>" % ngettext(
-            "Package to reinstall", "Packages to reinstall", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Package to reinstall",
+                                       "Packages to reinstall", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['li']
-        label = "<b>%s</b>" % ngettext(
-            "RPM file to install", "RPM files to install", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("RPM file to install",
+                                       "RPM files to install", len(pkg_list))
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         grps = self.queue.groups['i']
-        label = "<b>%s</b>" % ngettext(
-            "Group to install", "Groups to install", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Group to install", "Groups to install",
+                                       len(pkg_list))
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         grps = self.queue.groups['r']
-        label = "<b>%s</b>" % ngettext(
-            "Group to remove", "Groups to remove", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Group to remove", "Groups to remove",
+                                       len(pkg_list))
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         self.populate_list_downgrade()
@@ -158,13 +158,12 @@ class QueueView(Gtk.TreeView):
 
     def populate_list_downgrade(self):
         pkg_list = self.queue.packages['do']
-        label = "<b>%s</b>" % ngettext(
-            "Package to downgrade", "Packages to downgrade", len(pkg_list))
+        label = "<b>%s</b>" % ngettext("Package to downgrade",
+                                       "Packages to downgrade", len(pkg_list))
         if len(pkg_list) > 0:
             parent = self.store.append(None, [label, ""])
             for pkg in pkg_list:
                 item = self.store.append(parent,
                                          [str(pkg.downgrade_po), pkg.summary])
                 self.store.append(
-                    item, [_("<b>Downgrade to</b> %s ") %
-                           str(pkg), ""])
+                    item, [_("<b>Downgrade to</b> %s ") % str(pkg), ""])
