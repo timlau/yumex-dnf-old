@@ -15,7 +15,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel >= 3.8
-BuildRequires: make
+BuildRequires: meson
 BuildRequires: python3-libsass
 BuildRequires: libappstream-glib
 
@@ -36,13 +36,11 @@ Graphical package tool for maintain packages on the system
 
 
 %build
-make %{?_smp_mflags}
+%meson
+%meson_build
 
 %install
-make install PYTHON=%{__python3} DESTDIR=%{buildroot} DATADIR=%{_datadir}
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}-local.desktop
-appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
+%meson_install
 
 %find_lang %name
 
@@ -65,7 +63,6 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/%{name}
 %{_bindir}/%{name}*
 %{python3_sitelib}/%{appname}/
-%{python3_sitelib}/yumex_dnf-*.egg-info
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{name}.metainfo.xml

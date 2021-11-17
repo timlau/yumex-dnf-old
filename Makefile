@@ -1,7 +1,7 @@
 APPNAME = yumex-dnf
 DATADIR = /usr/share
 PYTHON = python3 
-SUBDIRS = gfx misc po
+SUBDIRS = misc po
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
 VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
@@ -13,34 +13,15 @@ GIT_MASTER=develop
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 
-all: build
 
-$(SUBDIRS):
-	$(MAKE) -C $@ 
-
-INSTALL_TARGETS = $(SUBDIRS:%=install-%)
-$(INSTALL_TARGETS):
-	$(MAKE) -C $(@:install-%=%) install DESTDIR=$(DESTDIR) DATADIR=$(DATADIR)
-
-CLEAN_TARGETS = $(SUBDIRS:%=clean-%)
-$(CLEAN_TARGETS):
-	$(MAKE) -C $(@:clean-%=%) clean
-
-build: $(SUBDIRS)
-	$(PYTHON) setup.py build
-
-install: all $(INSTALL_TARGETS)
-	$(PYTHON) setup.py install --skip-build --root $(DESTDIR) --install-data=$(DATADIR)/$(APPNAME)
-
-clean: $(CLEAN_TARGETS)
-	$(PYTHON) setup.py clean
+clean: 
 	-rm -f *.tar.gz
 	-rm -rf build
-	-rm -rf dist
+	-rm -rf .build
 	
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client python3-libsass
+	@sudo dnf install python3-devel python3-gobject transifex-client python3-libsass meson
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -159,8 +140,7 @@ status-checkupdates:
 status-run:
 	cd dbus && ./dbus_status.py -v -d
 
-.PHONY: all archive install clean build
-.PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
+.PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
 .PHONY: test-copr	
 	
