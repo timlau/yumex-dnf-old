@@ -28,7 +28,7 @@ install: build
 	install -m644 $(APPNAME).desktop $(DESTDIR)$(DATADIR)/applications/.
 	install -m644 $(APPNAME)-local.desktop $(DESTDIR)$(DATADIR)/applications/.
 	install -m644 $(APPNAME)-updater.desktop $(DESTDIR)$(DATADIR)/$(APPNAME)/.
-	install -m644 $(APPNAME).appdata.xml $(DESTDIR)$(DATADIR)/appdata/.
+	install -m644 $(APPNAME).appdata.xml $(DESTDIR)$(DATADIR)/metainfo/$(APPNAME).metainfo.xml
 	install -m644 themes/* $(DESTDIR)$(DATADIR)/$(APPNAME)/themes/.
 
 .PHONY: all install clean build sass
