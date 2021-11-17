@@ -65,6 +65,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/%{name}
 %{_bindir}/%{name}*
 %{python3_sitelib}/%{appname}/
+%{python3_sitelib}/yumex_dnf-*.egg-info
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{name}.metainfo.xml
