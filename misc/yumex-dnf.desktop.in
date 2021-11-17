@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=Yum Extender (DNF)
+_Name=Yum Extender
 _Comment=Install, update and remove applications
 Categories=System;Settings;X-Red-Hat-Base;X-Fedora;
 Icon=yumex-dnf

@@ -27,10 +27,18 @@
   </description>
 
   <screenshots>
-    <screenshot type="default" width="1202" height="899">https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-01.png</screenshot>
-    <screenshot type="default" width="1202" height="899">https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-02.png</screenshot>
-    <screenshot type="default" width="1202" height="899">https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-03.png</screenshot>
-    <screenshot type="default" width="1202" height="899">https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-04.png</screenshot>
+    <screenshot type="default">
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-01.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-02.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-03.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-04.png</image>
+    </screenshot>
   </screenshots>
   <launchable type="desktop-id">yumex-dnf.desktop</launchable>
   <url type="homepage">https://github.com/timlau/yumex-dnf</url>

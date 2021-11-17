@@ -24,7 +24,7 @@ install: build
 	install -d $(DESTDIR)$(DATADIR)/applications
 	install -d $(DESTDIR)$(DATADIR)/$(APPNAME)
 	install -d $(DESTDIR)$(DATADIR)/$(APPNAME)/themes
-	install -d $(DESTDIR)$(DATADIR)/appdata
+	install -d $(DESTDIR)$(DATADIR)/metainfo
 	install -m644 $(APPNAME).desktop $(DESTDIR)$(DATADIR)/applications/.
 	install -m644 $(APPNAME)-local.desktop $(DESTDIR)$(DATADIR)/applications/.
 	install -m644 $(APPNAME)-updater.desktop $(DESTDIR)$(DATADIR)/$(APPNAME)/.

@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=Yumex Package Installer
+_Name=Yum Extender Package Installer
 _Comment=Install local packages on system
 Categories=System;
 Exec=/usr/bin/yumex-dnf --install %F

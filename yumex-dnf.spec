@@ -17,6 +17,7 @@ BuildRequires: intltool
 BuildRequires: python3-devel >= 3.8
 BuildRequires: make
 BuildRequires: python3-libsass
+BuildRequires: libappstream-glib
 
 Requires: python3-dnfdaemon >= 0.3.10
 Requires: python3-gobject >= 3.10
@@ -37,11 +38,11 @@ Graphical package tool for maintain packages on the system
 %build
 make %{?_smp_mflags}
 
-
 %install
 make install PYTHON=%{__python3} DESTDIR=%{buildroot} DATADIR=%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}-local.desktop
+appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
 
 %find_lang %name
 
@@ -66,7 +67,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{python3_sitelib}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
-%{_datadir}/appdata/*.xml
+%{_metainfodir}/%{name}.metainfo.xml
 
 %changelog
 
