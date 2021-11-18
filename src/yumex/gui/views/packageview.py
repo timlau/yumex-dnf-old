@@ -20,7 +20,7 @@
 import logging
 
 from gi.repository import GObject, Gtk
-from yumex.common import TimeFunction, _, doGtkEvents
+from yumex.common import timer, _, do_gtk_events
 
 from yumex.gui.views.selectionview import SelectionView
 
@@ -302,7 +302,7 @@ class PackageView(SelectionView):
         else:
             cell.set_property('visible', False)
 
-    @TimeFunction
+    @timer
     def populate(self, pkgs):
         self.freeze_child_notify()
         self.set_model(None)
@@ -313,7 +313,7 @@ class PackageView(SelectionView):
             for po in sorted(pkgs, key=lambda po: po.name):
                 i += 1
                 if i % 500:  # Handle Gtk event, so gui dont freeze
-                    doGtkEvents()
+                    do_gtk_events()
                 self.store.append([po, str(po)])
         self.thaw_child_notify()
         # reset the selection column header selection state

@@ -45,27 +45,27 @@ logger = logging.getLogger('yumex.common')
 
 
 class QueueEmptyError(Exception):
-    def __init__(self):
-        super(QueueEmptyError, self).__init__()
+    pass
 
 
 class TransactionBuildError(Exception):
     def __init__(self, msgs):
-        super(TransactionBuildError, self).__init__()
+        super().__init__()
         self.msgs = msgs
 
 
 class TransactionSolveError(Exception):
     def __init__(self, msgs):
-        super(TransactionSolveError, self).__init__()
+        super().__init__()
         self.msgs = msgs
 
 
 def dbus_dnfsystem(cmd):
-    subprocess.call('/usr/bin/dbus-send --system --print-reply '
-                    '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.%s' %
-                    cmd,
-                    shell=True)
+    subprocess.run('/usr/bin/dbus-send',
+                   '--system', '--print-reply '
+                   '--dest=org.baseurl.DnfSystem',
+                   f'/org.baseurl.DnfSystem.{cmd}',
+                   check=False)
 
 
 def load_ui(ui_file):
@@ -90,11 +90,11 @@ def list_to_string(pkg_list, first_delimitier, delimiter):
 
 
 def pkg_id_to_full_name(pkg_id):
-    (n, e, v, r, a, repo_id) = to_pkg_tuple(pkg_id)
+    (n, e, v, r, a, _) = to_pkg_tuple(pkg_id)
     if e and e != '0':
-        return "%s-%s:%s-%s.%s" % (n, e, v, r, a)
+        return f"{n}-{e}:{v}-{r}.{a}"
     else:
-        return "%s-%s-%s.%s" % (n, v, r, a)
+        return f"{n}-{v}-{r}.{a}"
 
 
 def color_floats(spec):
@@ -109,12 +109,12 @@ def get_color(spec):
     return rgba
 
 
-def rgb_to_hex(r, g, b):
-    if isinstance(r, float):
-        r *= 255
-        g *= 255
-        b *= 255
-    return "#{0:02X}{1:02X}{2:02X}".format(int(r), int(g), int(b))
+def rgb_to_hex(red, green, blue):
+    if isinstance(red, float):
+        red *= 255
+        green *= 255
+        blue *= 255
+    return f"#{int(red):#02X}{int(green):#02X}{int(blue):#02X}"
 
 
 def color_to_hex(color):
@@ -148,19 +148,16 @@ def get_style_color(widget):
     return color
 
 
-def doGtkEvents():
-    """
-
-    """
+def do_gtk_events():
     while Gtk.events_pending():  # process Gtk events
         Gtk.main_iteration()
 
 
-def ExceptionHandler(func):
+def exception_handler(func):
     """
     This decorator catch yum backed exceptions
     """
-    def newFunc(*args, **kwargs):
+    def new_func(*args, **kwargs):
         try:
             rc = func(*args, **kwargs)
             return rc
@@ -168,28 +165,28 @@ def ExceptionHandler(func):
             base = args[0]  # get current class
             base.exception_handler(e)
 
-    newFunc.__name__ = func.__name__
-    newFunc.__doc__ = func.__doc__
-    newFunc.__dict__.update(func.__dict__)
-    return newFunc
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
 
 
-def TimeFunction(func):
+def timer(func):
     """
     This decorator show the execution time of a function in the debug log
     """
-    def newFunc(*args, **kwargs):
-        t_start = time.time()
+    def new_func(*args, **kwargs):
+        t_start = time.perf_counter()
         rc = func(*args, **kwargs)
-        t_end = time.time()
+        t_end = time.perf_counter()
         name = func.__name__
-        logger.debug("%s took %.2f sec", name, t_end - t_start)
+        logger.debug("%s took %.4f sec", name, t_end - t_start)
         return rc
 
-    newFunc.__name__ = func.__name__
-    newFunc.__doc__ = func.__doc__
-    newFunc.__dict__.update(func.__dict__)
-    return newFunc
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
 
 
 def format_number(number, SI=0, space=' '):
@@ -254,13 +251,13 @@ def logger_setup(logroot='yumex',
                  logfmt='%(asctime)s: %(message)s',
                  loglvl=logging.INFO):
     """Setup Python logging."""
-    logger = logging.getLogger(logroot)
-    logger.setLevel(loglvl)
+    log = logging.getLogger(logroot)
+    log.setLevel(loglvl)
     formatter = logging.Formatter(logfmt, '%H:%M:%S')
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     handler.propagate = False
-    logger.addHandler(handler)
+    log.addHandler(handler)
 
 
 def is_gnome():
@@ -356,7 +353,7 @@ class Config(object):
             logger.info("creating default config file : %s", self.conf_file)
             first_read = True
         else:
-            self.parser.read_file(open(self.conf_file, "r"))
+            self.parser.read_file(open(self.conf_file, "r", encoding="UTF-8"))
         if not self.parser.has_section('yumex'):
             self.parser.add_section('yumex')
         self.conf.populate(self.parser, 'yumex')
@@ -365,9 +362,9 @@ class Config(object):
             self.write()
 
     def write(self):
-        fp = open(self.conf_file, "w")
-        self.conf.write(fp, "yumex", Config.WRITE_ALWAYS)
-        fp.close()
+        out_file = open(self.conf_file, "w", encoding="UTF-8")
+        self.conf.write(out_file, "yumex", Config.WRITE_ALWAYS)
+        out_file.close()
 
 
 CONFIG = Config()

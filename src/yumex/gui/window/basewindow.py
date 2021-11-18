@@ -246,11 +246,11 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         win = self.get_window()
         if win is not None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        misc.doGtkEvents()
+        misc.do_gtk_events()
 
     def _set_normal_cursor(self):
         """Set Normal cursor in main window."""
         win = self.get_window()
         if win is not None:
             win.set_cursor(None)
-        misc.doGtkEvents()
+        misc.do_gtk_events()

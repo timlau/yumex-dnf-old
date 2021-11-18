@@ -24,7 +24,7 @@ from gi.repository import Gdk
 
 import yumex.common.const as const
 from yumex.backend import Backend
-from yumex.common import (CONFIG, ExceptionHandler, TimeFunction, _,
+from yumex.common import (CONFIG, exception_handler, timer, _,
                           format_number, ngettext, pkg_id_to_full_name,
                           to_pkg_tuple)
 
@@ -66,7 +66,7 @@ class DnfPackage:
     def fullname(self):
         return pkg_id_to_full_name(self.pkg_id)
 
-    @ExceptionHandler
+    @exception_handler
     def get_attribute(self, attr):
         """Get a given attribute for a package."""
         return self.backend.GetAttribute(self.pkg_id, attr)
@@ -134,17 +134,17 @@ class DnfPackage:
         return rgba
 
     @property
-    @ExceptionHandler
+    @exception_handler
     def downgrades(self):
         return self.backend.get_downgrades(self.pkg_id)
 
     @property
-    @ExceptionHandler
+    @exception_handler
     def updateinfo(self):
         return self.get_attribute('updateinfo')
 
     @property
-    @ExceptionHandler
+    @exception_handler
     def requirements(self):
         return self.get_attribute('requires')
 
@@ -285,13 +285,13 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         except dnfdaemon.client.LockedError:
             return False, 'locked-by-other'
 
-    @ExceptionHandler
+    @exception_handler
     def quit(self):
         """Quit the dnf backend daemon."""
         self.Unlock()
         self.Exit()
 
-    @ExceptionHandler
+    @exception_handler
     def reload(self):
         """Reload the dnf backend daemon."""
         self.Unlock()  # Release the lock
@@ -335,7 +335,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             po_list.append(DnfPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
-    @TimeFunction
+    @timer
     def _make_pkg_object_with_attr(self, pkgs):
         """Make list of Packages from a list of pkg_ids & attrs.
 
@@ -372,8 +372,8 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             po_list.append(DnfPackage(pkg_values, action, self))
         return self.cache.find_packages(po_list)
 
-    @ExceptionHandler
-    @TimeFunction
+    @exception_handler
+    @timer
     def get_packages(self, flt):
         """Get packages for a given pkg filter."""
         logger.debug('get-packages : %s ', flt)
@@ -395,19 +395,19 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         logger.debug(f' number of packages = {len(result)}')
         return result
 
-    @ExceptionHandler
+    @exception_handler
     def get_downgrades(self, pkg_id):
         """Get downgrades for a given pkg_id"""
         pkgs = self.GetAttribute(pkg_id, 'downgrades')
         return self._build_package_list(pkgs)
 
-    @ExceptionHandler
+    @exception_handler
     def get_repo_ids(self, flt):
         """Get repository ids"""
         repos = self.GetRepositories(flt)
         return repos
 
-    @ExceptionHandler
+    @exception_handler
     def get_repositories(self, flt='*'):
         """Get a list of repo attributes to populate repo view."""
         repo_list = []
@@ -419,8 +419,8 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             repo_list.append([repo['enabled'], repo_id, repo['name'], False])
         return sorted(repo_list, key=lambda elem: elem[1])
 
-    @TimeFunction
-    @ExceptionHandler
+    @timer
+    @exception_handler
     def get_packages_by_name(self, name_key, newest_only):
         """Get packages by a given name wildcard.
 
@@ -431,7 +431,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         pkgs = self.GetPackagesByName(name_key, attrs, newest_only)
         return self._make_pkg_object_with_attr(pkgs)
 
-    @ExceptionHandler
+    @exception_handler
     def search(self, search_attrs, keys, match_all, newest_only, tags):
         """Search given pkg attributes for given keys.
 
@@ -446,13 +446,13 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
                            tags)
         return self._make_pkg_object_with_attr(pkgs)
 
-    @ExceptionHandler
+    @exception_handler
     def get_groups(self):
         """Get groups/categories from dnf daemon backend"""
         result = self.GetGroups()
         return result
 
-    @TimeFunction
+    @timer
     def get_group_packages(self, grp_id, grp_flt):
         """Get a list of packages from a grp_id and a group filter.
 

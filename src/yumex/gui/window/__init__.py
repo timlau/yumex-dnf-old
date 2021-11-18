@@ -364,7 +364,7 @@ class Window(BaseWindow):
         self.backend.reload()
         self.set_working(False, splash=True)
 
-    @misc.ExceptionHandler
+    @misc.exception_handler
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True, splash=True)
@@ -570,7 +570,7 @@ class Window(BaseWindow):
         self._reset()
         return
 
-    @misc.ExceptionHandler
+    @misc.exception_handler
     def _process_actions_installmode(self, action, package, always_yes,
                                      app_quit):
         """Process the pending actions from the command line.
@@ -621,7 +621,7 @@ class Window(BaseWindow):
             self.release_root_backend(quit_dnfdaemon=True)
             self.app.quit()
 
-    @misc.ExceptionHandler
+    @misc.exception_handler
     def _process_actions(self, from_queue=True):
         """Process the current actions in the queue.
 
