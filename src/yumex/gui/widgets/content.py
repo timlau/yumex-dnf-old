@@ -19,7 +19,6 @@
 
 import logging
 from gi.repository import GObject
-from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.widget')
 
@@ -44,11 +43,11 @@ class Content(GObject.GObject):
         """Set the active page."""
         self._stack.set_visible_child_name(page)
 
-    def on_menu_select(self, widget, page):
+    def on_menu_select(self, _widget, page):
         """Main menu page entry is seleceted"""
         self.select_page(page)
 
-    def on_switch(self, widget, data):
+    def on_switch(self, _widget, _data):
         """The active page is changed."""
         child = self._stack.get_visible_child_name()
         self.emit('page-changed', child)

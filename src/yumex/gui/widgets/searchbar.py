@@ -19,7 +19,7 @@
 
 import logging
 from gi.repository import GLib, GObject, Gtk
-from yumex.common import CONFIG, _
+from yumex.common import CONFIG
 
 logger = logging.getLogger('yumex.gui.widget')
 G_TRUE = GLib.Variant.new_boolean(True)
@@ -64,7 +64,7 @@ class SearchBar(GObject.GObject):
         self._spinner.stop()
         # setup field checkboxes
         for key in SearchBar.FIELDS:
-            wid = self.win.get_ui('sch_fld_%s' % key)
+            wid = self.win.get_ui(f'sch_fld_{key}')
             if key in self.search_fields:
                 wid.set_active(True)
             wid.connect('toggled', self.on_fields_changed, key)
@@ -72,7 +72,7 @@ class SearchBar(GObject.GObject):
         self._set_fields_sensitive(self.search_type == 'fields')
         # setup search type radiobuttons
         for key in SearchBar.TYPES:
-            wid = self.win.get_ui('sch_opt_%s' % key)
+            wid = self.win.get_ui(f'sch_opt_{key}')
             if key == self.search_type:
                 wid.set_active(True)
             wid.connect('toggled', self.on_type_changed, key)
@@ -92,14 +92,14 @@ class SearchBar(GObject.GObject):
     def _set_fields_sensitive(self, state=True):
         """Set sensitivity of field checkboxes."""
         for key in SearchBar.FIELDS:
-            wid = self.win.get_ui('sch_fld_%s' % key)
+            wid = self.win.get_ui(f'sch_fld_{key}')
             wid.set_sensitive(state)
 
     def _get_active_field(self):
         """Get the active search fields, based on checkbox states."""
         active = []
         for key in SearchBar.FIELDS:
-            wid = self.win.get_ui('sch_fld_%s' % key)
+            wid = self.win.get_ui(f'sch_fld_{key}')
             if wid.get_active():
                 active.append(key)
         return active
@@ -109,7 +109,7 @@ class SearchBar(GObject.GObject):
         self._entry.grab_focus()
         self._entry.emit('move-cursor', Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
-    def on_options_button(self, widget):
+    def on_options_button(self, _widget):
         """Search Option button is toggled."""
         if self.opt_popover.get_visible():
             self.opt_popover.hide()
@@ -117,7 +117,7 @@ class SearchBar(GObject.GObject):
         else:
             self.opt_popover.show_all()
 
-    def on_toggle(self, widget=None):
+    def on_toggle(self, _widget=None):
         """Search Toggle button is toggled."""
         self._bar.set_search_mode(not self._bar.get_search_mode())
         if self._bar.get_search_mode():
@@ -134,17 +134,17 @@ class SearchBar(GObject.GObject):
             else:
                 self._set_fields_sensitive(False)
 
-    def on_fields_changed(self, widget, key):
+    def on_fields_changed(self, _widget, _key):
         """Search fields is changed."""
         self.search_fields = self._get_active_field()
         CONFIG.conf.search_fields = self.search_fields
 
-    def on_entry_activate(self, widget):
+    def on_entry_activate(self, _widget):
         """Seach entry is activated"""
         # make sure search option is hidden
         self.signal()
 
-    def on_entry_icon(self, widget, icon_pos, event):
+    def on_entry_icon(self, _widget, icon_pos, _event):
         """Search icon press callback."""
         # clear icon pressed
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:

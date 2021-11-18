@@ -75,7 +75,7 @@ class Progress:
         if self.label.get_text() == "":
             self.message(_("Getting Package Metadata"))
 
-    def set_progress(self, frac, label=None):
+    def set_progress(self, frac, _label=None):
         if 0.0 <= frac <= 1.0:
             self._show_infobar()
             self.progress.set_fraction(frac)

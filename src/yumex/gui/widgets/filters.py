@@ -20,7 +20,7 @@
 import logging
 import yumex.common.const as const
 from gi.repository import GObject, Gtk
-from yumex.common import CONFIG, _
+from yumex.common import CONFIG
 
 logger = logging.getLogger('yumex.gui.widget')
 
@@ -50,7 +50,7 @@ class ExtraFilters(GObject.GObject):
     def popup(self):
         self._on_button(self._button)
 
-    def _on_button(self, button):
+    def _on_button(self, _button):
         self._popover.show_all()
 
     def _setup_archs(self):
@@ -59,14 +59,14 @@ class ExtraFilters(GObject.GObject):
             CONFIG.write()
         self.current_archs = set(CONFIG.conf.archs)
         for arch in self.all_archs:
-            cb = Gtk.CheckButton(label=arch)
-            self._arch_box.pack_start(cb, True, True, 0)
+            button = Gtk.CheckButton(label=arch)
+            self._arch_box.pack_start(button, True, True, 0)
             if arch in CONFIG.conf.archs:
-                cb.set_active(True)
+                button.set_active(True)
             else:
-                cb.set_active(False)
-            cb.show()
-            cb.connect('toggled', self._on_arch)
+                button.set_active(False)
+            button.show()
+            button.connect('toggled', self._on_arch)
 
     def _on_arch(self, widget):
         state = widget.get_active()
@@ -102,7 +102,7 @@ class FilterSidebar(GObject.GObject):
         self._lb.unselect_all()
         self._lb.connect('row-selected', self.on_toggled)
 
-    def on_toggled(self, widget, row):
+    def on_toggled(self, _widget, row):
         """Active filter is changed."""
         if row:
             ndx = row.get_index()
@@ -138,7 +138,7 @@ class Filters(GObject.GObject):
         self.current = 'updates'
         self._sidebar.connect('sidebar-changed', self.on_toggled)
 
-    def on_toggled(self, widget, flt):
+    def on_toggled(self, _widget, flt):
         """Active filter is changed."""
         self.current = flt
         self.emit('filter-changed', flt)

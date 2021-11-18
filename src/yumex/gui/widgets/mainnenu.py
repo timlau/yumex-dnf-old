@@ -54,7 +54,7 @@ class MainMenu(Gio.Menu):
 
     def _add_menu(self, menu, label, name):
         # menu
-        menu.append(label, 'win.{}'.format(name))
+        menu.append(label, f'win.{name}')
         # action
         action = Gio.SimpleAction.new(name, None)
         self.win.add_action(action)
@@ -72,5 +72,5 @@ class MainMenu(Gio.Menu):
             data = True
         self.emit('menu-changed', action_name, data)
 
-    def _on_button(self, button):
+    def _on_button(self, _button):
         self._popover.show_all()
