@@ -18,17 +18,18 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 """ Main launcher """
-# We need this for else is Gtk 4.0 selected by default
-import gi  # isort:skip
-
-gi.require_version('Gtk', '3.0')  # isort:skip
-gi.require_version('Notify', '0.7')  # isort:skip
-from gi.repository import Gtk  # type: ignore isort:skip
+# pylint: disable=broad-except, unused-import, wrong-import-position
 
 import signal
 import subprocess
 import sys
 import traceback
+import gi  # isort:skip
+
+# We need this for else is Gtk 4.0 selected by default
+gi.require_version('Gtk', '3.0')  # isort:skip
+gi.require_version('Notify', '0.7')  # isort:skip
+from gi.repository import Gtk  # type: ignore isort:skip
 
 from yumex import YumexApplication
 
@@ -36,7 +37,7 @@ here = sys.path[0]
 if here != '/usr/bin':
     # git checkout
     sys.path[0] = here
-    print("set PYTHONPATH to %s" % here)
+    print(f"set PYTHONPATH to {here}")
 
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -56,6 +57,6 @@ except Exception as e:
             '/usr/bin/dbus-send --system --print-reply '
             '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
             shell=True)
-    except:
+    except Exception:
         pass
 sys.exit(1)
