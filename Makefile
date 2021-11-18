@@ -100,10 +100,10 @@ rpm:
 
 test-builds:
 	@$(MAKE) test-release
-	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
-	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
-	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
-	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@-ssh timlau@fedorapeople.org rm public_html/files/yumex/*
+	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau@fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
+	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau@fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau@fedorapeople.org:public_html/files/yumex/.
 
 test-upd:
 	@$(MAKE) test-release
