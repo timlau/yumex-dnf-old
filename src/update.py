@@ -18,6 +18,8 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+# pylint: disable=broad-except, unused-import, wrong-import-position
+
 # We need this for else is Gtk 4.0 selected by default
 import gi  # isort:skip
 
@@ -35,7 +37,7 @@ here = sys.path[0]
 if here != '/usr/bin':
     # git checkout
     sys.path[0] = here
-    print("set PYTHONPATH to %s" % here)
+    print(f"set PYTHONPATH to {here}")
 
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
