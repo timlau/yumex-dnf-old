@@ -17,26 +17,14 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import gi  # isort:skip
-
-gi.require_version("Gtk", "3.0")  # isort:skip
-gi.require_version("Notify", "0.7")  # isort:skip
-from gi.repository import Gdk, Gio, GLib, Gtk  # isort:skip
-
 import argparse
-import datetime
 import logging
-import os.path
-import re
-import shutil
-import subprocess
 import sys
 
-from pathlib import Path
+import gi  # isort:skip
+from gi.repository import Gio, Gtk  # isort:skip
 
-import yumex.common.const as const
-from yumex.common import CONFIG, Config, _, dbus_dnfsystem, ngettext, logger_setup
-
+from yumex.common import const, CONFIG, _, dbus_dnfsystem, logger_setup
 from yumex.gui.window import Window
 
 logger = logging.getLogger("yumex")
@@ -59,6 +47,7 @@ class YumexApplication(Gtk.Application):
         self.dont_close = False
         self.window = None
         self.install_mode = False
+        self.current_args = None
 
     def on_activate(self, app):
         if not self.running:
@@ -75,7 +64,7 @@ class YumexApplication(Gtk.Application):
             if self.install_mode and self.window.can_close():
                 self.window.rerun_installmode(self.current_args)
 
-    def on_command_line(self, app, args):
+    def on_command_line(self, _, args):
         parser = argparse.ArgumentParser(prog="app")
         parser.add_argument("-d", "--debug", action="store_true")
         parser.add_argument("-y",
@@ -129,7 +118,7 @@ class YumexApplication(Gtk.Application):
         self.activate()
         return 0
 
-    def on_shutdown(self, app):
+    def on_shutdown(self, _):
         if self.window and not self.install_mode:
             CONFIG.conf.info_paned = self.window.main_paned.get_position()
             if self.window.cur_maximized:
