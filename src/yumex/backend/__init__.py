@@ -45,17 +45,17 @@ class Backend:
         else:
             return None
 
-    def exception_handler(self, e):
+    def exception_handler(self, exc):
         """
         send exceptions to the frontend
         """
-        self.frontend.exception_handler(e)
+        self.frontend.exception_handler(exc)
 
     def get_packages(self, pkg_filter):
         """ Get a list of Package objects based on a filter
         ('installed', 'available'...)
         """
-        pkgs = self.cache._get_packages(pkg_filter)
+        pkgs = self.cache._get_packages(pkg_filter) # pylint: disable=protected-access
         return pkgs
 
 
@@ -112,8 +112,8 @@ class Filters:
 
     def run(self, pkgs):
         flt_pkgs = pkgs
-        for name in self._filters:
-            flt_pkgs = self._filters[name].run(flt_pkgs)
+        for flt in self._filters.values():
+            flt_pkgs =flt.run(flt_pkgs)
         return flt_pkgs
 
     def get(self, name):
@@ -158,8 +158,6 @@ class PackageCache:
         return str(pkg_filter) in self._populated
 
     def populate(self, pkg_filter, pkgs):
-        """
-        """
         self.find_packages(pkgs)
         self._populated.append(str(pkg_filter))
 
