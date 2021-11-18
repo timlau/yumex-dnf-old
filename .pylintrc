@@ -82,6 +82,7 @@ disable=wrong-import-position,
         wrong-import-order,
         missing-function-docstring,
         missing-module-docstring,
+        missing-class-docstring,
         logging-fstring-interpolation,
         fixme
 
@@ -203,7 +204,8 @@ good-names=i,
            ex,
            Run,
            _,
-           po,n,e,r,v,a
+           po,n,e,r,v,a,
+           rc
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted

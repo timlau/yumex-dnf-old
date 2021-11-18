@@ -37,10 +37,12 @@ class BaseYumex:
         self._root_backend = None
         self._root_locked = False
         self.is_working = False
+        self.infobar = None
+        self.error_dialog = None
 
-    def set_working(self, state, insensitive=False):
-        """Set the working state."""
-        self.is_working = state
+    def set_working(self, state, insensitive=True, splash=False):
+        """Set the working state. (implement in subclass)"""
+        raise NotImplementedError
 
     def _check_cache_expired(self, cache_type):
         time_fmt = '%Y-%m-%d %H:%M'
@@ -139,9 +141,9 @@ class BaseYumex:
         """
         close = True
         msg = str(e)
-        logger.error('BASE EXCEPTION : %s ' % msg)
+        logger.error(f'BASE EXCEPTION : {msg}')
         err, errmsg = self._parse_error(msg)
-        logger.debug('BASE err:  [%s] - msg: %s' % (err, errmsg))
+        logger.debug(f'BASE err:  [{err}] - msg: {errmsg}')
         if err == 'LockedError':
             errmsg = 'DNF is locked by another process.\n' \
                 '\nYum Extender will exit'
@@ -158,7 +160,7 @@ class BaseYumex:
         if close:
             try:
                 self.release_root_backend(quit_dnfdaemon=True)
-            except:
+            except Exception:  # pylint: disable=broad-except
                 pass
         sys.exit(1)
 
