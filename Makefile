@@ -29,8 +29,8 @@ sass:
 
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject transifex-client python3-libsass meson
-
+	@sudo dnf build-dep yumex-dnf.spec
+	
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
