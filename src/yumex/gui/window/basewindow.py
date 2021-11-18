@@ -17,7 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import gi  # isort:skip
+import gi  # pylint: disable=unused-import
 from gi.repository import Gdk, GLib, Gtk  # isort:skip
 
 import logging
@@ -26,7 +26,6 @@ import re
 import sys
 
 import yumex.common.const as const
-import yumex.gui.dialogs as dialogs
 import yumex.common as misc
 
 from yumex.common import CONFIG
@@ -38,6 +37,7 @@ from yumex.base import BaseYumex
 logger = logging.getLogger('yumex')
 
 
+# pylint: disable=no-member
 class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     def __init__(self, app):
         Gtk.ApplicationWindow.__init__(self,
@@ -51,18 +51,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         self.set_icon(icon)
         self.ui = Gtk.Builder()
         self.ui.set_translation_domain('yumex-dnf')
-        try:
-            self.ui.add_from_file(const.UI_DIR + "/yumex.ui")
-        except:
-            raise
-            # noinspection PyUnreachableCode
-            dialogs.show_information(
-                self, 'GtkBuilder ui file not found : ' + const.DATA_DIR +
-                '/yumex.ui')
-            sys.exit()
+        self.ui.add_from_file(const.UI_DIR + "/yumex.ui")
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
         self.error_dialog = ErrorDialog(self)
+        self.cur_height = None
+        self.cur_width = None
+        self.cur_maximized = None
 
     def get_ui(self, widget_name):
         return self.ui.get_object(widget_name)
@@ -75,7 +70,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             return True
 
     # noinspection PyUnusedLocal
-    def on_delete_event(self, *args):
+    def on_delete_event(self, *_args):
         if self.is_working:
             self.iconify()
             return True
@@ -94,17 +89,20 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             context = Gtk.StyleContext()
             context.add_provider_for_screen(screen, css_provider,
                                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
-            logger.debug('loading custom styling : %s', css_fn)
+            logger.debug(f'loading custom styling : {css_fn}')
 
     def load_colors(self, theme_fn):
         color_table = {}
-        colors = 'color_install', 'color_update', 'color_downgrade', 'color_normal', 'color_obsolete'
+        colors = [
+            'color_install', 'color_update', 'color_downgrade', 'color_normal',
+            'color_obsolete'
+        ]
         regex = re.compile(r'@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;')
         if misc.check_dark_theme():
             backup_color = '#ffffff'
         else:
             backup_color = '#000000'
-        with open(theme_fn, 'r') as reader:
+        with open(theme_fn, 'r', encoding='UTF-8') as reader:
             lines = reader.readlines()
         for line in lines:
             if line.startswith("@define-color"):
@@ -132,7 +130,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def load_theme(self):
         theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
-        logger.debug('looking for %s', theme_fn)
+        logger.debug(f'looking for {theme_fn}')
         if os.path.exists(theme_fn):
             self.apply_css(theme_fn)
             self.load_colors(theme_fn)
@@ -146,14 +144,14 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         css_fn = None
         theme = gtk_settings.props.gtk_theme_name
         logger.debug(f'current theme : {theme}')
-        css_postfix = '%s/apps/yumex.css' % theme
+        css_postfix = f'{theme}/apps/yumex.css'
         for css_prefix in [
                 os.path.expanduser('~/.themes'), '/usr/share/themes'
         ]:
-            fn = os.path.join(css_prefix, css_postfix)
-            logger.debug('looking for %s', fn)
-            if os.path.exists(fn):
-                css_fn = fn
+            css_file = os.path.join(css_prefix, css_postfix)
+            logger.debug(f'looking for {css_file}')
+            if os.path.exists(css_file):
+                css_fn = css_file
                 break
         if css_fn:
             self.apply_css(css_fn)
@@ -161,12 +159,12 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.load_theme()
 
     # noinspection PyUnusedLocal
-    def on_window_state(self, widget, event):
+    def on_window_state(self, _widget, event):
         # save window current maximized state
         self.cur_maximized = event.new_window_state & \
             Gdk.WindowState.MAXIMIZED != 0
 
-    def on_window_changed(self, widget, data):
+    def on_window_changed(self, widget, _data):
         size = widget.get_size()
         if isinstance(size, tuple):
             self.cur_height = size[1]
@@ -181,9 +179,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """
         close = True
         msg = str(e)
-        logger.error('EXCEPTION : %s ' % msg)
+        logger.error(f'EXCEPTION : {msg} ')
         err, errmsg = self._parse_error(msg)
-        logger.debug('err:  [%s] - msg: %s' % (err, errmsg))
+        logger.debug(f'err:  [{err}] - msg: {errmsg}')
         if err == 'LockedError':
             errmsg = 'dnf is locked by another process \n' \
                      '\nYum Extender will exit'
@@ -205,7 +203,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         if close:
             try:
                 self.release_root_backend(quit_dnfdaemon=True)
-            except:
+            except Exception:  #pylint: disable=broad-except
                 pass
         Gtk.main_quit()
         sys.exit(1)
@@ -235,13 +233,13 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
                 self._disable_buttons(True)
 
     def _disable_buttons(self, state):
-        WIDGETS_INSENSITIVE = [
+        insensitive_widgets = [
             'left_header', 'right_header', 'package_sidebar', 'content_box'
         ]
-        for widget in WIDGETS_INSENSITIVE:
+        for widget in insensitive_widgets:
             self.ui.get_object(widget).set_sensitive(state)
 
-    def _set_busy_cursor(self, insensitive=False):
+    def _set_busy_cursor(self, _insensitive=False):
         """Set busy cursor in main window."""
         win = self.get_window()
         if win is not None:

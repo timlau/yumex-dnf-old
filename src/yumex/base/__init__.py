@@ -16,7 +16,7 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-
+#pylint: disable=no-member
 import datetime
 import logging
 import sys
@@ -38,7 +38,6 @@ class BaseYumex:
         self._root_locked = False
         self.is_working = False
         self.infobar = None
-        self.error_dialog = None
 
     def set_working(self, state, insensitive=True, splash=False):
         """Set the working state. (implement in subclass)"""

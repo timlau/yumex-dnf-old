@@ -73,7 +73,7 @@ class PackageDetails(GObject.GObject):
         else:
             self.widget.hide()
 
-    def on_toggled(self, listbox, row):
+    def on_toggled(self, _listbox, row):
         if row:
             ndx = row.get_index()
             key = PackageDetails.VALUES[ndx]
@@ -91,7 +91,7 @@ class PackageDetails(GObject.GObject):
             return
         if newline and txt[-1] != '\n':
             txt += '\n'
-        start, end = self._buffer.get_bounds()
+        _, end = self._buffer.get_bounds()
         if style_name:
             style = self.get_style(style_name)
         else:
@@ -110,14 +110,14 @@ class PackageDetails(GObject.GObject):
         self._text.scroll_to_iter(self._buffer.get_start_iter(), 0.0, False,
                                   0.0, 0.0)
 
-    def on_url_event(self, tag, widget, event, iterator):
+    def on_url_event(self, tag, _widget, event, _iterator):
         """ Catch when the user clicks the URL """
         if event.type == Gdk.EventType.BUTTON_RELEASE:
             url = self.url_list[tag.get_property("name")]
             if self._url_handler:
                 self._url_handler(url)
 
-    def on_mouse_motion(self, widget, event, data=None):
+    def on_mouse_motion(self, widget, _event, _data=None):
         """
         Mouse movement handler for TextView
 
@@ -127,7 +127,7 @@ class PackageDetails(GObject.GObject):
         """
         window = widget.get_window(Gtk.TextWindowType.WIDGET)
         # Get x,y pos for widget
-        w, x, y, mask = window.get_pointer()
+        _, x, y, _ = window.get_pointer()
         # convert coords to TextBuffer coords
         x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
         # Get the tags on current pointer location
@@ -179,7 +179,7 @@ class PackageInfo(PackageDetails):
         self.connect('info-changed', self.on_filter_changed)
         self.update()
 
-    def on_filter_changed(self, widget, data):
+    def on_filter_changed(self, _widget, data):
         self.active_filter = data
         self.update()
 
@@ -215,19 +215,20 @@ class PackageInfo(PackageDetails):
             elif self.active_filter == 'deps':
                 self._show_requirements()
             else:
-                logger.error("Package info not found: %s", self.active_filter)
+                logger.error(f"Package info not found: {self.active_filter}")
         self.goto_top()
 
+    # pylint: disable=method-hidden
     def _url_handler(self, url):
-        logger.debug('URL activated: ' + url)
+        logger.debug('URL activated: {url}')
         # just to be sure and prevent shell injection
         if is_url(url):
-            rc = subprocess.call("xdg-open '%s'" % url, shell=True)
+            rc = subprocess.run("xdg-open", f"'{url}'", check=False)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
             if rc != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
-            self.frontend.warning("%s is not an URL" % url)
+            self.frontend.warning(f"%s is not an {url}")  #pylint: disable=no-member
 
     def _get_name_for_url(self):
         return urllib.parse.quote_plus(self.current_package.name)
@@ -247,7 +248,7 @@ class PackageInfo(PackageDetails):
         self.write('\n')
         self.write(_("Links: "), "changelog-header", newline=True)
         self.write('  ', newline=False)
-        url_hp = self.current_package.URL
+        url_hp = self.current_package.url
         self.add_url(url_hp, url_hp, newline=True)
         if self._is_fedora_pkg():
             self.write('  ', newline=False)
@@ -281,6 +282,7 @@ class PackageInfo(PackageDetails):
 
     def _write_update_info(self, upd_info):
         head = ""
+        # pylint: disable=consider-using-f-string
         head += ("%14s " % _("Release")) + ": %(id)s\n"
         head += ("%14s " % _("Type")) + ": "
         head += const.ADVISORY_TYPES[upd_info['type']] + "\n"
@@ -301,17 +303,18 @@ class PackageInfo(PackageDetails):
             ]
             if len(bzs):
                 self.write('\n')
+                # pylint: disable=unused-variable
                 header = "Bugzilla"
                 for bz in bzs:
-                    (typ, bug, title, url) = bz
-                    bug_msg = '- %s' % title
-                    self.write("%14s : " % header, 'filelist', newline=False)
+                    (_typ, bug, title, url) = bz
+                    bug_msg = f'- {title}'
+                    self.write("{header} : ", 'filelist', newline=False)
                     self.add_url(bug, url)
                     self.write(bug_msg, 'filelist')
                     header = " "
 
         desc = upd_info['description']
-        head += "\n%14s : %s\n" % (_("Description"), format_block(desc, 17))
+        head += f'\n{_("Description"):14} : {format_block(desc, 17)}\n'
         head += "\n"
         self.write(head, 'filelist')
 
@@ -322,12 +325,13 @@ class PackageInfo(PackageDetails):
             i = 0
             for (c_date, c_ver, msg) in changelog:
                 i += 1
+                # pylint: disable=consider-using-f-string
                 self.write(
                     "* %s %s" %
                     (datetime.date.fromtimestamp(c_date).isoformat(), c_ver),
                     "changelog-header")
                 for line in msg.split('\n'):
-                    self.write("%s" % line, "changelog")
+                    self.write(line, "changelog")
                 self.write('\n')
                 if i == 5:  # only show the last 5 entries
                     break
@@ -361,5 +365,5 @@ class PackageInfo(PackageDetails):
                 self.write(key, 'filelist')
                 for pkg_id in reqs[key]:
                     pkg = pkg_id_to_full_name(pkg_id)
-                    self.write(' --> {}'.format(pkg), 'filelist')
+                    self.write(f' --> {pkg}', 'filelist')
         self.base.set_working(False, False)

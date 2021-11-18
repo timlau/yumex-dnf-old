@@ -180,7 +180,7 @@ def timer(func):
         rc = func(*args, **kwargs)
         t_end = time.perf_counter()
         name = func.__name__
-        logger.debug("%s took %.4f sec", name, t_end - t_start)
+        logger.debug(f"{name} took {t_end - t_start:.4f} sec")
         return rc
 
     new_func.__name__ = func.__name__
@@ -339,7 +339,7 @@ class Config(object):
         object.__init__(self)
         self.conf_dir = os.environ['HOME'] + "/.config/yumex-dnf"
         if not os.path.isdir(self.conf_dir):
-            logger.info("creating config directory : %s", self.conf_dir)
+            logger.info(f"creating config directory : {self.conf_dir}")
             os.makedirs(self.conf_dir, 0o700)
         self.conf_file = self.conf_dir + "/yumex.conf"
         self.parser = configparser.ConfigParser()
@@ -350,7 +350,7 @@ class Config(object):
     def read(self):
         first_read = False
         if not os.path.exists(self.conf_file):
-            logger.info("creating default config file : %s", self.conf_file)
+            logger.info(f"creating default config file : {self.conf_file}")
             first_read = True
         else:
             self.parser.read_file(open(self.conf_file, "r", encoding="UTF-8"))
