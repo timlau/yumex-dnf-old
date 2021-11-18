@@ -120,15 +120,12 @@ transifex-setup:
 	tx set --auto-local  -r yumex.${APPNAME} 'po/<lang>.po' --source-lang en --source-file po/${APPNAME}.pot --execute
 
 
-transifex-pull:
+transifex-update:
 	tx pull -a -f
-	@echo "You can now git commit -a -m 'Transfix pull, *.po update'"
-
-transifex-push:
-	make -C po ${APPNAME}.pot
+	tools/update-translations.sh 
 	tx push -s
-	@echo "You can now git commit -a -m 'Transfix push, ${APPNAME}.pot update'"
-	
+	git commit -a -m "Updated translations from transifex"
+
 
 status-exit:
 	/usr/bin/dbus-send --session --print-reply --dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit
