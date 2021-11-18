@@ -55,25 +55,25 @@ class HistoryPackageView(Gtk.TreeView):
         names_pair = {}
         for elem in data:
             pkg_id, state, is_inst = elem
-            (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-            na = "%s.%s" % (n, a)
+            (name, _, _, _, arch, _) = str(pkg_id).split(',')
+            name_arch = f"{name}.{arch}"
             if state in const.HISTORY_UPDATE_STATES:  # part of a pair
-                if na in names_pair:
+                if name_arch in names_pair:
                     # this is the updating pkg
                     if state in const.HISTORY_NEW_STATES:
-                        names_pair[na].insert(0, elem)  # add first in list
+                        names_pair[name_arch].insert(0, elem)  # add first in list
                     else:
-                        names_pair[na].append(elem)
+                        names_pair[name_arch].append(elem)
                 else:
-                    names_pair[na] = [elem]
+                    names_pair[name_arch] = [elem]
             else:
-                names[na] = [elem]
+                names[name_arch] = [elem]
 
         # order by primary state
         states = {}
         # pkgs without relatives
-        for na in sorted(list(names)):
-            pkg_list = names[na]
+        for name_arch in sorted(list(names)):
+            pkg_list = names[name_arch]
             pkg_id, state, is_inst = pkg_list[
                 0]  # Get first element (the primary (new) one )
             if state in states:
@@ -81,8 +81,8 @@ class HistoryPackageView(Gtk.TreeView):
             else:
                 states[state] = [pkg_list]
         # pkgs with releatives
-        for na in sorted(list(names_pair)):
-            pkg_list = names_pair[na]
+        for name_arch in sorted(list(names_pair)):
+            pkg_list = names_pair[name_arch]
             pkg_id, state, is_inst = pkg_list[
                 0]  # Get first element (the primary (new) one )
             if state in states:
@@ -94,19 +94,19 @@ class HistoryPackageView(Gtk.TreeView):
             if state in states:
                 num = len(states[state])
                 cat = self.model.append(None, [
-                    "<b>%s (%i)</b>" % (const.HISTORY_STATE_LABLES[state], num)
+                    f"<b>{const.HISTORY_STATE_LABLES[state]} ({num})</b>"
                 ])
                 for pkg_list in states[state]:
-                    pkg_id, st, is_inst = pkg_list[0]
+                    pkg_id, _, is_inst = pkg_list[0]
                     if is_inst:
-                        name = '<span foreground="%s">%s</span>' % (
-                            CONFIG.conf.color_install,
-                            pkg_id_to_full_name(pkg_id))
+                        color = CONFIG.conf.color_install
+                        fullname = pkg_id_to_full_name(pkg_id)
+                        name = f'<span foreground="{color}">{fullname}</span>'
                     else:
                         name = pkg_id_to_full_name(pkg_id)
                     pkg_cat = self.model.append(cat, [name])
                     if len(pkg_list) == 2:
-                        pkg_id, st, is_inst = pkg_list[1]
+                        pkg_id, _, is_inst = pkg_list[1]
                         name = pkg_id_to_full_name(pkg_id)
                         self.model.append(pkg_cat, [name])
         self.expand_all()

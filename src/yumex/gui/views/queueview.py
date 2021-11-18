@@ -39,10 +39,10 @@ class QueueView(Gtk.TreeView):
         self.queue = PackageQueue()
         self.queue_menu = queue_menu
         self.connect('button-press-event',
-                     self.on_QueueView_button_press_event)
+                     self.on_queue_view_button_press)
         remove_menu = self.queue_menu.get_children()[
             0]  # get the first child (remove menu)
-        remove_menu.connect('activate', self.deleteSelected)
+        remove_menu.connect('activate', self.delete_selected)
 
     def _setup_model(self):
         """
@@ -63,7 +63,7 @@ class QueueView(Gtk.TreeView):
         self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
         return model
 
-    def deleteSelected(self, widget=None):
+    def delete_selected(self, _widget=None):
         rmvlist = []
         model, paths = self.get_selection().get_selected_rows()
         for path in paths:
@@ -81,10 +81,10 @@ class QueueView(Gtk.TreeView):
         self.queue.remove_groups(rmvlist)
         self.refresh()
 
-    def on_QueueView_button_press_event(self, treeview, event):
+    def on_queue_view_button_press(self, _treeview, event):
         """
         Mouse button clicked in package view handler
-        :param treeview:
+        :param _treeview:
         :param event:
         """
         if event.button == 3:  # Right Click
@@ -108,38 +108,38 @@ class QueueView(Gtk.TreeView):
         """ Populate view with data from queue """
         self.store.clear()
         pkg_list = self.queue.packages['u'] + self.queue.packages['o']
-        label = "<b>%s</b>" % ngettext("Package to update",
-                                       "Packages to update", len(pkg_list))
+        text = ngettext("Package to update",  "Packages to update", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['i']
-        label = "<b>%s</b>" % ngettext("Package to install",
-                                       "Packages to install", len(pkg_list))
+        text = ngettext("Package to install", "Packages to install", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['r']
-        label = "<b>%s</b>" % ngettext("Package to remove",
-                                       "Packages to remove", len(pkg_list))
+        text = ngettext("Package to remove", "Packages to remove", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['ri']
-        label = "<b>%s</b>" % ngettext("Package to reinstall",
-                                       "Packages to reinstall", len(pkg_list))
+        text = ngettext("Package to reinstall", "Packages to reinstall", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         pkg_list = self.queue.packages['li']
-        label = "<b>%s</b>" % ngettext("RPM file to install",
-                                       "RPM files to install", len(pkg_list))
+        text = ngettext("RPM file to install", "RPM files to install", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             self.populate_list(label, pkg_list)
         grps = self.queue.groups['i']
-        label = "<b>%s</b>" % ngettext("Group to install", "Groups to install",
-                                       len(pkg_list))
+        text = ngettext("Group to install", "Groups to install", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         grps = self.queue.groups['r']
-        label = "<b>%s</b>" % ngettext("Group to remove", "Groups to remove",
-                                       len(pkg_list))
+        text = ngettext("Group to remove", "Groups to remove", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(grps) > 0:
             self.populate_group_list(label, grps)
         self.populate_list_downgrade()
@@ -158,8 +158,8 @@ class QueueView(Gtk.TreeView):
 
     def populate_list_downgrade(self):
         pkg_list = self.queue.packages['do']
-        label = "<b>%s</b>" % ngettext("Package to downgrade",
-                                       "Packages to downgrade", len(pkg_list))
+        text = ngettext("Package to downgrade", "Packages to downgrade", len(pkg_list))
+        label = f"<b>{text}</b>"
         if len(pkg_list) > 0:
             parent = self.store.append(None, [label, ""])
             for pkg in pkg_list:

@@ -17,6 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import argparse
 import configparser
 import gettext
 import locale
@@ -61,11 +62,12 @@ class TransactionSolveError(Exception):
 
 
 def dbus_dnfsystem(cmd):
-    subprocess.run('/usr/bin/dbus-send',
-                   '--system', '--print-reply '
-                   '--dest=org.baseurl.DnfSystem',
-                   f'/org.baseurl.DnfSystem.{cmd}',
-                   check=False)
+    args = [
+        '/usr/bin/dbus-send', '--system', '--print-reply=literal',
+        '--dest=org.baseurl.DnfSystem', '/', f'org.baseurl.DnfSystem.{cmd}'
+    ]
+    rc = subprocess.run(args, check=False)
+    print(f' Executed : {" ".join(rc.args)}')
 
 
 def load_ui(ui_file):

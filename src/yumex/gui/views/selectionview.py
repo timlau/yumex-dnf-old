@@ -19,7 +19,6 @@
 
 import logging
 from gi.repository import Gtk
-from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -193,7 +192,7 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def get_data_text(self, column, cell, model, iterator, prop):
+    def get_data_text(self, _column, cell, model, iterator, prop):
         """property function to get string data from a object in
         the TreeStore based on an attributes key
         """
@@ -202,7 +201,7 @@ class SelectionView(Gtk.TreeView):
             cell.set_property('text', getattr(obj, prop))
             cell.set_property('foreground-rgba', obj.color)
 
-    def get_data_bool(self, column, cell, model, iterator, prop):
+    def get_data_bool(self, _column, cell, model, iterator, prop):
         """Property function to get boolean data from a object in
         the TreeStore based on an attributes key
         """
@@ -211,9 +210,9 @@ class SelectionView(Gtk.TreeView):
         if obj:
             cell.set_property("active", getattr(obj, prop))
 
-    def on_toggled(self, widget, path):
+    def on_toggled(self, _widget, path):
         """
         selection togged handler
         overload in child class
         """
-        pass
+        raise NotImplementedError

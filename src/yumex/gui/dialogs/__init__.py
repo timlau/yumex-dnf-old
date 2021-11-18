@@ -17,6 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+
 import logging
 
 from gi.repository import Gtk
@@ -53,7 +54,7 @@ def yes_no_dialog(window, msg, add_msg=None):
 
 
 def ask_for_gpg_import(window, values):
-    (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
+    (pkg_id, userid, hexkeyid, keyurl, _timestamp) = values
     pkg_name = pkg_id.split(',')[0]
     msg = (_(' Do you want to import this GPG key\n'
              ' needed to verify the %s package?\n\n'

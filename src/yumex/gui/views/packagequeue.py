@@ -20,7 +20,6 @@
 import logging
 
 from yumex import const
-from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -64,25 +63,24 @@ class PackageQueue:
         """Add a package to queue"""
         if not action:
             action = pkg.action
-        na = "%s.%s" % (pkg.name, pkg.arch)
+        name_arch = f"{pkg.name}.{pkg.arch}"
         if pkg not in self.packages[action] and \
-                na not in self._name_arch_index:
+                name_arch not in self._name_arch_index:
             self.packages[action].append(pkg)
-            na = "%s.%s" % (pkg.name, pkg.arch)
-            self._name_arch_index[na] = 1
+            self._name_arch_index[name_arch] = 1
 
     def remove(self, pkg, action=None):
         """Remove package from queue"""
         if not action:
             action = pkg.action
-        na = "%s.%s" % (pkg.name, pkg.arch)
+        name_arch = f"{pkg.name}.{pkg.arch}"
         if pkg in self.packages[action]:
             self.packages[action].remove(pkg)
-            del self._name_arch_index[na]
+            del self._name_arch_index[name_arch]
 
     def has_pkg_with_name_arch(self, pkg):
-        na = "%s.%s" % (pkg.name, pkg.arch)
-        return na in self._name_arch_index
+        name_arch = f"{pkg.name}.{pkg.arch}"
+        return name_arch in self._name_arch_index
 
     def add_group(self, grp, action):
         """
@@ -90,7 +88,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         """
-        logger.debug('add_group : %s - %s', grp.id, action)
+        logger.debug(f'add_group : {grp.id} - {action}')
         grps = self.groups[action]
         if grp.id not in grps:
             grps[grp.id] = grp
@@ -102,7 +100,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         """
-        logger.debug('removeGroup : %s - %s', grp.id, action)
+        logger.debug(f'remove_group : {grp.id} - {action}')
         grps = self.groups[action]
         if grp.id in grps:
             del grps[grp.id]

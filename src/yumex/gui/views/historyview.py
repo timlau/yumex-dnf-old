@@ -57,25 +57,25 @@ class HistoryView(Gtk.TreeView):
         self.pkg_view.reset()
         self.model.clear()
         main = {}
-        for tid, dt in data:
-            da, t = dt.split('T')
-            y, m, d = da.split('-')
+        for tid, date_time in data:
+            date, time = date_time.split('T')
+            year, month, day = date.split('-')
             # year
-            if y not in main:
-                ycat = self.model.append(None, [y, -1])
-                main[y] = (ycat, {})
-            ycat, mdict = main[y]
+            if year not in main:
+                ycat = self.model.append(None, [year, -1])
+                main[year] = (ycat, {})
+            ycat, mdict = main[year]
             # month
-            if m not in mdict:
-                mcat = self.model.append(ycat, [m, -1])
-                mdict[m] = (mcat, {})
-            mcat, ddict = mdict[m]
+            if month not in mdict:
+                mcat = self.model.append(ycat, [month, -1])
+                mdict[month] = (mcat, {})
+            mcat, ddict = mdict[month]
             # day
-            if d not in ddict:
-                dcat = self.model.append(mcat, [d, -1])
-                ddict[d] = dcat
-            dcat = ddict[d]
-            self.model.append(dcat, [t, tid])
+            if day not in ddict:
+                dcat = self.model.append(mcat, [day, -1])
+                ddict[day] = dcat
+            dcat = ddict[day]
+            self.model.append(dcat, [time, tid])
         self.collapse_all()
         path = Gtk.TreePath.new_from_string("0:0:0:0")
         self.expand_to_path(path)

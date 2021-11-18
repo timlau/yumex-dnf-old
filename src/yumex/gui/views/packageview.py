@@ -40,7 +40,7 @@ class PackageView(SelectionView):
         self.group_mode = group_mode
         self._click_header_state = ""
         self.queue = qview.queue
-        self.queueView = qview
+        self.queue_view = qview
         self.store = self._setup_model()
         self.connect('cursor-changed', self.on_cursor_changed)
         self.connect('button-press-event', self.on_mouse_button)
@@ -103,18 +103,18 @@ class PackageView(SelectionView):
         if shortcut in ('Ctrl+S'):
             self.on_section_header_clicked(widget)
 
-    def on_section_header_button(self, button, event):
+    def on_section_header_button(self, _widget, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
-    def on_mouse_button(self, button, event):
+    def on_mouse_button(self, _widget, event):
         """Handle mouse click in view."""
         if event.button == 3:  # Right Click
             x = int(event.x)
             y = int(event.y)
             pthinfo = self.get_path_at_pos(x, y)
             if pthinfo is not None:
-                path, col, cellx, celly = pthinfo
+                path, col, _, _ = pthinfo
                 self.grab_focus()
                 self.set_cursor(path, col, 0)
                 iterator = self.store.get_iter(path)
@@ -129,43 +129,43 @@ class PackageView(SelectionView):
         else:
             return False
 
-    def _get_package_popup(self, pkg, path):
+    def _get_package_popup(self, pkg, _):
         """ Create a right click menu, for a given package."""
         # get available downgrades
         popup = Gtk.Menu()
-        mi = Gtk.MenuItem(_("Reinstall Package"))
-        mi.connect('activate', self.on_package_reinstall, pkg)
-        popup.add(mi)
+        menu_item = Gtk.MenuItem(_("Reinstall Package"))
+        menu_item.connect('activate', self.on_package_reinstall, pkg)
+        popup.add(menu_item)
         # Show downgrade menu only if there is any avaliable downgrades
         do_pkgs = pkg.downgrades
         if do_pkgs:
             popup_sub = Gtk.Menu()
             for do_pkg in do_pkgs:
-                mi = Gtk.MenuItem(str(do_pkg))
-                mi.set_use_underline(False)
-                mi.connect('button-press-event', self.on_package_downgrade,
+                menu_item = Gtk.MenuItem(str(do_pkg))
+                menu_item.set_use_underline(False)
+                menu_item.connect('button-press-event', self.on_package_downgrade,
                            pkg, do_pkg)
-                popup_sub.add(mi)
+                popup_sub.add(menu_item)
             popup_sub.show_all()
-            mi = Gtk.MenuItem(_("Downgrade Package"))
-            mi.set_submenu(popup_sub)
-            popup.add(mi)
+            menu_item = Gtk.MenuItem(_("Downgrade Package"))
+            menu_item.set_submenu(popup_sub)
+            popup.add(menu_item)
         popup.show_all()
         return popup
 
-    def on_package_reinstall(self, widget, pkg):
+    def on_package_reinstall(self, _, pkg):
         """Handler for package right click menu"""
-        logger.debug('reinstall: %s ', str(pkg))
+        logger.debug(f'reinstall: {str(pkg)}')
         pkg.queued = 'ri'
         pkg.selected = True
         self.queue.add(pkg, 'ri')
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
-    def on_package_downgrade(self, widget, event, pkg, do_pkg):
+    def on_package_downgrade(self, _, event, pkg, do_pkg):
         """Downgrade package right click menu handler"""
         if event.button == 1:  # Left Click
-            logger.debug('downgrade to : %s ', str(do_pkg))
+            logger.debug(f'downgrade to : {str(do_pkg)}')
             pkg.queued = 'do'
             pkg.selected = True
             pkg.downgrade_po = do_pkg
@@ -173,10 +173,10 @@ class PackageView(SelectionView):
             do_pkg.selected = True
             do_pkg.downgrade_po = pkg
             self.queue.add(do_pkg, 'do')
-            self.queueView.refresh()
+            self.queue_view.refresh()
             self.queue_draw()
 
-    def on_section_header_clicked(self, widget):
+    def on_section_header_clicked(self, _):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
@@ -190,7 +190,7 @@ class PackageView(SelectionView):
             self.select_by_keys(self._last_selected)
             self._last_selected = []
 
-    def on_section_header_clicked_group(self, widget):
+    def on_section_header_clicked_group(self, _):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
@@ -223,26 +223,26 @@ class PackageView(SelectionView):
         """
         Select all packages in the view
         """
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if not obj.queued == obj.action:
                 obj.queued = obj.action
                 self.queue.add(obj)
                 obj.set_select(not obj.selected)
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
     def deselect_all(self):
         """
         Deselect all packages in the view
         """
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if obj.queued == obj.action:
                 obj.queued = None
                 self.queue.remove(obj)
                 obj.set_select(not obj.selected)
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
     def select_by_keys(self, keys):
@@ -258,26 +258,26 @@ class PackageView(SelectionView):
                 self.queue.remove(obj)
                 obj.set_select(False)
             iterator = self.store.iter_next(iterator)
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
     def get_selected(self):
         selected = []
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if obj.selected:
                 selected.append(obj)
         return selected
 
     def get_notselected(self):
         notselected = []
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if not obj.queued == obj.action:
                 notselected.append(obj)
         return notselected
 
-    def new_pixbuf(self, column, cell, model, iterator, data):
+    def new_pixbuf(self, _, cell, model, iterator, _data):
         """
         Cell Data function for recent Column, shows pixmap
         if recent Value is True.
@@ -324,10 +324,10 @@ class PackageView(SelectionView):
         """ Package selection handler """
         iterator = self.store.get_iter(path)
         obj = self.store.get_value(iterator, 0)
-        self.togglePackage(obj)
-        self.queueView.refresh()
+        self.toggle_package(obj)
+        self.queue_view.refresh()
 
-    def togglePackage(self, obj):
+    def toggle_package(self, obj):
         """
         Toggle the package queue status
         @param obj:
@@ -372,31 +372,31 @@ class PackageView(SelectionView):
                 obj.selected = True
                 obj.downgrade_po = pkg
                 self.queue.add(obj, 'do')
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
     def install_all(self):
         """
         Select all packages in the view
         """
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if not obj.queued == obj.action and obj.action == 'i':
                 obj.queued = obj.action
                 self.queue.add(obj)
                 obj.set_select(not obj.selected)
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
 
     def remove_all(self):
         """
         Select all packages in the view
         """
-        for el in self.store:
-            obj = el[0]
+        for elem in self.store:
+            obj = elem[0]
             if not obj.queued == obj.action and obj.action == 'r':
                 obj.queued = obj.action
                 self.queue.add(obj)
                 obj.set_select(not obj.selected)
-        self.queueView.refresh()
+        self.queue_view.refresh()
         self.queue_draw()
