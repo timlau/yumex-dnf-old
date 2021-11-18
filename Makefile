@@ -13,12 +13,20 @@ GIT_MASTER=develop
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 
+all:
+	@echo "Nothing to do, use a specific target"
 
 clean: 
 	-rm -f *.tar.gz
 	-rm -rf build
 	-rm -rf .build
-	
+
+sass:	
+	pysassc -t expanded misc/scss/Dracula.scss misc/themes/Dracula.theme
+	pysassc -t expanded misc/scss/One-Dark.scss misc/themes/One-Dark.theme
+	pysassc -t expanded misc/scss/System-Dark.scss misc/themes/System-Dark.theme
+	pysassc -t expanded misc/scss/System-Light.scss misc/themes/System-Light.theme
+
 
 get-builddeps:
 	@sudo dnf install python3-devel python3-gobject transifex-client python3-libsass meson
@@ -139,5 +147,5 @@ status-run:
 
 .PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
-.PHONY: test-copr	
+.PHONY: test-copr sass
 	
