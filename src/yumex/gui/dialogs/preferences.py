@@ -43,7 +43,7 @@ class Preferences:
             need_reset = self.set_settings()
         return need_reset
 
-    def on_repo_page_active(self, widget, *args):
+    def on_repo_page_active(self, *_args):
         """ Callback for ::map event there is called when repo page is active"""
         if not self.repos:
             self._load_repositories()
@@ -82,7 +82,7 @@ class Preferences:
     def get_settings(self):
         # set boolean states
         for option in Preferences.FLAGS:
-            logger.debug("%s : %s ", option, getattr(CONFIG.conf, option))
+            logger.debug(f"{option} : {getattr(CONFIG.conf, option)}")
             widget = self.ui.get_object('pref_' + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler
@@ -96,7 +96,7 @@ class Preferences:
         # Get Themes
         self.get_themes()
 
-    def on_clean_instonly(self, *args):
+    def on_clean_instonly(self, *_args):
         """Handler for clean_instonly switch"""
         widget = self.ui.get_object('pref_clean_instonly')
         state = widget.get_active()
@@ -157,8 +157,9 @@ class Preferences:
         if option == 'autostart':
             if state:  # create an autostart .desktop for current user
                 if not os.path.isdir(const.AUTOSTART_DIR):
-                    logger.info("creating autostart directory : %s",
-                                const.AUTOSTART_DIR)
+                    logger.info(
+                        f"creating autostart directory : {const.AUTOSTART_DIR}"
+                    )
                     os.makedirs(const.AUTOSTART_DIR, 0o700)
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
             else:  # remove the autostart file

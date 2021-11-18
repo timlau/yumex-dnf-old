@@ -73,7 +73,7 @@ class TransactionResult:
             column.set_fixed_width(size)
         view.append_column(column)
 
-    def populate(self, pkglist, dnl_size):
+    def populate(self, pkglist, _dnl_size):
         """
         Populate the TreeView with data
         @param pkglist: list containing view data
@@ -83,15 +83,13 @@ class TransactionResult:
         self.store.clear()
         total_size = 0
         for sub, lvl1 in pkglist:
-            label = "<b>%s</b>" % const.TRANSACTION_RESULT_TYPES[sub]
+            label = f"<b>{const.TRANSACTION_RESULT_TYPES[sub]}</b>"
             level1 = model.append(None, [label, "", "", "", ""])
             for pkgid, size, replaces in lvl1:
-                (n, e, v, r, a, repo_id) = str(pkgid).split(',')
+                (n, _, v, r, a, repo_id) = str(pkgid).split(',')
                 level2 = model.append(
-                    level1,
-                    [n, a,
-                     "%s.%s" % (v, r), repo_id,
-                     format_number(size)])
+                    level1, [n, a, f"{v}.{r}", repo_id,
+                             format_number(size)])
                 # packages there need to be downloaded
                 if sub in [
                         'install', 'update', 'install-deps', 'update-deps',
@@ -99,10 +97,9 @@ class TransactionResult:
                 ]:
                     total_size += size
                 for r in replaces:
-                    (n, e, v, r, a, repo_id) = str(r).split(',')
+                    (n, _, v, r, a, repo_id) = str(r).split(',')
                     model.append(level2, [
-                        _("<b>replacing</b> {}").format(n), a,
-                        "%s.%s" % (v, r), repo_id,
+                        _(f"<b>replacing</b> {n}"), a, f"{v}.{r}", repo_id,
                         format_number(size)
                     ])
         self.ui.get_object("result_size").set_text(format_number(total_size))
