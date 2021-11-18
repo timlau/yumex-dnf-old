@@ -51,11 +51,11 @@ class Backend:
         """
         self.frontend.exception_handler(exc)
 
-    def get_packages(self, pkg_filter):
+    def get_packages(self, flt):
         """ Get a list of Package objects based on a filter
         ('installed', 'available'...)
         """
-        pkgs = self.cache._get_packages(pkg_filter) # pylint: disable=protected-access
+        pkgs = self.cache._get_packages(flt) # pylint: disable=protected-access
         return pkgs
 
 

@@ -50,7 +50,7 @@ class DnfPackage:
         self.downgrade_po = None
         self.summary = summary
         self.size = size
-        self.sizeM = format_number(size)
+        self.sizeM = format_number(size)  # pylint: disable=invalid-name
         # cache
         self._description = None
         self.action = action
@@ -78,20 +78,19 @@ class DnfPackage:
         if self.action == 'li':
             return self.repository
         else:
-            return "%s-%s.%s.%s.rpm" % (self.name, self.version, self.release,
-                                        self.arch)
+            return f"{self.name}-{self.version}.{self.release}.{self.arch}.rpm"
 
     @property
     def fullver(self):
         """Package full version-release."""
-        return "%s-%s" % (self.version, self.release)
+        return f"{self.version}-{self.release}"
 
     @property
     def installed(self):
         return self.repository[0] == '@'
 
     @property
-    def URL(self):
+    def url(self):
         return self.get_attribute('url')
 
     def set_select(self, state):
@@ -171,6 +170,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         self._files_to_download = 0
         self._files_downloaded = 0
         self._current_download = None
+        self._dnl_packages = None
         if self.running_api_version == const.NEEDED_DAEMON_API:
             logger.debug('dnfdaemon api version (%d)',
                          self.running_api_version)
@@ -209,11 +209,11 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         elif event == 'end-run':
             self.frontend.infobar.hide()
         else:
-            logger.debug('TransactionEvent : %s', event)
+            logger.debug(f'TransactionEvent : {event}')
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current,
                        ts_total):
-        num = ' ( %i/%i )' % (ts_current, ts_total)
+        num = f' ( {ts_current}/{ts_total} )'
         if ',' in package:  # this is a pkg_id
             name = pkg_id_to_full_name(package)
         else:  # this is just a pkg name (cleanup)
@@ -223,7 +223,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         if action_msg:
             self.frontend.infobar.message_sub(action_msg % name)
         else:
-            logger.info("RPM Progress: Undefinded action {}".format(action))
+            logger.info(f"RPM Progress: Undefinded action {action}")
         if 0 < ts_current <= ts_total:
             frac = float(ts_current) / float(ts_total)
             self.frontend.infobar.set_progress(frac, label=num)
@@ -249,7 +249,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         """Progress for a single element in the batch."""
-        num = '( %d/%d )' % (self._files_downloaded, self._files_to_download)
+        num = f'( {self._files_downloaded}/{self._files_to_download} )'
         self.frontend.infobar.set_progress(total_frac, label=num)
 
     def on_DownloadEnd(self, name, status, msg):
@@ -317,11 +317,6 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
             logger.debug('root: Setting repos : %s',
                          CONFIG.session.enabled_repos)
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
-
-    def to_pkg_tuple(self, pkg_id):
-        """Get package nevra & repoid from an package pkg_id"""
-        (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
-        return n, e, v, r, a, repo_id
 
     def _make_pkg_object(self, pkgs, flt):
         """Get a list Package objects from a list of pkg_ids & attrs.
