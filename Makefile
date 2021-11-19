@@ -145,7 +145,10 @@ status-checkupdates:
 status-run:
 	cd dbus && ./dbus_status.py -v -d
 
+pylint-errors:
+	@-find src -type f -name "*.py" | xargs pylint -E --rcfile=.pylintrc
+
 .PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
-.PHONY: test-copr sass
+.PHONY: test-copr sass pylint-errors
 	

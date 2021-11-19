@@ -32,6 +32,7 @@ import sys
 import time
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('Notify', '0.7')
 from gi.repository import Gio, Notify, GObject, GLib
@@ -47,7 +48,6 @@ LOG_ROOT = 'yumex.updater'
 
 logger = logging.getLogger(LOG_ROOT)
 
-
 BIN_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 YUMEX_BIN = '/usr/bin/yumex-dnf'
@@ -61,7 +61,7 @@ class _Notification(GObject.GObject):
     """Used to notify users of available updates"""
 
     __gsignals__ = {
-        'notify-action': (GObject.SignalFlags.RUN_FIRST, None, (str,))
+        'notify-action': (GObject.SignalFlags.RUN_FIRST, None, (str, ))
     }
 
     def __init__(self, summary, body):
@@ -70,8 +70,7 @@ class _Notification(GObject.GObject):
         icon = "yumex-dnf"
         self.__notification = Notify.Notification.new(summary, body, icon)
         self.__notification.set_timeout(10000)  # timeout 10s
-        self.__notification.add_action('later', _('Not Now'),
-                                       self.__callback)
+        self.__notification.add_action('later', _('Not Now'), self.__callback)
         self.__notification.add_action('show', _('Show Updates'),
                                        self.__callback)
         self.__notification.connect('closed', self.__on_closed)
@@ -93,7 +92,6 @@ class _UpdateTimestamp:
     """
     a persistent timestamp. e.g. for storing the last update check
     """
-
     def __init__(self, file_name=TIMESTAMP_FILE):
         self.__time_file = file_name
         self.__last_time = -1
@@ -105,14 +103,13 @@ class _UpdateTimestamp:
         now = int(time.time())
         if self.__last_time == -1:
             try:
-                file = open(self.__time_file, 'r')
-                t_old = int(file.read())
-                file.close()
-                self.__last_time = t_old
+                with open(self.__time_file, 'r', encoding="UTF-8") as file:
+                    t_old = int(file.read())
+                    self.__last_time = t_old
             except OSError as ose:
                 # File has not been written yet, this might happen on first run
-                logger.info('Error reading last timestamp from file: %s',
-                            ose.strerror)
+                logger.info(
+                    f'Error reading last timestamp from file: {ose.strerror}')
                 self.__last_time = 0
         if self.__last_time > now:
             return -1
@@ -121,14 +118,12 @@ class _UpdateTimestamp:
     def store_current_time(self):
         """Save current time stamp permanently."""
         now = int(time.time())
-        file = open(self.__time_file, 'w')
-        file.write(str(now))
-        file.close()
+        with open(self.__time_file, 'w', encoding="UTF-8") as file:
+            file.write(str(now))
         self.__last_time = now
 
 
 class _Updater:
-
     def __init__(self):
         # update checking
         self.__update_timer_id = -1
@@ -143,8 +138,8 @@ class _Updater:
             self.__backend = dnfdaemon.client.Client()
         except dnfdaemon.client.DaemonError as error:
             msg = str(error)
-            logger.debug('Error starting dnfdaemon service: [%s]', msg)
-            common.notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
+            logger.debug(f'Error starting dnfdaemon service: [{msg}]')
+            common.notify(f'Error starting dnfdaemon service\n\n{msg}', msg)
             sys.exit(1)
 
     def __get_updates(self):
@@ -153,7 +148,7 @@ class _Updater:
             pkgs = self.__backend.GetPackages('updates')
             update_count = len(pkgs)
             self.__backend.Unlock()
-            logger.debug('#Number of updates : %d', update_count)
+            logger.debug(f'#Number of updates : {update_count}')
         else:
             logger.debug('Could not get the dnfdaemon lock')
             update_count = -1
@@ -162,14 +157,12 @@ class _Updater:
                 # Only show the same notification once
                 # until the user closes the notification
                 if update_count != self.__last_num_updates:
-                    logger.debug('notification opened : # updates = %d',
-                                 update_count)
-                    notify = _Notification(_('New Updates'),
-                                           # Translators: %d is a number of available updates
-                                           ngettext('%d available update',
-                                                    '%d available updates',
-                                                    update_count)
-                                           % update_count)
+                    logger.debug(f'notification opened : # updates = {update_count}')
+                    notify = _Notification(
+                        _('New Updates'),
+                        # Translators: %d is a number of available updates
+                        ngettext('%d available update', '%d available updates',
+                                 update_count) % update_count)
                     notify.connect('notify-action', self.__on_notify_action)
                     notify.show()
                     self.__last_num_updates = update_count
@@ -177,15 +170,14 @@ class _Updater:
                     logger.debug('skipping notification (same # of updates)')
             else:
                 self.__mute_count -= 1
-                logger.debug('skipping notification : mute_count = %s',
-                             self.__mute_count)
+                logger.debug(f'skipping notification : mute_count = {self.__mute_count}')
         self.__update_timestamp.store_current_time()
         self.start_update_timer()  # restart update timer if necessary
         return update_count
 
     def __on_notify_action(self, notification, action):
         """Handle notification actions. """
-        logger.debug('notify-action: %s', action)
+        logger.debug(f'notify-action: {action}')
         if action == 'later':
             logger.debug('setting mute_count = 10')
             self.__mute_count = 10
@@ -197,7 +189,7 @@ class _Updater:
             self.__last_num_updates = 0
 
     def start_yumex(self):
-        logger.debug('Starting: %s', YUMEX_BIN)
+        logger.debug(f'Starting: {YUMEX_BIN}')
         flags = Gio.AppInfoCreateFlags.NONE
         yumex_app = Gio.AppInfo.create_from_commandline(
             YUMEX_BIN, YUMEX_BIN, flags)
@@ -221,8 +213,8 @@ class _Updater:
         if time_diff == -1 or delay < 0:
             delay = 0
 
-        logger.debug('Starting update timer with a delay of %i min'
-                     ' (time_diff=%i)', delay, time_diff)
+        logger.debug(
+            f'Starting update timer with a delay of {delay} min (time_diff={time_diff})')
         self.__next_update = delay
         self.__last_timestamp = int(time.time())
         self.__update_timer_id = GObject.timeout_add_seconds(
@@ -252,7 +244,6 @@ class _Updater:
 
 class UpdateApplication(Gio.Application):
     """Update application."""
-
     def __init__(self):
         Gio.Application.__init__(
             self,
@@ -264,13 +255,13 @@ class UpdateApplication(Gio.Application):
         self.__updater = None
         self.__main_loop = GLib.MainLoop.new(GLib.MainContext.default(), False)
 
-        self.add_main_option(
-            "debug", ord('d'), GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
-            "Enable advanced debug output", None)
+        self.add_main_option("debug", ord('d'), GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             "Enable advanced debug output", None)
         self.__debug = False
-        self.add_main_option(
-            "exit", 0, GLib.OptionFlags.NONE, GLib.OptionArg.NONE,
-            "Quit other updater instance", None)
+        self.add_main_option("exit", 0, GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             "Quit other updater instance", None)
         self.add_main_option(
             "delay", 0, GLib.OptionFlags.NONE, GLib.OptionArg.INT,
             "Specify delay between update notifications, in seconds. "
@@ -302,10 +293,9 @@ class UpdateApplication(Gio.Application):
 
     def __log_setup(self):
         if self.__debug:
-            common.logger_setup(
-                logroot='yumex.updater',
-                logfmt='%(asctime)s: [%(name)s] - %(message)s',
-                loglvl=logging.DEBUG)
+            common.logger_setup(logroot='yumex.updater',
+                                logfmt='%(asctime)s: [%(name)s] - %(message)s',
+                                loglvl=logging.DEBUG)
         else:
             common.logger_setup()
 
@@ -326,8 +316,8 @@ class UpdateApplication(Gio.Application):
         exit_status = 0
 
         if new_cli.get_is_remote():  # second instance
-            logger.debug('Successive run. Remote arguments: %s',
-                         " ".join(new_cli.get_arguments()))
+            args = " ".join(new_cli.get_arguments())
+            logger.debug(f'Successive run. Remote arguments: {args}')
             # --debug
             if self.__debug:
                 new_cli.do_printerr_literal(

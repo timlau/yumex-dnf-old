@@ -456,7 +456,7 @@ class Window(BaseWindow):
                     if not rc:
                         logger.debug(f'result : {rc}: {pkg}')
                         errors += 1
-                        error_msgs.add(f'{pkg_type} : {pkg}')
+                        error_msgs.append(f'{pkg_type} : {pkg}')
                 else:
                     logger.debug(f'adding: {pkg_type} {pkg.pkg_id}')
                     rc, msgs = self.backend.AddTransaction(
@@ -464,7 +464,7 @@ class Window(BaseWindow):
                     if not rc:
                         logger.debug(f'result: {rc}: {pkg}')
                         errors += 1
-                        error_msgs.add(f'{pkg_type} : {pkg}')
+                        error_msgs.append(f'{pkg_type} : {pkg}')
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, msgs = self.backend.GroupInstall(grp_id)
