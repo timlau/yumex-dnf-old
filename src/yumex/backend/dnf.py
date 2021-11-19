@@ -172,14 +172,12 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
         self._current_download = None
         self._dnl_packages = None
         if self.running_api_version == const.NEEDED_DAEMON_API:
-            logger.debug('dnfdaemon api version (%d)',
-                         self.running_api_version)
+            logger.debug(f'dnfdaemon api version ({self.running_api_version})')
         else:
             raise dnfdaemon.client.APIVersionError(
-                _('dnfdaemon api version : %d'
+                _(f'dnfdaemon api version : {self.running_api_version}'
                   "\ndon't match"
-                  '\nneeded api version : %d') %
-                (self.running_api_version, const.NEEDED_DAEMON_API))
+                  '\nneeded api version : {const.NEEDED_DAEMON_API}') )
 
     def on_TransactionEvent(self, event, data):
         if event == 'start-run':
@@ -231,7 +229,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
         values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
         self._gpg_confirm = values
-        logger.debug('received signal : GPGImport %s', repr(values))
+        logger.debug(f'received signal : GPGImport {repr(values)}')
 
     def on_DownloadStart(self, num_files, num_bytes):
         """Starting a new parallel download batch."""
@@ -255,19 +253,18 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single element ended."""
         if status == -1 or status == 2:  # download OK or already exists
-            logger.debug('Downloaded : %s', name)
+            logger.debug(f'Downloaded : {name}')
             self._files_downloaded += 1
             self.frontend.infobar.message_sub(
                 f'{name} - ({self._files_downloaded}/{self._files_to_download})'
             )
         else:
-            logger.debug('Download Error : %s - %s (status : %d )', name, msg,
-                         status)
+            logger.debug(f'Download Error : {name} - {msg} (status : {status} )')
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress."""
         values = (name, frac)
-        logger.debug('on_RepoMetaDataProgress (root): %s', repr(values))
+        logger.debug(f'on_RepoMetaDataProgress (root): {repr(values)}')
         if frac == 0.0:
             self.frontend.infobar.message_sub(name)
         else:
@@ -304,18 +301,15 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
     def _update_config_options(self):
         if CONFIG.session.clean_instonly:
             self.SetConfig('installonly_limit', CONFIG.conf.installonly_limit)
-            logger.debug('installonly_limit = %d',
-                         CONFIG.conf.installonly_limit)
+            logger.debug(f'installonly_limit = {CONFIG.conf.installonly_limit}')
         else:
             self.SetConfig('installonly_limit', "<off>")
-            logger.debug('installonly_limit = %s', "<off>")
+            logger.debug('installonly_limit = <off>')
         self.SetConfig('clean_requirements_on_remove',
                        CONFIG.session.clean_unused)
-        logger.debug('clean_requirements_on_remove = %s',
-                     CONFIG.session.clean_unused)
+        logger.debug(f'clean_requirements_on_remove = {CONFIG.session.clean_unused}')
         if CONFIG.session.enabled_repos:
-            logger.debug('root: Setting repos : %s',
-                         CONFIG.session.enabled_repos)
+            logger.debug(f'root: Setting repos : {CONFIG.session.enabled_repos}')
             self.SetEnabledRepos(CONFIG.session.enabled_repos)
 
     def _make_pkg_object(self, pkgs, flt):
@@ -376,7 +370,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
     @timer
     def get_packages(self, flt):
         """Get packages for a given pkg filter."""
-        logger.debug('get-packages : %s ', flt)
+        logger.debug(f'get-packages : {flt} ')
         if flt == 'all':
             filters = ['installed', 'updates', 'available']
         else:

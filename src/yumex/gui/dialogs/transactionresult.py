@@ -73,7 +73,7 @@ class TransactionResult:
             column.set_fixed_width(size)
         view.append_column(column)
 
-    def populate(self, pkglist, _dnl_size):
+    def populate(self, pkglist, dnl_size):
         """
         Populate the TreeView with data
         @param pkglist: list containing view data

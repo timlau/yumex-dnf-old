@@ -43,7 +43,7 @@ class RepoView(SelectionView):
         state = self.store.get_value(iterator, 0)
         self.store.set_value(iterator, 0, not state)
 
-    def on_section_header_clicked(self, _widget):
+    def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
@@ -92,7 +92,7 @@ class RepoView(SelectionView):
         for state, ident, name, gpg in data:
             self.store.append([state, ident, name, gpg])
 
-    def new_pixbuf(self, _column, cell, model, iterator, _data):
+    def new_pixbuf(self, column, cell, model, iterator, data):
         gpg = model.get_value(iterator, 3)
         if gpg:
             cell.set_property('visible', True)

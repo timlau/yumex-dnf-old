@@ -109,7 +109,7 @@ class SearchBar(GObject.GObject):
         self._entry.grab_focus()
         self._entry.emit('move-cursor', Gtk.MovementStep.BUFFER_ENDS, 1, False)
 
-    def on_options_button(self, _widget):
+    def on_options_button(self, widget):
         """Search Option button is toggled."""
         if self.opt_popover.get_visible():
             self.opt_popover.hide()
@@ -117,7 +117,7 @@ class SearchBar(GObject.GObject):
         else:
             self.opt_popover.show_all()
 
-    def on_toggle(self, _widget=None):
+    def on_toggle(self, widget=None):
         """Search Toggle button is toggled."""
         self._bar.set_search_mode(not self._bar.get_search_mode())
         if self._bar.get_search_mode():
@@ -134,17 +134,17 @@ class SearchBar(GObject.GObject):
             else:
                 self._set_fields_sensitive(False)
 
-    def on_fields_changed(self, _widget, _key):
+    def on_fields_changed(self, widget, key):
         """Search fields is changed."""
         self.search_fields = self._get_active_field()
         CONFIG.conf.search_fields = self.search_fields
 
-    def on_entry_activate(self, _widget):
+    def on_entry_activate(self, widget):
         """Seach entry is activated"""
         # make sure search option is hidden
         self.signal()
 
-    def on_entry_icon(self, _widget, icon_pos, _event):
+    def on_entry_icon(self, widget, icon_pos, event):
         """Search icon press callback."""
         # clear icon pressed
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:

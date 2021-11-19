@@ -64,7 +64,7 @@ class YumexApplication(Gtk.Application):
             if self.install_mode and self.window.can_close():
                 self.window.rerun_installmode(self.current_args)
 
-    def on_command_line(self, _, args):
+    def on_command_line(self, app, args):
         parser = argparse.ArgumentParser(prog="app")
         parser.add_argument("-d", "--debug", action="store_true")
         parser.add_argument("-y",
@@ -118,7 +118,7 @@ class YumexApplication(Gtk.Application):
         self.activate()
         return 0
 
-    def on_shutdown(self, _):
+    def on_shutdown(self, app):
         if self.window and not self.install_mode:
             CONFIG.conf.info_paned = self.window.main_paned.get_position()
             if self.window.cur_maximized:

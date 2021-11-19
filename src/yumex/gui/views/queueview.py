@@ -63,7 +63,7 @@ class QueueView(Gtk.TreeView):
         self.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
         return model
 
-    def delete_selected(self, _widget=None):
+    def delete_selected(self, widget=None):
         rmvlist = []
         model, paths = self.get_selection().get_selected_rows()
         for path in paths:
@@ -81,7 +81,7 @@ class QueueView(Gtk.TreeView):
         self.queue.remove_groups(rmvlist)
         self.refresh()
 
-    def on_queue_view_button_press(self, _treeview, event):
+    def on_queue_view_button_press(self, treeview, event):
         """
         Mouse button clicked in package view handler
         :param _treeview:

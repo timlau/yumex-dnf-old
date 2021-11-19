@@ -50,7 +50,7 @@ class ExtraFilters(GObject.GObject):
     def popup(self):
         self._on_button(self._button)
 
-    def _on_button(self, _button):
+    def _on_button(self, button):
         self._popover.show_all()
 
     def _setup_archs(self):
@@ -102,7 +102,7 @@ class FilterSidebar(GObject.GObject):
         self._lb.unselect_all()
         self._lb.connect('row-selected', self.on_toggled)
 
-    def on_toggled(self, _widget, row):
+    def on_toggled(self, widget, row):
         """Active filter is changed."""
         if row:
             ndx = row.get_index()
@@ -138,7 +138,7 @@ class Filters(GObject.GObject):
         self.current = 'updates'
         self._sidebar.connect('sidebar-changed', self.on_toggled)
 
-    def on_toggled(self, _widget, flt):
+    def on_toggled(self, widget, flt):
         """Active filter is changed."""
         self.current = flt
         self.emit('filter-changed', flt)

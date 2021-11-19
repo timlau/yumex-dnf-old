@@ -103,11 +103,11 @@ class PackageView(SelectionView):
         if shortcut in ('Ctrl+S'):
             self.on_section_header_clicked(widget)
 
-    def on_section_header_button(self, _widget, event):
+    def on_section_header_button(self, widget, event):
         if event.button == 3:  # Right click
             print("Right Click on selection column header")
 
-    def on_mouse_button(self, _widget, event):
+    def on_mouse_button(self, widget, event):
         """Handle mouse click in view."""
         if event.button == 3:  # Right Click
             x = int(event.x)
@@ -129,7 +129,7 @@ class PackageView(SelectionView):
         else:
             return False
 
-    def _get_package_popup(self, pkg, _):
+    def _get_package_popup(self, pkg, path):
         """ Create a right click menu, for a given package."""
         # get available downgrades
         popup = Gtk.Menu()
@@ -153,7 +153,7 @@ class PackageView(SelectionView):
         popup.show_all()
         return popup
 
-    def on_package_reinstall(self, _, pkg):
+    def on_package_reinstall(self, widget, pkg):
         """Handler for package right click menu"""
         logger.debug(f'reinstall: {str(pkg)}')
         pkg.queued = 'ri'
@@ -162,7 +162,7 @@ class PackageView(SelectionView):
         self.queue_view.refresh()
         self.queue_draw()
 
-    def on_package_downgrade(self, _, event, pkg, do_pkg):
+    def on_package_downgrade(self, widget, event, pkg, do_pkg):
         """Downgrade package right click menu handler"""
         if event.button == 1:  # Left Click
             logger.debug(f'downgrade to : {str(do_pkg)}')
@@ -176,7 +176,7 @@ class PackageView(SelectionView):
             self.queue_view.refresh()
             self.queue_draw()
 
-    def on_section_header_clicked(self, _):
+    def on_section_header_clicked(self, widget):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
@@ -190,7 +190,7 @@ class PackageView(SelectionView):
             self.select_by_keys(self._last_selected)
             self._last_selected = []
 
-    def on_section_header_clicked_group(self, _):
+    def on_section_header_clicked_group(self, widget):
         """  Selection column header clicked"""
         if self.state == 'normal':  # deselect all
             self._last_selected = self.get_selected()
@@ -277,7 +277,7 @@ class PackageView(SelectionView):
                 notselected.append(obj)
         return notselected
 
-    def new_pixbuf(self, _, cell, model, iterator, _data):
+    def new_pixbuf(self, column, cell, model, iterator, data):
         """
         Cell Data function for recent Column, shows pixmap
         if recent Value is True.

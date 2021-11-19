@@ -73,7 +73,7 @@ class PackageDetails(GObject.GObject):
         else:
             self.widget.hide()
 
-    def on_toggled(self, _listbox, row):
+    def on_toggled(self, listbox, row):
         if row:
             ndx = row.get_index()
             key = PackageDetails.VALUES[ndx]
@@ -110,14 +110,14 @@ class PackageDetails(GObject.GObject):
         self._text.scroll_to_iter(self._buffer.get_start_iter(), 0.0, False,
                                   0.0, 0.0)
 
-    def on_url_event(self, tag, _widget, event, _iterator):
+    def on_url_event(self, tag, widget, event, iterator):
         """ Catch when the user clicks the URL """
         if event.type == Gdk.EventType.BUTTON_RELEASE:
             url = self.url_list[tag.get_property("name")]
             if self._url_handler:
                 self._url_handler(url)
 
-    def on_mouse_motion(self, widget, _event, _data=None):
+    def on_mouse_motion(self, widget, event, data=None):
         """
         Mouse movement handler for TextView
 
@@ -179,7 +179,7 @@ class PackageInfo(PackageDetails):
         self.connect('info-changed', self.on_filter_changed)
         self.update()
 
-    def on_filter_changed(self, _widget, data):
+    def on_filter_changed(self, widget, data):
         self.active_filter = data
         self.update()
 

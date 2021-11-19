@@ -159,12 +159,12 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             self.load_theme()
 
     # noinspection PyUnusedLocal
-    def on_window_state(self, _widget, event):
+    def on_window_state(self, widget, event):
         # save window current maximized state
         self.cur_maximized = event.new_window_state & \
             Gdk.WindowState.MAXIMIZED != 0
 
-    def on_window_changed(self, widget, _data):
+    def on_window_changed(self, widget, data):
         size = widget.get_size()
         if isinstance(size, tuple):
             self.cur_height = size[1]
@@ -239,7 +239,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         for widget in insensitive_widgets:
             self.ui.get_object(widget).set_sensitive(state)
 
-    def _set_busy_cursor(self, _insensitive=False):
+    def _set_busy_cursor(self, insensitive=False):
         """Set busy cursor in main window."""
         win = self.get_window()
         if win is not None:

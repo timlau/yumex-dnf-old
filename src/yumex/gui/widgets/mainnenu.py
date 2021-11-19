@@ -72,5 +72,5 @@ class MainMenu(Gio.Menu):
             data = True
         self.emit('menu-changed', action_name, data)
 
-    def _on_button(self, _button):
+    def _on_button(self, button):
         self._popover.show_all()
