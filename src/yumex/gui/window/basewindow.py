@@ -26,7 +26,7 @@ import re
 import sys
 
 import yumex.common.const as const
-import yumex.common as misc
+import yumex.common as common
 
 from yumex.common import CONFIG
 from yumex.gui.dialogs.errordialog import ErrorDialog
@@ -98,7 +98,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             'color_obsolete'
         ]
         regex = re.compile(r'@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;')
-        if misc.check_dark_theme():
+        if common.check_dark_theme():
             backup_color = '#ffffff'
         else:
             backup_color = '#000000'
@@ -244,11 +244,11 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         win = self.get_window()
         if win is not None:
             win.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        misc.do_gtk_events()
+        common.do_gtk_events()
 
     def _set_normal_cursor(self):
         """Set Normal cursor in main window."""
         win = self.get_window()
         if win is not None:
             win.set_cursor(None)
-        misc.do_gtk_events()
+        common.do_gtk_events()

@@ -41,7 +41,7 @@ from xdg import BaseDirectory
 import dnfdaemon.client
 
 from yumex.common import _, ngettext, CONFIG
-import yumex.common as misc
+import yumex.common as common
 
 LOG_ROOT = 'yumex.updater'
 
@@ -144,7 +144,7 @@ class _Updater:
         except dnfdaemon.client.DaemonError as error:
             msg = str(error)
             logger.debug('Error starting dnfdaemon service: [%s]', msg)
-            misc.notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
+            common.notify('Error starting dnfdaemon service\n\n%s' % msg, msg)
             sys.exit(1)
 
     def __get_updates(self):
@@ -297,17 +297,17 @@ class UpdateApplication(Gio.Application):
 
     def __cleanup_and_quit(self):
         # all of UpdateApplication is running in main loop, so this is easy
-        misc.dbus_dnfsystem('Exit')
+        common.dbus_dnfsystem('Exit')
         self.__main_loop.quit()
 
     def __log_setup(self):
         if self.__debug:
-            misc.logger_setup(
+            common.logger_setup(
                 logroot='yumex.updater',
                 logfmt='%(asctime)s: [%(name)s] - %(message)s',
                 loglvl=logging.DEBUG)
         else:
-            misc.logger_setup()
+            common.logger_setup()
 
     def __on_command_line(self, new_cli):
         options = new_cli.get_options_dict()

@@ -165,7 +165,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
     def __init__(self, frontend):
         Backend.__init__(self, frontend, filters=True)
         dnfdaemon.client.Client.__init__(self)
-        self._gpg_confirm = None
+        self.gpg_confirm = None
         self.dnl_progress = None
         self._files_to_download = 0
         self._files_downloaded = 0
@@ -228,7 +228,7 @@ class DnfRootBackend(Backend, dnfdaemon.client.Client):
 
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
         values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
-        self._gpg_confirm = values
+        self.gpg_confirm = values
         logger.debug(f'received signal : GPGImport {repr(values)}')
 
     def on_DownloadStart(self, num_files, num_bytes):

@@ -17,6 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+# pylint: disable=attribute-defined-outside-init
 import gi  # isort:skip
 from gi.repository import Gdk, Gtk  # isort:skip
 
@@ -29,7 +30,7 @@ from pathlib import Path
 
 import yumex.common.const as const
 import yumex.gui.dialogs as dialogs
-import yumex.common as misc
+import yumex.common as common
 
 from yumex.common import CONFIG, _, ngettext
 from yumex.gui.dialogs.preferences import Preferences
@@ -102,12 +103,12 @@ class Window(BaseWindow):
         # so we need to remove the old one.
         # and create a new one
         if os.path.exists(const.LEGACY_DESKTOP_FILE):
-            logger.debug('removing legacy autostart: %s',
-                         const.LEGACY_DESKTOP_FILE)
+            logger.debug(
+                f'removing legacy autostart: {const.LEGACY_DESKTOP_FILE}')
             os.unlink(const.LEGACY_DESKTOP_FILE)
         if CONFIG.conf.autostart:
             if not os.path.exists(const.USER_DESKTOP_FILE):
-                logger.debug('create autostart: %s', const.USER_DESKTOP_FILE)
+                logger.debug(f'create autostart: {const.USER_DESKTOP_FILE}')
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
         # key is renamed to keyword
         if CONFIG.conf.search_default == 'key':
@@ -122,15 +123,15 @@ class Window(BaseWindow):
         and second instance is excuted in installmode
         """
         self.get_ui('content_box').hide()
-        WIDGETS_HIDE = ['left_buttons', 'right_buttons']
-        for widget in WIDGETS_HIDE:
+        hidden_widgets = ['left_buttons', 'right_buttons']
+        for widget in hidden_widgets:
             self.ui.get_object(widget).hide()
         self.resize(50, 50)
         self._run_actions_installmode(args, quit_app=False)
         self.infobar.hide()
         self.get_ui('content_box').show()
-        WIDGETS_HIDE = ['left_buttons', 'right_buttons']
-        for widget in WIDGETS_HIDE:
+        hidden_widgets = ['left_buttons', 'right_buttons']
+        for widget in hidden_widgets:
             self.ui.get_object(widget).show()
         width = CONFIG.conf.win_width
         height = CONFIG.conf.win_height
@@ -160,28 +161,28 @@ class Window(BaseWindow):
         self.add(box)
         self._headerbar = self.get_ui('headerbar')
         if self.use_headerbar:  # Gnome, headerbar in titlebar
-            hb = self.get_ui('headerbar')
-            rb = self.get_ui('right_header')
-            lb = self.get_ui('left_header')
-            hb.set_custom_title(lb)
-            hb.pack_end(rb)
-            self.set_titlebar(hb)
+            headerbar = self.get_ui('headerbar')
+            right_header = self.get_ui('right_header')
+            left_header = self.get_ui('left_header')
+            headerbar.set_custom_title(left_header)
+            headerbar.pack_end(right_header)
+            self.set_titlebar(headerbar)
             self._headerbar.set_show_close_button(True)
         else:
-            hb = self.get_ui('headerbox')
-            rb = self.get_ui('right_header')
-            rb.set_margin_top(3)
-            rb.set_margin_bottom(3)
-            rb.set_margin_start(3)
-            rb.set_margin_end(3)
-            lb = self.get_ui('left_header')
-            lb.set_margin_top(3)
-            lb.set_margin_bottom(3)
-            lb.set_margin_start(3)
-            lb.set_margin_end(3)
-            hb.set_center_widget(lb)
-            hb.pack_end(rb, False, True, 0)
-            box.pack_start(hb, False, True, 0)
+            headerbar = self.get_ui('headerbox')
+            right_header = self.get_ui('right_header')
+            right_header.set_margin_top(3)
+            right_header.set_margin_bottom(3)
+            right_header.set_margin_start(3)
+            right_header.set_margin_end(3)
+            left_header = self.get_ui('left_header')
+            left_header.set_margin_top(3)
+            left_header.set_margin_bottom(3)
+            left_header.set_margin_start(3)
+            left_header.set_margin_end(3)
+            headerbar.set_center_widget(left_header)
+            headerbar.pack_end(right_header, False, True, 0)
+            box.pack_start(headerbar, False, True, 0)
         box.pack_start(self.get_ui('main_overlay'), False, True, 0)
         # Setup search
         self.search_bar = SearchBar(self)
@@ -244,16 +245,16 @@ class Window(BaseWindow):
         self.queue_view = QueueView(queue_menu)
         self.queue_view.connect('queue-refresh', self.on_queue_refresh)
         # Queue Page
-        sw = self.get_ui('queue_sw')
-        sw.add(self.queue_view)
+        scroll_win = self.get_ui('queue_sw')
+        scroll_win.add(self.queue_view)
 
     def _setup_package_page(self):
         """Setup the package page."""
         self.package_view = PackageView(self.queue_view)
         self.package_view.connect('pkg_changed',
                                   self.on_pkg_view_selection_changed)
-        sw = self.get_ui('package_sw')
-        sw.add(self.package_view)
+        scroll_win = self.get_ui('package_sw')
+        scroll_win.add(self.package_view)
         # setup info view
         self.info = PackageInfo(self, self)
         self.extra_filters = ExtraFilters(self)
@@ -262,18 +263,18 @@ class Window(BaseWindow):
     def _setup_group_page(self):
         """Setup the group page."""
         # Groups
-        sw = self.get_ui('groups_sw')
-        hb = Gtk.Box()
-        hb.set_direction(Gtk.Orientation.HORIZONTAL)
+        scroll_win = self.get_ui('groups_sw')
+        box = Gtk.Box()
+        box.set_direction(Gtk.Orientation.HORIZONTAL)
         self.groups = GroupView(self.queue_view, self)
         self.groups.connect('group-changed', self.on_group_changed)
         # sw.add(hb)
-        sw.add(self.groups)
-        sw = self.get_ui('group_pkg_sw')
+        scroll_win.add(self.groups)
+        scroll_win = self.get_ui('group_pkg_sw')
         self.group_package_view = PackageView(self.queue_view, group_mode=True)
         self.group_package_view.connect(
             'pkg_changed', self.on_group_pkg_view_selection_changed)
-        sw.add(self.group_package_view)
+        scroll_win.add(self.group_package_view)
 
     def _setup_history_page(self):
         """Setup the history page."""
@@ -302,13 +303,13 @@ class Window(BaseWindow):
 
     def _open_url(self, url):
         """Open URL in default browser."""
-        if misc.is_url(url):  # just to be sure and prevent shell injection
-            rc = subprocess.call('xdg-open %s' % url, shell=True)
+        if common.is_url(url):  # just to be sure and prevent shell injection
+            rc = subprocess.run('xdg-open', url, check=False)
             # failover to gtk.show_uri, if xdg-open fails or is not installed
-            if rc != 0:
+            if rc.returncode != 0:
                 Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
         else:
-            dialogs.show_information('%s is not an url' % url)
+            dialogs.show_information(self, f'{url} is not an url')
 
     def _search_name(self, data, search_flt):
         """Search package name for keyword with wildcards."""
@@ -318,7 +319,7 @@ class Window(BaseWindow):
         newest_only = CONFIG.session.newest_only
         self.last_search_pkgs = self.backend.get_packages_by_name(
             search_flt % data, newest_only)
-        logger.debug('Packages found : %d' % len(self.last_search_pkgs))
+        logger.debug(f'Packages found : {len(self.last_search_pkgs)}')
         self.info.set_package(None)
         self.set_working(False)
         self.pkg_filter.set_active('all')
@@ -364,7 +365,7 @@ class Window(BaseWindow):
         self.backend.reload()
         self.set_working(False, splash=True)
 
-    @misc.exception_handler
+    @common.exception_handler
     def _reset(self):
         """Reset the gui on transaction completion."""
         self.set_working(True, splash=True)
@@ -379,7 +380,7 @@ class Window(BaseWindow):
         self.search_bar.reset()
         # reset groups
         self._grps = None
-        self._load_groups
+        self._load_groups()
         # reset history
         self.history_view.reset()
         self._load_history()
@@ -445,33 +446,25 @@ class Window(BaseWindow):
         self.backend.ClearTransaction()
         errors = 0
         error_msgs = []
-        for action in const.QUEUE_PACKAGE_TYPES:
+        for action, pkg_type in const.QUEUE_PACKAGE_TYPES.items():
             pkgs = self.queue_view.queue.get(action)
             for pkg in pkgs:
                 if action == 'do':
-                    logger.debug(
-                        'adding: %s %s' %
-                        (const.QUEUE_PACKAGE_TYPES[action], pkg.pkg_id))
+                    logger.debug(f'adding: {pkg_type} {pkg.pkg_id}')
                     rc, msgs = self.backend.AddTransaction(
-                        pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                        pkg.pkg_id, pkg_type)
                     if not rc:
-                        logger.debug('result : %s: %s' % (rc, pkg))
+                        logger.debug(f'result : {rc}: {pkg}')
                         errors += 1
-                        error_msgs.add(
-                            '%s : %s' %
-                            (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add(f'{pkg_type} : {pkg}')
                 else:
-                    logger.debug(
-                        'adding: %s %s' %
-                        (const.QUEUE_PACKAGE_TYPES[action], pkg.pkg_id))
+                    logger.debug(f'adding: {pkg_type} {pkg.pkg_id}')
                     rc, msgs = self.backend.AddTransaction(
-                        pkg.pkg_id, const.QUEUE_PACKAGE_TYPES[action])
+                        pkg.pkg_id, pkg_type)
                     if not rc:
-                        logger.debug('result: %s: %s' % (rc, pkg))
+                        logger.debug(f'result: {rc}: {pkg}')
                         errors += 1
-                        error_msgs.add(
-                            '%s : %s' %
-                            (const.QUEUE_PACKAGE_TYPES[action], pkg))
+                        error_msgs.add(f'{pkg_type} : {pkg}')
         for grp_id, action in self.queue_view.queue.get_groups():
             if action == 'i':
                 rc, msgs = self.backend.GroupInstall(grp_id)
@@ -488,15 +481,15 @@ class Window(BaseWindow):
                     error_msgs.extend(msgs)
 
         if errors > 0:
-            raise misc.TransactionBuildError(error_msgs)
+            raise common.TransactionBuildError(error_msgs)
 
     def _check_protected(self, trans):
         """Check for deletion protected packages in transaction"""
         protected = []
         for action, pkgs in trans:
             if action == 'remove':
-                for pkgid, size, replaces in pkgs:
-                    (n, e, v, r, a, repo_id) = str(pkgid).split(',')
+                for pkgid, _, _ in pkgs:
+                    (n, _, _, _, _, _) = str(pkgid).split(',')
                     if n in CONFIG.conf.protected:
                         protected.append(n)
         return protected
@@ -505,14 +498,14 @@ class Window(BaseWindow):
         """Populate transaction from queue and resolve deps."""
         # switch to queue view
         if self.queue_view.queue.total() == 0:
-            raise misc.QueueEmptyError
+            raise common.QueueEmptyError
         self.content.select_page('actions')
         self._populate_transaction()
         self.infobar.message(_('Searching for dependencies'))
         rc, result = self.backend.BuildTransaction()
         self.infobar.message(_('Dependencies resolved'))
         if not rc:
-            raise misc.TransactionSolveError(result)
+            raise common.TransactionSolveError(result)
         return result
 
     def _get_transaction(self):
@@ -520,12 +513,12 @@ class Window(BaseWindow):
         rc, result = self.backend.GetTransaction()
         logger.debug(f'GetTransaction : {rc=}')
         if not rc:
-            raise misc.TransactionSolveError(result)
+            raise common.TransactionSolveError(result)
         return result
 
     def _run_transaction(self):
         """Run the current transaction."""
-        self.infobar.message(_('Applying changes to the system'))
+        self.infobar.message(common._('Applying changes to the system'))
         self.set_working(True, True, splash=True)
         rc, result = self.backend.RunTransaction()
         logger.debug(f'RunTransaction : {rc=}')
@@ -533,10 +526,10 @@ class Window(BaseWindow):
         # imported)
         while rc == 1:
             # get info about gpgkey to be comfirmed
-            values = self.backend._gpg_confirm
+            values = self.backend.gpg_confirm
             if values:  # There is a gpgkey to be verified
-                (pkg_id, userid, hexkeyid, keyurl, timestamp) = values
-                logger.debug('GPGKey : %s' % repr(values))
+                (_, _, hexkeyid, _, _) = values
+                logger.debug(f'GPGKey : {repr(values)}')
                 ok = dialogs.ask_for_gpg_import(self, values)
                 if ok:
                     # tell the backend that the gpg key is confirmed
@@ -570,7 +563,7 @@ class Window(BaseWindow):
         self._reset()
         return
 
-    @misc.exception_handler
+    @common.exception_handler
     def _process_actions_installmode(self, action, package, always_yes,
                                      app_quit):
         """Process the pending actions from the command line.
@@ -585,13 +578,13 @@ class Window(BaseWindow):
             exit_msg = _('%s was installed successfully') % package
             self.infobar.message_sub(package)
             txmbrs = self.backend.Install(package)
-            logger.debug('txmbrs: %s' % str(txmbrs))
+            logger.debug(f'txmbrs: {str(txmbrs)}')
         elif action == 'remove':
             self.infobar.message(_('Removing package: %s') % package)
             exit_msg = _('%s was removed successfully') % package
             self.infobar.message_sub(package)
             txmbrs = self.backend.Remove(package)
-            logger.debug('txmbrs: %s' % str(txmbrs))
+            logger.debug(f'txmbrs: {str(txmbrs)}')
         elif action == 'update':
             self.infobar.message(_('Updating all available updates'))
             exit_msg = _('Available updates was applied successfully')
@@ -610,7 +603,7 @@ class Window(BaseWindow):
                 self.backend.RunTransaction()
                 self.release_root_backend()
                 self.hide()
-                misc.notify('Yum Extender', exit_msg)
+                common.notify('Yum Extender', exit_msg)
         else:
             dialogs.show_information(
                 self,
@@ -621,7 +614,7 @@ class Window(BaseWindow):
             self.release_root_backend(quit_dnfdaemon=True)
             self.app.quit()
 
-    @misc.exception_handler
+    @common.exception_handler
     def _process_actions(self, from_queue=True):
         """Process the current actions in the queue.
 
@@ -644,7 +637,7 @@ class Window(BaseWindow):
                 self.error_dialog.show(
                     ngettext("Can't remove protected package:",
                              "Can't remove protected packages:", len(check)) +
-                    misc.list_to_string(check, "\n ", ",\n "))
+                    common.list_to_string(check, "\n ", ",\n "))
                 self._reset_on_cancel()
                 return
             # transaction confirmation dialog
@@ -655,18 +648,18 @@ class Window(BaseWindow):
             else:  # user cancelled transaction
                 self._reset_on_cancel()
                 return
-        except misc.QueueEmptyError:  # Queue is empty
+        except common.QueueEmptyError:  # Queue is empty
             self.set_working(False)
             dialogs.show_information(self, _('No pending actions in queue'))
             self._reset_on_cancel()
-        except misc.TransactionBuildError as e:
+        except common.TransactionBuildError as e:
             # Error in building transaction
             self.error_dialog.show(
                 ngettext('Error in building transaction\n',
                          'Errors in building transaction\n', len(e.msgs)) +
                 '\n'.join(e.msgs))
             self._reset_on_cancel()
-        except misc.TransactionSolveError as e:
+        except common.TransactionSolveError as e:
             self.error_dialog.show(
                 ngettext('Error in search for dependencies\n',
                          'Errors in search for dependencies\n', len(e.msgs)) +
@@ -747,11 +740,11 @@ class Window(BaseWindow):
         if data == 'arch':
             self.active_archs = para
             self.arch_filter.change(self.active_archs)
-            logger.debug('arch changed : %s' % self.active_archs)
+            logger.debug(f'arch changed : {self.active_archs}')
             self._refresh()
         elif data == 'newest_only':
             CONFIG.session.newest_only = para
-            logger.debug('newest_only changed : %s' % para)
+            logger.debug(f'newest_only changed : {para}')
             self._refresh()
 
     def on_apply_changes(self, widget):
@@ -837,7 +830,7 @@ class Window(BaseWindow):
 
     def on_group_changed(self, widget, grp_id):
         """Handle group selection on group page."""
-        logger.debug('on_group_changed : %s ' % grp_id)
+        logger.debug(f'on_group_changed : {grp_id}')
         self.set_working(True, True)
         pkgs = self.backend.get_group_packages(grp_id, 'all')
         self.group_package_view.populate(pkgs)
@@ -846,13 +839,13 @@ class Window(BaseWindow):
     def on_history_undo(self, widget):
         """Handle the undo button on history page."""
         tid = self.history_view.get_selected()
-        logger.debug('History Undo : %s', tid)
+        logger.debug(f'History Undo : {tid}')
         rc, messages = self.backend.HistoryUndo(tid)
         if rc:
             self._process_actions(from_queue=False)
         else:
-            msg = "Can't undo history transaction :\n%s" % \
-                  ("\n".join(messages))
+            err_msgs = "\n".join(messages)
+            msg = f"Can't undo history transaction :\n{err_msgs}"
             logger.debug(msg)
             dialogs.show_information(self,
                                      _('Error in undo history transaction'),

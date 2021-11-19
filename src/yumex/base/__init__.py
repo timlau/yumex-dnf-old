@@ -22,7 +22,7 @@ import logging
 import sys
 
 import yumex.common.const as const
-import yumex.common as misc
+import yumex.common as common
 
 from yumex.common import CONFIG, _
 
@@ -78,7 +78,7 @@ class BaseYumex:
     def backend(self):
         return self.get_root_backend()
 
-    @misc.exception_handler
+    @common.exception_handler
     def reset_cache(self):
         logger.debug('Refresh system cache')
         self.set_working(True, True, splash=True)
@@ -90,7 +90,7 @@ class BaseYumex:
         else:
             show_information(self, _('Could not refresh the DNF cache (root)'))
 
-    @misc.exception_handler
+    @common.exception_handler
     def get_root_backend(self):
         """Get the current root backend.
 
@@ -121,7 +121,7 @@ class BaseYumex:
                 sys.exit(1)
         return self._root_backend
 
-    @misc.exception_handler
+    @common.exception_handler
     def release_root_backend(self, quit_dnfdaemon=False):
         """Release the current root backend, if it is setup and locked."""
         if self._root_backend is None:

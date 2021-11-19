@@ -21,7 +21,6 @@ import logging
 import os
 
 from gi.repository import Gtk, GObject, GdkPixbuf
-from yumex.common import _
 
 logger = logging.getLogger('yumex.gui.views')
 
@@ -48,8 +47,8 @@ class GroupView(Gtk.TreeView):
         self.base = base
         self.model = self.setup_view()
         self.queue = qview.queue
-        self.queueView = qview
-        self.currentCategory = None
+        self.queue_view = qview
+        self.current_category = None
         self._groups = None
         self.selected_group = None
         self.connect('cursor-changed', self.on_cursor_changed)
@@ -117,7 +116,7 @@ class GroupView(Gtk.TreeView):
                 self.queue.add_group(obj, 'r')  # Add for remove
             else:  # Group is not installed, add it to queue for installation
                 self.queue.add_group(obj, 'i')  # Add for install
-        self.queueView.refresh()
+        self.queue_view.refresh()
 
     def on_cursor_changed(self, widget):
         """
@@ -178,29 +177,29 @@ class GroupView(Gtk.TreeView):
         """
         obj = model.get_value(iterator, 0)
         pix = None
-        fn = "/usr/share/pixmaps/comps/%s.png" % obj.id
-        if os.access(fn, os.R_OK):
-            pix = self._get_pix(fn)
+        filename = f"/usr/share/pixmaps/comps/{obj.id}.png"
+        if os.access(filename, os.R_OK):
+            pix = self._get_pix(filename)
         else:  # Try to get the parent icon
             parent = model.iter_parent(iterator)
             if parent:
                 cat_id = model[parent][0].id  # get the parent cat_id
-                fn = "/usr/share/pixmaps/comps/%s.png" % cat_id
-                if os.access(fn, os.R_OK):
-                    pix = self._get_pix(fn)
+                filename = f"/usr/share/pixmaps/comps/{cat_id}.png"
+                if os.access(filename, os.R_OK):
+                    pix = self._get_pix(filename)
         if pix:
             cell.set_property('visible', True)
             cell.set_property('pixbuf', pix)
         else:
             cell.set_property('visible', False)
 
-    def _get_pix(self, fn):
+    def _get_pix(self, filename):
         """
         Get a pix buffer from a file, resize it to 24 px, if needed
         @param fn:
         """
         imgsize = 24
-        pix = GdkPixbuf.Pixbuf.new_from_file(fn)
+        pix = GdkPixbuf.Pixbuf.new_from_file(filename)
         if pix.get_height() != imgsize or pix.get_width() != imgsize:
             pix = pix.scale_simple(imgsize, imgsize, GdkPixbuf.INTERP_BILINEAR)
         return pix
