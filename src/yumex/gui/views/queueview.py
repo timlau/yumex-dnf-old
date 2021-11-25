@@ -20,11 +20,12 @@
 import logging
 
 from gi.repository import GObject, Gtk
+
 from yumex import const
 from yumex.common import _, ngettext
+from yumex.gui.views.packagequeue import PackageQueue
 
 logger = logging.getLogger("yumex.gui.views")
-from yumex.gui.views.packagequeue import PackageQueue
 
 
 class QueueView(Gtk.TreeView):

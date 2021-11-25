@@ -303,7 +303,7 @@ class PackageInfo(PackageDetails):
                     self.write("{header} : ", "filelist", newline=False)
                     self.add_url(bug, url)
                     self.write(bug_msg, "filelist")
-                    header = " "
+                    header = " "  # noqa: F841
 
         desc = upd_info["description"]
         head += f'\n{_("Description"):14} : {format_block(desc, 17)}\n'

@@ -18,7 +18,6 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 # pylint: disable=attribute-defined-outside-init
-import gi  # isort:skip
 from gi.repository import Gdk, Gtk  # isort:skip
 
 import logging
@@ -484,7 +483,7 @@ class Window(BaseWindow):
         protected = []
         for action, pkgs in trans:
             if action == "remove":
-                for pkgid, _, _ in pkgs:
+                for pkgid, _, _ in pkgs:  # noqa: F402
                     (n, _, _, _, _, _) = str(pkgid).split(",")
                     if n in CONFIG.conf.protected:
                         protected.append(n)

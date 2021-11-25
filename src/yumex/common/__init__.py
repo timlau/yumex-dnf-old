@@ -17,7 +17,6 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import argparse
 import configparser
 import gettext
 import locale
@@ -29,6 +28,9 @@ import sys
 import time
 
 import dnfdaemon.client
+import yumex.common.config as config
+import yumex.common.const as const
+
 from gi.repository import Gdk, Gtk, Notify
 
 LOCALE_DIR = os.path.join(sys.prefix, "share", "locale")
@@ -39,8 +41,6 @@ gettext.textdomain("yumex-dnf")
 _ = gettext.gettext
 ngettext = gettext.ngettext
 
-import yumex.common.config as config
-import yumex.common.const as const
 
 logger = logging.getLogger("yumex.common")
 

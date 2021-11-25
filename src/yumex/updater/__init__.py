@@ -31,18 +31,17 @@ import os
 import sys
 import time
 
+from xdg import BaseDirectory
+import dnfdaemon.client
+from yumex.common import _, ngettext, CONFIG
+import yumex.common as common
+
 import gi
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Notify", "0.7")
-from gi.repository import Gio, Notify, GObject, GLib
+from gi.repository import Gio, Notify, GObject, GLib  # noqa: E402
 
-from xdg import BaseDirectory
-
-import dnfdaemon.client
-
-from yumex.common import _, ngettext, CONFIG
-import yumex.common as common
 
 LOG_ROOT = "yumex.updater"
 

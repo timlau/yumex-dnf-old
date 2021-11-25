@@ -21,10 +21,10 @@ import argparse
 import logging
 import sys
 
-import gi  # isort:skip
+import gi  # noqa: F401
 from gi.repository import Gio, Gtk  # isort:skip
 
-from yumex.common import const, CONFIG, _, dbus_dnfsystem, logger_setup
+from yumex.common import CONFIG, dbus_dnfsystem, logger_setup
 from yumex.gui.window import Window
 
 logger = logging.getLogger("yumex")

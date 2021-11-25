@@ -18,7 +18,8 @@ The Option/BaseConfig classes is taken from config.py from the yum project
 It is modified to work in Python 3
 """
 # pylint: skip-file
-# FIXME: lot of pylint issues, so we disable it for now, the whole config option has to be redesigned
+# FIXME: lot of pylint issues, so we disable it for now,
+# the whole config option has to be redesigned
 
 import copy
 import glob

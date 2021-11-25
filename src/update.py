@@ -20,18 +20,19 @@
 
 # pylint: disable=broad-except, unused-import, wrong-import-position
 
+import sys
+import traceback
+import subprocess
+import signal
+
 # We need this for else is Gtk 4.0 selected by default
 import gi  # isort:skip
 
 gi.require_version("Gtk", "3.0")  # isort:skip
 gi.require_version("Notify", "0.7")  # isort:skip
-from gi.repository import Gtk  # type: ignore isort:skip
+from gi.repository import Gtk  # noqa: F401, E402
 
-from yumex.updater import UpdateApplication
-import sys
-import traceback
-import subprocess
-import signal
+from yumex.updater import UpdateApplication  # noqa: E402
 
 here = sys.path[0]
 if here != "/usr/bin":
@@ -44,7 +45,7 @@ try:
     app = UpdateApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
-except Exception as e:
+except Exception:
     print("Exception in user code:")
     print("-" * 80)
     traceback.print_exc(file=sys.stdout)

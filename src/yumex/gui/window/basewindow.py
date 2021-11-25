@@ -17,8 +17,7 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import gi  # pylint: disable=unused-import
-from gi.repository import Gdk, GLib, Gtk  # isort:skip
+from gi.repository import Gdk, Gtk  # isort:skip
 
 import logging
 import os.path
@@ -82,10 +81,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         if css_fn:
             screen = Gdk.Screen.get_default()
             css_provider = Gtk.CssProvider()
-            try:
-                css_provider.load_from_path(css_fn)
-            except GLib.Error as e:
-                logger.error(f"Error in theme: {e} ")
+            css_provider.load_from_path(css_fn)
             context = Gtk.StyleContext()
             context.add_provider_for_screen(
                 screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
@@ -103,9 +99,9 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         ]
         regex = re.compile(r"@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;")
         if common.check_dark_theme():
-            backup_color = "#ffffff"
+            color_bak = "#ffffff"
         else:
-            backup_color = "#000000"
+            color_bak = "#000000"
         with open(theme_fn, "r", encoding="UTF-8") as reader:
             lines = reader.readlines()
         for line in lines:
@@ -117,18 +113,18 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         logger.debug(f"loaded {len(color_table)} colors from {theme_fn}")
         for color in colors:
             if color in color_table:
-                color_value = color_table[color]
-                if color_value.startswith("@"):  # lookup macro color
-                    key = color_value[1:]  # dump the @
+                color_val = color_table[color]
+                if color_val.startswith("@"):  # lookup macro color
+                    key = color_val[1:]  # dump the @
                     if key in color_table:
-                        color_value = color_table[key]
+                        color_val = color_table[key]
                     else:
                         logger.info(
-                            f"Unknown Color alias : {color_value} default to {backup_color}"
+                            f"Unknown Color alias : {color_val} default to {color_bak}"
                         )
-                        color_value = backup_color
-                setattr(CONFIG.session, color, color_value)
-                logger.debug(f"  --> updated color : {color} to: {color_value}")
+                        color_val = color_bak
+                setattr(CONFIG.session, color, color_val)
+                logger.debug(f"  --> updated color : {color} to: {color_val}")
 
     def load_theme(self):
         theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
