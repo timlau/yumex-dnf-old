@@ -58,7 +58,9 @@ sudo dnf install yumex-dnf
 <br/>
 <br/>
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge&logo=appveyor)](https://github.com/psf/black) &nbsp;
- [![Code linter: flake8](https://img.shields.io/badge/linter-flake8-blue.svg?style=for-the-badge&logo=appveyor
-)](https://github.com/PyCQA/flake8)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black) &nbsp;
+ [![Code linter: flake8](https://img.shields.io/badge/linter-flake8-blue.svg?style=for-the-badge
+)](https://github.com/PyCQA/flake8)&nbsp;
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=for-the-badge&logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
 
