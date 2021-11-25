@@ -16,3 +16,15 @@
 #    along with this program; if not, write to
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import os.path
+
+from gi.repository import Gtk
+import yumex.common.const as const
+
+
+def load_ui(ui_file):
+    ui = Gtk.Builder()
+    ui.set_translation_domain("yumex-dnf")
+    ui.add_from_file(os.path.join(const.UI_DIR, ui_file))
+    return ui

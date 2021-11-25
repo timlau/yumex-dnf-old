@@ -17,8 +17,8 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from yumex.common import load_ui
 import yumex.common.const as const
+from yumex.gui import load_ui
 
 
 class ProgressSplash:

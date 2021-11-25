@@ -20,7 +20,7 @@
 import logging
 
 from gi.repository import Gtk
-from yumex import const
+import yumex.common.const as const
 from yumex.common import _, CONFIG, pkg_id_to_full_name
 
 logger = logging.getLogger("yumex.gui.views")

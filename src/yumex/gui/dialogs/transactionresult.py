@@ -18,9 +18,9 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from gi.repository import Gtk, GObject
-from yumex.common import load_ui
-from yumex import const
+import yumex.common.const as const
 from yumex.common import _, format_number
+from yumex.gui import load_ui
 
 
 class TransactionResult:

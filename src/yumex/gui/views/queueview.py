@@ -21,7 +21,7 @@ import logging
 
 from gi.repository import GObject, Gtk
 
-from yumex import const
+import yumex.common.const as const
 from yumex.common import _, ngettext
 from yumex.gui.views.packagequeue import PackageQueue
 

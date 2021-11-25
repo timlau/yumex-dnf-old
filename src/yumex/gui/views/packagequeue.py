@@ -19,7 +19,7 @@
 
 import logging
 
-from yumex import const
+import yumex.common.const as const
 
 logger = logging.getLogger("yumex.gui.views")
 

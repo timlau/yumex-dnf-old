@@ -29,7 +29,6 @@ import time
 
 import dnfdaemon.client
 import yumex.common.config as config
-import yumex.common.const as const
 
 from gi.repository import Gdk, Gtk, Notify
 
@@ -72,13 +71,6 @@ def dbus_dnfsystem(cmd):
     ]
     rc = subprocess.run(args, check=False)
     print(f' Executed : {" ".join(rc.args)}')
-
-
-def load_ui(ui_file):
-    ui = Gtk.Builder()
-    ui.set_translation_domain("yumex-dnf")
-    ui.add_from_file(os.path.join(const.UI_DIR, ui_file))
-    return ui
 
 
 def to_pkg_tuple(pkg_id):
