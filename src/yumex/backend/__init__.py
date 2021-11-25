@@ -20,7 +20,7 @@ import logging
 
 import yumex.common.const as const
 
-logger = logging.getLogger('yumex.backend')
+logger = logging.getLogger("yumex.backend")
 
 
 class Backend:
@@ -31,6 +31,7 @@ class Backend:
 
     must be implemented in a sub class
     """
+
     def __init__(self, frontend, filters=False):
         if filters:
             self.cache = PackageCacheWithFilters()
@@ -52,10 +53,10 @@ class Backend:
         self.frontend.exception_handler(exc)
 
     def get_packages(self, flt):
-        """ Get a list of Package objects based on a filter
+        """Get a list of Package objects based on a filter
         ('installed', 'available'...)
         """
-        pkgs = self.cache._get_packages(flt) # pylint: disable=protected-access
+        pkgs = self.cache._get_packages(flt)  # pylint: disable=protected-access
         return pkgs
 
 
@@ -63,6 +64,7 @@ class BaseFilter:
     """Used as base for filters, there can filter a list of packages
     based on a different conditions
     """
+
     def __init__(self, name, active=False):
         self.name = name
         self.active = active
@@ -82,9 +84,10 @@ class ArchFilter(BaseFilter):
     """
     Arch Filter to filter a list of packages by arch
     """
+
     def __init__(self, name, active=False):
         BaseFilter.__init__(self, name, active)
-        self.archs = ['noarch', 'i686', 'x86_64']
+        self.archs = ["noarch", "i686", "x86_64"]
 
     def run(self, pkgs):
         BaseFilter.run(self, pkgs)
@@ -99,6 +102,7 @@ class Filters:
     """
     Container to contain a number of filters based on the BaseFilter class
     """
+
     def __init__(self):
         self._filters = {}
 
@@ -113,7 +117,7 @@ class Filters:
     def run(self, pkgs):
         flt_pkgs = pkgs
         for flt in self._filters.values():
-            flt_pkgs =flt.run(flt_pkgs)
+            flt_pkgs = flt.run(flt_pkgs)
         return flt_pkgs
 
     def get(self, name):
@@ -128,6 +132,7 @@ class PackageCache:
     Package cache to contain packages from backend,
     so we dont have get them more than once.
     """
+
     def __init__(self):
         """
         setup the cache
@@ -184,17 +189,18 @@ class PackageCache:
 
 
 class PackageCacheWithFilters(PackageCache):
-    """ Package cache to contain packages from backend,
+    """Package cache to contain packages from backend,
     so we dont have get them more than once.
     This version has filtering, so we can filter packages by fx. arch
     """
+
     def __init__(self):
         """
         setup the cache
         """
         PackageCache.__init__(self)
         self.filters = Filters()
-        arch_flt = ArchFilter('arch')
+        arch_flt = ArchFilter("arch")
         self.filters.add(arch_flt)
 
     def _get_packages(self, pkg_filter):

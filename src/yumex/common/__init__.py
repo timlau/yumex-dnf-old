@@ -31,18 +31,18 @@ import time
 import dnfdaemon.client
 from gi.repository import Gdk, Gtk, Notify
 
-LOCALE_DIR = os.path.join(sys.prefix, 'share', 'locale')
-locale.setlocale(locale.LC_ALL, '')
-locale.bindtextdomain('yumex-dnf', LOCALE_DIR)
-gettext.bindtextdomain('yumex-dnf', LOCALE_DIR)
-gettext.textdomain('yumex-dnf')
+LOCALE_DIR = os.path.join(sys.prefix, "share", "locale")
+locale.setlocale(locale.LC_ALL, "")
+locale.bindtextdomain("yumex-dnf", LOCALE_DIR)
+gettext.bindtextdomain("yumex-dnf", LOCALE_DIR)
+gettext.textdomain("yumex-dnf")
 _ = gettext.gettext
 ngettext = gettext.ngettext
 
 import yumex.common.config as config
 import yumex.common.const as const
 
-logger = logging.getLogger('yumex.common')
+logger = logging.getLogger("yumex.common")
 
 
 class QueueEmptyError(Exception):
@@ -63,8 +63,12 @@ class TransactionSolveError(Exception):
 
 def dbus_dnfsystem(cmd):
     args = [
-        '/usr/bin/dbus-send', '--system', '--print-reply=literal',
-        '--dest=org.baseurl.DnfSystem', '/', f'org.baseurl.DnfSystem.{cmd}'
+        "/usr/bin/dbus-send",
+        "--system",
+        "--print-reply=literal",
+        "--dest=org.baseurl.DnfSystem",
+        "/",
+        f"org.baseurl.DnfSystem.{cmd}",
     ]
     rc = subprocess.run(args, check=False)
     print(f' Executed : {" ".join(rc.args)}')
@@ -72,14 +76,14 @@ def dbus_dnfsystem(cmd):
 
 def load_ui(ui_file):
     ui = Gtk.Builder()
-    ui.set_translation_domain('yumex-dnf')
+    ui.set_translation_domain("yumex-dnf")
     ui.add_from_file(os.path.join(const.UI_DIR, ui_file))
     return ui
 
 
 def to_pkg_tuple(pkg_id):
     """Find the real package nevre & repoid from an package pkg_id"""
-    (n, e, v, r, a, repo_id) = str(pkg_id).split(',')
+    (n, e, v, r, a, repo_id) = str(pkg_id).split(",")
     return n, e, v, r, a, repo_id
 
 
@@ -93,7 +97,7 @@ def list_to_string(pkg_list, first_delimitier, delimiter):
 
 def pkg_id_to_full_name(pkg_id):
     (n, e, v, r, a, _) = to_pkg_tuple(pkg_id)
-    if e and e != '0':
+    if e and e != "0":
         return f"{n}-{e}:{v}-{r}.{a}"
     else:
         return f"{n}-{v}-{r}.{a}"
@@ -125,18 +129,20 @@ def color_to_hex(color):
 
 def is_url(url):
     urls = re.findall(
-        r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|'
-        r'[!*(),]|%[0-9a-fA-F][0-9a-fA-F])+', url)
+        r"^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+~]|"
+        r"[!*(),]|%[0-9a-fA-F][0-9a-fA-F])+",
+        url,
+    )
     return urls
 
 
 def format_block(block, indent):
-    """ Format a block of text so they get the same indentation"""
+    """Format a block of text so they get the same indentation"""
     spaces = " " * indent
-    lines = str(block).split('\n')
+    lines = str(block).split("\n")
     result = lines[0] + "\n"
     for line in lines[1:]:
-        result += spaces + line + '\n'
+        result += spaces + line + "\n"
     return result
 
 
@@ -159,6 +165,7 @@ def exception_handler(func):
     """
     This decorator catch yum backed exceptions
     """
+
     def new_func(*args, **kwargs):
         try:
             rc = func(*args, **kwargs)
@@ -177,6 +184,7 @@ def timer(func):
     """
     This decorator show the execution time of a function in the debug log
     """
+
     def new_func(*args, **kwargs):
         t_start = time.perf_counter()
         rc = func(*args, **kwargs)
@@ -191,18 +199,18 @@ def timer(func):
     return new_func
 
 
-def format_number(number, SI=0, space=' '):
+def format_number(number, SI=0, space=" "):
     """Turn numbers into human-readable metric-like numbers"""
     symbols = [
-        '',  # (none)
-        'k',  # kilo
-        'M',  # mega
-        'G',  # giga
-        'T',  # tera
-        'P',  # peta
-        'E',  # exa
-        'Z',  # zetta
-        'Y'
+        "",  # (none)
+        "k",  # kilo
+        "M",  # mega
+        "G",  # giga
+        "T",  # tera
+        "P",  # peta
+        "E",  # exa
+        "Z",  # zetta
+        "Y",
     ]  # yotta
 
     if SI:
@@ -224,19 +232,19 @@ def format_number(number, SI=0, space=' '):
     if isinstance(number, int):
         # it's an int or a long, which means it didn't get divided,
         # which means it's already short enough
-        fmt = '%i%s%s'
+        fmt = "%i%s%s"
     elif number < 9.95:
         # must use 9.95 for proper sizing.  For example, 9.99 will be
         # rounded to 10.0 with the .1f fmt string (which is too long)
-        fmt = '%.1f%s%s'
+        fmt = "%.1f%s%s"
     else:
-        fmt = '%.0f%s%s'
+        fmt = "%.0f%s%s"
 
     return fmt % (float(number or 0), space, symbols[depth])
 
 
 def notify(summary, body):
-    Notify.init('Yum Extender')
+    Notify.init("Yum Extender")
     icon = "yumex-dnf"
     notification = Notify.Notification.new(summary, body, icon)
     notification.set_timeout(5000)  # timeout 5s
@@ -249,13 +257,13 @@ def check_dark_theme():
     return gtk_settings.get_property("gtk-application-prefer-dark-theme")
 
 
-def logger_setup(logroot='yumex',
-                 logfmt='%(asctime)s: %(message)s',
-                 loglvl=logging.INFO):
+def logger_setup(
+    logroot="yumex", logfmt="%(asctime)s: %(message)s", loglvl=logging.INFO
+):
     """Setup Python logging."""
     log = logging.getLogger(logroot)
     log.setLevel(loglvl)
-    formatter = logging.Formatter(logfmt, '%H:%M:%S')
+    formatter = logging.Formatter(logfmt, "%H:%M:%S")
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     handler.propagate = False
@@ -268,34 +276,34 @@ def is_gnome():
 
 
 class YumexConf(config.BaseConfig):
-    """ Yum Extender Config Setting"""
+    """Yum Extender Config Setting"""
+
     debug = config.BoolOption(False)
     autostart = config.BoolOption(False)
     theme = config.Option("System-Dark.theme")
     use_dark = config.BoolOption(False)
     show_splash = config.BoolOption(True)
 
-    color_install = config.Option('#8BE8FD')
-    color_update = config.Option('#FF79C6')
-    color_downgrade = config.Option('#50FA7B')
-    color_normal = config.Option('#D3DAE3')
-    color_obsolete = config.Option('#FFB86C')
+    color_install = config.Option("#8BE8FD")
+    color_update = config.Option("#FF79C6")
+    color_downgrade = config.Option("#50FA7B")
+    color_normal = config.Option("#D3DAE3")
+    color_obsolete = config.Option("#FFB86C")
 
     history_days = config.IntOption(180)
     newest_only = config.BoolOption(True)
     clean_unused = config.BoolOption(False)
     update_interval = config.IntOption(60)
     autocheck_updates = config.BoolOption(False)
-    system_refresh = config.Option('2000-01-01 00:01')
+    system_refresh = config.Option("2000-01-01 00:01")
     refresh_interval = config.IntOption(12)
     # headerbar is default if running gnome
     hb_default = is_gnome()
     headerbar = config.BoolOption(hb_default)
-    search_default = config.CaselessSelectionOption(default='prefix',
-                                                    allowed=('prefix',
-                                                             'keyword',
-                                                             'fields', 'key'))
-    search_fields = config.KeyListOption(['name', 'summary'])
+    search_default = config.CaselessSelectionOption(
+        default="prefix", allowed=("prefix", "keyword", "fields", "key")
+    )
+    search_fields = config.KeyListOption(["name", "summary"])
     win_height = config.IntOption(700)
     win_width = config.IntOption(1150)
     info_paned = config.IntOption(450)
@@ -304,16 +312,17 @@ class YumexConf(config.BaseConfig):
     repo_saved = config.BoolOption(False)
     repo_enabled = config.KeyListOption([])
     archs = config.KeyListOption([])
-    protected = config.KeyListOption(['yumex-dnf', 'python3-dnfdaemon'])
+    protected = config.KeyListOption(["yumex-dnf", "python3-dnfdaemon"])
     clean_instonly = config.BoolOption(True)
     search_visible = config.BoolOption(False)
-    installonly_limit = config.PositiveIntOption(3,
-                                                 range_min=2,
-                                                 names_of_0=["0", "<off>"])
+    installonly_limit = config.PositiveIntOption(
+        3, range_min=2, names_of_0=["0", "<off>"]
+    )
 
 
 class SessionConf(config.BaseConfig):
-    """ Yum Extender current session Setting"""
+    """Yum Extender current session Setting"""
+
     # show newest package version only for current session
     newest_only = config.BoolOption(True)
     # Clean orphan dependencies for this session
@@ -321,25 +330,30 @@ class SessionConf(config.BaseConfig):
     # enabled repositories for this session
     enabled_repos = config.ListOption([])
     clean_instonly = config.BoolOption(False)
-    color_install = config.Option('#ffffff')
-    color_update = config.Option('#ffffff')
-    color_downgrade = config.Option('#ffffff')
-    color_normal = config.Option('#ffffff')
-    color_obsolete = config.Option('#ffffff')
+    color_install = config.Option("#ffffff")
+    color_update = config.Option("#ffffff")
+    color_downgrade = config.Option("#ffffff")
+    color_normal = config.Option("#ffffff")
+    color_obsolete = config.Option("#ffffff")
 
 
 class Config(object):
     """
     Yum Extender Configuration class
     """
+
     WRITE_ALWAYS = [
-        'autostart', 'update_interval', 'update_startup_delay',
-        'autocheck_updates', 'update_notify', 'update_showicon'
+        "autostart",
+        "update_interval",
+        "update_startup_delay",
+        "autocheck_updates",
+        "update_notify",
+        "update_showicon",
     ]
 
     def __init__(self):
         object.__init__(self)
-        self.conf_dir = os.environ['HOME'] + "/.config/yumex-dnf"
+        self.conf_dir = os.environ["HOME"] + "/.config/yumex-dnf"
         if not os.path.isdir(self.conf_dir):
             logger.info(f"creating config directory : {self.conf_dir}")
             os.makedirs(self.conf_dir, 0o700)
@@ -356,10 +370,10 @@ class Config(object):
             first_read = True
         else:
             self.parser.read_file(open(self.conf_file, "r", encoding="UTF-8"))
-        if not self.parser.has_section('yumex'):
-            self.parser.add_section('yumex')
-        self.conf.populate(self.parser, 'yumex')
-        self.session.populate(self.parser, 'yumex')
+        if not self.parser.has_section("yumex"):
+            self.parser.add_section("yumex")
+        self.conf.populate(self.parser, "yumex")
+        self.session.populate(self.parser, "yumex")
         if first_read:
             self.write()
 

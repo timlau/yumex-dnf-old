@@ -22,11 +22,12 @@ import os
 
 from gi.repository import Gtk, GObject, GdkPixbuf
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class Group:
-    """ Object to represent a dnf group/category """
+    """Object to represent a dnf group/category"""
+
     def __init__(self, grpid, grp_name, grp_desc, inst, is_category=False):
         self.id = grpid
         self.name = grp_name
@@ -38,8 +39,7 @@ class Group:
 
 class GroupView(Gtk.TreeView):
     __gsignals__ = {
-        'group-changed':
-        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+        "group-changed": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING,))
     }
 
     def __init__(self, qview, base):
@@ -51,17 +51,17 @@ class GroupView(Gtk.TreeView):
         self.current_category = None
         self._groups = None
         self.selected_group = None
-        self.connect('cursor-changed', self.on_cursor_changed)
+        self.connect("cursor-changed", self.on_cursor_changed)
 
     def setup_view(self):
-        """ Setup Group View  """
+        """Setup Group View"""
         model = Gtk.TreeStore(GObject.TYPE_PYOBJECT)
 
         self.set_model(model)
         column = Gtk.TreeViewColumn(None, None)
         # Selection checkbox
         selection = Gtk.CellRendererToggle()  # Selection
-        selection.set_property('activatable', True)
+        selection.set_property("activatable", True)
         column.pack_start(selection, False)
         column.set_cell_data_func(selection, self.set_checkbox)
         selection.connect("toggled", self.on_toggled)
@@ -69,19 +69,19 @@ class GroupView(Gtk.TreeView):
         column = Gtk.TreeViewColumn(None, None)
         # Queue Status (install/remove group)
         state = Gtk.CellRendererPixbuf()  # Queue Status
-        state.set_property('stock-size', 1)
+        state.set_property("stock-size", 1)
         column.pack_start(state, False)
         column.set_cell_data_func(state, self.queue_pixbuf)
 
         # category/group icons
         icon = Gtk.CellRendererPixbuf()
-        icon.set_property('stock-size', 1)
+        icon.set_property("stock-size", 1)
         column.pack_start(icon, False)
         column.set_cell_data_func(icon, self.grp_pixbuf)
 
         category = Gtk.CellRendererText()
         column.pack_start(category, False)
-        column.set_cell_data_func(category, self.get_data_text, 'name')
+        column.set_cell_data_func(category, self.get_data_text, "name")
 
         self.append_column(column)
         self.set_headers_visible(False)
@@ -93,19 +93,19 @@ class GroupView(Gtk.TreeView):
         """
         obj = model.get_value(iterator, 0)
         if obj:
-            cell.set_property('text', getattr(obj, prop))
+            cell.set_property("text", getattr(obj, prop))
 
     def set_checkbox(self, column, cell, model, iterator, data=None):
         obj = model.get_value(iterator, 0)
         if obj:
             if obj.category:
-                cell.set_property('visible', False)
+                cell.set_property("visible", False)
             else:
-                cell.set_property('visible', True)
-                cell.set_property('active', obj.selected)
+                cell.set_property("visible", True)
+                cell.set_property("active", obj.selected)
 
     def on_toggled(self, widget, path):
-        """ Group selection handler """
+        """Group selection handler"""
         iterator = self.model.get_iter(path)
         obj = self.model.get_value(iterator, 0)
         action = self.queue.has_group(obj)
@@ -113,9 +113,9 @@ class GroupView(Gtk.TreeView):
             self.queue.remove_group(obj, action)
         else:
             if obj.installed:  # Group is installed add it to queue for removal
-                self.queue.add_group(obj, 'r')  # Add for remove
+                self.queue.add_group(obj, "r")  # Add for remove
             else:  # Group is not installed, add it to queue for installation
-                self.queue.add_group(obj, 'i')  # Add for install
+                self.queue.add_group(obj, "i")  # Add for install
         self.queue_view.refresh()
 
     def on_cursor_changed(self, widget):
@@ -129,7 +129,7 @@ class GroupView(Gtk.TreeView):
                 if not obj.category and obj.id != self.selected_group:
                     self.selected_group = obj.id
                     # send the group-changed signal
-                    self.emit('group-changed', obj.id)
+                    self.emit("group-changed", obj.id)
 
     def populate(self, data):
         self.freeze_child_notify()
@@ -157,18 +157,18 @@ class GroupView(Gtk.TreeView):
         obj = model.get_value(iterator, 0)
         if not obj.category:
             action = self.queue.has_group(obj.id)
-            icon = 'non-starred-symbolic'
+            icon = "non-starred-symbolic"
             if obj.installed:
-                icon = 'starred'
+                icon = "starred"
             if action:
-                if action == 'i':
-                    icon = 'network-server'
+                if action == "i":
+                    icon = "network-server"
                 else:
-                    icon = 'edit-delete'
-            cell.set_property('icon-name', icon)
-            cell.set_property('visible', True)
+                    icon = "edit-delete"
+            cell.set_property("icon-name", icon)
+            cell.set_property("visible", True)
         else:
-            cell.set_property('visible', False)
+            cell.set_property("visible", False)
 
     def grp_pixbuf(self, column, cell, model, iterator, data=None):
         """
@@ -188,10 +188,10 @@ class GroupView(Gtk.TreeView):
                 if os.access(filename, os.R_OK):
                     pix = self._get_pix(filename)
         if pix:
-            cell.set_property('visible', True)
-            cell.set_property('pixbuf', pix)
+            cell.set_property("visible", True)
+            cell.set_property("pixbuf", pix)
         else:
-            cell.set_property('visible', False)
+            cell.set_property("visible", False)
 
     def _get_pix(self, filename):
         """

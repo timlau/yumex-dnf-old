@@ -32,7 +32,7 @@ class Progress:
         self.spinner = ui.get_object("info_spinner")
 
     def _show_infobar(self, show=True):
-        """ Show or hide the info bar"""
+        """Show or hide the info bar"""
         if show == self._is_visible:  # check if infobar already is in the wanted state
             return
         self.infobar.set_reveal_child(show)
@@ -61,21 +61,21 @@ class Progress:
     def message(self, msg):
         self._show_infobar(True)
         self.label.set_text(msg)
-        if hasattr(self.base, 'working_splash'):
+        if hasattr(self.base, "working_splash"):
             self.base.working_splash.set_label(msg)
             self.base.working_splash.set_sublabel("")
 
     def message_sub(self, msg):
         self._show_infobar(True)
         self.sublabel.set_text(msg)
-        if hasattr(self.base, 'working_splash'):
+        if hasattr(self.base, "working_splash"):
             self.base.working_splash.set_sublabel(msg)
 
     def check_info(self):
         if self.label.get_text() == "":
             self.message(_("Getting Package Metadata"))
 
-    #pylint: disable=unused-argument
+    # pylint: disable=unused-argument
     def set_progress(self, frac, label=None):
         if 0.0 <= frac <= 1.0:
             self._show_infobar()

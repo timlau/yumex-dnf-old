@@ -22,15 +22,19 @@ import yumex.common.const as const
 from gi.repository import GObject, Gtk
 from yumex.common import CONFIG
 
-logger = logging.getLogger('yumex.gui.widget')
+logger = logging.getLogger("yumex.gui.widget")
 
 
 class ExtraFilters(GObject.GObject):
     __gsignals__ = {
-        'changed': (GObject.SignalFlags.RUN_FIRST, None, (
-            GObject.TYPE_STRING,
-            GObject.TYPE_PYOBJECT,
-        ))
+        "changed": (
+            GObject.SignalFlags.RUN_FIRST,
+            None,
+            (
+                GObject.TYPE_STRING,
+                GObject.TYPE_PYOBJECT,
+            ),
+        )
     }
 
     def __init__(self, win):
@@ -38,14 +42,14 @@ class ExtraFilters(GObject.GObject):
         self.win = win
         self.all_archs = const.PLATFORM_ARCH
         self.current_archs = None
-        self._button = self.win.get_ui('button_more_filters')
-        self._button.connect('clicked', self._on_button)
-        self._popover = self.win.get_ui('more_filters_popover')
-        self._arch_box = self.win.get_ui('box_archs')
+        self._button = self.win.get_ui("button_more_filters")
+        self._button.connect("clicked", self._on_button)
+        self._popover = self.win.get_ui("more_filters_popover")
+        self._arch_box = self.win.get_ui("box_archs")
         self._setup_archs()
-        self.newest_only = self.win.get_ui('cb_newest_only')
+        self.newest_only = self.win.get_ui("cb_newest_only")
         self.newest_only.set_active(CONFIG.conf.newest_only)
-        self.newest_only.connect('toggled', self._on_newest)
+        self.newest_only.connect("toggled", self._on_newest)
 
     def popup(self):
         self._on_button(self._button)
@@ -66,7 +70,7 @@ class ExtraFilters(GObject.GObject):
             else:
                 button.set_active(False)
             button.show()
-            button.connect('toggled', self._on_arch)
+            button.connect("toggled", self._on_arch)
 
     def _on_arch(self, widget):
         state = widget.get_active()
@@ -77,30 +81,29 @@ class ExtraFilters(GObject.GObject):
             self.current_archs.remove(label)
         CONFIG.conf.archs = list(self.current_archs)
         CONFIG.write()
-        self.emit("changed", 'arch', list(self.current_archs))
+        self.emit("changed", "arch", list(self.current_archs))
 
     def _on_newest(self, widget):
         state = widget.get_active()
-        self.emit('changed', 'newest_only', state)
+        self.emit("changed", "newest_only", state)
 
 
 class FilterSidebar(GObject.GObject):
-    """Sidebar selector widget. """
+    """Sidebar selector widget."""
 
     __gsignals__ = {
-        'sidebar-changed':
-        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+        "sidebar-changed": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING,))
     }
 
-    INDEX = {0: 'updates', 1: 'installed', 2: 'available', 3: 'all'}
+    INDEX = {0: "updates", 1: "installed", 2: "available", 3: "all"}
 
     def __init__(self, parent):
         GObject.GObject.__init__(self)
-        self._lb = parent.get_ui('pkg_listbox')
+        self._lb = parent.get_ui("pkg_listbox")
         self._parent = parent
         self._current = None
         self._lb.unselect_all()
-        self._lb.connect('row-selected', self.on_toggled)
+        self._lb.connect("row-selected", self.on_toggled)
 
     def on_toggled(self, widget, row):
         """Active filter is changed."""
@@ -108,15 +111,15 @@ class FilterSidebar(GObject.GObject):
             ndx = row.get_index()
             key = FilterSidebar.INDEX[ndx]
             if key != self._current:
-                self.emit('sidebar_changed', key)
+                self.emit("sidebar_changed", key)
                 self._current = key
 
     def set_active(self, key):
         """Set the active item based on key."""
         if self._current == key:
-            self.emit('sidebar_changed', key)
+            self.emit("sidebar_changed", key)
         else:
-            row_name = 'pkg_flt_row_' + key
+            row_name = "pkg_flt_row_" + key
             row = self._parent.get_ui(row_name)
             self._lb.select_row(row)
 
@@ -125,23 +128,22 @@ class Filters(GObject.GObject):
     """Handling the package filter UI."""
 
     __gsignals__ = {
-        'filter-changed':
-        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+        "filter-changed": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING,))
     }
 
-    FILTERS = ['updates', 'installed', 'available', 'all']
+    FILTERS = ["updates", "installed", "available", "all"]
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
         self._sidebar = FilterSidebar(self.win)
-        self.current = 'updates'
-        self._sidebar.connect('sidebar-changed', self.on_toggled)
+        self.current = "updates"
+        self._sidebar.connect("sidebar-changed", self.on_toggled)
 
     def on_toggled(self, widget, flt):
         """Active filter is changed."""
         self.current = flt
-        self.emit('filter-changed', flt)
+        self.emit("filter-changed", flt)
 
     def set_active(self, flt):
         """Set the active filter."""

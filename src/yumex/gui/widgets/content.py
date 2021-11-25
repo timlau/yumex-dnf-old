@@ -20,24 +20,23 @@
 import logging
 from gi.repository import GObject
 
-logger = logging.getLogger('yumex.gui.widget')
+logger = logging.getLogger("yumex.gui.widget")
 
 
 class Content(GObject.GObject):
     """Handling the content pages"""
 
     __gsignals__ = {
-        'page-changed':
-        (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING, ))
+        "page-changed": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_STRING,))
     }
 
     def __init__(self, win):
         GObject.GObject.__init__(self)
         self.win = win
-        self._stack = self.win.get_ui('main_stack')
-        self.switcher = self.win.get_ui('main_switcher')
+        self._stack = self.win.get_ui("main_stack")
+        self.switcher = self.win.get_ui("main_switcher")
         # catch changes in active page in stack
-        self._stack.connect('notify::visible-child', self.on_switch)
+        self._stack.connect("notify::visible-child", self.on_switch)
 
     def select_page(self, page):
         """Set the active page."""
@@ -50,4 +49,4 @@ class Content(GObject.GObject):
     def on_switch(self, widget, data):
         """The active page is changed."""
         child = self._stack.get_visible_child_name()
-        self.emit('page-changed', child)
+        self.emit("page-changed", child)

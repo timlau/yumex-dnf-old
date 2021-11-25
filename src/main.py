@@ -27,14 +27,14 @@ import traceback
 import gi  # isort:skip
 
 # We need this for else is Gtk 4.0 selected by default
-gi.require_version('Gtk', '3.0')  # isort:skip
-gi.require_version('Notify', '0.7')  # isort:skip
-from gi.repository import Gtk  # type: ignore isort:skip
+gi.require_version("Gtk", "3.0")  # isort:skip
+gi.require_version("Notify", "0.7")  # isort:skip
+from gi.repository import Gtk  # noqa: F401, E402
 
-from yumex import YumexApplication
+from yumex import YumexApplication  # noqa: E402
 
 here = sys.path[0]
-if here != '/usr/bin':
+if here != "/usr/bin":
     # git checkout
     sys.path[0] = here
     print(f"set PYTHONPATH to {here}")
@@ -44,19 +44,20 @@ try:
     app = YumexApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
-except Exception as e:
+except Exception:
     print("Exception in user code:")
-    print('-' * 80)
+    print("-" * 80)
     traceback.print_exc(file=sys.stdout)
-    print('-' * 80)
+    print("-" * 80)
 
     # Try to close backend dbus daemon
-    print('Closing backend D-Bus daemons')
+    print("Closing backend D-Bus daemons")
     try:
         subprocess.call(
-            '/usr/bin/dbus-send --system --print-reply '
-            '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
-            shell=True)
+            "/usr/bin/dbus-send --system --print-reply "
+            "--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
+            shell=True,
+        )
     except Exception:
         pass
 sys.exit(1)

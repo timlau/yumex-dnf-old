@@ -21,17 +21,18 @@ import logging
 
 from yumex import const
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class PackageQueue:
     """
     A Queue class to store selected packages/groups and the pending actions
     """
+
     def __init__(self):
         self.packages = {}
         self._setup_packages()
-        self.groups = {'i': {}, 'r': {}}
+        self.groups = {"i": {}, "r": {}}
         self._name_arch_index = {}
 
     def _setup_packages(self):
@@ -42,7 +43,7 @@ class PackageQueue:
         del self.packages
         self.packages = {}
         self._setup_packages()
-        self.groups = {'i': {}, 'r': {}}
+        self.groups = {"i": {}, "r": {}}
         self._name_arch_index = {}
 
     def get(self, action=None):
@@ -55,8 +56,8 @@ class PackageQueue:
         num = 0
         for key in const.QUEUE_PACKAGE_TYPES:
             num += len(self.packages[key])
-        num += len(self.groups['i'].keys())
-        num += len(self.groups['r'].keys())
+        num += len(self.groups["i"].keys())
+        num += len(self.groups["r"].keys())
         return num
 
     def add(self, pkg, action=None):
@@ -64,8 +65,7 @@ class PackageQueue:
         if not action:
             action = pkg.action
         name_arch = f"{pkg.name}.{pkg.arch}"
-        if pkg not in self.packages[action] and \
-                name_arch not in self._name_arch_index:
+        if pkg not in self.packages[action] and name_arch not in self._name_arch_index:
             self.packages[action].append(pkg)
             self._name_arch_index[name_arch] = 1
 
@@ -88,7 +88,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         """
-        logger.debug(f'add_group : {grp.id} - {action}')
+        logger.debug(f"add_group : {grp.id} - {action}")
         grps = self.groups[action]
         if grp.id not in grps:
             grps[grp.id] = grp
@@ -100,7 +100,7 @@ class PackageQueue:
         @param grp: Group object
         @param action:
         """
-        logger.debug(f'remove_group : {grp.id} - {action}')
+        logger.debug(f"remove_group : {grp.id} - {action}")
         grps = self.groups[action]
         if grp.id in grps:
             del grps[grp.id]
@@ -110,7 +110,7 @@ class PackageQueue:
         """
         remove all groups from queue
         """
-        for action in ('i', 'r'):
+        for action in ("i", "r"):
             for grp in self.groups[action]:
                 self.remove_group(grp, action)
 
@@ -118,7 +118,7 @@ class PackageQueue:
         """
         remove groups from queue based on list of grp_ids
         """
-        for action in ('i', 'r'):
+        for action in ("i", "r"):
             new_dict = {}
             grps = self.groups[action]
             for grp in grps.values():
@@ -129,15 +129,15 @@ class PackageQueue:
             self.groups[action] = new_dict
 
     def has_group(self, grp_id):
-        """ check if group is in package queue """
-        for action in ['i', 'r']:
+        """check if group is in package queue"""
+        for action in ["i", "r"]:
             grps = self.groups[action]
             if grp_id in grps:
                 return action
         return None
 
     def get_groups(self):
-        """ get (grp_id, action) generator"""
-        for action in ('i', 'r'):
+        """get (grp_id, action) generator"""
+        for action in ("i", "r"):
             for grp in self.groups[action].values():
                 yield grp.id, action

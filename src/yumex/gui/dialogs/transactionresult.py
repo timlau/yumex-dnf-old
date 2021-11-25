@@ -26,7 +26,7 @@ from yumex.common import _, format_number
 class TransactionResult:
     def __init__(self, base):
         self.base = base
-        self.ui = load_ui('transactionresult.ui')
+        self.ui = load_ui("transactionresult.ui")
         self.dialog = self.ui.get_object("transaction-results")
         self.dialog.set_transient_for(base)
         self.view = self.ui.get_object("result_view")
@@ -46,9 +46,13 @@ class TransactionResult:
         Setup the TreeView
         @param view: the TreeView widget
         """
-        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
-                              GObject.TYPE_STRING, GObject.TYPE_STRING,
-                              GObject.TYPE_STRING)
+        model = Gtk.TreeStore(
+            GObject.TYPE_STRING,
+            GObject.TYPE_STRING,
+            GObject.TYPE_STRING,
+            GObject.TYPE_STRING,
+            GObject.TYPE_STRING,
+        )
         view.set_model(model)
         self.create_text_column(_("Name"), view, 0, size=250)
         self.create_text_column(_("Arch"), view, 1)
@@ -86,21 +90,30 @@ class TransactionResult:
             label = f"<b>{const.TRANSACTION_RESULT_TYPES[sub]}</b>"
             level1 = model.append(None, [label, "", "", "", ""])
             for pkgid, size, replaces in lvl1:
-                (n, _, v, r, a, repo_id) = str(pkgid).split(',')
+                (n, _, v, r, a, repo_id) = str(pkgid).split(",")
                 level2 = model.append(
-                    level1, [n, a, f"{v}.{r}", repo_id,
-                             format_number(size)])
+                    level1, [n, a, f"{v}.{r}", repo_id, format_number(size)]
+                )
                 # packages there need to be downloaded
                 if sub in [
-                        'install', 'update', 'install-deps', 'update-deps',
-                        'obsoletes'
+                    "install",
+                    "update",
+                    "install-deps",
+                    "update-deps",
+                    "obsoletes",
                 ]:
                     total_size += size
                 for r in replaces:
-                    (n, _, v, r, a, repo_id) = str(r).split(',')
-                    model.append(level2, [
-                        _(f"<b>replacing</b> {n}"), a, f"{v}.{r}", repo_id,
-                        format_number(size)
-                    ])
+                    (n, _, v, r, a, repo_id) = str(r).split(",")
+                    model.append(
+                        level2,
+                        [
+                            _(f"<b>replacing</b> {n}"),
+                            a,
+                            f"{v}.{r}",
+                            repo_id,
+                            format_number(size),
+                        ],
+                    )
         self.ui.get_object("result_size").set_text(format_number(total_size))
         self.view.expand_all()

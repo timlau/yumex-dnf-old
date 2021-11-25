@@ -23,17 +23,17 @@ from yumex.common import load_ui
 
 class ErrorDialog:
     def __init__(self, base):
-        self.ui = load_ui('errordialog.ui')
+        self.ui = load_ui("errordialog.ui")
         self.dialog = self.ui.get_object("error_dialog")
         self.dialog.set_transient_for(base)
-        self._buffer = self.ui.get_object('error_buffer')
+        self._buffer = self.ui.get_object("error_buffer")
 
     def show(self, txt):
         self._set_text(txt)
         self.dialog.show_all()
         rc = self.dialog.run()
         self.dialog.hide()
-        self._buffer.set_text('')
+        self._buffer.set_text("")
         return rc == Gtk.ResponseType.CLOSE
 
     def _set_text(self, txt):

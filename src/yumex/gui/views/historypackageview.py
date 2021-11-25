@@ -23,18 +23,19 @@ from gi.repository import Gtk
 from yumex import const
 from yumex.common import _, CONFIG, pkg_id_to_full_name
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class HistoryPackageView(Gtk.TreeView):
-    """ History Package View Class"""
+    """History Package View Class"""
+
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
 
     def setup_view(self):
-        """ Create Notebook list for single page  """
+        """Create Notebook list for single page"""
         model = Gtk.TreeStore(str)
         self.set_model(model)
         cell = Gtk.CellRendererText()
@@ -55,7 +56,7 @@ class HistoryPackageView(Gtk.TreeView):
         names_pair = {}
         for elem in data:
             pkg_id, state, is_inst = elem
-            (name, _, _, _, arch, _) = str(pkg_id).split(',')
+            (name, _, _, _, arch, _) = str(pkg_id).split(",")
             name_arch = f"{name}.{arch}"
             if state in const.HISTORY_UPDATE_STATES:  # part of a pair
                 if name_arch in names_pair:
@@ -75,7 +76,8 @@ class HistoryPackageView(Gtk.TreeView):
         for name_arch in sorted(list(names)):
             pkg_list = names[name_arch]
             pkg_id, state, is_inst = pkg_list[
-                0]  # Get first element (the primary (new) one )
+                0
+            ]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -84,7 +86,8 @@ class HistoryPackageView(Gtk.TreeView):
         for name_arch in sorted(list(names_pair)):
             pkg_list = names_pair[name_arch]
             pkg_id, state, is_inst = pkg_list[
-                0]  # Get first element (the primary (new) one )
+                0
+            ]  # Get first element (the primary (new) one )
             if state in states:
                 states[state].append(pkg_list)
             else:
@@ -93,9 +96,9 @@ class HistoryPackageView(Gtk.TreeView):
         for state in const.HISTORY_SORT_ORDER:
             if state in states:
                 num = len(states[state])
-                cat = self.model.append(None, [
-                    f"<b>{const.HISTORY_STATE_LABLES[state]} ({num})</b>"
-                ])
+                cat = self.model.append(
+                    None, [f"<b>{const.HISTORY_STATE_LABLES[state]} ({num})</b>"]
+                )
                 for pkg_list in states[state]:
                     pkg_id, _, is_inst = pkg_list[0]
                     if is_inst:

@@ -8,25 +8,32 @@ from yumex import const
 from yumex.common import CONFIG, _, load_ui
 from yumex.gui.views.repoview import RepoView
 
-logger = logging.getLogger('yumex.gui.preffernces')
+logger = logging.getLogger("yumex.gui.preffernces")
 
 
 class Preferences:
 
-    VALUES = ['update_interval', 'refresh_interval', 'installonly_limit']
+    VALUES = ["update_interval", "refresh_interval", "installonly_limit"]
     FLAGS = [
-        'autostart', 'clean_unused', 'newest_only', 'headerbar',
-        'auto_select_updates', 'repo_saved', 'clean_instonly', 'use_dark',
-        'search_visible', 'show_splash'
+        "autostart",
+        "clean_unused",
+        "newest_only",
+        "headerbar",
+        "auto_select_updates",
+        "repo_saved",
+        "clean_instonly",
+        "use_dark",
+        "search_visible",
+        "show_splash",
     ]
 
     def __init__(self, base):
         self.base = base
-        self.ui = load_ui('preferences.ui')
+        self.ui = load_ui("preferences.ui")
         self.dialog = self.ui.get_object("preferences")
         self.dialog.set_transient_for(base)
         self.repo_view = RepoView()
-        widget = self.ui.get_object('repo_sw')
+        widget = self.ui.get_object("repo_sw")
         widget.add(self.repo_view)
         self.repo_box = self.ui.get_object("box_repos")
         # track when repo page is active in stack
@@ -44,15 +51,15 @@ class Preferences:
         return need_reset
 
     def on_repo_page_active(self, *_args):
-        """ Callback for ::map event there is called when repo page is active"""
+        """Callback for ::map event there is called when repo page is active"""
         if not self.repos:
             self._load_repositories()
 
     def _load_repositories(self):
-        """ Lazy load repositories """
+        """Lazy load repositories"""
         # get the repositories
         self.base.set_working(True, splash=True)
-        self.base.infobar.message(_('Fetching repository information'))
+        self.base.infobar.message(_("Fetching repository information"))
         self.repos = self.base.backend.get_repositories()
         self.base.infobar.hide()
         self.repo_view.populate(self.repos)
@@ -62,12 +69,10 @@ class Preferences:
 
     def get_themes(self):
         # Get Themes
-        pattern = os.path.normpath(os.path.join(const.THEME_DIR, '*.theme'))
+        pattern = os.path.normpath(os.path.join(const.THEME_DIR, "*.theme"))
         theme_files = glob.glob(pattern)
-        theme_names = [
-            os.path.basename(theme).split('.')[0] for theme in theme_files
-        ]
-        widget = self.ui.get_object('pref_theme')
+        theme_names = [os.path.basename(theme).split(".")[0] for theme in theme_files]
+        widget = self.ui.get_object("pref_theme")
         widget.remove_all()
         default = CONFIG.conf.theme.split(".")[0]
         i = 0
@@ -83,14 +88,14 @@ class Preferences:
         # set boolean states
         for option in Preferences.FLAGS:
             logger.debug(f"{option} : {getattr(CONFIG.conf, option)}")
-            widget = self.ui.get_object('pref_' + option)
+            widget = self.ui.get_object("pref_" + option)
             widget.set_active(getattr(CONFIG.conf, option))
         # cleanup installonly handler
-        widget = self.ui.get_object('pref_clean_instonly')
-        widget.connect('notify::active', self.on_clean_instonly)
+        widget = self.ui.get_object("pref_clean_instonly")
+        widget.connect("notify::active", self.on_clean_instonly)
         # Set value states
         for name in Preferences.VALUES:
-            widget = self.ui.get_object('pref_' + name)
+            widget = self.ui.get_object("pref_" + name)
             widget.set_value(getattr(CONFIG.conf, name))
         self.on_clean_instonly()
         # Get Themes
@@ -98,13 +103,13 @@ class Preferences:
 
     def on_clean_instonly(self, *_args):
         """Handler for clean_instonly switch"""
-        widget = self.ui.get_object('pref_clean_instonly')
+        widget = self.ui.get_object("pref_clean_instonly")
         state = widget.get_active()
-        postfix = 'installonly_limit'
+        postfix = "installonly_limit"
         self._set_sensitive(postfix, state)
 
     def _set_sensitive(self, postfix, state):
-        for prefix in ['pref_', 'label_']:
+        for prefix in ["pref_", "label_"]:
             id_ = prefix + postfix
             if state:
                 self.ui.get_object(id_).set_sensitive(True)
@@ -116,7 +121,7 @@ class Preferences:
         need_reset = False
         # handle boolean options
         for option in Preferences.FLAGS:
-            widget = self.ui.get_object('pref_' + option)
+            widget = self.ui.get_object("pref_" + option)
             state = widget.get_active()
             if state != getattr(CONFIG.conf, option):  # changed ??
                 setattr(CONFIG.conf, option, state)
@@ -124,7 +129,7 @@ class Preferences:
                 self.handle_setting(option, state)
         # handle value options
         for name in Preferences.VALUES:
-            widget = self.ui.get_object('pref_' + name)
+            widget = self.ui.get_object("pref_" + name)
             value = widget.get_value_as_int()
             if value != getattr(CONFIG.conf, name):  # changed ??
                 setattr(CONFIG.conf, name, value)
@@ -142,11 +147,11 @@ class Preferences:
                     CONFIG.conf.repo_enabled = repo_now
                     changed = True
         # Themes
-        widget = self.ui.get_object('pref_theme')
+        widget = self.ui.get_object("pref_theme")
         default = CONFIG.conf.theme.split(".")[0]
         theme = widget.get_active_text()
         if theme != default:
-            CONFIG.conf.theme = f'{theme}.theme'
+            CONFIG.conf.theme = f"{theme}.theme"
             self.base.load_custom_styling()
             changed = True
         if changed:
@@ -154,12 +159,10 @@ class Preferences:
         return need_reset
 
     def handle_setting(self, option, state):
-        if option == 'autostart':
+        if option == "autostart":
             if state:  # create an autostart .desktop for current user
                 if not os.path.isdir(const.AUTOSTART_DIR):
-                    logger.info(
-                        f"creating autostart directory : {const.AUTOSTART_DIR}"
-                    )
+                    logger.info(f"creating autostart directory : {const.AUTOSTART_DIR}")
                     os.makedirs(const.AUTOSTART_DIR, 0o700)
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
             else:  # remove the autostart file

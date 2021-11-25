@@ -25,11 +25,11 @@ import yumex.common.const as const
 class AboutDialog(Gtk.AboutDialog):
     def __init__(self, parent):
         Gtk.AboutDialog.__init__(self)
-        self.props.program_name = 'Yum Extender (dnf)'
+        self.props.program_name = "Yum Extender (dnf)"
         self.props.version = const.VERSION
-        self.props.authors = ['Tim Lauridsen <timlau@fedoraproject.org>']
+        self.props.authors = ["Tim Lauridsen <timlau@fedoraproject.org>"]
         self.props.license_type = Gtk.License.GPL_2_0
-        self.props.copyright = '(C) 2021 Tim Lauridsen'
-        self.props.website = 'https://www.yumex.dk'
-        self.props.logo_icon_name = 'yumex-dnf'
+        self.props.copyright = "(C) 2021 Tim Lauridsen"
+        self.props.website = "https://www.yumex.dk"
+        self.props.logo_icon_name = "yumex-dnf"
         self.set_transient_for(parent)

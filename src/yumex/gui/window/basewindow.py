@@ -34,23 +34,23 @@ from yumex.gui.dialogs.transactionresult import TransactionResult
 
 from yumex.base import BaseYumex
 
-logger = logging.getLogger('yumex')
+logger = logging.getLogger("yumex")
 
 
 # pylint: disable=no-member
 class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     def __init__(self, app):
-        Gtk.ApplicationWindow.__init__(self,
-                                       title='Yum Extender - Powered by DNF',
-                                       application=app)
+        Gtk.ApplicationWindow.__init__(
+            self, title="Yum Extender - Powered by DNF", application=app
+        )
         BaseYumex.__init__(self)
         self.get_style_context().add_class("yumex-dnf-window")
         self.app = app
-        self.connect('delete_event', self.on_delete_event)
-        icon = Gtk.IconTheme.get_default().load_icon('yumex-dnf', 128, 0)
+        self.connect("delete_event", self.on_delete_event)
+        icon = Gtk.IconTheme.get_default().load_icon("yumex-dnf", 128, 0)
         self.set_icon(icon)
         self.ui = Gtk.Builder()
-        self.ui.set_translation_domain('yumex-dnf')
+        self.ui.set_translation_domain("yumex-dnf")
         self.ui.add_from_file(const.UI_DIR + "/yumex.ui")
         # transaction result dialog
         self.transaction_result = TransactionResult(self)
@@ -63,7 +63,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         return self.ui.get_object(widget_name)
 
     def can_close(self):
-        """ Check if yumex is idle and can be closed"""
+        """Check if yumex is idle and can be closed"""
         if self.is_working:
             return False
         else:
@@ -87,50 +87,52 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
             except GLib.Error as e:
                 logger.error(f"Error in theme: {e} ")
             context = Gtk.StyleContext()
-            context.add_provider_for_screen(screen, css_provider,
-                                            Gtk.STYLE_PROVIDER_PRIORITY_USER)
-            logger.debug(f'loading custom styling : {css_fn}')
+            context.add_provider_for_screen(
+                screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
+            )
+            logger.debug(f"loading custom styling : {css_fn}")
 
     def load_colors(self, theme_fn):
         color_table = {}
         colors = [
-            'color_install', 'color_update', 'color_downgrade', 'color_normal',
-            'color_obsolete'
+            "color_install",
+            "color_update",
+            "color_downgrade",
+            "color_normal",
+            "color_obsolete",
         ]
-        regex = re.compile(r'@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;')
+        regex = re.compile(r"@define-color\s(\w*)\s*(#\w{6}|@\w*)\s*;")
         if common.check_dark_theme():
-            backup_color = '#ffffff'
+            backup_color = "#ffffff"
         else:
-            backup_color = '#000000'
-        with open(theme_fn, 'r', encoding='UTF-8') as reader:
+            backup_color = "#000000"
+        with open(theme_fn, "r", encoding="UTF-8") as reader:
             lines = reader.readlines()
         for line in lines:
             if line.startswith("@define-color"):
                 match = regex.search(line)
                 if len(match.groups()) == 2:
                     color_table[match.group(1)] = match.group(2)
-                    logger.debug(
-                        f' --> Color:  {match.group(1)} = {match.group(2)}')
-        logger.debug(f'loaded {len(color_table)} colors from {theme_fn}')
+                    logger.debug(f" --> Color:  {match.group(1)} = {match.group(2)}")
+        logger.debug(f"loaded {len(color_table)} colors from {theme_fn}")
         for color in colors:
             if color in color_table:
                 color_value = color_table[color]
-                if color_value.startswith('@'):  # lookup macro color
+                if color_value.startswith("@"):  # lookup macro color
                     key = color_value[1:]  # dump the @
                     if key in color_table:
                         color_value = color_table[key]
                     else:
                         logger.info(
-                            f'Unknown Color alias : {color_value} default to {backup_color}'
+                            f"Unknown Color alias : {color_value} default to {backup_color}"
                         )
                         color_value = backup_color
                 setattr(CONFIG.session, color, color_value)
-                logger.debug(
-                    f'  --> updated color : {color} to: {color_value}')
+                logger.debug(f"  --> updated color : {color} to: {color_value}")
 
     def load_theme(self):
         theme_fn = os.path.join(const.THEME_DIR, CONFIG.conf.theme)
-        logger.debug(f'looking for {theme_fn}')
+        logger.debug(f"looking for {theme_fn}")
         if os.path.exists(theme_fn):
             self.apply_css(theme_fn)
             self.load_colors(theme_fn)
@@ -139,17 +141,16 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """Load custom .css styling from current theme."""
         # Use Dark Theme
         gtk_settings = Gtk.Settings.get_default()
-        gtk_settings.set_property("gtk-application-prefer-dark-theme",
-                                  CONFIG.conf.use_dark)
+        gtk_settings.set_property(
+            "gtk-application-prefer-dark-theme", CONFIG.conf.use_dark
+        )
         css_fn = None
         theme = gtk_settings.props.gtk_theme_name
-        logger.debug(f'current theme : {theme}')
-        css_postfix = f'{theme}/apps/yumex.css'
-        for css_prefix in [
-                os.path.expanduser('~/.themes'), '/usr/share/themes'
-        ]:
+        logger.debug(f"current theme : {theme}")
+        css_postfix = f"{theme}/apps/yumex.css"
+        for css_prefix in [os.path.expanduser("~/.themes"), "/usr/share/themes"]:
             css_file = os.path.join(css_prefix, css_postfix)
-            logger.debug(f'looking for {css_file}')
+            logger.debug(f"looking for {css_file}")
             if os.path.exists(css_file):
                 css_fn = css_file
                 break
@@ -161,8 +162,7 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
     # noinspection PyUnusedLocal
     def on_window_state(self, widget, event):
         # save window current maximized state
-        self.cur_maximized = event.new_window_state & \
-            Gdk.WindowState.MAXIMIZED != 0
+        self.cur_maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
 
     def on_window_changed(self, widget, data):
         size = widget.get_size()
@@ -179,31 +179,29 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
         """
         close = True
         msg = str(e)
-        logger.error(f'EXCEPTION : {msg} ')
+        logger.error(f"EXCEPTION : {msg} ")
         err, errmsg = self._parse_error(msg)
-        logger.debug(f'err:  [{err}] - msg: {errmsg}')
-        if err == 'LockedError':
-            errmsg = 'dnf is locked by another process \n' \
-                     '\nYum Extender will exit'
+        logger.debug(f"err:  [{err}] - msg: {errmsg}")
+        if err == "LockedError":
+            errmsg = "dnf is locked by another process \n" "\nYum Extender will exit"
             close = False
-        elif err == 'AccessDeniedError':
+        elif err == "AccessDeniedError":
             errmsg = "Root backend was not authorized and can't continue"
             close = True
-        elif err == 'FatalError':
-            errmsg = 'Fatal error in yumex backend'
+        elif err == "FatalError":
+            errmsg = "Fatal error in yumex backend"
             close = False
-        elif err == 'NoReply':
-            errmsg = 'DNF Dbus backend is not responding \n'\
-                     '\nYum Extender will exit'
+        elif err == "NoReply":
+            errmsg = "DNF Dbus backend is not responding \n" "\nYum Extender will exit"
             close = False
-        if errmsg == '':
+        if errmsg == "":
             errmsg = msg
         self.error_dialog.show(errmsg)
         # try to exit the backends, ignore errors
         if close:
             try:
                 self.release_root_backend(quit_dnfdaemon=True)
-            except Exception:  #pylint: disable=broad-except
+            except Exception:  # pylint: disable=broad-except
                 pass
         Gtk.main_quit()
         sys.exit(1)
@@ -234,7 +232,10 @@ class BaseWindow(Gtk.ApplicationWindow, BaseYumex):
 
     def _disable_buttons(self, state):
         insensitive_widgets = [
-            'left_header', 'right_header', 'package_sidebar', 'content_box'
+            "left_header",
+            "right_header",
+            "package_sidebar",
+            "content_box",
         ]
         for widget in insensitive_widgets:
             self.ui.get_object(widget).set_sensitive(state)

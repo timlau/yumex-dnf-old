@@ -23,55 +23,55 @@ from gi.repository import Gtk
 from yumex.common import _
 from yumex.gui.views.selectionview import SelectionView
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class RepoView(SelectionView):
     """
     This class controls the repo TreeView
     """
+
     def __init__(self):
         SelectionView.__init__(self)
-        self.headers = [_('Repository'), _('Filename')]
+        self.headers = [_("Repository"), _("Filename")]
         self.store = self.setup_view()
-        self.state = 'normal'
+        self.state = "normal"
         self._last_selected = []
 
     def on_toggled(self, widget, path):
-        """ Repo select/unselect handler """
+        """Repo select/unselect handler"""
         iterator = self.store.get_iter(path)
         state = self.store.get_value(iterator, 0)
         self.store.set_value(iterator, 0, not state)
 
     def on_section_header_clicked(self, widget):
-        """  Selection column header clicked"""
-        if self.state == 'normal':  # deselect all
+        """Selection column header clicked"""
+        if self.state == "normal":  # deselect all
             self._last_selected = self.get_selected()
             self.select_all(state=False)
-            self.state = 'deselected'
-        elif self.state == 'deselected':  # select all
-            self.state = 'selected'
+            self.state = "deselected"
+        elif self.state == "deselected":  # select all
+            self.state = "selected"
             self.select_all(state=True)
-        elif self.state == 'selected':  # select previous selected
-            self.state = 'normal'
+        elif self.state == "selected":  # select previous selected
+            self.state = "normal"
             self.select_by_keys(self._last_selected)
             self._last_selected = []
 
     def setup_view(self):
-        """ Create models and columns for the Repo TextView  """
-        store = Gtk.ListStore('gboolean', str, str, 'gboolean')
+        """Create models and columns for the Repo TextView"""
+        store = Gtk.ListStore("gboolean", str, str, "gboolean")
         self.set_model(store)
         # Setup Selection Column
         col = self.create_selection_column_num(
-            0,
-            tooltip=_("Click here to switch between\n"
-                      " none/all/default selected"))
+            0, tooltip=_("Click here to switch between\n" " none/all/default selected")
+        )
         col.set_clickable(True)
-        col.connect('clicked', self.on_section_header_clicked)
+        col.connect("clicked", self.on_section_header_clicked)
 
         # Setup resent column
         cell2 = Gtk.CellRendererPixbuf()  # gpgcheck
-        cell2.set_property('icon-name', 'dialog-password-symbolic')
+        cell2.set_property("icon-name", "dialog-password-symbolic")
         column2 = Gtk.TreeViewColumn("", cell2)
         column2.set_cell_data_func(cell2, self.new_pixbuf)
         column2.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -80,14 +80,14 @@ class RepoView(SelectionView):
         self.append_column(column2)
 
         # Setup reponame & repofile column's
-        self.create_text_column_num(_('Repository'), 1)
-        self.create_text_column_num(_('Name'), 2)
+        self.create_text_column_num(_("Repository"), 1)
+        self.create_text_column_num(_("Name"), 2)
         self.set_search_column(1)
         self.set_reorderable(False)
         return store
 
     def populate(self, data):
-        """ Populate a repo liststore with data """
+        """Populate a repo liststore with data"""
         self.store.clear()
         for state, ident, name, gpg in data:
             self.store.append([state, ident, name, gpg])
@@ -95,9 +95,9 @@ class RepoView(SelectionView):
     def new_pixbuf(self, column, cell, model, iterator, data):
         gpg = model.get_value(iterator, 3)
         if gpg:
-            cell.set_property('visible', True)
+            cell.set_property("visible", True)
         else:
-            cell.set_property('visible', False)
+            cell.set_property("visible", False)
 
     def get_selected(self):
         selected = []

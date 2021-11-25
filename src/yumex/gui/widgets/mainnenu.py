@@ -24,41 +24,45 @@ from yumex.common import _
 G_TRUE = GLib.Variant.new_boolean(True)
 G_FALSE = GLib.Variant.new_boolean(False)
 
-logger = logging.getLogger('yumex.gui.widget')
+logger = logging.getLogger("yumex.gui.widget")
 
 
 class MainMenu(Gio.Menu):
     __gsignals__ = {
-        'menu-changed': (GObject.SignalFlags.RUN_FIRST, None, (
-            GObject.TYPE_STRING,
-            GObject.TYPE_PYOBJECT,
-        ))
+        "menu-changed": (
+            GObject.SignalFlags.RUN_FIRST,
+            None,
+            (
+                GObject.TYPE_STRING,
+                GObject.TYPE_PYOBJECT,
+            ),
+        )
     }
 
     def __init__(self, win):
         super(MainMenu, self).__init__()
         self.win = win
-        self._button = self.win.get_ui('mainmenu_button')
-        self._button.connect('clicked', self._on_button)
+        self._button = self.win.get_ui("mainmenu_button")
+        self._button.connect("clicked", self._on_button)
         self._popover = Gtk.Popover.new_from_model(self._button, self)
         gen_menu = Gio.Menu()
-        self._add_menu(gen_menu, _("Preferences"), 'pref')
-        self._add_menu(gen_menu, _("Refresh Metadata"), 'reload')
-        self._add_menu(gen_menu, _("Quit"), 'quit')
-        self.append_section(_('Main Menu'), gen_menu)
+        self._add_menu(gen_menu, _("Preferences"), "pref")
+        self._add_menu(gen_menu, _("Refresh Metadata"), "reload")
+        self._add_menu(gen_menu, _("Quit"), "quit")
+        self.append_section(_("Main Menu"), gen_menu)
         help_menu = Gio.Menu()
-        self._add_menu(help_menu, _("About"), 'about')
-        self._add_menu(help_menu, _("Keyboard Shortcuts"), 'shortcuts')
-        self._add_menu(help_menu, _("Documentation"), 'docs')
+        self._add_menu(help_menu, _("About"), "about")
+        self._add_menu(help_menu, _("Keyboard Shortcuts"), "shortcuts")
+        self._add_menu(help_menu, _("Documentation"), "docs")
         self.append_section(_("Help"), help_menu)
 
     def _add_menu(self, menu, label, name):
         # menu
-        menu.append(label, f'win.{name}')
+        menu.append(label, f"win.{name}")
         # action
         action = Gio.SimpleAction.new(name, None)
         self.win.add_action(action)
-        action.connect('activate', self._on_menu, name)
+        action.connect("activate", self._on_menu, name)
         return action
 
     def _on_menu(self, action, state, action_name):
@@ -70,7 +74,7 @@ class MainMenu(Gio.Menu):
         elif state == G_FALSE:
             action.change_state(G_TRUE)
             data = True
-        self.emit('menu-changed', action_name, data)
+        self.emit("menu-changed", action_name, data)
 
     def _on_button(self, button):
         self._popover.show_all()

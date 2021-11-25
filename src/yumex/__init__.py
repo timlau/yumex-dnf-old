@@ -32,6 +32,7 @@ logger = logging.getLogger("yumex")
 
 class YumexApplication(Gtk.Application):
     """Main application."""
+
     def __init__(self):
         Gtk.Application.__init__(
             self,
@@ -67,28 +68,23 @@ class YumexApplication(Gtk.Application):
     def on_command_line(self, app, args):
         parser = argparse.ArgumentParser(prog="app")
         parser.add_argument("-d", "--debug", action="store_true")
-        parser.add_argument("-y",
-                            "--yes",
-                            action="store_true",
-                            help="Answer yes/ok to all questions")
+        parser.add_argument(
+            "-y", "--yes", action="store_true", help="Answer yes/ok to all questions"
+        )
         parser.add_argument(
             "--exit",
             action="store_true",
             help="tell dnfdaemon dbus services used by yumex to exit",
         )
-        parser.add_argument("-I",
-                            "--install",
-                            type=str,
-                            metavar="PACKAGE",
-                            help="Install Package")
-        parser.add_argument("-R",
-                            "--remove",
-                            type=str,
-                            metavar="PACKAGE",
-                            help="Remove Package")
-        parser.add_argument("--updateall",
-                            action="store_true",
-                            help="apply all available updates")
+        parser.add_argument(
+            "-I", "--install", type=str, metavar="PACKAGE", help="Install Package"
+        )
+        parser.add_argument(
+            "-R", "--remove", type=str, metavar="PACKAGE", help="Remove Package"
+        )
+        parser.add_argument(
+            "--updateall", action="store_true", help="apply all available updates"
+        )
         if not self.running:
             # First run
             self.args = parser.parse_args(args.get_arguments()[1:])
@@ -105,15 +101,17 @@ class YumexApplication(Gtk.Application):
         else:
             # Second Run
             # parse cmdline in a non quitting way
-            self.current_args = parser.parse_known_args(
-                args.get_arguments()[1:])[0]
+            self.current_args = parser.parse_known_args(args.get_arguments()[1:])[0]
             if self.current_args.exit:
                 if self.window.can_close():
                     self.quit()
                 else:
                     logger.info("Application is busy")
-            if (self.current_args.install or self.current_args.remove
-                    or self.current_args.updateall):
+            if (
+                self.current_args.install
+                or self.current_args.remove
+                or self.current_args.updateall
+            ):
                 self.install_mode = True
         self.activate()
         return 0

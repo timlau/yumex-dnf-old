@@ -24,10 +24,10 @@ import yumex.common.const as const
 class ProgressSplash:
     def __init__(self, base):
         self.base = base
-        self.ui = load_ui('progresssplash.ui')
+        self.ui = load_ui("progresssplash.ui")
         self.win = self.ui.get_object("win_working")
         pix = self.ui.get_object("work_pix")
-        pix_file = f'{const.PIX_DIR}/progress.gif'
+        pix_file = f"{const.PIX_DIR}/progress.gif"
         pix.set_from_file(pix_file)
         self.label = self.ui.get_object("work_label")
         self.sublabel = self.ui.get_object("work_sublabel")

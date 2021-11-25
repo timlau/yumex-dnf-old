@@ -20,13 +20,14 @@
 import logging
 from gi.repository import Gtk
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class SelectionView(Gtk.TreeView):
     """
     A Base view with an selection column
     """
+
     def __init__(self):
         """
         init the view
@@ -34,12 +35,7 @@ class SelectionView(Gtk.TreeView):
         Gtk.TreeView.__init__(self)
         self.store = None
 
-    def create_text_column_num(self,
-                               hdr,
-                               colno,
-                               resize=True,
-                               size=None,
-                               markup=False):
+    def create_text_column_num(self, hdr, colno, resize=True, size=None, markup=False):
         """
         Create a TreeViewColumn with data from a TreeStore column
         @param hdr: column header text
@@ -60,13 +56,9 @@ class SelectionView(Gtk.TreeView):
         self.append_column(column)
         return column
 
-    def create_text_column(self,
-                           hdr,
-                           prop,
-                           size,
-                           sortcol=None,
-                           click_handler=None,
-                           tooltip=None):
+    def create_text_column(
+        self, hdr, prop, size, sortcol=None, click_handler=None, tooltip=None
+    ):
         """
         Create a TreeViewColumn with text and set
         the sorting properties and add it to the view
@@ -92,24 +84,21 @@ class SelectionView(Gtk.TreeView):
             widget = column.get_button()
             while not isinstance(widget, Gtk.Button):
                 widget = widget.get_parent()
-            widget.connect('button-release-event', click_handler)
+            widget.connect("button-release-event", click_handler)
             if tooltip:
                 widget.set_tooltip_text(tooltip)
 
         return column
 
-    def create_selection_colunm(self,
-                                attr,
-                                click_handler=None,
-                                popup_handler=None,
-                                tooltip=None,
-                                icon=None):
+    def create_selection_colunm(
+        self, attr, click_handler=None, popup_handler=None, tooltip=None, icon=None
+    ):
         """Create an selection column, there get data via property function
         and a key attr
         """
         # Setup a selection column using a object attribute
         cell1 = Gtk.CellRendererToggle()  # Selection
-        cell1.set_property('activatable', True)
+        cell1.set_property("activatable", True)
         column1 = Gtk.TreeViewColumn("", cell1)
         column1.set_cell_data_func(cell1, self.get_data_bool, attr)
         column1.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -118,7 +107,7 @@ class SelectionView(Gtk.TreeView):
         cell1.connect("toggled", self.on_toggled)
         column1.set_clickable(True)
         if click_handler:
-            column1.connect('clicked', click_handler)
+            column1.connect("clicked", click_handler)
         label = Gtk.Label(label="+")
         label.show()
         column1.set_widget(label)
@@ -126,7 +115,7 @@ class SelectionView(Gtk.TreeView):
             widget = column1.get_widget()
             while not isinstance(widget, Gtk.Button):
                 widget = widget.get_parent()
-            widget.connect('button-release-event', popup_handler)
+            widget.connect("button-release-event", popup_handler)
             if icon:
                 image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
                 widget.set_image(image)
@@ -145,7 +134,7 @@ class SelectionView(Gtk.TreeView):
         column = Gtk.TreeViewColumn(None, None)
         # Selection checkbox
         selection = Gtk.CellRendererToggle()  # Selection
-        selection.set_property('activatable', True)
+        selection.set_property("activatable", True)
         column.pack_start(selection, False)
         if data_func:
             column.set_cell_data_func(selection, data_func)
@@ -166,11 +155,7 @@ class SelectionView(Gtk.TreeView):
 
         return column
 
-    def create_selection_text_column(self,
-                                     hdr,
-                                     select_func,
-                                     text_attr,
-                                     size=200):
+    def create_selection_text_column(self, hdr, select_func, text_attr, size=200):
         """
         Create an selection column, there get data an TreeStore Column
         """
@@ -179,7 +164,7 @@ class SelectionView(Gtk.TreeView):
         column = Gtk.TreeViewColumn(hdr, None)
         # Selection checkbox
         selection = Gtk.CellRendererToggle()  # Selection
-        selection.set_property('activatable', True)
+        selection.set_property("activatable", True)
         selection.connect("toggled", self.on_toggled)
         column.pack_start(selection, False)
         column.set_cell_data_func(selection, select_func)
@@ -198,8 +183,8 @@ class SelectionView(Gtk.TreeView):
         """
         obj = model.get_value(iterator, 0)
         if obj:
-            cell.set_property('text', getattr(obj, prop))
-            cell.set_property('foreground-rgba', obj.color)
+            cell.set_property("text", getattr(obj, prop))
+            cell.set_property("foreground-rgba", obj.color)
 
     def get_data_bool(self, column, cell, model, iterator, prop):
         """Property function to get boolean data from a object in

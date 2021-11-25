@@ -23,21 +23,22 @@ from gi.repository import Gtk
 from yumex.common import _
 from yumex.gui.views.historypackageview import HistoryPackageView
 
-logger = logging.getLogger('yumex.gui.views')
+logger = logging.getLogger("yumex.gui.views")
 
 
 class HistoryView(Gtk.TreeView):
-    """ History View Class"""
+    """History View Class"""
+
     def __init__(self, base):
         Gtk.TreeView.__init__(self)
         self.model = self.setup_view()
         self.base = base
         self.pkg_view = HistoryPackageView(self.base)
-        self.connect('cursor-changed', self.on_cursor_changed)
+        self.connect("cursor-changed", self.on_cursor_changed)
         self.is_populated = False
 
     def setup_view(self):
-        """ Create Notebook list for single page  """
+        """Create Notebook list for single page"""
         model = Gtk.TreeStore(str, int)
         self.set_model(model)
         cell1 = Gtk.CellRendererText()
@@ -58,8 +59,8 @@ class HistoryView(Gtk.TreeView):
         self.model.clear()
         main = {}
         for tid, date_time in data:
-            date, time = date_time.split('T')
-            year, month, day = date.split('-')
+            date, time = date_time.split("T")
+            year, month, day = date.split("-")
             # year
             if year not in main:
                 ycat = self.model.append(None, [year, -1])
