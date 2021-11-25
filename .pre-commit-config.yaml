@@ -3,7 +3,7 @@ default_language_version:
   python: python3.10
 repos:
   - repo: https://github.com/psf/black
-    rev: 21.8b0
+    rev: 21.11b1
     hooks:
     - id: black
       args: [
@@ -13,7 +13,7 @@ repos:
       exclude: ^(tools/|docs/)
       types: ['python']
   - repo: https://github.com/PyCQA/flake8
-    rev: 3.8.2
+    rev: 4.0.1
     hooks:
     - id: flake8
       args: [
