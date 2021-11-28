@@ -148,6 +148,9 @@ status-run:
 pylint-errors:
 	@-find src -type f -name "*.py" | xargs pylint -E --rcfile=.pylintrc
 
+flake8:
+	@-flake8 src/
+
 .PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
 .PHONY: test-copr sass pylint-errors
