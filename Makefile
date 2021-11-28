@@ -145,13 +145,23 @@ status-checkupdates:
 status-run:
 	cd dbus && ./dbus_status.py -v -d
 
-pylint-errors:
+# Run pylint checks
+check-pylint:
 	@-find src -type f -name "*.py" | xargs pylint -E --rcfile=.pylintrc
 
-flake8:
+# Run flake8 checks
+check-flake8:
 	@-flake8 src/
+
+# format python code using black
+check-black:
+	@black src/
+
+# install python linters & formatters using pip
+check-inst-deps:
+	@pip install pylint black flake8
 
 .PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
-.PHONY: test-copr sass pylint-errors
+.PHONY: test-copr sass check-pylint check-flake8 check-black check-inst-deps 
 	
