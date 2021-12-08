@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Yum Extender\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-18 07:45+0100\n"
-"PO-Revision-Date: 2021-11-18 06:44+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
+"POT-Creation-Date: 2021-11-18 07:48+0100\n"
+"PO-Revision-Date: 2021-11-20 12:54+0000\n"
+"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/timlau/yumex/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,7 +112,7 @@ msgstr "Usunięte pakiety"
 
 #: ../src/yumex/common/const.py:148
 msgid "Removed packages"
-msgstr ""
+msgstr "Usunięte pakiety"
 
 #: ../src/yumex/common/const.py:149 ../src/yumex/common/const.py:150
 msgid "Installed packages"
@@ -148,7 +148,7 @@ msgstr "Zastępowanie"
 
 #: ../src/yumex/common/const.py:161
 msgid "Weak Dependencies"
-msgstr ""
+msgstr "Słabe zależności"
 
 #: ../src/yumex/common/const.py:165
 #, python-format
@@ -229,7 +229,7 @@ msgstr " Czy zaimportować ten klucz GPG\n wymagany do sprawdzenia pakietu %s?\n
 
 #: ../src/yumex/gui/dialogs/preferences.py:55
 msgid "Fetching repository information"
-msgstr ""
+msgstr "Pobieranie informacji o repozytorium"
 
 #: ../src/yumex/gui/dialogs/transactionresult.py:53
 #: ../src/yumex/gui/views/repoview.py:84 ../data/ui/yumex.ui:1155
@@ -281,7 +281,7 @@ msgstr "Pakiet"
 
 #: ../src/yumex/gui/views/packageview.py:87
 msgid "Version"
-msgstr ""
+msgstr "Wersja"
 
 #: ../src/yumex/gui/views/packageview.py:88
 msgid "Arch."
@@ -397,7 +397,7 @@ msgstr "Zakończ"
 
 #: ../src/yumex/gui/widgets/mainnenu.py:48
 msgid "Main Menu"
-msgstr ""
+msgstr "Menu główne"
 
 #: ../src/yumex/gui/widgets/mainnenu.py:50
 msgid "About"
@@ -405,7 +405,7 @@ msgstr "O programie"
 
 #: ../src/yumex/gui/widgets/mainnenu.py:51
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Skróty klawiszowe"
 
 #: ../src/yumex/gui/widgets/mainnenu.py:52
 msgid "Documentation"
@@ -561,18 +561,18 @@ msgstr "Brak działań oczekujących w kolejce"
 #: ../src/yumex/gui/window/__init__.py:665
 msgid "Error in building transaction\n"
 msgid_plural "Errors in building transaction\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Błąd podczas budowania transakcji\n"
+msgstr[1] "Błędy podczas budowania transakcji\n"
+msgstr[2] "Błędy podczas budowania transakcji\n"
+msgstr[3] "Błędy podczas budowania transakcji\n"
 
 #: ../src/yumex/gui/window/__init__.py:671
 msgid "Error in search for dependencies\n"
 msgid_plural "Errors in search for dependencies\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Błąd podczas wyszukiwania zależności\n"
+msgstr[1] "Błędy podczas wyszukiwania zależności\n"
+msgstr[2] "Błędy podczas wyszukiwania zależności\n"
+msgstr[3] "Błędy podczas wyszukiwania zależności\n"
 
 #: ../src/yumex/gui/window/__init__.py:814
 msgid "Adding packages to view"
@@ -605,11 +605,11 @@ msgstr[3] "%d dostępnych aktualizacji"
 
 #: ../misc/yumex-dnf.appdata.xml.in:7 ../misc/yumex-dnf.desktop.in:3
 msgid "Yum Extender"
-msgstr ""
+msgstr "Yum Extender"
 
 #: ../misc/yumex-dnf.appdata.xml.in:9
 msgid "Tim Lauridsen"
-msgstr ""
+msgstr "Tim Lauridsen"
 
 #: ../misc/yumex-dnf.appdata.xml.in:12
 msgid ""
@@ -666,7 +666,7 @@ msgstr "Instalator oprogramowania"
 
 #: ../misc/yumex-dnf-local.desktop.in:3
 msgid "Yum Extender Package Installer"
-msgstr ""
+msgstr "Instalator pakietów Yum Extender"
 
 #: ../misc/yumex-dnf-local.desktop.in:4
 msgid "Install local packages on system"
@@ -678,11 +678,11 @@ msgstr "Błędy"
 
 #: ../data/ui/preferences.ui:83 ../data/ui/preferences.ui:170
 msgid "Theme"
-msgstr ""
+msgstr "Motyw"
 
 #: ../data/ui/preferences.ui:108
 msgid "Use Dark Theme"
-msgstr ""
+msgstr "Ciemny motyw"
 
 #: ../data/ui/preferences.ui:187
 msgid ""
@@ -720,11 +720,11 @@ msgstr "Zaznaczanie aktualizacji po uruchomieniu"
 
 #: ../data/ui/preferences.ui:276
 msgid "Seach visible by default"
-msgstr ""
+msgstr "Domyślnie widoczne wyszukiwanie"
 
 #: ../data/ui/preferences.ui:302
 msgid "Show progress splash screen on long running task"
-msgstr ""
+msgstr "Ekran postępu podczas długich zadań"
 
 #: ../data/ui/preferences.ui:336
 msgid "UI"
@@ -809,99 +809,99 @@ msgstr "Repozytoria"
 
 #: ../data/ui/progresssplash.ui:54 ../data/ui/progresssplash.ui:75
 msgid "Working ..."
-msgstr ""
+msgstr "Działanie…"
 
 #: ../data/ui/shortcuts.ui:14
 msgid "Pages"
-msgstr ""
+msgstr "Strony"
 
 #: ../data/ui/shortcuts.ui:18
 msgid "Go to packages page"
-msgstr ""
+msgstr "Przejdź do strony pakietów"
 
 #: ../data/ui/shortcuts.ui:25
 msgid "Go to group page"
-msgstr ""
+msgstr "Przejdź do strony grup"
 
 #: ../data/ui/shortcuts.ui:32
 msgid "Go to history page"
-msgstr ""
+msgstr "Przejdź do strony historii"
 
 #: ../data/ui/shortcuts.ui:39
 msgid "Go to queue page"
-msgstr ""
+msgstr "Przejdź do strony kolejki"
 
 #: ../data/ui/shortcuts.ui:48
 msgid "Filters"
-msgstr ""
+msgstr "Filtry"
 
 #: ../data/ui/shortcuts.ui:53
 msgid "Show updates"
-msgstr ""
+msgstr "Wyświetl aktualizacje"
 
 #: ../data/ui/shortcuts.ui:60
 msgid "Show installed"
-msgstr ""
+msgstr "Wyświetl zainstalowane"
 
 #: ../data/ui/shortcuts.ui:67
 msgid "Show available"
-msgstr ""
+msgstr "Wyświetl dostępne"
 
 #: ../data/ui/shortcuts.ui:74
 msgid "Show all"
-msgstr ""
+msgstr "Wyświetl wszystkie"
 
 #: ../data/ui/shortcuts.ui:83
 msgid "Info view"
-msgstr ""
+msgstr "Widok informacji"
 
 #: ../data/ui/shortcuts.ui:88
 msgid "package description"
-msgstr ""
+msgstr "opis pakietu"
 
 #: ../data/ui/shortcuts.ui:95
 msgid "package update info"
-msgstr ""
+msgstr "informacje o aktualizacji pakietu"
 
 #: ../data/ui/shortcuts.ui:102
 msgid "package files"
-msgstr ""
+msgstr "pliki pakietu"
 
 #: ../data/ui/shortcuts.ui:109
 msgid "package requirement"
-msgstr ""
+msgstr "wymagania pakietu"
 
 #: ../data/ui/shortcuts.ui:118
 msgid "Package View"
-msgstr ""
+msgstr "Widok pakietów"
 
 #: ../data/ui/shortcuts.ui:123
 msgid "Select all packages in view"
-msgstr ""
+msgstr "Zaznacz wszystkie pakiety w widoku"
 
 #: ../data/ui/shortcuts.ui:132
 msgid "Other"
-msgstr ""
+msgstr "Inne"
 
 #: ../data/ui/shortcuts.ui:137
 msgid "Apply Pending actions"
-msgstr ""
+msgstr "Zastosuj oczekujące działania"
 
 #: ../data/ui/shortcuts.ui:144
 msgid "Filter options"
-msgstr ""
+msgstr "Opcje filtrowania"
 
 #: ../data/ui/shortcuts.ui:151
 msgid "Toggle search bar"
-msgstr ""
+msgstr "Przełącz pasek wyszukiwania"
 
 #: ../data/ui/shortcuts.ui:165
 msgid "Open Preferences"
-msgstr ""
+msgstr "Otwórz preferencje"
 
 #: ../data/ui/shortcuts.ui:172
 msgid "Open Documentation"
-msgstr ""
+msgstr "Otwórz dokumentację"
 
 #: ../data/ui/transactionresult.ui:9
 msgid "Package actions to perform"
