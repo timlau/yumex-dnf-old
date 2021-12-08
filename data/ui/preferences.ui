@@ -2,6 +2,29 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="ad_update_startup_delay">
+    <property name="lower">10</property>
+    <property name="upper">900</property>
+    <property name="step-increment">10</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_installonly_limit">
+    <property name="lower">2</property>
+    <property name="upper">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_refresh_interval">
+    <property name="upper">240</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adj_update_interval">
+    <property name="lower">5</property>
+    <property name="upper">10080</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkDialog" id="preferences">
     <property name="can-focus">False</property>
     <property name="type-hint">dialog</property>
@@ -184,8 +207,10 @@
                   <object class="GtkLabel" id="label_headerbar">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">Use the toolbar in the header of the window
-standard when using GNOME</property>
+                    <property name="tooltip-text" translatable="yes">
+                      Use the toolbar in the header of the window
+                      standard when using GNOME
+                    </property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Show toolbar in window headerbar</property>
                   </object>
@@ -232,6 +257,7 @@ standard when using GNOME</property>
                     <property name="valign">start</property>
                     <property name="text" translatable="yes">12</property>
                     <property name="input-purpose">number</property>
+                    <property name="adjustment">adj_refresh_interval</property>
                     <property name="snap-to-ticks">True</property>
                     <property name="numeric">True</property>
                     <property name="value">12</property>
@@ -245,8 +271,10 @@ standard when using GNOME</property>
                   <object class="GtkLabel" id="label_auto_select_updates">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">Select all available updates when 
-Yum Extender is started</property>
+                    <property name="tooltip-text" translatable="yes">
+                      Select all available updates when
+                      Yum Extender is started
+                    </property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Select updates at startup</property>
                   </object>
@@ -380,6 +408,7 @@ Yum Extender is started</property>
                     <property name="invisible-char">●</property>
                     <property name="text">60</property>
                     <property name="input-purpose">number</property>
+                    <property name="adjustment">adj_update_interval</property>
                     <property name="snap-to-ticks">True</property>
                     <property name="numeric">True</property>
                     <property name="value">60</property>
@@ -433,10 +462,12 @@ Yum Extender is started</property>
                 <child>
                   <object class="GtkLabel" id="label_show_newest">
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">Show newest only is active when
-Yum Extender starts.
-Will show only latest version of available
-packages</property>
+                    <property name="tooltip-text" translatable="yes">
+                      Show newest only is active when
+                      Yum Extender starts.
+                      Will show only latest version of available
+                      packages
+                    </property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Show newest only</property>
@@ -461,8 +492,10 @@ packages</property>
                 <child>
                   <object class="GtkLabel" id="label_settings2">
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">Erase unused requirement option is
-active when Yum Extender starts</property>
+                    <property name="tooltip-text" translatable="yes">
+                      Erase unused requirement option is
+                      active when Yum Extender starts
+                    </property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Erase Unused Requirements</property>
@@ -529,6 +562,7 @@ active when Yum Extender starts</property>
                     <property name="max-width-chars">0</property>
                     <property name="text" translatable="yes">3</property>
                     <property name="input-purpose">digits</property>
+                    <property name="adjustment">adj_installonly_limit</property>
                     <property name="climb-rate">1</property>
                     <property name="numeric">True</property>
                     <property name="value">3</property>
@@ -597,9 +631,11 @@ active when Yum Extender starts</property>
                   <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">Save the current selected repositories
-so they will be used next time you
-start Yum Extender</property>
+                    <property name="tooltip-text" translatable="yes">
+                      Save the current selected repositories
+                      so they will be used next time you
+                      start Yum Extender
+                    </property>
                     <property name="margin-start">10</property>
                     <property name="margin-end">10</property>
                     <property name="margin-top">5</property>
