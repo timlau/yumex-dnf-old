@@ -100,7 +100,6 @@
         <property name="font">Normal</property>
         <property name="family">Monospace</property>
         <property name="size-points">12</property>
-        <property name="scale">0</property>
       </object>
     </child>
     <child type="tag">
