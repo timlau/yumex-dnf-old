@@ -1,3 +1,146 @@
+2022-09-17  Tim Lauridsen
+
+  * bumped version to 4.5.0
+  * updated translations
+
+2021-12-08  Tim Lauridsen
+
+  * fix pref. range widgets not working
+  * Updated translations from transifex
+
+2021-11-28  Tim Lauridsen
+
+  * add vscode settings
+
+2021-11-25  Tim Lauridsen
+
+  * Updated doc with recent screenshots and remove some legacy stuff
+  * move load_ui into yumex.gui to fix mess with circular imports
+  * lint: cleanup flake8 issues
+  * format code using black
+
+2021-11-19  Tim Lauridsen
+
+  * lint: fix issues
+  * lint: cleanup issues
+  * lint: undo var -> _var for unused arguments
+
+2021-11-18  Tim Lauridsen
+
+  * lint: fix more issues
+  * lint: fix more issues
+  * lint: fix issues
+  * lint: fix issues
+  * lint: fix issues
+  * lint: fix issues
+  * lint: cleanup issues
+  * lint: fix issues
+  * lint: cleanup ccde
+  * Cleanup Makefiles not need any more
+  * Updated translations from transifex
+  * Updated translations from transifex
+  * Updated translations from transifex
+
+2021-11-17  Tim Lauridsen
+
+  * build; convert build to use meson
+  * handle appdata in the rigt way for Fedora
+  * Install appdata in metadata dir 
+  https://docs.fedoraproject.org/en-US/packaging-guidelines/AppData/
+  * Add screenshoots to use in appdata
+  * format code with yapf
+
+2021-10-19  Tim Lauridsen
+
+  * update po building to match latest refactoring
+
+2021-10-15  Tim Lauridsen
+
+  * refactor: move widgets to sep. files
+  * refactor: remove unused imports
+  * build: autodetect modules
+  * refactor: misc, const & config into common submodule
+  * refactor: make updater a module
+  * refactor: split window & backend classes into sep. files
+  * refactor: make yumex.backend submodule. dnf_backend into backend.dnf
+  * refactor:  GroupView into separate file
+  * refactor: HistoryView & HistoryPackageView in separate files
+  * refactor: put HistoryView into sep. file
+  * refactor: move QueueView & PackageQueue into separate files
+  * refactor: split RepoView & PackageView into sep. files
+  * refactor: SelectionView into separate file
+  * refactor: move dialogs into yumex.gui.dialogs submodule
+  * refactor: add missing imports
+  * refactor: put transactionresult into separate files
+  * refactor: move ProgressSplash into separate files
+  * refactor; move AboutDialog to separate file
+  * refactor; move Errordialog code & ui into separate files
+  * refactor: move prefernces ui to separate .ui file
+  * refector: move ui files into data/ui
+  * Refector: extract Preferences into separate file.
+
+2021-09-30  Tim Lauridsen
+
+  * add new .po files
+
+2021-09-27  Tim Lauridsen
+
+  * Transfix pull, *.po update
+
+2021-07-21  Tim Lauridsen
+
+  * tweak search & infobar text colors
+  * make the progress overlay, shadow out the background
+  * Use Sass to build themes
+  * Add option to disable splash screen
+  * change info box shadow
+
+2021-07-20  Tim Lauridsen
+
+  * theme tweaks
+  * Theme & UI adjustments
+  * Theme & UI adjustments
+  * Make infobar an overlay adjust default theme to new style classes make the
+  ui look better
+
+2021-07-03  Tim Lauridsen
+
+  * remove debug print statements
+  * Use Gtk Stock buttons
+
+2021-07-02  Tim Lauridsen
+
+  * Make splash screen lock to main window Show files being downloaded in
+  progress
+  * Add progress splash screen for long running tasks (#163)
+  * Added option to show searchbar by default in preferences (#113)
+
+2021-07-01  Tim Lauridsen
+
+  * Make shortcut windows active fixed issues with shortcuts.ui
+
+2021-06-30  Tim Lauridsen
+
+  * reworked keypress handler add basics for GtkShortcutsWindows (broken in
+  Gtk3 in python / filed upstream bug)
+  * Enable group install Show depsolve errors in group install/remove (#105)
+
+2021-06-29  Tim Lauridsen
+
+  * reorder columns and change labels (#149)
+  * make sure  gi imports is not messed up
+  * Update progressbar stylling
+
+2021-06-28  Tim Lauridsen
+
+  * cleanup imports  fix docstring
+  * remove pycharm conf from tree
+  * remove .vscode settings from tree
+
+2021-06-24  Tim Lauridsen
+
+  * code formatting
+
 2021-06-04  Tim Lauridsen
 
   * bumped version to 4.4.0
