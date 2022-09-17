@@ -26,7 +26,7 @@ import hawkey
 
 from yumex.common import _
 
-VERSION = "4.4.0"
+VERSION = "4.5.0"
 
 NEEDED_DAEMON_API = 2  # The needed dnfdaemon API version
 
