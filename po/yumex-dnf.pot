@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-08 06:49+0100\n"
+"POT-Creation-Date: 2022-09-17 08:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,7 +229,7 @@ msgid "Fetching repository information"
 msgstr ""
 
 #: ../src/yumex/gui/dialogs/transactionresult.py:57
-#: ../src/yumex/gui/views/repoview.py:84 ../data/ui/yumex.ui:1155
+#: ../src/yumex/gui/views/repoview.py:84 ../data/ui/yumex.ui:1131
 msgid "Name"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgid "Arch."
 msgstr ""
 
 #: ../src/yumex/gui/views/packageview.py:91
-#: ../src/yumex/gui/views/queueview.py:59 ../data/ui/yumex.ui:1170
+#: ../src/yumex/gui/views/queueview.py:59 ../data/ui/yumex.ui:1146
 msgid "Summary"
 msgstr ""
 
@@ -298,7 +298,7 @@ msgstr ""
 msgid "Downgrade Package"
 msgstr ""
 
-#: ../src/yumex/gui/views/queueview.py:54 ../data/ui/yumex.ui:441
+#: ../src/yumex/gui/views/queueview.py:54 ../data/ui/yumex.ui:417
 msgid "Packages"
 msgstr ""
 
@@ -640,134 +640,144 @@ msgstr ""
 msgid "Errors"
 msgstr ""
 
-#: ../data/ui/preferences.ui:83 ../data/ui/preferences.ui:170
+#: ../data/ui/preferences.ui:106 ../data/ui/preferences.ui:193
 msgid "Theme"
 msgstr ""
 
-#: ../data/ui/preferences.ui:108
+#: ../data/ui/preferences.ui:131
 msgid "Use Dark Theme"
 msgstr ""
 
-#: ../data/ui/preferences.ui:187
+#: ../data/ui/preferences.ui:210
 msgid ""
-"Use the toolbar in the header of the window\n"
-"standard when using GNOME"
+"\n"
+"                      Use the toolbar in the header of the window\n"
+"                      standard when using GNOME\n"
+"                    "
 msgstr ""
 
-#: ../data/ui/preferences.ui:190
+#: ../data/ui/preferences.ui:215
 msgid "Show toolbar in window headerbar"
 msgstr ""
 
-#: ../data/ui/preferences.ui:215 ../data/ui/preferences.ui:230
+#: ../data/ui/preferences.ui:240 ../data/ui/preferences.ui:255
 msgid ""
 "The interval in hour, when the DNF cache will be expired and updated (0 = "
 "disabled)"
 msgstr ""
 
-#: ../data/ui/preferences.ui:217
+#: ../data/ui/preferences.ui:242
 msgid "Cache expire interval (hours)"
 msgstr ""
 
-#: ../data/ui/preferences.ui:233
+#: ../data/ui/preferences.ui:258
 msgid "12"
 msgstr ""
 
-#: ../data/ui/preferences.ui:248
+#: ../data/ui/preferences.ui:274
 msgid ""
-"Select all available updates when \n"
-"Yum Extender is started"
+"\n"
+"                      Select all available updates when\n"
+"                      Yum Extender is started\n"
+"                    "
 msgstr ""
 
-#: ../data/ui/preferences.ui:251
+#: ../data/ui/preferences.ui:279
 msgid "Select updates at startup"
 msgstr ""
 
-#: ../data/ui/preferences.ui:276
+#: ../data/ui/preferences.ui:304
 msgid "Seach visible by default"
 msgstr ""
 
-#: ../data/ui/preferences.ui:302
+#: ../data/ui/preferences.ui:330
 msgid "Show progress splash screen on long running task"
 msgstr ""
 
-#: ../data/ui/preferences.ui:336
+#: ../data/ui/preferences.ui:364
 msgid "UI"
 msgstr ""
 
-#: ../data/ui/preferences.ui:363
+#: ../data/ui/preferences.ui:391
 msgid "Autostart the Yum Extender update checker at user login"
 msgstr ""
 
-#: ../data/ui/preferences.ui:366
+#: ../data/ui/preferences.ui:394
 msgid "Start update checker at user login"
 msgstr ""
 
-#: ../data/ui/preferences.ui:396
+#: ../data/ui/preferences.ui:425
 msgid "How often the update checker will run"
 msgstr ""
 
-#: ../data/ui/preferences.ui:399
+#: ../data/ui/preferences.ui:428
 msgid "Update check interval (minutes)"
 msgstr ""
 
-#: ../data/ui/preferences.ui:422
+#: ../data/ui/preferences.ui:451
 msgid "Update Checker"
 msgstr ""
 
-#: ../data/ui/preferences.ui:436
+#: ../data/ui/preferences.ui:465
 msgid ""
-"Show newest only is active when\n"
-"Yum Extender starts.\n"
-"Will show only latest version of available\n"
-"packages"
+"\n"
+"                      Show newest only is active when\n"
+"                      Yum Extender starts.\n"
+"                      Will show only latest version of available\n"
+"                      packages\n"
+"                    "
 msgstr ""
 
-#: ../data/ui/preferences.ui:442
+#: ../data/ui/preferences.ui:473
 msgid "Show newest only"
 msgstr ""
 
-#: ../data/ui/preferences.ui:464
+#: ../data/ui/preferences.ui:495
 msgid ""
-"Erase unused requirement option is\n"
-"active when Yum Extender starts"
+"\n"
+"                      Erase unused requirement option is\n"
+"                      active when Yum Extender starts\n"
+"                    "
 msgstr ""
 
-#: ../data/ui/preferences.ui:468
+#: ../data/ui/preferences.ui:501
 msgid "Erase Unused Requirements"
 msgstr ""
 
-#: ../data/ui/preferences.ui:492
+#: ../data/ui/preferences.ui:525
 msgid "Cleanup Old Installonly packages"
 msgstr ""
 
-#: ../data/ui/preferences.ui:517
+#: ../data/ui/preferences.ui:550
 msgid "Number of installonly packages to keep"
 msgstr ""
 
-#: ../data/ui/preferences.ui:530
+#: ../data/ui/preferences.ui:563
 msgid "3"
 msgstr ""
 
-#: ../data/ui/preferences.ui:547
+#: ../data/ui/preferences.ui:581
 msgid "DNF Options"
 msgstr ""
 
-#: ../data/ui/preferences.ui:565
+#: ../data/ui/preferences.ui:599
 msgid "Repositories used in current session"
 msgstr ""
 
-#: ../data/ui/preferences.ui:600
+#: ../data/ui/preferences.ui:634
 msgid ""
-"Save the current selected repositories\n"
-"so they will be used next time you\n"
-"start Yum Extender"
+"\n"
+"                      Save the current selected repositories\n"
+"                      so they will be used next time you\n"
+"                      start Yum Extender\n"
+"                    "
 msgstr ""
 
-#: ../data/ui/preferences.ui:609
+#: ../data/ui/preferences.ui:645
 msgid "Save selected repositories"
 msgstr ""
 
-#: ../data/ui/preferences.ui:638
+#: ../data/ui/preferences.ui:674
 msgid "Repositories"
 msgstr ""
 
@@ -875,138 +885,138 @@ msgstr ""
 msgid "Size:"
 msgstr ""
 
-#: ../data/ui/yumex.ui:278
+#: ../data/ui/yumex.ui:254
 msgid "More filtering options"
 msgstr ""
 
-#: ../data/ui/yumex.ui:306
+#: ../data/ui/yumex.ui:282
 msgid "Show available updates (Ctrl+1)"
 msgstr ""
 
-#: ../data/ui/yumex.ui:312
+#: ../data/ui/yumex.ui:288
 msgid "Updates"
 msgstr ""
 
-#: ../data/ui/yumex.ui:327
+#: ../data/ui/yumex.ui:303
 msgid "Show installed packages (Ctrl+2)"
 msgstr ""
 
-#: ../data/ui/yumex.ui:333
+#: ../data/ui/yumex.ui:309
 msgid "Installed"
 msgstr ""
 
-#: ../data/ui/yumex.ui:348
+#: ../data/ui/yumex.ui:324
 msgid "Show available packages (Ctrl+3)"
 msgstr ""
 
-#: ../data/ui/yumex.ui:354
+#: ../data/ui/yumex.ui:330
 msgid "Available"
 msgstr ""
 
-#: ../data/ui/yumex.ui:369
+#: ../data/ui/yumex.ui:345
 msgid "Show all packages (Ctrl+4)"
 msgstr ""
 
-#: ../data/ui/yumex.ui:375
+#: ../data/ui/yumex.ui:351
 msgid "All"
 msgstr ""
 
-#: ../data/ui/yumex.ui:511
+#: ../data/ui/yumex.ui:487
 msgid "Groups"
 msgstr ""
 
-#: ../data/ui/yumex.ui:586
+#: ../data/ui/yumex.ui:562
 msgid "Undo"
 msgstr ""
 
-#: ../data/ui/yumex.ui:610
+#: ../data/ui/yumex.ui:586
 msgid "History"
 msgstr ""
 
-#: ../data/ui/yumex.ui:644
+#: ../data/ui/yumex.ui:620
 msgid "Queue"
 msgstr ""
 
-#: ../data/ui/yumex.ui:684
+#: ../data/ui/yumex.ui:660
 msgid "Package Description"
 msgstr ""
 
-#: ../data/ui/yumex.ui:706
+#: ../data/ui/yumex.ui:682
 msgid "Package Update Information"
 msgstr ""
 
-#: ../data/ui/yumex.ui:728
+#: ../data/ui/yumex.ui:704
 msgid "Package Filelist"
 msgstr ""
 
-#: ../data/ui/yumex.ui:750
+#: ../data/ui/yumex.ui:726
 msgid "Package Requirements"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1013
+#: ../data/ui/yumex.ui:989
 msgid "<b>Package Versions</b>"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1027
+#: ../data/ui/yumex.ui:1003
 msgid "<b>Archs</b>"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1071
+#: ../data/ui/yumex.ui:1047
 msgid "Newest Only"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1075
+#: ../data/ui/yumex.ui:1051
 msgid "Show only the latest package versions"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1110
+#: ../data/ui/yumex.ui:1086
 msgid "Prefix"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1114
+#: ../data/ui/yumex.ui:1090
 msgid "Package names starting with search key"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1125
+#: ../data/ui/yumex.ui:1101
 msgid "Keyword"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1129
+#: ../data/ui/yumex.ui:1105
 msgid "Package names containing search key"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1140
+#: ../data/ui/yumex.ui:1116
 msgid "Fields"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1144
+#: ../data/ui/yumex.ui:1120
 msgid "Specified package fields containing search keys."
 msgstr ""
 
-#: ../data/ui/yumex.ui:1159
+#: ../data/ui/yumex.ui:1135
 msgid "Package name"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1174
+#: ../data/ui/yumex.ui:1150
 msgid "Package summary"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1185
+#: ../data/ui/yumex.ui:1161
 msgid "Description"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1189
+#: ../data/ui/yumex.ui:1165
 msgid "Package description"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1250
+#: ../data/ui/yumex.ui:1226
 msgid "Remove Selected"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1264
+#: ../data/ui/yumex.ui:1240
 msgid "Search (show/hide)"
 msgstr ""
 
-#: ../data/ui/yumex.ui:1288
+#: ../data/ui/yumex.ui:1264
 msgid "Apply pending actions"
 msgstr ""
