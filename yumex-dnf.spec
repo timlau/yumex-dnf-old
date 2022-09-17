@@ -2,7 +2,7 @@
 
 Name:     %{appname}-dnf
 Version:  4.5.0
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
