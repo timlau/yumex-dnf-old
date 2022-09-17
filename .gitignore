@@ -11,3 +11,8 @@ __pycache__/
 *~
 /docs/_*
 /build/
+.idea/
+
+src/#yumex.ui#
+tools/test.py
+.vscode/

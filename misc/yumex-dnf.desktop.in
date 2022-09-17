@@ -1,10 +1,10 @@
 [Desktop Entry]
-_Name=Yum Extender (DNF)
-_Comment=Install, update and remove applications
+Name=Yum Extender
+Comment=Install, update and remove applications
 Categories=System;Settings;X-Red-Hat-Base;X-Fedora;
 Icon=yumex-dnf
 Exec=/usr/bin/yumex-dnf
 Type=Application
 Terminal=false
 Encoding=UTF-8
-_GenericName=Software Installer
+GenericName=Software Installer

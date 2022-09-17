@@ -1,28 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2013 Tim Lauridsen <timlau@fedoraproject.org> -->
-<application>
- <id type="desktop">yumex-dnf.desktop</id>
- <licence>CC0</licence>
- <name>Yum Extender (DNF)</name>
- <_summary>Graphical package manager</_summary>
- <description>
-  <_p>Yum Extender is a graphical package management application. It allows you to search and browse for packages to install,
-  remove and update on your computer.</_p>
-  <_p>It is designed to give you full control over the packages on your computer and to be used by all users.</_p>
-  <_p>Features:</_p>
-  <ul>
-   <_li>Browse packages available for installation or update</_li>
-   <_li>Browse packages installed on your computer</_li>
-   <_li>Search packages by name, summary, description</_li>
-   <_li>Watch the history of package action on your system</_li>
-   <_li>Browse and install/remove package groups</_li>
-   <_li>Browse packages by size, repository</_li>
-   <_li>Control what package repositories are enabled for the current session</_li>   
-  </ul>
- </description>
- <screenshots>
-  <screenshot type="default" width="1026" height="726">http://yumex-dnf.readthedocs.org/en/latest/_images/updates.png</screenshot>
- </screenshots>
- <url type="homepage">https://github.com/timlau/yumex-dnf</url>
- <updatecontact>timlau_at_fedoraproject.org</updatecontact>
-</application>
+<!-- Copyright 2021 Tim Lauridsen <tla_at_rasmil.dk> -->
+<component type="desktop-application">
+  <id>yumex-dnf.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Yum Extender</name>
+  <_summary>Graphical package manager</_summary>
+  <developer_name>Tim Lauridsen</developer_name>
+
+  <description>
+    <_p>
+      Yum Extender is a graphical package management application. It allows you to search and browse for packages to install,
+      remove and update on your computer.
+    </_p>
+    <_p>It is designed to give you full control over the packages on your computer and to be used by all users.</_p>
+    <_p>Features:</_p>
+    <ul>
+      <_li>Browse packages available for installation or update</_li>
+      <_li>Browse packages installed on your computer</_li>
+      <_li>Search packages by name, summary, description</_li>
+      <_li>Watch the history of package action on your system</_li>
+      <_li>Browse and install/remove package groups</_li>
+      <_li>Browse packages by size, repository</_li>
+      <_li>Control what package repositories are enabled for the current session</_li>
+    </ul>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-01.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-02.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-03.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-dnf/raw/develop/gfx/screenshoots/yumex-screenshoot-04.png</image>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">yumex-dnf.desktop</launchable>
+  <url type="homepage">https://github.com/timlau/yumex-dnf</url>
+  <url type="bugtracker">https://github.com/timlau/yumex-dnf/issues</url>
+  <url type="help">https://yumex-dnf.readthedocs.io/en/latest/</url>
+
+  <update_contact>tla_at_rasmil.dk</update_contact>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="violence-desecration">none</content_attribute>
+    <content_attribute id="violence-slavery">none</content_attribute>
+    <content_attribute id="violence-worship">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="sex-homosexuality">none</content_attribute>
+    <content_attribute id="sex-prostitution">none</content_attribute>
+    <content_attribute id="sex-adultery">none</content_attribute>
+    <content_attribute id="sex-appearance">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+</component>
+

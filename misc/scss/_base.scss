@@ -1,0 +1,200 @@
+@import 'palette';
+
+/* generic vindow & dialog */
+.main,
+.transaction,
+.error {
+  background-color: $bg_color;
+  color: $text_color;
+}
+
+/* Transaction & error dialog buttons */
+.btn {
+  background-color: $primary;
+  color: $text_color;
+}
+
+/* Search bar */
+.search {
+  &__entry.search {
+    color: $Gtk_orange_2;
+    background-color: $bg_color;
+    // padding: 5px;
+    border: 1px solid $text_color;
+    border-radius: 5px;
+    font-weight: normal;
+    font-size: 120%;
+    caret-color: $Gtk_orange_2; /* cursor color */
+  }
+
+  &__entry.search image {
+    color: $Gtk_orange_4;
+    background-color: $bg_color;
+  }
+
+  & box {
+    background-color: $primary_dark;
+    border: none;
+    outline-style: none;
+  }
+
+  &__btn {
+    color: $text_color;
+    background-color: $primary;
+    border: none;
+    box-shadow: none;
+    transition: all 200ms ease-in;
+  }
+
+  &__btn:hover {
+    color: $text_color;
+    background-color: $primary_light;
+  }
+}
+
+/* Infobar */
+.info {
+  background-color: $bg_color;
+  border: 3px solid $primary;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 50px 1440px 50px;
+  box-shadow: 0px 2px 5px 0px rgba($primary, .75),
+              0 0 0 1440px rgba($bg_color, .5);
+  transition: all 500ms ease-in-out;
+
+  &__label {
+    color: $Gtk_orange_2;
+  }
+
+  &__sublabel {
+    color: $Gtk_orange_4;
+  }
+
+  &__spinner {
+    color: $primary_light;
+    background-color: $primary_dark;
+  }
+
+  &__progress > trough {
+    min-height: 6px;
+    background-color: $primary_light;
+  }
+
+  &__progress > trough > progress {
+    min-height: 8px;
+    background-color: $secondary;
+  }
+}
+
+/* Paned */
+.content__paned > separator {
+  background-color: $primary;
+}
+
+/* Package filter selector */
+.pkgfilter {
+  background-color: $bg_color;
+  padding-top: 10px;
+  border-right: 2px solid $primary;
+
+  & toolbar {
+    background-color: $primary_dark;
+  }
+
+  & button {
+    color: $text_color;
+    background-color: $primary_dark;
+  }
+
+  &__list {
+    background-color: $bg_color;
+    color: $text_color;
+    margin-left: 10px;
+  }
+
+  &__item {
+    padding-left: 0.5em;
+    transition: all 200ms ease-in;
+    color: $primary_lighter;
+    background-color: $bg_color;
+    border-left: 5px solid $bg_color;
+    border-radius: 5px 0 0 5px;
+  }
+
+  &__item:selected {
+    color: $text_color;
+    background-color: $primary;
+    border-left-color: $secondary;
+  }
+
+  &__item:hover {
+    color: $text_color;
+  }
+}
+
+/* content views (packages, group, history, queue) */
+.content__view {
+  & treeview {
+    background-color: $bg_color;
+    color: $text_color;
+  }
+
+  & treeview:selected {
+    background-color: $primary_light;
+    color: $text_color;
+  }
+
+  & treeview:hover {
+    background-color: $primary;
+    color: $text_color;
+  }
+
+  & header button {
+    color: $text_color;
+    background-color: $primary_dark;
+    border: none;
+    border-bottom: 1px solid $primary_lighter;
+  }
+
+  & header button + button {
+    border-left: 1px dotted $primary_lighter;
+  }
+}
+
+/* Package Info Selector */
+.pkginfo {
+  &__select {
+    background-color: $bg_color;
+    border-right: 2px solid $primary;
+  }
+
+  &__list {
+    background-color: $bg_color;
+    margin-left: 5px;
+    margin-top: 5px;
+  }
+
+  &__item {
+    color: $primary_lighter;
+    background-color: $bg_color;
+    transition: all 200ms ease-in 100ms;
+    border-left: 4px solid $bg_color;
+    border-radius: 2px 0 0 2px;
+    padding: 0px 5px 0px 5px;
+  }
+
+  &__item:hover {
+    color: $text_color;
+  }
+
+  &__item:selected {
+    color: $text_color;
+    background-color: $primary;
+    border-left-color: $secondary;
+  }
+
+  &__text text {
+    background-color: $bg_color;
+  }
+}

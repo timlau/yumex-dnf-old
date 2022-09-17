@@ -1,0 +1,11 @@
+@import 'palette';
+
+$color_install:         $Material_Light_Indigo;
+$color_update:          $Material_Light_Pink;
+$color_downgrade:       $Material_Light_Lime;
+$color_normal:          $Material_Light_Orange;
+$color_obsolete:        $Material_Light_Green;
+
+@import 'functions';
+@import 'colors';
+@import 'system_base';

@@ -1,37 +1,40 @@
-/*
-*  Yum Extender styling (GTK3 CSS)
-*/
-
-/* Material Design Colors for light Background */
-
-@define-color Material_Red          #F44336;
-@define-color Material_Pink         #E91E63;
-@define-color Material_Purple       #9C27B0;
-@define-color Material_DeepPurple   #673AB7;
-@define-color Material_Indigo       #3F51B5;
-@define-color Material_Blue         #2196F3;
-@define-color Material_LightBlue    #03A9F4;
-@define-color Material_Cyan         #00BCD4;
-@define-color Material_Teal         #009688;
-@define-color Material_Green        #4CAF50;
-@define-color Material_LightGreen   #8BC34A;
-@define-color Material_Lime         #CDDC39;
-@define-color Material_Yellow       #FFEB3B;
-@define-color Material_Amber        #FFC107;
-@define-color Material_Orange       #FF9800;
-@define-color Material_DeepOrange   #FF5722;
-@define-color Material_Brown        #795548;
-@define-color Material_Grey         #9E9E9E;
-@define-color Material_BlueGrey     #607D8B;
-
-
 /*Package Type Colors */
-@define-color color_install         @Material_Indigo;
-@define-color color_update          @Material_Pink;
-@define-color color_downgrade       @Material_Lime;
-@define-color color_normal          @Material_Orange;
-@define-color color_obsolete        @Material_Green;
+@define-color color_install     #3F51B5;
+@define-color color_update      #E91E63;
+@define-color color_downgrade   #CDDC39;
+@define-color color_normal      #FF9800;
+@define-color color_obsolete    #4CAF50;
+.info {
+  background-color: @theme_bg_color;
+  border: 3px solid currentColor;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 50px 1440px 50px;
+  box-shadow: 0px 2px 5px 0px rgba(255, 255, 255, 0.75), 0 0 0 1440px rgba(0, 0, 0, 0.5);
+  transition: all 500ms ease-in-out;
+}
 
+/* Package filter selector */
+.pkgfilter {
+  padding-top: 10px;
+}
 
+.pkgfilter .pkgfilter__list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
+.pkgfilter .pkgfilter__item {
+  padding-left: 0.5em;
+}
 
+/* Package Info Selector */
+.pkginfo__list {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.pkginfo__item {
+  padding: 0px 5px 0px 5px;
+}

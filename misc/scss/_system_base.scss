@@ -1,0 +1,37 @@
+.info {
+  background-color: gtkcolor(theme_bg_color);
+  border: 3px solid currentColor;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 50px 1440px 50px;
+  box-shadow: 0px 2px 5px 0px rgba(white, .75),
+              0 0 0 1440px rgba(black, .5);
+  transition: all 500ms ease-in-out;
+
+}
+
+/* Package filter selector */
+.pkgfilter {
+  padding-top: 10px;
+
+  .pkgfilter__list {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .pkgfilter__item {
+    padding-left: 0.5em;
+  }
+}
+
+/* Package Info Selector */
+
+.pkginfo__list {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.pkginfo__item {
+  padding: 0px 5px 0px 5px;
+}

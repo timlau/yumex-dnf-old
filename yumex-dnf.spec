@@ -1,7 +1,7 @@
 %global appname yumex
 
 Name:     %{appname}-dnf
-Version:  4.4.0
+Version:  4.5.0
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -15,7 +15,9 @@ BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: python3-devel >= 3.8
-BuildRequires: make
+BuildRequires: meson
+BuildRequires: python3-libsass
+BuildRequires: libappstream-glib
 
 Requires: python3-dnfdaemon >= 0.3.10
 Requires: python3-gobject >= 3.10
@@ -34,13 +36,11 @@ Graphical package tool for maintain packages on the system
 
 
 %build
-make %{?_smp_mflags}
-
+%meson
+%meson_build
 
 %install
-make install PYTHON=%{__python3} DESTDIR=%{buildroot} DATADIR=%{_datadir}
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}-local.desktop
+%meson_install
 
 %find_lang %name
 
@@ -62,12 +62,15 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %doc README.md COPYING
 %{_datadir}/%{name}
 %{_bindir}/%{name}*
-%{python3_sitelib}/*
+%{python3_sitelib}/%{appname}/
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/
-%{_datadir}/appdata/*.xml
+%{_metainfodir}/%{name}.metainfo.xml
 
 %changelog
+
+* Sat Sep 17 2021 Tim Lauridsen <timlau@fedoraproject.org> 4.5.0-1
+- bumped release to 4.5.0 (dev)
 
 * Fri Jun 4 2021 Tim Lauridsen <timlau@fedoraproject.org> 4.4.0-1
 - bumped release to 4.4.0 (dev)

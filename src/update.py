@@ -18,40 +18,46 @@
 #    the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from yumex.updater import UpdateApplication
+# pylint: disable=broad-except, unused-import, wrong-import-position
+
 import sys
 import traceback
 import subprocess
 import signal
 
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Notify', '0.7')
+# We need this for else is Gtk 4.0 selected by default
+import gi  # isort:skip
 
+gi.require_version("Gtk", "3.0")  # isort:skip
+gi.require_version("Notify", "0.7")  # isort:skip
+from gi.repository import Gtk  # noqa: F401, E402
+
+from yumex.updater import UpdateApplication  # noqa: E402
 
 here = sys.path[0]
-if here != '/usr/bin':
+if here != "/usr/bin":
     # git checkout
     sys.path[0] = here
-    print("set PYTHONPATH to %s" % here)
+    print(f"set PYTHONPATH to {here}")
 
 try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = UpdateApplication()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
-except Exception as e:
+except Exception:
     print("Exception in user code:")
-    print('-' * 80)
+    print("-" * 80)
     traceback.print_exc(file=sys.stdout)
-    print('-' * 80)
+    print("-" * 80)
 
     # Try to close backend dbus daemon
-    print('Closing backend D-Bus daemons')
+    print("Closing backend D-Bus daemons")
     try:
         subprocess.call(
-            '/usr/bin/dbus-send --system --print-reply '
-            '--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit',
-            shell=True)
+            "/usr/bin/dbus-send --system --print-reply "
+            "--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
+            shell=True,
+        )
     finally:
         sys.exit(1)

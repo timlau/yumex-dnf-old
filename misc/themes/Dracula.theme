@@ -1,222 +1,197 @@
-/*
-*  Yum Extender styling (GTK3 CSS)
-*/
-
 /*Package Type Colors */
-
 @define-color color_install     #8BE8FD;
 @define-color color_update      #FF79C6;
 @define-color color_downgrade   #50FA7B;
 @define-color color_normal      #FFB86C;
 @define-color color_obsolete    #FFB86C;
-
-/* UI colors */
-
-@define-color bg_color          #21252b;
-@define-color primary_dark      #282A36;
-@define-color primary           #44475A;
-@define-color primary_light     #566388;
-@define-color primary_lighter   #6272A4;
-@define-color text_color        #F8F8F2;
-@define-color other_search      #FFB86C;
-@define-color other_infobar     #F1FA8C;
-@define-color secondary         #FF79C6;
-
 /* generic vindow & dialog */
-#yumex_main, #yumex_transaction, #yumex_error { 
-  background: @bg_color;
-  color: @text_color;
-  
+.main,
+.transaction,
+.error {
+  background-color: #21252b;
+  color: #F8F8F2;
 }
 
 /* Transaction & error dialog buttons */
-#yumex_transaction button, #yumex_error button{ 
-  background: @primary;
-  color: @text_color;
-}
-
-/* Info box w. progressbar */
-#yumex_infobar box{
-  background: @primary_dark;
-  border-style: solid;
-  border-width: 2px; 
-  border-color: @primary;
-  border-radius: 2px;
-}
-
-#yumex_infobar label{
-  color: @other_infobar;
-}
-
-#yumex_infobar spinner{
-  color: @primary_light;
-  background: @primary_dark;
-}
-
-/* separator between vies & info */
-paned separator{
-  background: @primary;
-}
-
-#yumex_infobox text {
-  background: @bg_color;
-  color: @text_color;
-  font-family: 'Noto Sans', sans-serif;
-  font-family: 'Noto Sans', sans-serif;
-}
-
-#yumex_infobox .frame {
-  border-style: none;  
-  border-left-style: solid;
-  border-left-width: 2px;
-  border-left-color: @primary;  
-}
-
-/* info type selector */
-#info_selector row {
-  color: @primary_lighter;
-  background: @bg_color;
-}
-
-#info_selector  row:hover {
-  color: @text_color;
-  transition: all 200ms ease-in 100ms;
-}
-
-#info_selector  row.activatable:selected {
-  color: @text_color;
-  background: @primary;
-  border-left-style: solid;
-  border-left-width: 4px;
-  border-left-color: @secondary;
-  border-radius: 2px;
-  transition: all 200ms ease-in 100ms;
-
-}
-
-/* Views */
-.yumex_views treeview{ 
-  background: @bg_color;
-  color: @text_color;
-}
-
-/* Package category selector */
-#package_sidebar toolbar{
-  background: @primary_dark;
-}
-
-#package_sidebar button{
-  color: @text_color;
-  background: @primary_dark;
-}
-
-#package_sidebar list{ 
-  background: @bg_color;
-  color: @text_color;
-}
-
-#package_sidebar  row.activatable{
-  padding-left: 10px;
-}
-
-#package_sidebar  row.activatable:selected {
-  color: @text_color;
-  background: @primary;
-  border: none; 
-  border-left-style: solid;
-  border-left-width: 3px;
-  border-left-color: @secondary;
-  border-radius: 2px;
-  /*padding-left: 10px;*/
-  transition: all 200ms ease-in 100ms;
-
-}
-
-#package_sidebar  row.activatable:hover {
-  color: @text_color;
-  background: @primary;
-  transition: all 200ms ease-in 100ms;
-}
-
-/* Package View */
-
-.yumex_views treeview:selected{ 
-  background: @primary_light;
-  color: @text_color;
-}
-
-.yumex_views treeview:hover{ 
-  background: @primary;
-  color: @text_color;
-}
-
-/* Package View Column Headers */
-.yumex_views header button {
-  color: @text_color;
-  background: @primary_dark;
-  border: none;
-  border-bottom-color: @primary_lighter;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-left-color: @primary_lighter;
-  border-left-width: 1px;
-  border-left-style: dotted;
-}
-
-/* Package View Checkboxes */
-.yumex_views check {
-  background: @primary;
-  color: @secondary;
-}
-
-.yumex_views check:checked {
-  background: @primary_lighter;
-  color: @text_color;
-  border-width: 0px;
-}
-
-#pkg_view {
-  border-style: none;
-  border-left-style: solid;
-  border-left-width: 2px;
-  border-left-color: @primary;  
+.btn {
+  background-color: #44475A;
+  color: #F8F8F2;
 }
 
 /* Search bar */
-
-/* Search Entry */
-#yumex_search entry.search{
-  color: @other_search;
-  background: @bg_color;
-  border: none;
-  border: 1px solid @text_color;
+.search__entry.search {
+  color: #ffa348;
+  background-color: #21252b;
+  border: 1px solid #F8F8F2;
   border-radius: 5px;
   font-weight: normal;
   font-size: 120%;
-  caret-color: @other_search; /* cursor color */
-  
+  caret-color: #ffa348;
+  /* cursor color */
 }
 
-#yumex_search entry.search image{
-  color: @other_search;
-  background: @bg_color;
+.search__entry.search image {
+  color: #e66100;
+  background-color: #21252b;
 }
 
-#yumex_search box{
-  background: @primary_dark;
+.search box {
+  background-color: #282A36;
   border: none;
   outline-style: none;
 }
 
-#yumex_search button {
-  color: @text_color;
-  background: @primary;
+.search__btn {
+  color: #F8F8F2;
+  background-color: #44475A;
   border: none;
   box-shadow: none;
+  transition: all 200ms ease-in;
 }
 
-#yumex_search button:hover {
-  color: @text_color;
-  background: @primary_light;
+.search__btn:hover {
+  color: #F8F8F2;
+  background-color: #566388;
+}
+
+/* Infobar */
+.info {
+  background-color: #21252b;
+  border: 3px solid #44475A;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 50px 1440px 50px;
+  box-shadow: 0px 2px 5px 0px rgba(68, 71, 90, 0.75), 0 0 0 1440px rgba(33, 37, 43, 0.5);
+  transition: all 500ms ease-in-out;
+}
+
+.info__label {
+  color: #ffa348;
+}
+
+.info__sublabel {
+  color: #e66100;
+}
+
+.info__spinner {
+  color: #566388;
+  background-color: #282A36;
+}
+
+.info__progress > trough {
+  min-height: 6px;
+  background-color: #566388;
+}
+
+.info__progress > trough > progress {
+  min-height: 8px;
+  background-color: #FF79C6;
+}
+
+/* Paned */
+.content__paned > separator {
+  background-color: #44475A;
+}
+
+/* Package filter selector */
+.pkgfilter {
+  background-color: #21252b;
+  padding-top: 10px;
+  border-right: 2px solid #44475A;
+}
+
+.pkgfilter toolbar {
+  background-color: #282A36;
+}
+
+.pkgfilter button {
+  color: #F8F8F2;
+  background-color: #282A36;
+}
+
+.pkgfilter__list {
+  background-color: #21252b;
+  color: #F8F8F2;
+  margin-left: 10px;
+}
+
+.pkgfilter__item {
+  padding-left: 0.5em;
+  transition: all 200ms ease-in;
+  color: #6272A4;
+  background-color: #21252b;
+  border-left: 5px solid #21252b;
+  border-radius: 5px 0 0 5px;
+}
+
+.pkgfilter__item:selected {
+  color: #F8F8F2;
+  background-color: #44475A;
+  border-left-color: #FF79C6;
+}
+
+.pkgfilter__item:hover {
+  color: #F8F8F2;
+}
+
+/* content views (packages, group, history, queue) */
+.content__view treeview {
+  background-color: #21252b;
+  color: #F8F8F2;
+}
+
+.content__view treeview:selected {
+  background-color: #566388;
+  color: #F8F8F2;
+}
+
+.content__view treeview:hover {
+  background-color: #44475A;
+  color: #F8F8F2;
+}
+
+.content__view header button {
+  color: #F8F8F2;
+  background-color: #282A36;
+  border: none;
+  border-bottom: 1px solid #6272A4;
+}
+
+.content__view header button + button {
+  border-left: 1px dotted #6272A4;
+}
+
+/* Package Info Selector */
+.pkginfo__select {
+  background-color: #21252b;
+  border-right: 2px solid #44475A;
+}
+
+.pkginfo__list {
+  background-color: #21252b;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.pkginfo__item {
+  color: #6272A4;
+  background-color: #21252b;
   transition: all 200ms ease-in 100ms;
+  border-left: 4px solid #21252b;
+  border-radius: 2px 0 0 2px;
+  padding: 0px 5px 0px 5px;
+}
+
+.pkginfo__item:hover {
+  color: #F8F8F2;
+}
+
+.pkginfo__item:selected {
+  color: #F8F8F2;
+  background-color: #44475A;
+  border-left-color: #FF79C6;
+}
+
+.pkginfo__text text {
+  background-color: #21252b;
 }

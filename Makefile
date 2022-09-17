@@ -1,7 +1,7 @@
 APPNAME = yumex-dnf
 DATADIR = /usr/share
 PYTHON = python3 
-SUBDIRS = gfx misc po
+SUBDIRS = misc po
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
 VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
@@ -13,35 +13,24 @@ GIT_MASTER=develop
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 
-all: build
+all:
+	@echo "Nothing to do, use a specific target"
 
-$(SUBDIRS):
-	$(MAKE) -C $@ 
-
-INSTALL_TARGETS = $(SUBDIRS:%=install-%)
-$(INSTALL_TARGETS):
-	$(MAKE) -C $(@:install-%=%) install DESTDIR=$(DESTDIR) DATADIR=$(DATADIR)
-
-CLEAN_TARGETS = $(SUBDIRS:%=clean-%)
-$(CLEAN_TARGETS):
-	$(MAKE) -C $(@:clean-%=%) clean
-
-build: $(SUBDIRS)
-	$(PYTHON) setup.py build
-
-install: all $(INSTALL_TARGETS)
-	$(PYTHON) setup.py install --skip-build --root $(DESTDIR) --install-data=$(DATADIR)/$(APPNAME)
-
-clean: $(CLEAN_TARGETS)
-	$(PYTHON) setup.py clean
+clean: 
 	-rm -f *.tar.gz
 	-rm -rf build
-	-rm -rf dist
-	
+	-rm -rf .build
+
+sass:	
+	pysassc -t expanded misc/scss/Dracula.scss misc/themes/Dracula.theme
+	pysassc -t expanded misc/scss/One-Dark.scss misc/themes/One-Dark.theme
+	pysassc -t expanded misc/scss/System-Dark.scss misc/themes/System-Dark.theme
+	pysassc -t expanded misc/scss/System-Light.scss misc/themes/System-Light.theme
+
 
 get-builddeps:
-	@sudo dnf install python3-devel python3-gobject gettext intltool transifex-client
-
+	@sudo dnf build-dep yumex-dnf.spec
+	
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
@@ -68,6 +57,7 @@ release-publish:
 	@git merge --no-ff release-${VERSION} -m "merge ${APPNAME}-${VERSION} release"
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
+	@git push origin
 	@$(MAKE) archive
 	@$(MAKE) rpm
 
@@ -110,10 +100,10 @@ rpm:
 
 test-builds:
 	@$(MAKE) test-release
-	@ssh timlau.fedorapeople.org rm public_html/files/yumex/*
-	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau.fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
-	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
-	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau.fedorapeople.org:public_html/files/yumex/.
+	@-ssh timlau@fedorapeople.org rm public_html/files/yumex/*
+	@scp ${APPNAME}-${NEW_VER}.tar.gz timlau@fedorapeople.org:public_html/files/yumex/${APPNAME}-${NEW_VER}-${GITDATE}.tar.gz
+	@scp $(BUILDDIR)/RPMS/noarch/${APPNAME}-${NEW_VER}*.rpm timlau@fedorapeople.org:public_html/files/yumex/.
+	@scp $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}*.rpm timlau@fedorapeople.org:public_html/files/yumex/.
 
 test-upd:
 	@$(MAKE) test-release
@@ -138,15 +128,12 @@ transifex-setup:
 	tx set --auto-local  -r yumex.${APPNAME} 'po/<lang>.po' --source-lang en --source-file po/${APPNAME}.pot --execute
 
 
-transifex-pull:
+transifex-update:
 	tx pull -a -f
-	@echo "You can now git commit -a -m 'Transfix pull, *.po update'"
-
-transifex-push:
-	make -C po ${APPNAME}.pot
+	tools/update-translations.sh 
 	tx push -s
-	@echo "You can now git commit -a -m 'Transfix push, ${APPNAME}.pot update'"
-	
+	git commit -a -m "Updated translations from transifex"
+
 
 status-exit:
 	/usr/bin/dbus-send --session --print-reply --dest=dk.yumex.StatusIcon / dk.yumex.StatusIcon.Exit
@@ -158,8 +145,23 @@ status-checkupdates:
 status-run:
 	cd dbus && ./dbus_status.py -v -d
 
-.PHONY: all archive install clean build
-.PHONY: $(SUBDIRS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
+# Run pylint checks
+check-pylint:
+	@-find src -type f -name "*.py" | xargs pylint -E --rcfile=.pylintrc
+
+# Run flake8 checks
+check-flake8:
+	@-flake8 src/
+
+# format python code using black
+check-black:
+	@black src/
+
+# install python linters & formatters using pip
+check-inst-deps:
+	@pip install pylint black flake8
+
+.PHONY: archive clean 
 .PHONY: test-reinst test-inst mock-build rpm test-release test-cleanup show-vars release upload	get-builddeps changelog
-.PHONY: test-copr	
+.PHONY: test-copr sass check-pylint check-flake8 check-black check-inst-deps 
 	

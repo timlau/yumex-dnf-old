@@ -20,16 +20,6 @@ Links
 .. _Development: https://github.com/timlau/yumex-dnf
 .. _Translation: https://www.transifex.com/projects/p/yumex/resource/yumex-dnf/
 
-Usage
-======
-
-Main menu
-----------
-.. image::  img/main-menu.png
-
-   
-The main menu used to select the different views available in Yum Extender.
-and other actions like preferences and options.
 
 Views
 ======
@@ -42,23 +32,10 @@ to be installed, upgraded or removed.
 
 .. image::  img/updates.png
 
-This is a overview of the Yum Extender header bar in the package views
 
-.. image::  img/top-bar.png
-
-
-1. The main menu 
-2. Apply pending actions
-3. Filter menu
-4. Search option menu
-5. Search entry
-6. Quit Yum Extender
-
-Filter menu
-~~~~~~~~~~~~
-The filter menu is used to limit the packages show to a special kind of status, this can 
-
-.. image::  img/filter-menu.png
+Filter Sidebar
+~~~~~~~~~~~~~~
+The filter sidebar is used to limit the packages show to a special kind of status, this can 
 
 1. **updates** will show available updates for installed packages
 2. **installed** will show packages installed on the local system
@@ -67,14 +44,12 @@ The filter menu is used to limit the packages show to a special kind of status, 
 
 There filters applies both to the current search result or all packages if no seach is performed.
 
-**available** and **all** will can take very long time, if used not limited by a search.
+**available** and **all** will can take some time, if used not limited by a search.
 
 Search Option Menu
 ~~~~~~~~~~~~~~~~~~~
 The search option menu is used to specify what type of search is performed when something is entered in
 the search entry.
-
-.. image::  img/search-options.png
 
 There is 3 kind of available search types:
 
@@ -84,7 +59,6 @@ There is 3 kind of available search types:
 
 Searching
 ~~~~~~~~~~
-.. image::  img/search-bar.png
 
 Searching is performed by entering a keyword in the search entry and pressing **Enter**
 
@@ -103,8 +77,6 @@ on the current installation state of the selected package.
 
 The selection column header (**+**) can be uses to perform actions on all shown packages in the view.
 
-.. image::  img/updates-selection.png
-
 clicking on the column header will switch between there states
 
 * Select all shown packages
@@ -112,13 +84,9 @@ clicking on the column header will switch between there states
 * Redo single selections by user
 
 
-
-
 Groups View
 --------------
 The group view shows packages ordered by categories and groups, the selection of packages is the same as for the package view.
-
-The group view is selected from the main menu |main-menu|
 
 .. image::  img/groups.png
 
@@ -128,8 +96,6 @@ History View
 --------------
 The history shows the history of transaction performed by dnf on the system.
 
-The history view is selected from the main menu |main-menu|
-
 .. image::  img/history.png
 
 .. warning:: If your are using both yum & dnf on the system, they will both have there own history, not including the transactions by the other tool.
@@ -138,11 +104,8 @@ Pending Actions View
 --------------------------
 The pending action queue show the pending actions for the packages selected by the user
 
-The pending action view is selected from the main menu |main-menu|
+Pending actions is exeucted by pressing the apply button
 
-Pending actions is exeucted by pressing the apply button |apply|
-
-.. image::  img/queue.png
    
 
 .. |filters| image:: img/button-filters.png
