@@ -69,7 +69,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 
 %changelog
 
-* Sat Sep 17 2021 Tim Lauridsen <timlau@fedoraproject.org> 4.5.0-1
+* Sat Sep 17 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.5.0-1
 - bumped release to 4.5.0 (dev)
 
 * Fri Jun 4 2021 Tim Lauridsen <timlau@fedoraproject.org> 4.4.0-1
