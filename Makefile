@@ -84,9 +84,6 @@ test-release:
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat ${APPNAME}.spec | sed  -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
-	# Make Changelog
-	$(PYTHON) tools/git2cl.py
-	@git commit -a -m "updated ChangeLog"
 	# Make archive
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
