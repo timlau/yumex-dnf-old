@@ -19,6 +19,7 @@
 
 from gi.repository import Gtk, GObject
 import yumex.common.const as const
+import yumex.common
 from yumex.common import _, format_number
 from yumex.gui import load_ui
 
@@ -105,10 +106,11 @@ class TransactionResult:
                     total_size += size
                 for r in replaces:
                     (n, _, v, r, a, repo_id) = str(r).split(",")
+                    action = yumex.common._("replacing")
                     model.append(
                         level2,
                         [
-                            _(f"<b>replacing</b> {n}"),
+                            f"<b>{action}</b> {n}",
                             a,
                             f"{v}.{r}",
                             repo_id,
