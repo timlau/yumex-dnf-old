@@ -106,6 +106,8 @@ class Window(BaseWindow):
             os.unlink(const.LEGACY_DESKTOP_FILE)
         if CONFIG.conf.autostart:
             if not os.path.exists(const.USER_DESKTOP_FILE):
+                if not os.path.exists(const.AUTOSTART_DIR):
+                    os.mkdir(const.AUTOSTART_DIR)
                 logger.debug(f"create autostart: {const.USER_DESKTOP_FILE}")
                 shutil.copy(const.SYS_DESKTOP_FILE, const.USER_DESKTOP_FILE)
         # key is renamed to keyword
