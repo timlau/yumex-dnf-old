@@ -118,7 +118,7 @@
   </object>
   <object class="GtkOverlay" id="main_overlay">
     <property name="width-request">800</property>
-    <property name="height-request">800</property>
+    <property name="height-request">600</property>
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
