@@ -1,9 +1,9 @@
 /*Package Type Colors */
-@define-color color_install     #3F51B5;
+@define-color color_install     #0319AB;
 @define-color color_update      #E91E63;
 @define-color color_downgrade   #CDDC39;
-@define-color color_normal      #FF9800;
-@define-color color_obsolete    #4CAF50;
+@define-color color_normal      #AB2A03;
+@define-color color_obsolete    #4CAE54;
 .info {
   background-color: @theme_bg_color;
   border: 3px solid currentColor;
