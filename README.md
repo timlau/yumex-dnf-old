@@ -3,7 +3,7 @@
 This repository contains a complete rewrite of Yum Extender in python3, Gtk3 and using the dnf-daemon dbus API for
 packaging actions
 
-> **_Jan 2023:_**  yumex-dnf is frozen, (yumex-ng)[https://github.com/timlau/yumex-ng] is a rewrite from scrach 
+> **_Jan 2023:_**  yumex-dnf is frozen, [yumex-ng](https://github.com/timlau/yumex-ng) is a rewrite from scrach 
 
 
 Group/History support is read-only for now, as dnfdaemon support for history/groups is broken 
